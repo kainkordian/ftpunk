@@ -1,5 +1,5 @@
 import { Trainer } from './js/trainer.js';
-import { HeartRateMonitor } from './js/heartratemonitor.js';
+import { HeartRateMonitor } from './js/heartRateMonitor.js';
 import { RampTest } from './js/ramp_test.js';
 import { UI } from './js/ui.js';
 
