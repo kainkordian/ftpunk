@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FTPunk Ramp Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>FTPunk Ramp Test</h1>
+    <div class="status" id="status">
+      <p>🚴 Trainer not connected</p>
+      <p>❤️ Heart Rate Monitor not connected</p>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric"><span>Power</span><strong id="power">0 W</strong></div>
+      <div class="metric"><span>Target</span><strong id="target">0 W</strong></div>
+      <div class="metric"><span>Cadence</span><strong id="cadence">0 RPM</strong></div>
+      <div class="metric"><span>Heart Rate</span><strong id="hr">0 BPM</strong></div>
+    </div>
+    <div class="time-metric">
+      <span>Time</span><strong id="time">00:00</strong>
+    </div>
+
+
+    <div>
+      <button id="connect-trainer">Connect Trainer</button>
+      <button id="connect-hrm">Connect HRM</button>
+      <button id="start-test" disabled>Start Test</button>
+      <button id="restart-test" style="display: none;">Restart Test</button>
+      
+      <div class="rider-settings">
+        <label for="riderType">Rider type:</label>
+        <select id="riderType">
+          <option value="heavy">Heavy</option>
+          <option value="light">Light</option>
+        </select>
+        <span id="info-bubble" class="info-bubble" title="Heavy is 60 kg or more.">
+          ⓘ
+        </span>
+      </div>
+
+      <div class="rider-settings">
+        <label for="warmupDuration">Warm-up duration (min):</label>
+        <select id="warmupDuration">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+
+      <div class="rider-settings">
+        <label for="warmupWatts">Warm-up wattage:</label>
+        <input type="number" id="warmupWatts" value="100" min="50" max="300" step="5" />
+        <span id="info-bubble-2" class="info-bubble" title="50% of your FTP.">
+          ⓘ
+        </span>
+      </div>
+
+    </div>
+    <details class="disclaimer">
+      <summary>ⓘ Ramp Test Information</summary>
+      <p>
+        <strong>Ramp Test Info:</strong><br>
+        According to <a href="https://www.cyclecoach.com/blog/2020/2/2/is-the-map-ramp-test-a-valid-estimator-of-ftp" target="_blank" rel="noopener">this source</a> by Richard Stern, male non-elite athletes are considered <em>heavy riders</em> (≥60 kg), and female athletes are generally considered <em>light riders</em>.
+        Heavy riders warm up at <strong>100 W</strong> and ramp up from 100 W by <strong>5 W every 12 seconds</strong>. Light riders warm up at <strong>75 W</strong> and ramp from 50 W by <strong>5 W every 20 seconds</strong>.
+        <br><br>
+        More exprienced riders can set their warm up target wattage to roughly <strong>50%</strong> of their FTP.
+        <br><br>
+        The estimated FTP is calculated as <strong>72–75%</strong> of your MAP (average power over the last minute before stopping). It's recommended to assume the lower end (72%) for a more conservative and realistic FTP estimate.
+        <br><br>
+        After failure, the trainer is automatically set to <strong>75 W</strong> for heavy riders and <strong>50 W</strong> for light riders to allow for an optional cooldown.
+      </p>
+    </details>
+  </main>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
