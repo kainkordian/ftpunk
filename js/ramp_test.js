@@ -49,7 +49,7 @@ export class RampTest {
           this.trainer.setTargetPower(this.stageWatts);
         }
 
-        if (this.trainer.cadence < 20) {
+        if (this.trainer.cadence < 45) {
           this._finishTest();
         }
 
@@ -66,11 +66,27 @@ export class RampTest {
 
   _finishTest() {
     clearInterval(this.interval);
+    // Find the 60s slice with the highest average
+    let maxAvg = 0;
+    let bestSlice = [];
+    if (this.powerHistory.length >= 60) {
+      for (let i = 0; i <= this.powerHistory.length - 60; i++) {
+        const slice = this.powerHistory.slice(i, i + 60);
+        const avg = slice.reduce((a, b) => a + b, 0) / 60;
+        if (avg > maxAvg) {
+          maxAvg = avg;
+          bestSlice = slice;
+        }
+      }
+    } else {
+      bestSlice = this.powerHistory.slice();
+      maxAvg = bestSlice.reduce((a, b) => a + b, 0) / (bestSlice.length || 1);
+    }
     const last60 = this.powerHistory.slice(-60);
     const avg = last60.reduce((a, b) => a + b, 0) / last60.length;
-    const minFtp = Math.floor(avg * 0.72);
-    const maxFtp = Math.floor(avg * 0.77);
-    this.ui.showFTP(minFtp, maxFtp, Math.floor(avg));
+    const minFtp = Math.floor(maxAvg * 0.72);
+    const maxFtp = Math.floor(maxAvg * 0.77);
+    this.ui.showFTP(minFtp, maxFtp, Math.floor(maxAvg));
     this.ui.setBackground('done');
     this.trainer.setTargetPower(this.cooldownWatts);
     this.ui.update(this.trainer.power, this.trainer.cadence, this.trainer.speed, this.hrm.heartRate, 0, this.cooldownWatts);

@@ -32,7 +32,8 @@ export class UI {
     statusDiv.innerHTML = html;
 
     // Enable the Start Test button only when both devices are connected
-    startBtn.disabled = !(trainerConnected && hrmConnected);
+    // startBtn.disabled = !(trainerConnected && hrmConnected);
+    startBtn.disabled = !(trainerConnected);
   }
 
 
