@@ -14,7 +14,7 @@
         <key>CFBundleURLSchemes</key><array><string>ftpunk</string></array>
     </dict></array>
     <key>LSRequiresIPhoneOS</key><true/>
-    <key>NSBluetoothAlwaysUsageDescription</key><string>FTPunk connects to your smart trainer, power pedals, and optional heart-rate sensor to perform and record your ramp test.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key><string>FTPunk connects to your smart trainer and optional external power meter or heart-rate sensor to perform and record your ramp test.</string>
     <key>UILaunchScreen</key><dict/>
     <key>UISupportedInterfaceOrientations</key><array>
         <string>UIInterfaceOrientationPortrait</string><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string>

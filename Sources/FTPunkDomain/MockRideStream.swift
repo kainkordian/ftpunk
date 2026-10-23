@@ -21,6 +21,7 @@ public struct MockRideStream: Sendable {
 
     public mutating func sample(at time: Double, target: Int, phase: WorkoutPhase,
                                 scenario: MockScenario = .rampToExhaustion,
+                                powerSource: PowerSource = .trainer,
                                 manualPower: Double? = nil, manualCadence: Double? = nil,
                                 manualHeartRate: Int? = nil) -> RideSample {
         let delta = max(0, min(1, time - (lastTime ?? time)))
@@ -33,6 +34,6 @@ public struct MockRideStream: Sendable {
         let hr = manualHeartRate ?? Int(min(190, 100 + Double(target) * 0.2 + 2 * sin(time / 11)))
         return RideSample(time: time, power: scenario == .powerDropout ? nil : power,
                           cadence: scenario == .cadenceDropout ? nil : cadence,
-                          heartRate: hr, trainerPower: max(0, Double(target) * 0.98))
+                          heartRate: hr, trainerPower: powerSource == .trainer ? (scenario == .powerDropout ? nil : power) : max(0, Double(target) * 0.98))
     }
 }

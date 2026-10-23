@@ -50,11 +50,14 @@ public struct RampEngine: Sendable {
         }
         let fresh = lastPower.map({ time >= $0.time && time - $0.time <= 2 }) ?? false
         if phase != .waiting && !fresh {
-            interrupt(at: time, reason: "Pedal power is no longer fresh."); return
+            interrupt(at: time, reason: "Power from the selected source is no longer fresh."); return
         }
         switch phase {
         case .waiting:
-            if fresh, let cadence = lastCadence, time - cadence.time <= 2, cadence.rpm >= 20 {
+            let moving = session.configuration.resolvedCadenceSource == .unavailable
+                ? (lastPower?.watts ?? 0) > 0
+                : lastCadence.map { time - $0.time <= 2 && $0.rpm >= 20 } ?? false
+            if fresh && moving {
                 transition(to: .warmup, at: time)
                 targetPower = session.configuration.warmupPower
             }
@@ -67,15 +70,17 @@ public struct RampEngine: Sendable {
             }
         case .ramp:
             let elapsed = time - phaseStartedAt
-            guard let cadence = lastCadence, time - cadence.time <= 2 else {
-                interrupt(at: time, reason: "Pedal cadence is no longer fresh."); return
+            if session.configuration.resolvedCadenceSource != .unavailable,
+               lastCadence.map({ time - $0.time <= 2 }) != true {
+                interrupt(at: time, reason: "Cadence from the selected source is no longer fresh."); return
             }
             if elapsed >= session.configuration.maximumRampSeconds ||
                 session.configuration.preset.startingPower + Int(elapsed / session.configuration.preset.stepSeconds) * session.configuration.preset.stepWatts > session.configuration.maximumPower {
                 finishRamp(at: time, outcome: .limitReached); return
             }
             targetPower = session.configuration.rampPower(at: elapsed)
-            if elapsed >= 10 && cadence.rpm < 45 {
+            if session.configuration.resolvedCadenceSource != .unavailable,
+               elapsed >= 10, let cadence = lastCadence, cadence.rpm < 45 {
                 if lowCadenceSince == nil { lowCadenceSince = time }
                 if let onset = lowCadenceSince, time - onset >= 5 {
                     finishRamp(at: onset, outcome: .exhaustion, cooldownStart: time)

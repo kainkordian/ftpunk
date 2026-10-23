@@ -35,7 +35,7 @@ struct HistoryView: View {
                             .font(.callout).foregroundStyle(.secondary).padding(.vertical)
                     } else {
                         trendChart
-                        Text("Each point is one test. Compare matching protocols and factors. Diamonds mark synthetic debug results.")
+                        Text("Each point is one test. Compare matching protocols, factors and power sources. Diamonds mark synthetic debug results.")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -104,6 +104,7 @@ private struct HistoryRow: View {
             Text(session.startedAt.formatted(date: .abbreviated, time: .shortened)).font(.subheadline)
             Text("\(session.configuration.preset.title) · \(Int(session.configuration.ftpFactor * 100))% estimate")
                 .font(.caption).foregroundStyle(.secondary)
+            Text("Power: \(session.configuration.resolvedPowerSource.title)").font(.caption).foregroundStyle(.secondary)
             if let status { Text("Intervals.icu · \(status.rawValue)").font(.caption).foregroundStyle(.secondary) }
         }.padding(.vertical, 5)
     }
@@ -130,6 +131,8 @@ struct SessionDetail: View {
                     Section("This test") {
                         LabeledContent("Rider at time of test", value: session.riderName)
                         LabeledContent("Protocol", value: session.configuration.preset.title)
+                        LabeledContent("Power source", value: session.configuration.resolvedPowerSource.title)
+                        LabeledContent("Cadence source", value: session.configuration.resolvedCadenceSource.title)
                         LabeledContent("Existing FTP", value: session.configuration.priorFTP.map { "\(Int($0.watts.rounded())) W" } ?? "Not provided")
                         LabeledContent("Session weight", value: session.configuration.weightKG.map { "\($0) kg" } ?? "Not provided")
                         LabeledContent("Warm-up", value: "\(session.configuration.warmupPower) W")

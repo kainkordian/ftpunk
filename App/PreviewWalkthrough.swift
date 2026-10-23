@@ -26,8 +26,13 @@ import Foundation
             try await Task.sleep(for: .seconds(1))
             try capture(to: directory.appendingPathComponent("protocol.png"))
             model.setupStep = 2
+            model.demoMode = false
             try await Task.sleep(for: .seconds(1))
             try capture(to: directory.appendingPathComponent("ready.png"))
+            model.powerSource = .externalPowerMeter
+            try await Task.sleep(for: .seconds(1))
+            try capture(to: directory.appendingPathComponent("external-meter-ready.png"))
+            model.powerSource = .trainer; model.demoMode = true
             model.mockSpeed = 4
             await model.start()
             try await Task.sleep(for: .seconds(1))

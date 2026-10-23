@@ -28,7 +28,7 @@ struct ProtocolInfoView: View {
                     Link("Zwift · its 20 W/min ramp", destination: URL(string: "https://www.zwift.com/ca/news/32912-how-to-measure-your-cycling-fitness-effectively")!)
                 } else {
                     Section("An estimate, with a range") {
-                        Text("FTPunk takes the best continuous 60 seconds of pedal power during the scored ramp as its MAP proxy. Warm-up, cooldown and the low-cadence confirmation period are excluded.")
+                        Text("FTPunk takes the best continuous 60 seconds from your selected power source during the scored ramp as its MAP proxy. Warm-up, cooldown and any low-cadence confirmation period are excluded.")
                         Text("Stern reports that roughly one-hour power commonly fell between 72% and 77% of MAP in the riders he studied. This is a guideline range, not a personal confidence interval or a guarantee.")
                         Text("75% became a common single-number estimate in training apps. Stern recommends 72% as a conservative starting point when a longer test is unavailable. FTPunk defaults to 72%, offers 75%, and always shows the 72–77% range.")
                     }

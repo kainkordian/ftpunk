@@ -12,10 +12,11 @@ public enum ActivityExport {
     public static func csv(_ session: TestSession) -> Data {
         let rows: [String] = session.samples.map { s in
             let columns: [String] = [String(s.time), s.power.map { String($0) } ?? "", s.cadence.map { String($0) } ?? "",
-                                     s.heartRate.map { String($0) } ?? "", s.trainerPower.map { String($0) } ?? ""]
+                                     s.heartRate.map { String($0) } ?? "", s.trainerPower.map { String($0) } ?? "",
+                                     session.configuration.resolvedPowerSource.rawValue, session.configuration.resolvedCadenceSource.rawValue]
             return columns.joined(separator: ",")
         }
-        return Data((["seconds,pedal_watts,cadence_rpm,heart_rate_bpm,trainer_watts"] + rows).joined(separator: "\n").utf8)
+        return Data((["seconds,power_watts,cadence_rpm,heart_rate_bpm,trainer_watts,power_source,cadence_source"] + rows).joined(separator: "\n").utf8)
     }
     public static func tcx(_ session: TestSession) throws -> Data {
         guard let end = session.endedAtOffset else { throw ExportError.notFinalized }
@@ -43,6 +44,7 @@ public enum ActivityExport {
     public static func description(_ session: TestSession) -> String {
         var text = "FTPunk \(session.configuration.preset.title). \(session.outcome?.title ?? "Recording")."
         text += " Rider: \(session.riderName)."
+        text += " Power source: \(session.configuration.resolvedPowerSource.title). Cadence source: \(session.configuration.resolvedCadenceSource.title)."
         if session.isDemo { text = "DEMO — synthetic activity. " + text }
         if let ftp = session.configuration.priorFTP { text += " Prior FTP: \(ftp.watts) W." }
         if let weight = session.configuration.weightKG { text += " Weight: \(weight) kg." }

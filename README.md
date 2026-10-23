@@ -1,6 +1,6 @@
 # FTPunk
 
-Native iPhone and Mac apps for FTP ramp tests with an Elite Suito-T and Favero Assioma PRO MX-2 pedals. The trainer controls resistance; the pedals supply the power used for the result. Riders, recordings and progress work locally. Intervals.icu upload is optional and asks for confirmation.
+Native iPhone and Mac apps for FTP ramp tests with a smart trainer, including the Elite Suito-T. The trainer controls resistance and supplies measured power by default. An external Bluetooth power meter, such as Favero Assioma PRO MX-2 pedals, is optional. Riders, recordings and progress work locally. Intervals.icu upload is optional and asks for confirmation.
 
 ## Use the Mac app
 
@@ -20,7 +20,7 @@ Mac and iPhone stores are independent. Future server sync can connect them witho
 1. Install full Xcode and an iOS Simulator runtime. Command-line tools alone are insufficient.
 2. Open `FTPunk.xcodeproj`, select **FTPunk**, and choose an iPhone simulator or an iOS 18+ device.
 3. For a physical iPhone, choose your signing team and, if needed, a unique bundle identifier.
-4. Use **Debug mode · no devices** first. For hardware, turn it off on the Ready step, connect the trainer and pedals separately, and enable trainer control. Heart rate is optional.
+4. Use **Debug mode · no devices** first. For hardware, turn it off on the Ready step, connect the trainer and enable trainer control. Trainer power is the default. Select External power meter only if you want to use a separate sensor. Heart rate is optional.
 
 To build and open a dedicated virtual iPhone with an isolated mock profile:
 
@@ -28,18 +28,19 @@ To build and open a dedicated virtual iPhone with an isolated mock profile:
 sh Tools/run_simulator.sh
 ```
 
-Activate/configure/calibrate the pedals in Favero's app and verify total power and crank length there or with a bike computer. Before a maximal test, validate acknowledged target changes and stopping at a low load on your actual trainer firmware. Keep other trainer-control apps closed.
+If using an external meter, configure/calibrate it in its vendor app. For dual-sided Assioma pedals, verify total power and crank length in Favero's app or with a bike computer. Before a maximal test, validate acknowledged target changes and stopping at a low load on your actual trainer firmware. Keep other trainer-control apps closed.
 
 ## Workflow and features
 
 **New test → Rider → Protocol → Ready → Ride → Result** keeps preparation separate from the active effort. Back/Continue/Start controls stay visible below the scrollable setup form.
 
-- **Named riders:** choose or add a local person. Each has separate FTP history and weight. Tests snapshot rider identity/name, selected FTP, weight, protocol and factor. Adopting an old test's FTP updates its owner, even when another rider is selected.
+- **Named riders:** choose or add a local person. Each has separate FTP history and weight. Tests snapshot rider identity/name, selected FTP, weight, protocol, factor and measurement sources. Adopting an old test's FTP updates its owner, even when another rider is selected.
 - **Starting FTP:** select a current or historical value, enter one manually, or leave it unspecified. Automatic warm-up uses 50% of the selected value. Without FTP, fallback power is 75 W for the 15 W/min protocol and 100 W for the others. A manual override is available.
 - **Three protocols:** 15 W/min (50 W start, +5 W/20 s), 25 W/min (100 W start, +5 W/12 s), and 20 W/min Zwift-style (100 W start, +20 W/60 s). Choose manually. The in-app guide explains the reference's 60 kg guideline and attributes the original protocol reasoning to Richard Stern.
-- **Dashboard:** large target and pedal watts, next-step countdown/progress, ramp/total time, cadence, optional heart rate, a power trace and clear finish/stop actions. Debug controls are collapsible.
+- **Power source:** Trainer is the default; no separate meter is required. Choose an optional external Bluetooth Cycling Power meter on pedals, a crank or a hub. Power and cadence sources are fixed when a test starts. Cadence prefers the selected meter when available, then the trainer. If neither reports fresh cadence, the test uses manual ramp finishing and says so. A selected meter disconnect interrupts the test; it never silently switches power sources.
+- **Dashboard:** large target and actual watts, next-step countdown/progress, ramp/total time, cadence, optional heart rate, a power trace and clear finish/stop actions. Debug controls are collapsible.
 - **Results:** best valid continuous 60-second ramp power, a selected 72% or 75% estimate, the 72–77% range, and W/kg from session weight. In-app information explains the range and its limitations.
-- **Progress:** rider-grouped recordings, a rider filter and FTP/W/kg trend charts. Debug points are hidden by default and use diamond symbols when included. Compare matching protocols/factors.
+- **Progress:** rider-grouped recordings, a rider filter and FTP/W/kg trend charts. Debug points are hidden by default and use diamond symbols when included. Compare matching protocols, factors and power sources.
 - **Deletion:** visible trash buttons, swipe/context actions and a detail-screen action, all with confirmation. Deleting removes local samples and pending jobs; adopted FTP values and activities already on Intervals.icu remain.
 - **Appearance:** System, Light and Dark under Settings, remembered per device. Native surfaces/text and adaptive accents support both themes.
 
@@ -102,11 +103,13 @@ xcodebuild -project FTPunk.xcodeproj -scheme FTPunkMac \
 | `Sources/FTPunkStorage` | Versioned Core Data SQLite store, independent profiles, append-only samples, checkpoints and CSV/JSON/TCX export. |
 | `Sources/FTPunkIntegrations` | Keychain credentials, Intervals.icu HTTP/OAuth adapters and account-bound retry queue. |
 
-Core Data avoids third-party dependencies and keeps explicit transactions. Older single-rider JSON payloads decode into a stable default rider; the existing SQLite model needs no destructive migration. Future account sync remains a separate service with DTOs/outbox behavior; workouts never depend on network access.
+Core Data avoids third-party dependencies and keeps explicit transactions. Older recordings retain their original external-meter power/cadence provenance; new tests default to trainer power. Older single-rider JSON payloads decode into a stable default rider; the existing SQLite model needs no destructive migration. Future account sync remains a separate service with DTOs/outbox behavior; workouts never depend on network access.
 
 This remains a hardware prototype. Validate actual Suito-T control/start/stop and capability ranges, Assioma total-power/cadence semantics, live TCX import and authorization, wider display/accessibility cases, reconnect/device bindings and lifecycle behavior before release. Standard one-byte FTMS resistance decoding is the default; use the explicit two-byte reference layout only when confirmed by packet capture.
 
 The foreground-only test policy interrupts on backgrounding or stale essential data. Stop acknowledgements are checked, but software cannot release braking after communication is lost. At exhaustion the hardware path releases ERG; a manually finished ramp can include cooldown.
+
+CSV exports use `power_watts` for the selected measured stream (replacing the old `pedal_watts` header), retain `trainer_watts` diagnostics, and include `power_source`/`cadence_source` columns. JSON metadata and TCX notes record the source too. History and results label each test’s power source so comparisons stay traceable.
 
 ## Reference and repository
 

@@ -31,6 +31,7 @@ struct UploadConsent: Identifiable {
     var selectedTab = 0
     var setupStep = 0
     var preset: RampPreset = .standard
+    var powerSource: PowerSource = .trainer
     var ftpSelection = "manual"
     var manualFTP = ""
     var weight = ""
@@ -93,8 +94,10 @@ struct UploadConsent: Identifiable {
         if preview { manualFTP = "250"; weight = "75" }
         try reload()
         bluetooth.onReading = { [weak self] in self?.receive($0) }
-        bluetooth.onEssentialFailure = { [weak self] reason in
+        bluetooth.onDeviceFailure = { [weak self] role, reason in
             guard let self, self.isActive, !self.demoMode else { return }
+            guard let configuration = self.engine?.session.configuration,
+                  MeasurementRouting.isEssential(role, configuration: configuration) else { return }
             self.interrupt(reason)
         }
         network.pathUpdateHandler = { [weak self] path in
@@ -155,8 +158,11 @@ struct UploadConsent: Identifiable {
     }
     var readyToStart: Bool {
         if demoMode { return true }
-        guard bluetooth.trainerReady, let last = bluetooth.lastPedalUptime else { return false }
-        return ProcessInfo.processInfo.systemUptime - last <= 2 && bluetooth.pedalCadence != nil
+        return bluetooth.trainerReady && bluetooth.measurements.hasFreshPower(from: powerSource, at: ProcessInfo.processInfo.systemUptime)
+    }
+    var cadenceSource: CadenceSource {
+        if demoMode { return powerSource == .trainer ? .trainer : .externalPowerMeter }
+        return bluetooth.measurements.preferredCadence(for: powerSource, at: ProcessInfo.processInfo.systemUptime)
     }
     func number(_ text: String) -> Double? {
         Double(text.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: ",", with: "."))
@@ -172,7 +178,8 @@ struct UploadConsent: Identifiable {
                                         warmupSeconds: demoMode && quickDebugTest ? 10 : Double(warmupMinutes * 60),
                                         manualWarmupPower: automaticWarmup ? nil : manual,
                                         cooldownSeconds: demoMode && quickDebugTest ? 10 : 180, ftpFactor: ftpFactor,
-                                        riderID: profile.id, riderName: riderName)
+                                        riderID: profile.id, riderName: riderName,
+                                        powerSource: powerSource, cadenceSource: cadenceSource)
     }
     func saveExistingFTP() {
         guard let value = number(manualFTP), value.isFinite, value > 0, value <= 32767 else {
@@ -243,14 +250,9 @@ struct UploadConsent: Identifiable {
     }
     private func receive(_ reading: DeviceReading) {
         guard isActive, !demoMode else { return }
-        let time = reading.uptime - origin
-        guard time >= 0 else { return }
-        if let rate = reading.heartRate { heartRate = rate; heartRateTime = time }
-        let sample = RideSample(time: time,
-                                power: reading.role == .pedals ? reading.power : nil,
-                                cadence: reading.role == .pedals ? reading.cadence : nil,
-                                heartRate: reading.heartRate,
-                                trainerPower: reading.role == .trainer ? reading.power : nil)
+        guard let configuration = engine?.session.configuration,
+              let sample = MeasurementRouting.sample(reading, configuration: configuration, origin: origin) else { return }
+        if let rate = reading.heartRate { heartRate = rate; heartRateTime = sample.time }
         engine?.receive(sample)
     }
     private func update() {
@@ -295,6 +297,7 @@ struct UploadConsent: Identifiable {
             elapsed = min(end, elapsed + 0.5)
             let sample = mockStream.sample(at: elapsed, target: engine?.targetPower ?? 100,
                                            phase: engine?.phase ?? .waiting, scenario: mockScenario,
+                                           powerSource: engine?.session.configuration.resolvedPowerSource ?? .trainer,
                                            manualPower: manualMockValues ? mockPower : nil,
                                            manualCadence: manualMockValues ? mockCadence : nil,
                                            manualHeartRate: manualMockValues ? Int(mockHeartRate) : nil)

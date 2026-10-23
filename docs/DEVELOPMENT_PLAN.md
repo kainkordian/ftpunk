@@ -1,6 +1,6 @@
 # FTPunk iOS and macOS development plan
 
-Build native iPhone and Mac apps that controls an Elite Suito-T in ERG mode and uses Favero Assioma PRO MX-2 pedals as the source for power and cadence. Tests and history work offline. Store results locally, offer optional, explicitly confirmed activity upload to Intervals.icu, and keep explicit boundaries for adding account sync later.
+Build native iPhone and Mac apps that controls an Elite Suito-T in ERG mode and uses trainer power by default, with an optional external Bluetooth power meter such as Favero Assioma PRO MX-2 pedals. Tests and history work offline. Store results locally, offer optional, explicitly confirmed activity upload to Intervals.icu, and keep explicit boundaries for adding account sync later.
 
 The first deliverable should be a working connection and recording prototype on the actual trainer and pedals. Reliable Bluetooth decoding, control acknowledgements, and measurement timing determine whether the FTP estimate is useful.
 
@@ -12,12 +12,12 @@ The refinement implementation adds System/Light/Dark appearance, a persistent na
 
 | Feature | Behavior |
 | --- | --- |
-| Device setup | Assign separate roles for trainer control, pedal power, and optional Bluetooth heart rate. Remember selected devices and show connection and data freshness separately. |
-| Readiness check | Require fresh pedal power and cadence, trainer target-power capability, and confirmed control permission before starting. Show battery where exposed and remind the rider to verify pedal activation, crank length, and calibration in the vendor apps. |
+| Device setup | Require trainer control; allow trainer power or a separate optional external power meter, plus optional Bluetooth heart rate. Remember selected devices and show connection and data freshness separately. |
+| Readiness check | Require fresh power from the chosen source, trainer target-power capability, and confirmed control permission before starting. Snapshot a fresh cadence source where available; otherwise explain manual finishing. Show battery where exposed and remind the rider to verify pedal activation, crank length, and calibration in the vendor apps. |
 | Named riders, FTP and weight | Select the current adopted FTP, a dated historical FTP, or a manually entered existing FTP. Keep separate named local profiles with their own FTP history and weight in kg. Snapshot both inputs when the session starts. |
 | Ramp configuration | Offer the reference project's two ramps plus 20 W/60 s Zwift-style steps, editable warm-up duration, warm-up power defaulting to 50% of the selected existing FTP, a manual wattage override, a preview, and an explicit upper power and duration limit. Name presets by ramp rate rather than “heavy” and “light.” |
 | Guided test | Wait for pedaling, warm up, increase ERG targets on schedule, detect sustained cadence failure, then offer cooldown. Provide an always-visible finish/stop control. |
-| Ride display | Show pedal watts, target watts, pedal cadence, elapsed time, next target countdown, and optional heart rate. Offer a readable landscape view, large controls, optional audio cues, and a target-versus-power chart. |
+| Ride display | Show selected-source watts, target watts, available cadence, elapsed time, next target countdown, and optional heart rate. Offer a readable landscape view, large controls, optional audio cues, and a target-versus-power chart. |
 | Result | Show best continuous 60-second measured power, estimated FTP range, the chosen FTP factor, FTP in W/kg using the session's weight, data quality, and reason for ending. Compare with the selected existing FTP and let the rider explicitly adopt a new FTP value. |
 | History | Group sessions by rider identity, with FTP/W/kg trend charts, protocol settings, FTP changes and optional body mass for W/kg. Snapshot mass and adopted FTP so old results stay reproducible. |
 | Export and recovery | Export CSV samples, versioned JSON session data, and a TCX activity through the share sheet. Recover saved data after termination as an interrupted session. Support local deletion. |
@@ -60,7 +60,7 @@ Elite lists FTMS support for Suito-T. Favor service discovery and advertised cap
 
 Pair the pedal power stream once and verify that it represents total dual-sided power. Do not double the reported value or sum two independently discovered pedal values without establishing their meaning. Confirm the expected master sensor and totals against the Favero app or a bike computer.
 
-For the first release, send the prescribed target directly to the trainer's own ERG controller. Calculate FTP exclusively from pedal measurements. A trainer target of 250 W does not guarantee that the pedals report exactly 250 W; display sustained target deviation and preserve both streams.
+For the first release, send the prescribed target directly to the trainer's own ERG controller. Calculate FTP exclusively from the power source selected at start: trainer or external meter. Record its identity and never silently switch streams mid-test. A trainer target of 250 W does not guarantee that the pedals report exactly 250 W; display sustained target deviation and preserve both streams.
 
 Elite's Power Meter Link can use an external meter and can revert to trainer-estimated power when that meter is unavailable. Treat its configuration as a separate, hardware-validated operating mode, recorded as user-confirmed or unknown unless the device exposes trustworthy status. Continue reading the pedals directly. Configure PML in Elite's app; do not assume standard FTMS can configure it. [Elite Power Meter Link](https://elitesrl.zendesk.com/hc/en-us/articles/4403492516242-Power-Meter-Link-PML-function)
 
@@ -149,7 +149,7 @@ Clamp and quantize targets to the discovered range and increment. Track prescrib
 
 Implement Cycling Power Measurement `0x2A63` independently of FTMS. Decode mandatory signed watts and optional fields using its own flags. Derive cadence from crank revolution and event-time deltas, accounting for counter rollover, unchanged events, reconnects, and resets. For crank event ticks, cadence is `60 * deltaRevolutions * 1024 / deltaTicks`; reject zero or implausible deltas. Capture actual Assioma payloads as fixtures. [Bluetooth GATT supplement, Cycling Power Measurement](https://btprodspecificationrefs.blob.core.windows.net/gatt-specification-supplement/GATT_Specification_Supplement.pdf)
 
-Keep trainer cadence and power as separate diagnostic values. Optional cadence fallback must be visible and recorded, and must not silently change the FTP power source. If the pedal power stream becomes unavailable, end the scored test as interrupted.
+Keep trainer power as a separate diagnostic stream when an external meter supplies scored power. Choose cadence from the selected meter if fresh, otherwise the trainer; snapshot that choice. Without cadence, use an explicitly labeled manual-finish mode. If a chosen power or cadence stream becomes unavailable mid-test, interrupt rather than silently switching sources. An unused optional meter or HR disconnect does not interrupt a trainer-only test.
 
 ## Timing and FTP calculation
 
@@ -173,7 +173,7 @@ An app cannot guarantee resistance release after losing its connection. Verify S
 
 ## Intervals.icu activity upload
 
-Include optional Intervals.icu upload in the first release, after the core local recording works. Generate a TCX activity containing timestamps, measured pedal power through the cycling power extension, cadence, optional heart rate, and lap/phase boundaries for warm-up, ramp, and cooldown. Export no fabricated GPS track or missing measurements as zeros. Validate the indoor cycling classification, stream import, elapsed time, and lap boundaries against an actual Intervals.icu import before release. FIT export remains a later addition.
+Include optional Intervals.icu upload in the first release, after the core local recording works. Generate a TCX activity containing timestamps, selected-source measured power through the cycling power extension, cadence, optional heart rate, and lap/phase boundaries for warm-up, ramp, and cooldown. Export no fabricated GPS track or missing measurements as zeros. Validate the indoor cycling classification, stream import, elapsed time, and lap boundaries against an actual Intervals.icu import before release. FIT export remains a later addition.
 
 Upload completed activity files with multipart `POST https://intervals.icu/api/v1/athlete/0/activities`, supplying the file and a stable `external_id` derived from the session UUID. Intervals.icu accepts TCX and supports this authenticated-athlete alias. Use a descriptive name and include protocol, selected prior FTP, session weight, and test outcome in the description; keep the app's FTP estimate clearly identified. [Intervals.icu integration cookbook](https://forum.intervals.icu/t/intervals-icu-api-integration-cookbook/80090)
 
@@ -235,4 +235,4 @@ The estimates below are planning ranges for one experienced iOS developer with r
 - Hardware runs cover both presets, low cadence, low/high target transitions within validated limits, trainer/pedal disconnects independently, Bluetooth off/on, incoming calls, screen lock, backgrounding, and another app taking trainer control.
 - Verify complete setup, test, result, history, export, and deletion with network access disabled. Compare decoded pedal values with a trusted display and validate command application against observed trainer response.
 
-The release gate is a complete offline ramp test with the selected FTP driving warm-up power, traceable pedal measurements, acknowledged trainer commands, reproducible FTP and W/kg analysis, saved history, and understood failure behavior on the actual Suito-T/Assioma setup. With Intervals.icu connected and upload explicitly approved, the finalized activity must eventually upload once connectivity permits without creating duplicates on retry.
+The release gate is a complete offline ramp test with the selected FTP driving warm-up power, traceable selected-source measurements, acknowledged trainer commands, reproducible FTP and W/kg analysis, saved history, and understood failure behavior on the actual Suito-T/Assioma setup. With Intervals.icu connected and upload explicitly approved, the finalized activity must eventually upload once connectivity permits without creating duplicates on retry.

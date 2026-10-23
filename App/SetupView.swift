@@ -168,7 +168,7 @@ struct SetupView: View {
             LabeledContent("Protocol", value: model.preset.title)
             LabeledContent("Warm-up", value: model.warmupPreview)
             LabeledContent("FTP factor", value: "\(Int(model.ftpFactor * 100))%")
-            Text("Stay seated and hold a comfortable, steady cadence. The trainer sets the load; your pedals measure the result.")
+            Text("Stay seated and hold a comfortable, steady cadence. The trainer sets the load; the selected power source measures the result.")
                 .font(.callout).foregroundStyle(.secondary)
         }
         Section("Devices") {
@@ -182,10 +182,26 @@ struct SetupView: View {
                     }
                 }
             } else {
-                ForEach(DeviceRole.allCases) { role in
+                ForEach([DeviceRole.trainer, .heartRate]) { role in
                     Button { deviceRole = role } label: {
                         LabeledContent(role.title, value: model.bluetooth.names[role] ?? (role == .heartRate ? "Optional" : "Connect"))
                     }
+                }
+                Picker("Power source", selection: $model.powerSource) {
+                    Text("Trainer · no extra sensor").tag(PowerSource.trainer)
+                    Text("External power meter · optional").tag(PowerSource.externalPowerMeter)
+                }
+                if model.powerSource == .externalPowerMeter {
+                    Button { deviceRole = .pedals } label: {
+                        LabeledContent("External power meter", value: model.bluetooth.names[.pedals] ?? "Connect")
+                    }
+                }
+                Text("An external power meter is a separate sensor on your pedals, crank or hub. You can use your trainer’s own power measurement instead.")
+                    .font(.caption).foregroundStyle(.secondary)
+                LabeledContent("Cadence source", value: model.cadenceSource.title)
+                if model.cadenceSource == .unavailable {
+                    Text("No fresh cadence signal. Automatic low-cadence finishing is disabled: tap Finish ramp when you cannot continue. Power recording and test limits still work.")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
                 if model.bluetooth.trainerCanPrepare && !model.bluetooth.trainerReady {
                     Button("Enable trainer control") {
@@ -217,13 +233,19 @@ struct DevicePicker: View {
         NavigationStack {
             List {
                 Section {
-                    Text("Wake the sensor by pedaling. Close other trainer-control apps. Choose the Assioma master sensor that reports total power.")
+                    Text(role == .pedals
+                         ? "Wake the meter by pedaling. Choose a Bluetooth Cycling Power sensor. For dual-sided pedals, select the master sensor that reports total power."
+                         : "Wake the sensor and close other apps controlling the trainer.")
                         .font(.callout).foregroundStyle(.secondary)
                     Button("Scan again") { model.bluetooth.scan() }
                     Text(model.bluetooth.status).font(.caption)
                 }
                 ForEach(model.bluetooth.nearby.filter { $0.roles.contains(role) }) { device in
-                    Button { model.bluetooth.connect(device, as: role); dismiss() } label: {
+                    Button {
+                        model.bluetooth.connect(device, as: role)
+                        if role == .pedals { model.powerSource = .externalPowerMeter }
+                        dismiss()
+                    } label: {
                         VStack(alignment: .leading) {
                             Text(device.name)
                             Text("\(device.signal) dBm · \(device.id.uuidString.suffix(8))").font(.caption).foregroundStyle(.secondary)

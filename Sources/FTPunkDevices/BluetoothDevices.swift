@@ -4,10 +4,12 @@ import CoreBluetooth
 import FTPunkDomain
 
 public enum DeviceRole: String, CaseIterable, Identifiable, Codable, Sendable {
+    // Keep the old "pedals" raw value for stored device/capture compatibility.
+    // It now covers any supported external Bluetooth Cycling Power meter.
     case trainer, pedals, heartRate
     public var id: String { rawValue }
     public var title: String {
-        switch self { case .trainer: "Trainer"; case .pedals: "Power pedals"; case .heartRate: "Heart rate" }
+        switch self { case .trainer: "Trainer"; case .pedals: "External power meter"; case .heartRate: "Heart rate" }
     }
     fileprivate var service: CBUUID {
         CBUUID(string: self == .trainer ? "1826" : self == .pedals ? "1818" : "180D")
@@ -27,6 +29,9 @@ public struct DeviceReading: Sendable {
     public var power: Double?
     public var cadence: Double?
     public var heartRate: Int?
+    public init(role: DeviceRole, uptime: Double, power: Double? = nil, cadence: Double? = nil, heartRate: Int? = nil) {
+        self.role = role; self.uptime = uptime; self.power = power; self.cadence = cadence; self.heartRate = heartRate
+    }
 }
 
 public struct PacketCapture: Codable, Identifiable, Sendable {
@@ -57,14 +62,12 @@ public enum BluetoothError: Error, LocalizedError {
 @MainActor @Observable public final class BluetoothDevices: NSObject {
     public private(set) var nearby: [NearbyDevice] = []
     public private(set) var names: [DeviceRole: String] = [:]
-    public private(set) var status = "Scan to find your trainer and pedals."
+    public private(set) var status = "Connect your trainer. An external power meter and heart-rate sensor are optional."
     public private(set) var scanning = false
     public private(set) var trainerCanPrepare = false
     public private(set) var trainerReady = false
     public private(set) var powerRange: SupportedPowerRange?
-    public private(set) var pedalPower: Double?
-    public private(set) var pedalCadence: Double?
-    public private(set) var lastPedalUptime: Double?
+    public private(set) var measurements = DeviceMeasurements()
     public private(set) var captures: [PacketCapture] = []
     public var captureEnabled = false
     public var resistanceLayout: ResistanceLayout = .standardOneByte
@@ -80,7 +83,7 @@ public enum BluetoothError: Error, LocalizedError {
         }
     }
     @ObservationIgnored public var onReading: ((DeviceReading) -> Void)?
-    @ObservationIgnored public var onEssentialFailure: ((String) -> Void)?
+    @ObservationIgnored public var onDeviceFailure: ((DeviceRole, String) -> Void)?
     @ObservationIgnored private var central: CBCentralManager?
     @ObservationIgnored private var discovered: [UUID: CBPeripheral] = [:]
     @ObservationIgnored private var selected: [DeviceRole: CBPeripheral] = [:]
@@ -105,7 +108,7 @@ public enum BluetoothError: Error, LocalizedError {
     public func connect(_ device: NearbyDevice, as role: DeviceRole) {
         guard let peripheral = discovered[device.id] else { return }
         guard !selected.contains(where: { $0.key != role && $0.value.identifier == device.id }) else {
-            status = "Select a separate device for trainer control and pedal power."; return
+            status = "Use the trainer as the power source, or select a separate external power meter."; return
         }
         if let old = selected[role] {
             selected.removeValue(forKey: role); central?.cancelPeripheralConnection(old)
@@ -123,7 +126,7 @@ public enum BluetoothError: Error, LocalizedError {
         if role == .trainer { clearTrainer() }
         if role == .pedals { clearPedals() }
         central?.cancelPeripheralConnection(peripheral)
-        if role != .heartRate { onEssentialFailure?("\(role.title) disconnected.") }
+        onDeviceFailure?(role, "\(role.title) disconnected.")
     }
 
     public func prepareTrainer() async throws {
@@ -162,7 +165,7 @@ public enum BluetoothError: Error, LocalizedError {
                 guard let self, self.pending?.id == id else { return }
                 self.trainerReady = false; self.trainerCanPrepare = false; self.controlHealthy = false
                 self.resolve(.failure(BluetoothError.timedOut))
-                self.onEssentialFailure?(BluetoothError.timedOut.localizedDescription)
+                self.onDeviceFailure?(.trainer, BluetoothError.timedOut.localizedDescription)
             }
             trainer.writeValue(data, for: control, type: .withResponse)
         }
@@ -177,9 +180,11 @@ public enum BluetoothError: Error, LocalizedError {
         resolve(.failure(BluetoothError.disconnected))
         trainerReady = false; trainerCanPrepare = false; powerRange = nil; features = nil; controlHealthy = true
         characteristics = [:]
+        measurements.reset(.trainer)
     }
     private func clearPedals() {
-        cadenceTracker.reset(); pedalPower = nil; pedalCadence = nil; lastPedalUptime = nil
+        cadenceTracker.reset()
+        measurements.reset(.pedals)
     }
     private func role(of peripheral: CBPeripheral) -> DeviceRole? {
         selected.first { $0.value === peripheral }?.key
@@ -191,8 +196,9 @@ public enum BluetoothError: Error, LocalizedError {
     }
     private func failure(_ error: any Error, role: DeviceRole) {
         status = error.localizedDescription
+        measurements.reset(role)
         if role == .trainer { trainerReady = false }
-        if role != .heartRate { onEssentialFailure?(status) }
+        onDeviceFailure?(role, status)
     }
 }
 
@@ -202,7 +208,7 @@ extension BluetoothDevices: @preconcurrency CBCentralManagerDelegate {
         else {
             names = [:]; clearTrainer(); clearPedals(); scanning = false
             status = "Bluetooth is unavailable. Check Bluetooth permission and Settings."
-            onEssentialFailure?(status)
+            onDeviceFailure?(.trainer, status)
         }
     }
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
@@ -292,17 +298,17 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
             case (.trainer, "2ADA"):
                 if data.first == 0xff {
                     trainerReady = false; resolve(.failure(BluetoothError.notReady))
-                    onEssentialFailure?("Trainer control was taken by another application.")
+                    onDeviceFailure?(.trainer, "Trainer control was taken by another application.")
                 }
             case (.trainer, "2AD2"):
                 let value = try IndoorBikeData.decode(data, resistanceLayout: resistanceLayout)
-                onReading?(DeviceReading(role: role, uptime: time, power: value.powerWatts, cadence: value.cadenceRPM))
+                let reading = DeviceReading(role: role, uptime: time, power: value.powerWatts, cadence: value.cadenceRPM)
+                measurements.receive(reading); onReading?(reading)
             case (.pedals, "2A63"):
                 let value = try CyclingPowerMeasurement.decode(data)
                 let cadence = value.crank.flatMap { cadenceTracker.receive($0, at: time) }
-                pedalPower = value.watts; lastPedalUptime = time
-                if let cadence { pedalCadence = cadence }
-                onReading?(DeviceReading(role: role, uptime: time, power: value.watts, cadence: cadence))
+                let reading = DeviceReading(role: role, uptime: time, power: value.watts, cadence: cadence)
+                measurements.receive(reading); onReading?(reading)
             case (.heartRate, "2A37"):
                 onReading?(DeviceReading(role: role, uptime: time, heartRate: try HeartRateMeasurement.decode(data)))
             default: break

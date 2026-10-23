@@ -16,6 +16,8 @@ struct RideView: View {
                             Label(model.mockPaused && model.isActive ? "DEBUG · STREAM PAUSED" : "DEBUG · MOCK SENSOR STREAM", systemImage: "ladybug")
                                 .font(.caption.bold()).foregroundStyle(.orange)
                         }
+                        Label("Power: \(engine.session.configuration.resolvedPowerSource.title)", systemImage: "bolt.circle")
+                            .font(.caption).foregroundStyle(.secondary)
                         if model.isActive {
                             liveDashboard(engine)
                         } else if let result = engine.session.result {
@@ -98,7 +100,7 @@ struct RideView: View {
         VStack(spacing: 20) {
             HStack(spacing: 12) {
                 powerTile("TARGET", value: engine.targetPower, tint: Theme.accent)
-                powerTile("PEDAL POWER", value: freshPower(engine), tint: .primary)
+                powerTile("ACTUAL POWER", value: freshPower(engine), tint: .primary)
             }
             VStack(spacing: 8) {
                 if engine.phase == .ramp {
@@ -131,11 +133,15 @@ struct RideView: View {
                 RideMetric(title: "CADENCE", value: engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? "\(Int($0.rpm))" : nil } ?? "—", unit: "rpm")
                 RideMetric(title: "HEART RATE", value: model.freshHeartRate.map(String.init) ?? "—", unit: "bpm")
             }
-            Label(model.demoMode ? "Mock sensors · no trainer commands" : model.bluetooth.trainerReady ? "ERG control · pedal power source" : "Trainer connection needs attention",
+            Label(model.demoMode ? "Mock sensors · no trainer commands" : model.bluetooth.trainerReady ? "ERG control · \(engine.session.configuration.resolvedPowerSource.title) power" : "Trainer connection needs attention",
                   systemImage: model.demoMode ? "play.rectangle" : "checkmark.shield")
                 .font(.caption).foregroundStyle(.secondary)
             Text(engine.phase == .cooldown ? "Ramp scored. Spin gently to cool down." : "Stay seated. Keep a steady, comfortable cadence.")
                 .font(.callout).foregroundStyle(.secondary)
+            if engine.session.configuration.resolvedCadenceSource == .unavailable {
+                Text("Cadence unavailable. Tap Finish ramp when you cannot continue.")
+                    .font(.callout).foregroundStyle(.orange)
+            }
         }
     }
     private func freshPower(_ engine: RampEngine) -> Int? {
@@ -186,11 +192,11 @@ struct PowerChart: View {
     }
     var body: some View {
         Chart(points) { point in
-            LineMark(x: .value("Minutes", point.time / 60), y: .value("Pedal power", point.power),
+            LineMark(x: .value("Minutes", point.time / 60), y: .value("Measured power", point.power),
                      series: .value("Continuous signal", point.segment))
                 .foregroundStyle(Theme.accent)
-        }.chartXAxisLabel("Minutes").chartYAxisLabel("Pedal W").frame(height: 160)
-            .accessibilityLabel("Recorded pedal power over time")
+        }.chartXAxisLabel("Minutes").chartYAxisLabel("W").frame(height: 160)
+            .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time")
     }
 }
 

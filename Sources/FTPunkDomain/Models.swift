@@ -1,5 +1,22 @@
 import Foundation
 
+public enum PowerSource: String, Codable, CaseIterable, Identifiable, Sendable {
+    case trainer, externalPowerMeter
+    public var id: String { rawValue }
+    public var title: String { self == .trainer ? "Trainer" : "External power meter" }
+}
+
+public enum CadenceSource: String, Codable, Sendable {
+    case trainer, externalPowerMeter, unavailable
+    public var title: String {
+        switch self {
+        case .trainer: "Trainer"
+        case .externalPowerMeter: "External power meter"
+        case .unavailable: "Unavailable · finish ramp manually"
+        }
+    }
+}
+
 public enum RampPreset: String, Codable, CaseIterable, Identifiable, Sendable {
     case standard, gentle, zwift
     public var id: String { rawValue }
@@ -60,12 +77,18 @@ public struct SessionConfiguration: Codable, Equatable, Sendable {
     public let ftpFactor: Double
     public let riderID: UUID?
     public let riderName: String?
+    public let powerSource: PowerSource?
+    public let cadenceSource: CadenceSource?
+    // Earlier recordings always used the external pedals. Preserve that provenance.
+    public var resolvedPowerSource: PowerSource { powerSource ?? .externalPowerMeter }
+    public var resolvedCadenceSource: CadenceSource { cadenceSource ?? .externalPowerMeter }
 
     public init(preset: RampPreset = .standard, priorFTP: FTPEntry? = nil, weightKG: Double? = nil,
                 warmupSeconds: Double = 600, manualWarmupPower: Int? = nil,
                 maximumPower: Int = 600, maximumRampSeconds: Double = 1800,
                 cooldownSeconds: Double = 180, ftpFactor: Double = 0.72,
-                riderID: UUID? = nil, riderName: String? = nil) throws {
+                riderID: UUID? = nil, riderName: String? = nil,
+                powerSource: PowerSource = .trainer, cadenceSource: CadenceSource = .trainer) throws {
         if let riderName, riderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || riderName.count > 80 {
             throw ConfigurationError.invalidRider
         }
@@ -81,11 +104,12 @@ public struct SessionConfiguration: Codable, Equatable, Sendable {
         guard maximumPower >= preset.startingPower, maximumPower <= 32767,
               maximumRampSeconds.isFinite, maximumRampSeconds >= 60,
               cooldownSeconds.isFinite, cooldownSeconds >= 0, [0.72, 0.75].contains(ftpFactor) else { throw ConfigurationError.invalidLimits }
-        self.protocolVersion = 2; self.preset = preset; self.priorFTP = priorFTP; self.weightKG = weightKG
+        self.protocolVersion = 3; self.preset = preset; self.priorFTP = priorFTP; self.weightKG = weightKG
         self.warmupSeconds = warmupSeconds; self.warmupPower = manualWarmupPower ?? Int(derived.rounded())
         self.usesAutomaticWarmup = manualWarmupPower == nil; self.maximumPower = maximumPower
         self.maximumRampSeconds = maximumRampSeconds; self.cooldownSeconds = cooldownSeconds; self.ftpFactor = ftpFactor
         self.riderID = riderID; self.riderName = riderName?.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.powerSource = powerSource; self.cadenceSource = cadenceSource
     }
 
     public func rampPower(at elapsed: Double) -> Int {
