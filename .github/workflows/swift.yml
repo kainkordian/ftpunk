@@ -1,0 +1,11 @@
+name: Swift checks
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run package tests and compile native preview
+        run: swift test
+      - name: Build iOS simulator application
+        run: xcodebuild -project FTPunk.xcodeproj -scheme FTPunk -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
