@@ -9,6 +9,7 @@ import Foundation
 @MainActor public protocol ProfileRepository {
     func loadProfile() throws -> RiderProfile
     func saveProfile(_ profile: RiderProfile) throws
+    func profiles() throws -> [RiderProfile]
 }
 
 public enum UploadStatus: String, Codable, Sendable { case queued, uploading, uploaded, needsAttention }

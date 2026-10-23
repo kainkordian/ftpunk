@@ -8,19 +8,23 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("binary", type=Path)
-parser.add_argument("--output", type=Path, default=Path("/tmp/FTPunkPreview.app"))
+parser.add_argument("--output", type=Path)
+parser.add_argument("--production", action="store_true", help="Package a persistent, full local Mac app")
 args = parser.parse_args()
+if args.output is None:
+    args.output = Path("dist/FTPunk.app") if args.production else Path("/tmp/FTPunkPreview.app")
+executable = "FTPunk" if args.production else "FTPunkPreview"
 contents = args.output / "Contents"
 (contents / "MacOS").mkdir(parents=True, exist_ok=True)
 # Replace atomically so rebuilding does not overwrite a running executable's inode.
-staged_binary = contents / "MacOS" / "FTPunkPreview.next"
+staged_binary = contents / "MacOS" / (executable + ".next")
 shutil.copy2(args.binary, staged_binary)
-staged_binary.replace(contents / "MacOS" / "FTPunkPreview")
+staged_binary.replace(contents / "MacOS" / executable)
 with (contents / "Info.plist").open("wb") as file:
     plistlib.dump({
-        "CFBundleIdentifier": "com.kainkordian.ftpunk.preview",
-        "CFBundleExecutable": "FTPunkPreview", "CFBundleName": "FTPunk Debug Preview",
-        "CFBundleDisplayName": "FTPunk Debug Preview", "CFBundlePackageType": "APPL",
+        "CFBundleIdentifier": "com.kainkordian.ftpunk.mac" if args.production else "com.kainkordian.ftpunk.preview",
+        "CFBundleExecutable": executable, "CFBundleName": "FTPunk" if args.production else "FTPunk Debug Preview",
+        "CFBundleDisplayName": "FTPunk" if args.production else "FTPunk Debug Preview", "CFBundlePackageType": "APPL",
         "CFBundleVersion": "1", "CFBundleShortVersionString": "1.0",
         "NSPrincipalClass": "NSApplication", "LSMinimumSystemVersion": "14.0",
         "NSBluetoothAlwaysUsageDescription": "Connect to cycling devices when real-device mode is explicitly selected.",

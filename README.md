@@ -1,44 +1,77 @@
 # FTPunk
 
-A native iOS ramp-test prototype for an Elite Suito-T and Favero Assioma PRO MX-2 pedals. The trainer controls resistance; the pedals supply the power used for the result. Testing, analysis, and history work locally. Optional Intervals.icu upload uses a durable queue.
+Native iPhone and Mac apps for FTP ramp tests with an Elite Suito-T and Favero Assioma PRO MX-2 pedals. The trainer controls resistance; the pedals supply the power used for the result. Riders, recordings and progress work locally. Intervals.icu upload is optional and asks for confirmation.
+
+## Use the Mac app
+
+The local build produces `dist/FTPunk.app` and `dist/FTPunk-Mac.zip`. Open the app directly or copy it to Applications. It has persistent local profiles and history, Bluetooth support, account connections, and the same test engine as the iPhone app. It is not restricted to mock input.
+
+```sh
+sh Tools/build_mac.sh
+open dist/FTPunk.app
+```
+
+This packages a release executable for the build Mac's architecture (Apple silicon in this workspace), with an ad-hoc local signature. A Developer ID signature and notarization remain necessary for normal public distribution to other Macs. The full Xcode project also includes a **FTPunkMac** scheme, with Bluetooth/network sandbox entitlements for signed builds. Minimum macOS: 14.
+
+Mac and iPhone stores are independent. Future server sync can connect them without changing the workout engine or repository boundaries.
 
 ## Run on iPhone
 
-1. Install full Xcode with the iOS SDK. Swift command-line tools alone cannot build an iPhone application.
-2. Open `FTPunk.xcodeproj` and select the **FTPunk** scheme.
-3. In Signing & Capabilities, choose your development team and, if necessary, a unique bundle identifier.
-4. Run on an iPhone running iOS 18 or later. **Debug mode · no devices** is enabled initially so you can explore setup, recording, results, and history immediately.
-5. For the hardware prototype, switch Debug mode off, connect the Suito-T and the Assioma master sensor separately, and enable trainer control. Optional heart rate can be connected independently.
+1. Install full Xcode and an iOS Simulator runtime. Command-line tools alone are insufficient.
+2. Open `FTPunk.xcodeproj`, select **FTPunk**, and choose an iPhone simulator or an iOS 18+ device.
+3. For a physical iPhone, choose your signing team and, if needed, a unique bundle identifier.
+4. Use **Debug mode · no devices** first. For hardware, turn it off on the Ready step, connect the trainer and pedals separately, and enable trainer control. Heart rate is optional.
 
-The initial hardware path needs validation against your actual firmware. Check acknowledged target changes and stop behavior at a low load before a maximal test. Keep other trainer-control apps closed. Activate/configure/calibrate the pedals in Favero's app, and verify total pedal power and crank length there or with a bike computer.
-
-The setup screen lets you select a current/historical FTP or enter one manually, enter weight in kg, choose either reference ramp, and set warm-up duration. Automatic warm-up uses 50% of the selected FTP. With no existing FTP, the preset's 100 W or 75 W fallback is shown. A manual wattage override is available. Results retain the session's input values and report FTP in W/kg when weight was provided.
-
-## Try it without cycling devices
-
-With full Xcode installed and its first-launch setup complete, start a dedicated virtual iPhone:
+To build and open a dedicated virtual iPhone with an isolated mock profile:
 
 ```sh
 sh Tools/run_simulator.sh
 ```
 
-The launcher builds, installs, and opens FTPunk with an isolated in-memory preview profile (250 W FTP, 75 kg). Select **Start debug test**. On the Ride screen you can:
+Activate/configure/calibrate the pedals in Favero's app and verify total power and crank length there or with a bike computer. Before a maximal test, validate acknowledged target changes and stopping at a low load on your actual trainer firmware. Keep other trainer-control apps closed.
 
-- Play generated power, cadence, and heart rate at 1×, 4×, 12×, or 60× speed.
-- Set exact values with sliders, including zero power or cadence.
-- Pause/resume the stream, skip warm-up, or advance 60 seconds.
-- Simulate power loss, cadence loss, or trainer disconnection.
-- Complete a test and inspect its FTP estimate, W/kg, chart, and history.
+## Workflow and features
 
-The default mock rider eventually exhausts as the ramp passes 300 W. Quick debug tests use a 10-second warm-up and cooldown. Disable that option to exercise normal durations. The generated samples pass through the same ramp engine and analysis as real samples. Debug activities never upload or become an adopted FTP.
+**New test → Rider → Protocol → Ready → Ride → Result** keeps preparation separate from the active effort. Back/Continue/Start controls stay visible below the scrollable setup form.
 
-Until full Xcode and an iOS Simulator runtime are installed, the same SwiftUI screens can run as a native Mac app:
+- **Named riders:** choose or add a local person. Each has separate FTP history and weight. Tests snapshot rider identity/name, selected FTP, weight, protocol and factor. Adopting an old test's FTP updates its owner, even when another rider is selected.
+- **Starting FTP:** select a current or historical value, enter one manually, or leave it unspecified. Automatic warm-up uses 50% of the selected value. Without FTP, fallback power is 75 W for the 15 W/min protocol and 100 W for the others. A manual override is available.
+- **Three protocols:** 15 W/min (50 W start, +5 W/20 s), 25 W/min (100 W start, +5 W/12 s), and 20 W/min Zwift-style (100 W start, +20 W/60 s). Choose manually. The in-app guide explains the reference's 60 kg guideline and attributes the original protocol reasoning to Richard Stern.
+- **Dashboard:** large target and pedal watts, next-step countdown/progress, ramp/total time, cadence, optional heart rate, a power trace and clear finish/stop actions. Debug controls are collapsible.
+- **Results:** best valid continuous 60-second ramp power, a selected 72% or 75% estimate, the 72–77% range, and W/kg from session weight. In-app information explains the range and its limitations.
+- **Progress:** rider-grouped recordings, a rider filter and FTP/W/kg trend charts. Debug points are hidden by default and use diamond symbols when included. Compare matching protocols/factors.
+- **Deletion:** visible trash buttons, swipe/context actions and a detail-screen action, all with confirmation. Deleting removes local samples and pending jobs; adopted FTP values and activities already on Intervals.icu remain.
+- **Appearance:** System, Light and Dark under Settings, remembered per device. Native surfaces/text and adaptive accents support both themes.
+
+The [UI review](docs/UX_REVIEW.md) explains the design decisions and remaining validation.
+
+## Try without cycling devices
+
+Debug mode generates power, cadence and heart rate through the real ramp engine and FTP analysis. It offers 1×/4×/12×/60× playback, exact manual sliders, pause/resume, skip warm-up, advance 60 seconds, lost power/cadence signals and simulated trainer disconnection. Quick tests use a 10-second warm-up/cooldown. The default mock rider exhausts when the ramp passes 300 W. Debug recordings never upload or become adopted FTP.
+
+For an isolated in-memory Mac preview:
 
 ```sh
 sh Tools/run_preview.sh
 ```
 
-This preview is for UI and local behavior; it does not replace an iOS build or Bluetooth validation. Preview launches use in-memory history and skip loading existing account credentials. For a repeatable walkthrough that leaves a result on screen and captures this app's views in `/tmp/ftpunk-preview`, run `sh Tools/run_preview.sh --preview-walkthrough`.
+For a repeatable visual walkthrough with two synthetic riders and dated mock history:
+
+```sh
+sh Tools/run_preview.sh --preview-walkthrough
+```
+
+It captures this app's own views in `/tmp/ftpunk-preview`, including all setup stages, the ride dashboard, results, progress, settings and light-theme screens. The preview skips loading existing credentials. Normal app launches use persistent history.
+
+## Intervals.icu
+
+**Settings → Connect with an API key** is available in either real-device or debug mode. Copy your personal key from Intervals.icu Settings → Developer settings. The app verifies the athlete, stores the key in Keychain and excludes it from exports.
+
+The alternative sign-in button uses Apple's authentication browser with OAuth/S256 PKCE. Its implementation is present, but live sign-in needs FTPunk's one-time public-client registration and approval. No server or embedded client secret is required. See [configuration](Configuration/IntervalsOAuth.md) and the [official OAuth documentation](https://forum.intervals.icu/t/intervals-icu-oauth-support/2759).
+
+After a real test is finalized and saved, the app asks whether to upload it. The prompt identifies **the test's rider and the connected athlete account**, so guests' tests do not silently go to the app owner's account. Choose Upload or Keep local. History provides the same deliberate upload flow for older recordings. Connecting while a finalized real test is on the Ride screen also offers its upload. Debug tests are always excluded.
+
+Only an approved upload enters the durable queue. Approved jobs retry on launch, network recovery and foreground scheduling, retaining the same TCX bytes for file-hash deduplication. Force-quitting/suspension cannot guarantee immediate delivery. Old pending automatic jobs from earlier prototypes are cancelled during migration; no new automatic uploads are created. Uploads never update remote FTP, weight or wellness settings. No COROS integration is included.
 
 ## Build and test
 
@@ -46,59 +79,35 @@ This preview is for UI and local behavior; it does not replace an iOS build or B
 swift test
 ```
 
-For a command-line-only Swift installation whose default engine fails to load Swift Testing macros, use `sh Tools/test.sh` instead. This uses the installed macro plugin explicitly and does not download dependencies. That is the test path verified on this workspace's Swift 6.4 toolchain.
-
-This compiles the four library modules and the shared SwiftUI screens through a native Mac preview target, and runs packet, ramp, analysis, storage, export, and upload-queue tests. The libraries have no external package dependencies. A full Xcode install is still needed for the iOS target and Simulator.
+On a command-line-only Swift 6.4 installation whose default engine cannot load Swift Testing macros, use `sh Tools/test.sh`. The package has no external dependencies. Tests compile the full shared app and cover packets, timing/analysis, persistence/export, upload requests/queue, OAuth, legacy rider migration, multi-rider ownership, confirmation and deletion.
 
 ```sh
 xcodebuild -project FTPunk.xcodeproj -scheme FTPunk \
   -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
   CODE_SIGNING_ALLOWED=NO build
+
+xcodebuild -project FTPunk.xcodeproj -scheme FTPunkMac \
+  -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
-Use an iPhone for Bluetooth validation.
+`python3 Tools/generate_project.py` regenerates both shared schemes/project without extra tooling. Run it after adding/removing top-level Swift files in `App`. Package sources are discovered automatically. GitHub Actions checks tests and unsigned iOS/macOS builds.
 
-`Tools/generate_project.py` regenerates the committed Xcode project without XcodeGen or Ruby dependencies. Run it after adding/removing top-level Swift files in `App`. Swift package sources are discovered automatically. GitHub Actions is configured to run package tests and an unsigned iOS Simulator build when the repository is hosted there.
-
-## Modules
+## Architecture and validation boundary
 
 | Location | Responsibility |
 | --- | --- |
-| `App` | SwiftUI screens, native authentication browser, application orchestration, and explicit debug/real-device modes. |
-| `Sources/FTPunkDomain` | Immutable setup snapshots, ramp definitions, deterministic state machine, time-weighted analysis, repository interfaces. |
-| `Sources/FTPunkDevices` | Bounded FTMS/Cycling Power/HR decoding, cadence rollover handling, CoreBluetooth discovery and acknowledged trainer commands. |
-| `Sources/FTPunkStorage` | Versioned Core Data SQLite model, atomic session checkpoints, append-only samples, CSV/JSON/TCX export. |
-| `Sources/FTPunkIntegrations` | Keychain credentials, Intervals.icu HTTP adapter, immutable upload payloads, and persistent retry queue. |
+| `App` | Shared SwiftUI workflow/dashboard, adaptive theme, native sign-in, rider orchestration and upload consent. |
+| `Sources/FTPunkDomain` | Immutable session snapshots, rider identity/grouping, ramp definitions/state machine, time-weighted analysis and repository interfaces. |
+| `Sources/FTPunkDevices` | Bounded FTMS/Cycling Power/HR parsing, cadence rollover, CoreBluetooth discovery and acknowledged commands. |
+| `Sources/FTPunkStorage` | Versioned Core Data SQLite store, independent profiles, append-only samples, checkpoints and CSV/JSON/TCX export. |
+| `Sources/FTPunkIntegrations` | Keychain credentials, Intervals.icu HTTP/OAuth adapters and account-bound retry queue. |
 
-Storage uses Core Data instead of the original plan's SwiftData choice. It gives this prototype explicit transactions and a versioned model, and compiles with the installed command-line tools, which lack SwiftData macro plugins. Domain types and repository interfaces remain independent of persistence and network services.
+Core Data avoids third-party dependencies and keeps explicit transactions. Older single-rider JSON payloads decode into a stable default rider; the existing SQLite model needs no destructive migration. Future account sync remains a separate service with DTOs/outbox behavior; workouts never depend on network access.
 
-## Intervals.icu
+This remains a hardware prototype. Validate actual Suito-T control/start/stop and capability ranges, Assioma total-power/cadence semantics, live TCX import and authorization, wider display/accessibility cases, reconnect/device bindings and lifecycle behavior before release. Standard one-byte FTMS resistance decoding is the default; use the explicit two-byte reference layout only when confirmed by packet capture.
 
-The normal connection flow is **Connect Intervals.icu → sign in → approve activity uploads**, using Apple's authentication browser and OAuth with S256 PKCE. Users do not need an API key. Tokens are stored in Keychain and excluded from activity exports. No custom server or embedded client secret is needed for an approved public client.
+The foreground-only test policy interrupts on backgrounding or stale essential data. Stop acknowledgements are checked, but software cannot release braking after communication is lost. At exhaustion the hardware path releases ERG; a manually finished ramp can include cooldown.
 
-**Live sign-in needs a one-time app registration and approval.** The repository contains the sign-in implementation but leaves the public client ID empty. Until configured, Connections explains that registration is pending. Follow [Intervals.icu configuration](Configuration/IntervalsOAuth.md) to register the app and set its client ID. A personal API-key fallback remains under advanced developer options in debug mode; existing private connections are migrated automatically.
+## Reference and repository
 
-Enable automatic upload after connecting. Activities queue only after recording, including cooldown, has ended and been saved locally. Retries reuse the same TCX bytes for file-hash deduplication. You can also upload a saved real-device activity manually.
-
-Pending uploads resume on launch, network recovery, and foreground retry scheduling. This version does not guarantee background delivery after suspension/force-quit. Upload status appears in activity history. Automatic upload excludes interrupted/aborted tests; manual upload remains available. Uploading does not update the athlete's remote FTP or wellness settings.
-
-See the [official integration cookbook](https://forum.intervals.icu/t/intervals-icu-api-integration-cookbook/80090) and [OAuth documentation](https://forum.intervals.icu/t/intervals-icu-oauth-support/2759).
-
-## Current validation boundary
-
-The app is a first implementation, not a hardware-certified release. Remaining validation includes:
-
-- iOS Simulator/device build and visual checks with full Xcode.
-- Actual Suito-T GATT capabilities, control/start/stop sequences, and behavior after connection loss.
-- Actual Assioma total-power semantics, cadence notification timing, and comparison with a trusted display.
-- Resistance-field layout: standard one-byte decoding is the default; the explicit two-byte reference layout is available under Bluetooth diagnostics. No automatic layout guessing is used.
-- End-to-end TCX import and account upload with an authorized Intervals.icu account.
-- OAuth registration and live authorization/denial/revocation, device binding persistence/reconnect, and broader lifecycle/release polish.
-
-The foreground-only test policy interrupts an active test on backgrounding or stale essential data. Trainer stop acknowledgement is checked; if communication is lost, software cannot guarantee that braking is released. Exhaustion ends the scored window before its confirmation delay; the first hardware version releases ERG at exhaustion rather than imposing a cooldown target on stalled pedaling. A manually finished ramp can continue through cooldown.
-
-## Repository and reference
-
-`reference_project/` is ignored by Git and is not needed to build or test this repository. It stays on disk for local inspection. The [reference audit](docs/REFERENCE_AUDIT.md) records the inspected source commit and the findings carried into this implementation. The [development plan](docs/DEVELOPMENT_PLAN.md) describes the full intended release and future server boundaries.
-
-The repository is initialized locally on `main`. No remote hosting or publication is required for development.
+`reference_project/` stays ignored and is not included in the repository or Mac archive. See the [reference audit](docs/REFERENCE_AUDIT.md) and [development plan](docs/DEVELOPMENT_PLAN.md). Generated binaries/archives in `dist/` are also ignored. The repository remains local on `main` with no remote publication.

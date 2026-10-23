@@ -42,6 +42,7 @@ public enum ActivityExport {
     }
     public static func description(_ session: TestSession) -> String {
         var text = "FTPunk \(session.configuration.preset.title). \(session.outcome?.title ?? "Recording")."
+        text += " Rider: \(session.riderName)."
         if session.isDemo { text = "DEMO — synthetic activity. " + text }
         if let ftp = session.configuration.priorFTP { text += " Prior FTP: \(ftp.watts) W." }
         if let weight = session.configuration.weightKG { text += " Weight: \(weight) kg." }

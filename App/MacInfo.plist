@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+    <key>CFBundleDisplayName</key><string>FTPunk</string>
+    <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+    <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>NSBluetoothAlwaysUsageDescription</key><string>FTPunk connects to your smart trainer, power pedals and optional heart-rate sensor to perform and record your ramp test.</string>
+    <key>IntervalsOAuthClientID</key><string>$(INTERVALS_OAUTH_CLIENT_ID)</string>
+    <key>CFBundleURLTypes</key><array><dict>
+        <key>CFBundleURLName</key><string>com.kainkordian.ftpunk.oauth</string>
+        <key>CFBundleURLSchemes</key><array><string>ftpunk</string></array>
+    </dict></array>
+</dict></plist>

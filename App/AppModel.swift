@@ -10,16 +10,26 @@ import FTPunkIntegrations
 import UIKit
 #endif
 
+struct UploadConsent: Identifiable {
+    var id: UUID { session.id }
+    let session: TestSession
+    let accountID: String
+    let accountName: String
+}
+
 @MainActor @Observable final class AppModel {
     let bluetooth = BluetoothDevices()
     private let store: LocalStore
     private let uploads: UploadWorker
     var profile: RiderProfile
+    var riders: [RiderProfile]
+    var riderName = ""
     var history: [TestSession] = []
     var jobs: [ActivityUploadJob] = []
     var engine: RampEngine?
     var elapsed = 0.0
     var selectedTab = 0
+    var setupStep = 0
     var preset: RampPreset = .standard
     var ftpSelection = "manual"
     var manualFTP = ""
@@ -42,16 +52,13 @@ import UIKit
     var connection: IntervalsConnection?
     var apiKeyInput = ""
     var connecting = false
-    var autoUpload: Bool {
-        didSet {
-            if !preview { UserDefaults.standard.set(autoUpload, forKey: "autoUpload") }
-            if !autoUpload, let connection {
-                do { try uploads.cancelAutomaticUploads(accountID: connection.athleteID); try reload() }
-                catch { errorMessage = error.localizedDescription }
-            }
-        }
-    }
+    var uploadConsent: UploadConsent?
     var heartRate: Int?
+    private var heartRateTime: Double?
+    var freshHeartRate: Int? {
+        guard let heartRateTime, elapsed - heartRateTime <= 5 else { return nil }
+        return heartRate
+    }
     private var origin = 0.0
     private var lastWallTime = 0.0
     private var mockStream = MockRideStream()
@@ -65,15 +72,24 @@ import UIKit
     private var finalizedID: UUID?
     private let network = NWPathMonitor()
     private var uploadRetry: Task<Void, Never>?
+    #if os(macOS)
+    @ObservationIgnored private var wakeActivity: NSObjectProtocol?
+    #endif
 
     init(store: LocalStore, preview: Bool = false) throws {
         self.store = store; self.preview = preview; uploads = UploadWorker(repository: store)
         try store.recoverInterruptedSessions()
-        profile = try store.loadProfile()
-        autoUpload = preview ? false : UserDefaults.standard.bool(forKey: "autoUpload")
+        let savedRiders = try store.profiles()
+        let availableRiders = savedRiders.isEmpty ? [RiderProfile()] : savedRiders
+        riders = availableRiders
+        let selectedID = preview ? nil : UserDefaults.standard.string(forKey: "selectedRiderID")
+        profile = availableRiders.first(where: { $0.id.uuidString == selectedID }) ?? availableRiders[0]
+        riderName = profile.name
         if let current = profile.currentFTP { ftpSelection = current.id.uuidString }
         if let kg = profile.weightKG { weight = String(kg) }
         connection = preview ? nil : try CredentialVault.load()
+        // Previous prototypes could queue automatically. New tests always ask first.
+        if let connection { try uploads.cancelAutomaticUploads(accountID: connection.athleteID) }
         if preview { manualFTP = "250"; weight = "75" }
         try reload()
         bluetooth.onReading = { [weak self] in self?.receive($0) }
@@ -92,6 +108,46 @@ import UIKit
     var selectedFTP: FTPEntry? {
         if ftpSelection == "manual" { return number(manualFTP).map { FTPEntry(watts: $0) } }
         return profile.ftpHistory.first { $0.id.uuidString == ftpSelection }
+    }
+    var selectedRiderID: UUID {
+        get { profile.id }
+        set { selectRider(newValue) }
+    }
+    func selectRider(_ id: UUID) {
+        guard !isActive, let rider = riders.first(where: { $0.id == id }) else { return }
+        profile = rider; riderName = rider.name
+        weight = rider.weightKG.map { String($0) } ?? ""
+        manualFTP = ""
+        ftpSelection = rider.currentFTPID?.uuidString ?? "manual"
+        if !preview { UserDefaults.standard.set(id.uuidString, forKey: "selectedRiderID") }
+    }
+    func addRider(name: String) -> Bool {
+        guard !isActive else { return false }
+        let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty, name.count <= 80 else { errorMessage = ConfigurationError.invalidRider.localizedDescription; return false }
+        guard !riders.contains(where: { $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }) else {
+            errorMessage = "A rider with that name already exists. Select them or use a different name."; return false
+        }
+        let rider = RiderProfile(id: UUID(), name: name)
+        do { try store.saveProfile(rider); riders.append(rider); selectRider(rider.id); return true }
+        catch { errorMessage = error.localizedDescription; return false }
+    }
+    @discardableResult func saveRiderDetails() -> Bool {
+        guard !isActive else { return false }
+        let name = riderName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty, name.count <= 80 else { errorMessage = ConfigurationError.invalidRider.localizedDescription; return false }
+        guard !riders.contains(where: { $0.id != profile.id && $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }) else {
+            errorMessage = "Another rider already uses that name. Use a distinct name to keep the history clear."; return false
+        }
+        if !weight.trimmingCharacters(in: .whitespaces).isEmpty,
+           number(weight).map({ $0.isFinite && $0 > 0 }) != true {
+            errorMessage = ConfigurationError.invalidWeight.localizedDescription; return false
+        }
+        profile.name = name; profile.weightKG = number(weight)
+        return persistProfile()
+    }
+    func name(for riderID: UUID) -> String {
+        riders.first(where: { $0.id == riderID })?.name ?? history.first(where: { $0.riderID == riderID })?.riderName ?? "You"
     }
     var warmupPreview: String {
         guard let config = try? configuration() else { return "Enter valid setup values" }
@@ -115,7 +171,8 @@ import UIKit
         return try SessionConfiguration(preset: preset, priorFTP: selectedFTP, weightKG: number(weight),
                                         warmupSeconds: demoMode && quickDebugTest ? 10 : Double(warmupMinutes * 60),
                                         manualWarmupPower: automaticWarmup ? nil : manual,
-                                        cooldownSeconds: demoMode && quickDebugTest ? 10 : 180, ftpFactor: ftpFactor)
+                                        cooldownSeconds: demoMode && quickDebugTest ? 10 : 180, ftpFactor: ftpFactor,
+                                        riderID: profile.id, riderName: riderName)
     }
     func saveExistingFTP() {
         guard let value = number(manualFTP), value.isFinite, value > 0, value <= 32767 else {
@@ -127,17 +184,27 @@ import UIKit
     }
     func adopt(_ session: TestSession) {
         guard !session.isDemo, let result = session.result else { return }
+        guard let index = riders.firstIndex(where: { $0.id == session.riderID }) else { return }
+        var rider = riders[index]
         let entry = FTPEntry(watts: result.estimatedFTP, source: "Ramp test")
-        profile.ftpHistory.insert(entry, at: 0); profile.currentFTPID = entry.id
-        persistProfile(); ftpSelection = entry.id.uuidString
+        rider.ftpHistory.insert(entry, at: 0); rider.currentFTPID = entry.id
+        do {
+            try store.saveProfile(rider); riders[index] = rider
+            if profile.id == rider.id { profile = rider; ftpSelection = entry.id.uuidString }
+        } catch { errorMessage = error.localizedDescription }
     }
-    private func persistProfile() {
-        do { try store.saveProfile(profile) } catch { errorMessage = error.localizedDescription }
+    @discardableResult private func persistProfile() -> Bool {
+        do {
+            try store.saveProfile(profile)
+            if let index = riders.firstIndex(where: { $0.id == profile.id }) { riders[index] = profile }
+            return true
+        } catch { errorMessage = error.localizedDescription; return false }
     }
     func start() async {
         guard !isActive, !isStarting else { return }
         isStarting = true; defer { isStarting = false }
         do {
+            guard saveRiderDetails() else { return }
             let config = try configuration()
             guard readyToStart else { throw BluetoothError.notReady }
             if !demoMode {
@@ -145,13 +212,16 @@ import UIKit
                       config.warmupPower == range.quantized(config.warmupPower),
                       config.preset.startingPower == range.quantized(config.preset.startingPower),
                       config.preset.cooldownPower == range.quantized(config.preset.cooldownPower),
-                      5.isMultiple(of: range.increment) else {
+                      config.preset.stepWatts.isMultiple(of: range.increment) else {
                     throw BluetoothError.targetOutOfRange
                 }
                 try await bluetooth.startTrainer(power: config.warmupPower)
             }
-            profile.weightKG = config.weightKG; try store.saveProfile(profile)
+            profile.weightKG = config.weightKG; profile.name = config.riderName ?? riderName
+            try store.saveProfile(profile)
+            if let index = riders.firstIndex(where: { $0.id == profile.id }) { riders[index] = profile }
             origin = ProcessInfo.processInfo.systemUptime; lastWallTime = origin
+            heartRate = nil; heartRateTime = nil
             mockStream = MockRideStream(); mockPaused = false
             elapsed = 0; lastCheckpoint = -1; finalizedID = nil
             lastAcknowledgedTarget = demoMode ? nil : config.warmupPower
@@ -172,10 +242,10 @@ import UIKit
         }
     }
     private func receive(_ reading: DeviceReading) {
-        if let rate = reading.heartRate { heartRate = rate }
         guard isActive, !demoMode else { return }
         let time = reading.uptime - origin
         guard time >= 0 else { return }
+        if let rate = reading.heartRate { heartRate = rate; heartRateTime = time }
         let sample = RideSample(time: time,
                                 power: reading.role == .pedals ? reading.power : nil,
                                 cadence: reading.role == .pedals ? reading.cadence : nil,
@@ -229,6 +299,7 @@ import UIKit
                                            manualCadence: manualMockValues ? mockCadence : nil,
                                            manualHeartRate: manualMockValues ? Int(mockHeartRate) : nil)
             heartRate = sample.heartRate
+            if sample.heartRate != nil { heartRateTime = elapsed }
             engine?.receive(sample); engine?.tick(at: elapsed)
         }
         checkpoint()
@@ -276,10 +347,7 @@ import UIKit
                 catch { self.errorMessage = "Trainer stop was not confirmed: \(error.localizedDescription)" }
             }
         }
-        if saved, autoUpload, let connection, session.outcome?.allowsEstimate == true, !session.isDemo {
-            do { try uploads.enqueue(session, connection: connection, automatic: true); Task { await flushUploads() } }
-            catch { errorMessage = error.localizedDescription }
-        }
+        if saved, session.outcome?.allowsEstimate == true { requestUpload(session) }
     }
     func connectIntervals() async {
         guard !connecting else { return }
@@ -304,23 +372,35 @@ import UIKit
         if let old = connection, old.athleteID != value.athleteID { try store.deleteUploadJobs(accountID: old.athleteID) }
         try CredentialVault.save(value); connection = value
         await flushUploads()
+        if let session = engine?.session, session.endedAtOffset != nil { requestUpload(session) }
     }
     func disconnectIntervals() async {
         let old = connection
         do {
             uploadRetry?.cancel()
             if let old { try store.deleteUploadJobs(accountID: old.athleteID) }
-            try CredentialVault.clear(); connection = nil; autoUpload = false; try reload()
+            try CredentialVault.clear(); connection = nil; uploadConsent = nil; try reload()
             if let old, old.usesOAuth {
                 do { try await IntervalsClient().revoke(old) }
                 catch { errorMessage = "Disconnected on this device. Online revocation could not be confirmed; you can revoke access in Intervals.icu Settings." }
             }
         } catch { errorMessage = error.localizedDescription }
     }
-    func upload(_ session: TestSession) async {
+    private func upload(_ session: TestSession) async {
         guard let connection, !session.isDemo else { return }
         do { try uploads.enqueue(session, connection: connection); await flushUploads() }
         catch { errorMessage = error.localizedDescription }
+    }
+    func requestUpload(_ session: TestSession) {
+        guard let connection, !session.isDemo, session.endedAtOffset != nil,
+              !jobs.contains(where: { $0.sessionID == session.id && $0.accountID == connection.athleteID }) else { return }
+        uploadConsent = UploadConsent(session: session, accountID: connection.athleteID, accountName: connection.athleteName)
+    }
+    func confirmUpload(_ consent: UploadConsent) async {
+        guard connection?.athleteID == consent.accountID else {
+            errorMessage = "The connected account changed. Choose Upload again to confirm the destination."; return
+        }
+        await upload(consent.session)
     }
     func flushUploads(manual: Bool = false) async {
         guard let connection else { return }
@@ -339,7 +419,12 @@ import UIKit
     }
     func delete(_ session: TestSession) {
         guard session.id != engine?.session.id || !isActive else { return }
-        do { try store.deleteSession(id: session.id); try reload() } catch { errorMessage = error.localizedDescription }
+        do {
+            try store.deleteSession(id: session.id)
+            if engine?.session.id == session.id { engine = nil }
+            if uploadConsent?.id == session.id { uploadConsent = nil }
+            try reload()
+        } catch { errorMessage = error.localizedDescription }
     }
     func reload() throws { history = try store.sessions(); jobs = try store.uploadJobs() }
     func export(_ session: TestSession, kind: String) -> URL? {
@@ -359,6 +444,12 @@ import UIKit
     private func setAwake(_ enabled: Bool) {
         #if canImport(UIKit)
         UIApplication.shared.isIdleTimerDisabled = enabled
+        #elseif os(macOS)
+        if enabled, wakeActivity == nil {
+            wakeActivity = ProcessInfo.processInfo.beginActivity(options: [.userInitiated, .idleSystemSleepDisabled, .idleDisplaySleepDisabled], reason: "Recording an FTP ramp test")
+        } else if !enabled, let activity = wakeActivity {
+            ProcessInfo.processInfo.endActivity(activity); wakeActivity = nil
+        }
         #endif
     }
 }

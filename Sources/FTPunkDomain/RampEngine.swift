@@ -71,7 +71,7 @@ public struct RampEngine: Sendable {
                 interrupt(at: time, reason: "Pedal cadence is no longer fresh."); return
             }
             if elapsed >= session.configuration.maximumRampSeconds ||
-                session.configuration.preset.startingPower + Int(elapsed / session.configuration.preset.stepSeconds) * 5 > session.configuration.maximumPower {
+                session.configuration.preset.startingPower + Int(elapsed / session.configuration.preset.stepSeconds) * session.configuration.preset.stepWatts > session.configuration.maximumPower {
                 finishRamp(at: time, outcome: .limitReached); return
             }
             targetPower = session.configuration.rampPower(at: elapsed)

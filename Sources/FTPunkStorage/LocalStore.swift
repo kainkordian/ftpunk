@@ -72,13 +72,19 @@ import FTPunkDomain
         } catch { context.rollback(); throw error }
     }
     public func loadProfile() throws -> RiderProfile {
-        guard let record = try rows("Profile").first else { return RiderProfile() }
-        return try decoder.decode(RiderProfile.self, from: payload(record))
+        try profiles().first ?? RiderProfile()
+    }
+    public func profiles() throws -> [RiderProfile] {
+        try rows("Profile").map { try decoder.decode(RiderProfile.self, from: payload($0)) }
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
     public func saveProfile(_ profile: RiderProfile) throws {
         do {
-            let record = try rows("Profile").first ?? insert("Profile")
-            record.setValue("rider", forKey: "key"); record.setValue(try encoder.encode(profile), forKey: "payload")
+            let key = profile.id.uuidString
+            let existing = try rows("Profile", matching: "key == %@", key).first
+            let legacy = profile.id == RiderProfile.legacyID ? try rows("Profile", matching: "key == %@", "rider").first : nil
+            let record = existing ?? legacy ?? insert("Profile")
+            record.setValue(key, forKey: "key"); record.setValue(try encoder.encode(profile), forKey: "payload")
             try context.save()
         } catch { context.rollback(); throw error }
     }

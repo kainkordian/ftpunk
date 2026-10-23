@@ -5,7 +5,7 @@ let package = Package(
     name: "FTPunk",
     platforms: [.iOS(.v18), .macOS(.v14)],
     products: [
-        .executable(name: "FTPunkPreview", targets: ["FTPunkApp"]),
+        .executable(name: "FTPunk", targets: ["FTPunkApp"]),
         .library(name: "FTPunkDomain", targets: ["FTPunkDomain"]),
         .library(name: "FTPunkDevices", targets: ["FTPunkDevices"]),
         .library(name: "FTPunkStorage", targets: ["FTPunkStorage"]),
@@ -17,7 +17,7 @@ let package = Package(
         .target(name: "FTPunkStorage", dependencies: ["FTPunkDomain"]),
         .target(name: "FTPunkIntegrations", dependencies: ["FTPunkDomain", "FTPunkStorage"]),
         .executableTarget(name: "FTPunkApp", dependencies: ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations"],
-                          path: "App", exclude: ["Info.plist", "Assets.xcassets"]),
-        .testTarget(name: "FTPunkTests", dependencies: ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations"])
+                          path: "App", exclude: ["Info.plist", "MacInfo.plist", "Mac.entitlements", "Assets.xcassets"]),
+        .testTarget(name: "FTPunkTests", dependencies: ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations", "FTPunkApp"])
     ]
 )
