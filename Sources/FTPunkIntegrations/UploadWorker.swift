@@ -36,7 +36,7 @@ import FTPunkStorage
             guard try repository.uploadJobs().contains(where: { $0.id == job.id }) else { continue }
             job.status = .uploading; job.attempts += 1; try repository.saveUploadJob(job)
             do {
-                let ids = try await uploader.upload(job, credential: connection.apiKey)
+                let ids = try await uploader.upload(job, credential: connection.authorizationHeader)
                 guard try repository.uploadJobs().contains(where: { $0.id == job.id }) else { continue }
                 job.remoteIDs = ids; job.status = .uploaded; job.lastError = nil
             } catch {

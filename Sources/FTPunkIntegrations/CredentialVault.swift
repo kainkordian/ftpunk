@@ -4,9 +4,29 @@ import Security
 public struct IntervalsConnection: Codable, Sendable {
     public let athleteID: String
     public let athleteName: String
-    public let apiKey: String
+    public let usesOAuth: Bool
+    private let secret: String
+    public var authorizationHeader: String {
+        usesOAuth ? "Bearer " + secret : "Basic " + Data("API_KEY:\(secret)".utf8).base64EncodedString()
+    }
     public init(athleteID: String, athleteName: String, apiKey: String) {
-        self.athleteID = athleteID; self.athleteName = athleteName; self.apiKey = apiKey
+        self.athleteID = athleteID; self.athleteName = athleteName; secret = apiKey; usesOAuth = false
+    }
+    public init(athleteID: String, athleteName: String, accessToken: String) {
+        self.athleteID = athleteID; self.athleteName = athleteName; secret = accessToken; usesOAuth = true
+    }
+    private enum CodingKeys: String, CodingKey { case athleteID, athleteName, secret, usesOAuth, apiKey }
+    public init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        athleteID = try values.decode(String.self, forKey: .athleteID)
+        athleteName = try values.decode(String.self, forKey: .athleteName)
+        usesOAuth = try values.decodeIfPresent(Bool.self, forKey: .usesOAuth) ?? false
+        secret = try values.decodeIfPresent(String.self, forKey: .secret) ?? values.decode(String.self, forKey: .apiKey)
+    }
+    public func encode(to encoder: any Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(athleteID, forKey: .athleteID); try values.encode(athleteName, forKey: .athleteName)
+        try values.encode(usesOAuth, forKey: .usesOAuth); try values.encode(secret, forKey: .secret)
     }
 }
 

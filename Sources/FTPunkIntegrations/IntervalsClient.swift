@@ -20,7 +20,7 @@ public actor IntervalsClient: ActivityUploader {
     private let session: URLSession
     public init(session: URLSession = .shared) { self.session = session }
 
-    /// Personal-use authentication. Public distribution will use registered OAuth + PKCE.
+    /// Advanced personal-use fallback. The normal connection flow uses OAuth + PKCE.
     public func connect(apiKey: String) async throws -> IntervalsConnection {
         var request = URLRequest(url: URL(string: "https://intervals.icu/api/v1/athlete/0")!)
         request.setValue(Self.authorization(apiKey), forHTTPHeaderField: "Authorization")
@@ -29,6 +29,33 @@ public actor IntervalsClient: ActivityUploader {
         struct Athlete: Decodable { let id: String; let name: String? }
         let athlete = try JSONDecoder().decode(Athlete.self, from: data)
         return IntervalsConnection(athleteID: athlete.id, athleteName: athlete.name ?? athlete.id, apiKey: apiKey)
+    }
+    public func exchange(_ attempt: IntervalsOAuthAttempt, code: String) async throws -> IntervalsConnection {
+        let (data, response) = try await session.data(for: attempt.tokenRequest(code: code))
+        try Self.validate(response)
+        struct Token: Decodable {
+            let access_token: String
+            let token_type: String
+            let scope: String
+            let athlete: Athlete
+            struct Athlete: Decodable { let id: String; let name: String? }
+        }
+        let token = try JSONDecoder().decode(Token.self, from: data)
+        guard token.token_type.lowercased() == "bearer", !token.access_token.isEmpty else { throw IntervalsError.invalidResponse }
+        let scopes = token.scope.split(whereSeparator: { $0 == "," || $0.isWhitespace }).map(String.init)
+        guard scopes.contains("ACTIVITY:WRITE") else { throw OAuthError.missingPermission }
+        return IntervalsConnection(athleteID: token.athlete.id, athleteName: token.athlete.name ?? token.athlete.id,
+                                   accessToken: token.access_token)
+    }
+    public func revoke(_ connection: IntervalsConnection) async throws {
+        guard connection.usesOAuth else { return }
+        var request = URLRequest(url: URL(string: "https://intervals.icu/api/v1/disconnect-app")!)
+        request.httpMethod = "DELETE"; request.timeoutInterval = 15
+        request.setValue(connection.authorizationHeader, forHTTPHeaderField: "Authorization")
+        let (_, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) || http.statusCode == 401 else {
+            throw IntervalsError.invalidResponse
+        }
     }
     public func upload(_ job: ActivityUploadJob, credential: String) async throws -> [String] {
         let request = Self.uploadRequest(job, credential: credential)
@@ -49,7 +76,7 @@ public actor IntervalsClient: ActivityUploader {
         ]
         var request = URLRequest(url: components.url!); request.httpMethod = "POST"; request.timeoutInterval = 60
         let boundary = "FTPunk-\(job.id.uuidString)"
-        request.setValue(authorization(credential), forHTTPHeaderField: "Authorization")
+        request.setValue(credential, forHTTPHeaderField: "Authorization")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         var body = Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"file\"; filename=\"\(job.sessionID.uuidString).tcx\"\r\nContent-Type: application/vnd.garmin.tcx+xml\r\n\r\n".utf8)
         body.append(job.file); body.append(Data("\r\n--\(boundary)--\r\n".utf8))

@@ -8,6 +8,11 @@
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>1.0</string>
     <key>CFBundleVersion</key><string>1</string>
+    <key>IntervalsOAuthClientID</key><string>$(INTERVALS_OAUTH_CLIENT_ID)</string>
+    <key>CFBundleURLTypes</key><array><dict>
+        <key>CFBundleURLName</key><string>com.kainkordian.ftpunk.oauth</string>
+        <key>CFBundleURLSchemes</key><array><string>ftpunk</string></array>
+    </dict></array>
     <key>LSRequiresIPhoneOS</key><true/>
     <key>NSBluetoothAlwaysUsageDescription</key><string>FTPunk connects to your smart trainer, power pedals, and optional heart-rate sensor to perform and record your ramp test.</string>
     <key>UILaunchScreen</key><dict/>

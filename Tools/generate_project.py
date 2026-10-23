@@ -59,6 +59,7 @@ for mode in ["Debug", "Release"]:
         "PRODUCT_BUNDLE_IDENTIFIER": "com.kainkordian.ftpunk",
         "PRODUCT_NAME": "$(TARGET_NAME)",
         "SWIFT_VERSION": "6.0",
+        "INTERVALS_OAUTH_CLIENT_ID": "",
         "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
         "TARGETED_DEVICE_FAMILY": "1,2",
         "SDKROOT": "iphoneos",

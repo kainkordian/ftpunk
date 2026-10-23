@@ -34,10 +34,16 @@ private struct SetupView: View {
                         .foregroundStyle(.secondary)
                 }
                 Section {
-                    Toggle("Demo mode", isOn: $model.demoMode)
+                    Toggle("Debug mode · no devices", isOn: $model.demoMode)
                     if model.demoMode {
-                        Label("Synthetic ride · 12× speed · never uploads", systemImage: "play.rectangle")
+                        Label("Mock power, cadence and heart rate · never uploads", systemImage: "play.rectangle")
                             .font(.caption).foregroundStyle(.orange)
+                        Toggle("Quick test · 10 s warm-up and cooldown", isOn: $model.quickDebugTest)
+                        Picker("Playback speed", selection: $model.mockSpeed) {
+                            ForEach([1.0, 4.0, 12.0, 60.0], id: \.self) { Text("\(Int($0))×").tag($0) }
+                        }
+                        Text("Change the mock numbers, pause, skip ahead, or simulate a lost signal from the Ride screen.")
+                            .font(.caption).foregroundStyle(.secondary)
                     } else {
                         ForEach(DeviceRole.allCases) { role in
                             Button { deviceRole = role } label: {
@@ -80,8 +86,12 @@ private struct SetupView: View {
                     }
                     Text("Starts at \(model.preset.startingPower) W. Adds 5 W every \(Int(model.preset.stepSeconds)) seconds.")
                         .font(.caption).foregroundStyle(.secondary)
-                    Picker("Warm-up", selection: $model.warmupMinutes) {
-                        ForEach([0, 1, 5, 10, 15, 20], id: \.self) { Text("\($0) minutes").tag($0) }
+                    if model.demoMode && model.quickDebugTest {
+                        LabeledContent("Warm-up", value: "10 seconds · quick debug test")
+                    } else {
+                        Picker("Warm-up", selection: $model.warmupMinutes) {
+                            ForEach([0, 1, 5, 10, 15, 20], id: \.self) { Text("\($0) minutes").tag($0) }
+                        }
                     }
                     Toggle("Warm up at 50% of existing FTP", isOn: $model.automaticWarmup)
                     if !model.automaticWarmup {
@@ -103,13 +113,14 @@ private struct SetupView: View {
                         Task { await model.start() }
                     } label: {
                         HStack {
-                            Text(model.isStarting ? "Preparing…" : model.demoMode ? "Start demo test" : "Start ramp test")
+                            Text(model.isStarting ? "Preparing…" : model.demoMode ? "Start debug test" : "Start ramp test")
                             Spacer(); Image(systemName: "arrow.right")
                         }.font(.headline)
                     }
                     .disabled(model.isStarting || !model.readyToStart)
                 }
             }
+            .formStyle(.grouped)
             .disabled(model.isActive)
             .navigationTitle("FTPunk")
             .sheet(item: $deviceRole) { DevicePicker(model: model, role: $0) }
@@ -160,17 +171,21 @@ private struct RideView: View {
                 if let engine = model.engine {
                     VStack(spacing: 24) {
                         if engine.session.isDemo {
-                            Label("DEMO · SYNTHETIC DATA", systemImage: "play.rectangle.fill")
+                            Label("DEBUG · MOCK SENSOR STREAM", systemImage: "play.rectangle.fill")
                                 .font(.caption.bold()).foregroundStyle(.orange)
                         }
                         HStack {
                             Text(engine.phase.title.uppercased()).font(.headline).foregroundStyle(accent)
                             Spacer(); Text(time(model.elapsed)).monospacedDigit().foregroundStyle(.secondary)
                         }
-                        VStack(spacing: 0) {
-                            Text(engine.lastPower.map { "\(Int($0.watts.rounded()))" } ?? "—")
-                                .font(.system(size: 90, weight: .bold, design: .rounded)).monospacedDigit()
-                            Text("PEDAL WATTS").font(.caption).foregroundStyle(.secondary)
+                        if let result = engine.session.result {
+                            ResultCard(result: result)
+                        } else {
+                            VStack(spacing: 0) {
+                                Text(engine.lastPower.map { "\(Int($0.watts.rounded()))" } ?? "—")
+                                    .font(.system(size: 90, weight: .bold, design: .rounded)).monospacedDigit()
+                                Text("PEDAL WATTS").font(.caption).foregroundStyle(.secondary)
+                            }
                         }
                         HStack(spacing: 24) {
                             Metric(title: "TARGET", value: engine.targetPower.map { "\($0) W" } ?? "—")
@@ -184,7 +199,7 @@ private struct RideView: View {
                             Text("Next +5 W in \(Int(ceil(step - (model.elapsed - engine.phaseStartedAt).truncatingRemainder(dividingBy: step)))) s")
                         }
                         PowerChart(samples: engine.session.samples)
-                        if let result = engine.session.result { ResultCard(result: result) }
+                        if engine.session.isDemo && model.isActive { DebugControlsView(model: model) }
                         if let reason = engine.session.endReason { Text(reason).foregroundStyle(.orange) }
                         if engine.phase == .ramp {
                             Button("Finish ramp · begin cooldown", action: model.finishRamp).buttonStyle(.bordered)
@@ -200,13 +215,47 @@ private struct RideView: View {
                     }.padding(24).frame(maxWidth: 850)
                 } else {
                     ContentUnavailableView("Ready when you are", systemImage: "bicycle",
-                                           description: Text("Configure a ramp test or try the demo from Test setup."))
+                                           description: Text("Configure a ramp test or try debug mode without any devices."))
                         .padding(.top, 80)
                 }
             }.navigationTitle("Your test")
         }
     }
     private func time(_ seconds: Double) -> String { "\(Int(seconds) / 60):\(String(format: "%02d", Int(seconds) % 60))" }
+}
+
+private struct DebugControlsView: View {
+    @Bindable var model: AppModel
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Label("Debug controls", systemImage: "ladybug").font(.headline).foregroundStyle(.orange)
+            Picker("Signal scenario", selection: $model.mockScenario) {
+                ForEach(MockScenario.allCases) { Text($0.title).tag($0) }
+            }
+            Picker("Playback speed", selection: $model.mockSpeed) {
+                ForEach([1.0, 4.0, 12.0, 60.0], id: \.self) { Text("\(Int($0))×").tag($0) }
+            }
+            Toggle("Set mock numbers manually", isOn: $model.manualMockValues)
+            if model.manualMockValues {
+                Text("Power: \(Int(model.mockPower)) W")
+                Slider(value: $model.mockPower, in: 0...600, step: 5).accessibilityLabel("Mock power watts")
+                Text("Cadence: \(Int(model.mockCadence)) rpm")
+                Slider(value: $model.mockCadence, in: 0...140, step: 1).accessibilityLabel("Mock cadence rpm")
+                Text("Heart rate: \(Int(model.mockHeartRate)) bpm")
+                Slider(value: $model.mockHeartRate, in: 60...200, step: 1).accessibilityLabel("Mock heart rate bpm")
+            }
+            HStack {
+                Button(model.mockPaused ? "Resume" : "Pause stream") { model.mockPaused.toggle() }
+                Button("Advance 60 s") { model.advanceMock(seconds: 60) }
+            }.buttonStyle(.bordered)
+            if model.engine?.phase == .warmup {
+                Button("Skip warm-up") { model.skipMockWarmup() }.buttonStyle(.bordered)
+            }
+            Button("Simulate trainer disconnect", role: .destructive) { model.simulateTrainerDisconnect() }
+            Text("All sensor values are generated locally. No Bluetooth commands or activity uploads are sent.")
+                .font(.caption).foregroundStyle(.secondary)
+        }.padding().background(.orange.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
+    }
 }
 
 private struct Metric: View {
@@ -264,7 +313,7 @@ private struct HistoryView: View {
                     NavigationLink { SessionDetail(model: model, session: session) } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
-                                Text(session.isDemo ? "Demo test" : session.outcome?.title ?? "Recording").font(.headline)
+                                Text(session.isDemo ? "Debug test" : session.outcome?.title ?? "Recording").font(.headline)
                                 Spacer()
                                 if let ftp = session.result?.estimatedFTP { Text("\(Int(ftp.rounded())) W").foregroundStyle(accent) }
                             }
@@ -284,7 +333,7 @@ private struct SessionDetail: View {
     @ViewState private var exportURL: URL? = nil
     var body: some View {
         List {
-            if session.isDemo { Label("Demo · synthetic data", systemImage: "play.rectangle").foregroundStyle(.orange) }
+            if session.isDemo { Label("Debug · mock sensor data", systemImage: "play.rectangle").foregroundStyle(.orange) }
             if let result = session.result {
                 ResultCard(result: result)
                 if !session.isDemo { Button("Use this estimate as my current FTP") { model.adopt(session) } }
@@ -328,15 +377,30 @@ private struct SettingsView: View {
                         LabeledContent("Connected", value: connection.athleteName)
                         Toggle("Automatically upload saved activities", isOn: $model.autoUpload)
                         Button("Retry pending uploads") { Task { await model.flushUploads(manual: true) } }
-                        Button("Disconnect", role: .destructive, action: model.disconnectIntervals)
+                        Button("Disconnect", role: .destructive) { Task { await model.disconnectIntervals() } }
                     } else {
-                        SecureField("Personal API key", text: $model.apiKeyInput)
-                        Text("For your private app, use your own key from Intervals.icu → Settings → Developer settings. It is stored in Keychain.")
+                        Button {
+                            Task { await model.connectIntervals() }
+                        } label: {
+                            Label(model.connecting ? "Connecting…" : "Connect Intervals.icu", systemImage: "person.crop.circle.badge.checkmark")
+                        }.buttonStyle(.borderedProminent).disabled(model.connecting)
+                        Text("Sign in securely with your Intervals.icu account and allow activity uploads. FTPunk never sees your password.")
                             .font(.caption).foregroundStyle(.secondary)
-                        Button(model.connecting ? "Connecting…" : "Connect Intervals.icu") { Task { await model.connectIntervals() } }
-                            .disabled(model.apiKeyInput.isEmpty || model.connecting)
+                        if !model.oauthConfigured {
+                            Text("Sign-in is awaiting FTPunk's Intervals.icu app registration and approval.")
+                                .font(.caption).foregroundStyle(.orange)
+                        }
+                        if model.demoMode {
+                            DisclosureGroup("Advanced developer connection") {
+                                SecureField("Personal API key", text: $model.apiKeyInput)
+                                Text("Optional private-development fallback. Regular users use the sign-in button above.")
+                                    .font(.caption).foregroundStyle(.secondary)
+                                Button("Connect with personal key") { Task { await model.connectIntervalsWithAPIKey() } }
+                                    .disabled(model.apiKeyInput.isEmpty || model.connecting)
+                            }
+                        }
                     }
-                    Text("Uploads happen after cooldown and saving. Offline activities wait for a retry. Demo rides never upload. Disconnecting leaves already uploaded activities on Intervals.icu.")
+                    Text("Uploads happen after cooldown and saving. Offline activities wait for a retry. Debug rides never upload. Disconnecting leaves already uploaded activities on Intervals.icu.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Section("Bluetooth diagnostics") {
@@ -356,7 +420,7 @@ private struct SettingsView: View {
                     Text("Hardware prototype: validate trainer control and stop behavior at a low load before a maximal test.")
                         .font(.caption).foregroundStyle(.orange)
                 }
-            }.navigationTitle("Connections")
+            }.formStyle(.grouped).navigationTitle("Connections")
         }
     }
 }

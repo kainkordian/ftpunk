@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import Network
+import AuthenticationServices
 import FTPunkDomain
 import FTPunkDevices
 import FTPunkStorage
@@ -28,6 +29,14 @@ import UIKit
     var manualWarmup = "100"
     var ftpFactor = 0.72
     var demoMode = true
+    var mockScenario: MockScenario = .rampToExhaustion
+    var mockSpeed = 12.0
+    var quickDebugTest = true
+    var mockPaused = false
+    var manualMockValues = false
+    var mockPower = 200.0
+    var mockCadence = 88.0
+    var mockHeartRate = 140.0
     var isStarting = false
     var errorMessage: String?
     var connection: IntervalsConnection?
@@ -35,7 +44,7 @@ import UIKit
     var connecting = false
     var autoUpload: Bool {
         didSet {
-            UserDefaults.standard.set(autoUpload, forKey: "autoUpload")
+            if !preview { UserDefaults.standard.set(autoUpload, forKey: "autoUpload") }
             if !autoUpload, let connection {
                 do { try uploads.cancelAutomaticUploads(accountID: connection.athleteID); try reload() }
                 catch { errorMessage = error.localizedDescription }
@@ -44,6 +53,10 @@ import UIKit
     }
     var heartRate: Int?
     private var origin = 0.0
+    private var lastWallTime = 0.0
+    private var mockStream = MockRideStream()
+    private let preview: Bool
+    private let signIn = IntervalsSignIn()
     private var timer: Task<Void, Never>?
     private var targetTask: Task<Void, Never>?
     private var lastAcknowledgedTarget: Int?
@@ -53,14 +66,15 @@ import UIKit
     private let network = NWPathMonitor()
     private var uploadRetry: Task<Void, Never>?
 
-    init(store: LocalStore) throws {
-        self.store = store; uploads = UploadWorker(repository: store)
+    init(store: LocalStore, preview: Bool = false) throws {
+        self.store = store; self.preview = preview; uploads = UploadWorker(repository: store)
         try store.recoverInterruptedSessions()
         profile = try store.loadProfile()
-        autoUpload = UserDefaults.standard.bool(forKey: "autoUpload")
+        autoUpload = preview ? false : UserDefaults.standard.bool(forKey: "autoUpload")
         if let current = profile.currentFTP { ftpSelection = current.id.uuidString }
         if let kg = profile.weightKG { weight = String(kg) }
-        connection = try CredentialVault.load()
+        connection = preview ? nil : try CredentialVault.load()
+        if preview { manualFTP = "250"; weight = "75" }
         try reload()
         bluetooth.onReading = { [weak self] in self?.receive($0) }
         bluetooth.onEssentialFailure = { [weak self] reason in
@@ -70,10 +84,11 @@ import UIKit
         network.pathUpdateHandler = { [weak self] path in
             if path.status == .satisfied { Task { @MainActor [weak self] in await self?.flushUploads() } }
         }
-        network.start(queue: DispatchQueue(label: "FTPunk.network"))
+        if !preview { network.start(queue: DispatchQueue(label: "FTPunk.network")) }
     }
     var isActive: Bool { engine?.phase.isActive == true }
     var activeSession: TestSession? { engine?.session }
+    var oauthConfigured: Bool { IntervalsSignIn.configuration != nil }
     var selectedFTP: FTPEntry? {
         if ftpSelection == "manual" { return number(manualFTP).map { FTPEntry(watts: $0) } }
         return profile.ftpHistory.first { $0.id.uuidString == ftpSelection }
@@ -98,8 +113,9 @@ import UIKit
         let manual = Int(manualWarmup)
         if !automaticWarmup && manual == nil { throw ConfigurationError.invalidWarmup }
         return try SessionConfiguration(preset: preset, priorFTP: selectedFTP, weightKG: number(weight),
-                                        warmupSeconds: Double(warmupMinutes * 60),
-                                        manualWarmupPower: automaticWarmup ? nil : manual, ftpFactor: ftpFactor)
+                                        warmupSeconds: demoMode && quickDebugTest ? 10 : Double(warmupMinutes * 60),
+                                        manualWarmupPower: automaticWarmup ? nil : manual,
+                                        cooldownSeconds: demoMode && quickDebugTest ? 10 : 180, ftpFactor: ftpFactor)
     }
     func saveExistingFTP() {
         guard let value = number(manualFTP), value.isFinite, value > 0, value <= 32767 else {
@@ -135,7 +151,8 @@ import UIKit
                 try await bluetooth.startTrainer(power: config.warmupPower)
             }
             profile.weightKG = config.weightKG; try store.saveProfile(profile)
-            origin = ProcessInfo.processInfo.systemUptime
+            origin = ProcessInfo.processInfo.systemUptime; lastWallTime = origin
+            mockStream = MockRideStream(); mockPaused = false
             elapsed = 0; lastCheckpoint = -1; finalizedID = nil
             lastAcknowledgedTarget = demoMode ? nil : config.warmupPower
             engine = RampEngine(configuration: config, isDemo: demoMode, devices: demoMode ? [] : bluetooth.deviceSnapshots)
@@ -146,7 +163,7 @@ import UIKit
             timer = Task { [weak self] in
                 while !Task.isCancelled {
                     self?.update()
-                    do { try await Task.sleep(for: .milliseconds(self?.demoMode == true ? 50 : 250)) } catch { return }
+                    do { try await Task.sleep(for: .milliseconds(self?.demoMode == true ? 100 : 250)) } catch { return }
                 }
             }
         } catch {
@@ -168,15 +185,15 @@ import UIKit
     }
     private func update() {
         guard isActive else { return }
-        // Demo advances faster, but the engine sees a consistent monotonic workout clock.
-        elapsed = (ProcessInfo.processInfo.systemUptime - origin) * (demoMode ? 12 : 1)
+        let now = ProcessInfo.processInfo.systemUptime
+        let wallDelta = max(0, now - lastWallTime); lastWallTime = now
         if demoMode {
-            let target = Double(engine?.targetPower ?? 100)
-            let cadence = (engine?.phase == .ramp && target > 300) ? 30.0 : 88.0
-            engine?.receive(RideSample(time: elapsed, power: target + sin(elapsed / 3) * 3, cadence: cadence, heartRate: 135))
-            heartRate = 135
-            // Feed at <=1-second simulation intervals to preserve the same freshness policy.
+            guard !mockPaused else { return }
+            // Bounded substeps exercise the real freshness and deadline policies at every speed.
+            advanceMock(seconds: min(wallDelta, 0.5) * mockSpeed)
+            return
         }
+        elapsed = now - origin
         engine?.tick(at: elapsed)
         if !demoMode, let began = commandStartedAt, elapsed - began > 2 {
             interrupt("Trainer target confirmation was delayed."); return
@@ -200,6 +217,30 @@ import UIKit
         }
         checkpoint()
         if !isActive { finalize() }
+    }
+    func advanceMock(seconds: Double) {
+        guard demoMode, isActive, seconds.isFinite, seconds > 0 else { return }
+        let end = elapsed + min(seconds, 3600)
+        while elapsed < end && isActive {
+            elapsed = min(end, elapsed + 0.5)
+            let sample = mockStream.sample(at: elapsed, target: engine?.targetPower ?? 100,
+                                           phase: engine?.phase ?? .waiting, scenario: mockScenario,
+                                           manualPower: manualMockValues ? mockPower : nil,
+                                           manualCadence: manualMockValues ? mockCadence : nil,
+                                           manualHeartRate: manualMockValues ? Int(mockHeartRate) : nil)
+            heartRate = sample.heartRate
+            engine?.receive(sample); engine?.tick(at: elapsed)
+        }
+        checkpoint()
+        if !isActive { finalize() }
+    }
+    func skipMockWarmup() {
+        guard demoMode, let engine, engine.phase == .warmup else { return }
+        advanceMock(seconds: max(0.5, engine.session.configuration.warmupSeconds - (elapsed - engine.phaseStartedAt) + 0.5))
+    }
+    func simulateTrainerDisconnect() {
+        guard demoMode else { return }
+        interrupt("Debug simulation: trainer connection lost.")
     }
     func finishRamp() {
         guard engine?.phase == .ramp else { return }
@@ -241,19 +282,39 @@ import UIKit
         }
     }
     func connectIntervals() async {
+        guard !connecting else { return }
+        connecting = true; defer { connecting = false }
+        do {
+            let value = try await signIn.connect()
+            try await acceptConnection(value)
+        }
+        catch {
+            if (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin { errorMessage = error.localizedDescription }
+        }
+    }
+    func connectIntervalsWithAPIKey() async {
+        guard !connecting else { return }
         connecting = true; defer { connecting = false }
         do {
             let value = try await IntervalsClient().connect(apiKey: apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines))
-            if let old = connection, old.athleteID != value.athleteID { try store.deleteUploadJobs(accountID: old.athleteID) }
-            try CredentialVault.save(value); connection = value; apiKeyInput = ""
-            await flushUploads()
+            try await acceptConnection(value); apiKeyInput = ""
         } catch { errorMessage = error.localizedDescription }
     }
-    func disconnectIntervals() {
+    private func acceptConnection(_ value: IntervalsConnection) async throws {
+        if let old = connection, old.athleteID != value.athleteID { try store.deleteUploadJobs(accountID: old.athleteID) }
+        try CredentialVault.save(value); connection = value
+        await flushUploads()
+    }
+    func disconnectIntervals() async {
+        let old = connection
         do {
             uploadRetry?.cancel()
-            if let connection { try store.deleteUploadJobs(accountID: connection.athleteID) }
+            if let old { try store.deleteUploadJobs(accountID: old.athleteID) }
             try CredentialVault.clear(); connection = nil; autoUpload = false; try reload()
+            if let old, old.usesOAuth {
+                do { try await IntervalsClient().revoke(old) }
+                catch { errorMessage = "Disconnected on this device. Online revocation could not be confirmed; you can revoke access in Intervals.icu Settings." }
+            }
         } catch { errorMessage = error.localizedDescription }
     }
     func upload(_ session: TestSession) async {
