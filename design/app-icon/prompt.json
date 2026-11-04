@@ -1,0 +1,7 @@
+{
+  "generator": "Built-in imagegen",
+  "intent": "precise-object-edit",
+  "source": "../icon-proposals/05-pixel-pursuit.png",
+  "selected": "FTPunk-source.png",
+  "prompt": "Use case: precise-object-edit. Asset type: selected FTPunk iPhone and Mac app icon. Edit target: the supplied pixel-art cyclist icon. Replace ONLY the rider's hot-magenta mohawk with a clearly recognizable hot-magenta road-cycling helmet. Helmet: smooth low aerodynamic profile translated into crisp chunky square pixels, two or three simple near-black ventilation slots, fitted closely to the top and back of the head, and a thin black pixel chin strap if it fits the existing face. Absolutely no mohawk, spikes, hair sticking up, or helmet spike. Preserve the existing rider's head position, sunglasses, lime face/body, leaning pose, all bicycle geometry, cyan frame, ivory wheels, coarse 8-bit pixel-art style, near-black opaque background, square canvas, scale, margins and composition. No letters, text, border, mockup, glossy effects, gradients or additional objects. Keep the helmet magenta so the icon retains its original funky punk color personality. This is one targeted headgear replacement, not a redesign."
+}

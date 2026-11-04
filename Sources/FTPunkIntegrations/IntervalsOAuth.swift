@@ -52,7 +52,7 @@ public struct IntervalsOAuthAttempt: Sendable {
             URLQueryItem(name: "client_id", value: configuration.clientID),
             URLQueryItem(name: "redirect_uri", value: configuration.redirectURI.absoluteString),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: "ACTIVITY:WRITE"),
+            URLQueryItem(name: "scope", value: "ACTIVITY:WRITE,CALENDAR:READ,SETTINGS:READ"),
             URLQueryItem(name: "state", value: state),
             URLQueryItem(name: "code_challenge", value: challenge),
             URLQueryItem(name: "code_challenge_method", value: "S256")

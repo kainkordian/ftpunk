@@ -58,7 +58,7 @@ private func oauthFixture() throws -> IntervalsOAuthAttempt {
     let attempt = try oauthFixture()
     #expect(attempt.challenge == "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM")
     let query = try #require(URLComponents(url: attempt.authorizationURL, resolvingAgainstBaseURL: false)?.queryItems)
-    #expect(query.first(where: { $0.name == "scope" })?.value == "ACTIVITY:WRITE")
+    #expect(query.first(where: { $0.name == "scope" })?.value == "ACTIVITY:WRITE,CALENDAR:READ,SETTINGS:READ")
     #expect(query.first(where: { $0.name == "code_challenge_method" })?.value == "S256")
     let body = String(decoding: attempt.tokenRequest(code: "code+&=").httpBody ?? Data(), as: UTF8.self)
     #expect(body.contains("code=code%2B%26%3D"))

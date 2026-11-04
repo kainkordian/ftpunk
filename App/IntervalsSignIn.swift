@@ -34,7 +34,7 @@ import AppKit
             if !browser.start() { session = nil; continuation.resume(throwing: OAuthError.invalidCallback) }
         }
         let code = try attempt.authorizationCode(from: callback)
-        return try await IntervalsClient().exchange(attempt, code: code)
+        return try await AppInfo.intervalsClient.exchange(attempt, code: code)
     }
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         #if canImport(UIKit)

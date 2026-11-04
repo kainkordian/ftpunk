@@ -1,0 +1,138 @@
+{
+  "format": "ftpunk-portable",
+  "version": 2,
+  "exportedAt": "2026-10-30T09:00:00.000Z",
+  "profiles": [
+    {
+      "id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "name": "Alex",
+      "weightKG": 75,
+      "ftpHistory": [
+        {
+          "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+          "watts": 250,
+          "date": "2026-10-30T09:00:00.000Z",
+          "source": "Manual"
+        }
+      ],
+      "currentFTPID": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      "cycleProgress": {
+        "version": 1,
+        "credits": {
+          "cccccccc-cccc-cccc-cccc-cccccccccccc": 6000,
+          "dddddddd-dddd-dddd-dddd-dddddddddddd": 1200000
+        }
+      }
+    }
+  ],
+  "activities": [
+    {
+      "schemaVersion": 1,
+      "kind": "workout",
+      "session": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "startedAt": "2026-10-30T09:00:00.000Z",
+        "configuration": {
+          "protocolVersion": 3,
+          "preset": "standard",
+          "priorFTP": {
+            "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+            "watts": 250,
+            "date": "2026-10-30T09:00:00.000Z",
+            "source": "Manual"
+          },
+          "weightKG": 75,
+          "warmupSeconds": 0,
+          "warmupPower": 125,
+          "usesAutomaticWarmup": true,
+          "maximumPower": 600,
+          "maximumRampSeconds": 1800,
+          "cooldownSeconds": 180,
+          "ftpFactor": 0.75,
+          "riderID": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "riderName": "Alex",
+          "powerSource": "externalPowerMeter",
+          "cadenceSource": "trainer",
+          "powerMatchingEnabled": true
+        },
+        "isDemo": false,
+        "devices": [],
+        "samples": [
+          {
+            "time": 0,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 1,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 2,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 3,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 4,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 5,
+            "power": 100,
+            "cadence": 90
+          },
+          {
+            "time": 6,
+            "power": 100,
+            "cadence": 90
+          }
+        ],
+        "events": [
+          {
+            "time": 0,
+            "message": "Training"
+          },
+          {
+            "time": 6,
+            "message": "Activity saved"
+          }
+        ],
+        "outcome": "completed",
+        "endedAtOffset": 6,
+        "result": null,
+        "training": {
+          "version": 1,
+          "kind": "workout",
+          "name": "Boundary check",
+          "ftpWatts": 200,
+          "steps": [
+            {
+              "name": "Warm-up",
+              "seconds": 3,
+              "watts": 100
+            },
+            {
+              "name": "Effort",
+              "seconds": 2,
+              "watts": 150
+            },
+            {
+              "name": "Cooldown",
+              "seconds": 1,
+              "watts": 50
+            }
+          ]
+        },
+        "adventureEnabled": true,
+        "eligibleMilliseconds": 6000
+      }
+    }
+  ]
+}

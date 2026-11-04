@@ -51,7 +51,7 @@ public enum BluetoothError: Error, LocalizedError {
         case .timedOut: "The trainer did not confirm the command. Reconnect before retrying."
         case .rejected(let code): "The trainer rejected the command (result \(code))."
         case .disconnected: "The Bluetooth connection ended."
-        case .unsupported: "The trainer does not expose the required ERG controls."
+        case .unsupported: "The trainer does not expose the requested control mode."
         case .targetOutOfRange: "The target is outside the trainer's supported power range."
         }
     }
@@ -66,6 +66,10 @@ public enum BluetoothError: Error, LocalizedError {
     public private(set) var scanning = false
     public private(set) var trainerCanPrepare = false
     public private(set) var trainerReady = false
+    /// Counts trainer connections, so the app can tell a new connection (a cold trainer, maybe) from the same one.
+    public private(set) var trainerConnections = 0
+    public private(set) var resistanceRange: SupportedResistanceRange?
+    public var supportsResistance: Bool { features?.supportsResistance == true && resistanceRange != nil }
     public private(set) var powerRange: SupportedPowerRange?
     public private(set) var measurements = DeviceMeasurements()
     public private(set) var captures: [PacketCapture] = []
@@ -78,10 +82,14 @@ public enum BluetoothError: Error, LocalizedError {
                 capabilities = ["minimumWatts": String(powerRange.minimum), "maximumWatts": String(powerRange.maximum),
                                 "incrementWatts": String(powerRange.increment), "resistanceLayout": resistanceLayout.rawValue]
             }
+            if role == .trainer, supportsResistance, let range = resistanceRange {
+                capabilities["resistanceTenths"] = "\(range.minimum)...\(range.maximum) step \(range.increment)"
+            }
             return DeviceSnapshot(role: role.rawValue, name: names[role] ?? role.title,
                                   localIdentifier: peripheral.identifier.uuidString, capabilities: capabilities)
         }
     }
+    @ObservationIgnored public var onExternalMeterReady: ((String) -> Void)?
     @ObservationIgnored public var onReading: ((DeviceReading) -> Void)?
     @ObservationIgnored public var onDeviceFailure: ((DeviceRole, String) -> Void)?
     @ObservationIgnored private var central: CBCentralManager?
@@ -141,6 +149,15 @@ public enum BluetoothError: Error, LocalizedError {
         try await setTargetPower(power)
     }
 
+    public func startResistance(level: Int) async throws {
+        guard trainerReady, supportsResistance else { throw BluetoothError.unsupported }
+        try await command(.start); try await setResistance(level)
+    }
+    public func setResistance(_ level: Int) async throws {
+        guard trainerReady, supportsResistance, let range = resistanceRange else { throw BluetoothError.unsupported }
+        guard level == range.quantized(level) else { throw BluetoothError.targetOutOfRange }
+        try await command(.targetResistance(level))
+    }
     public func setTargetPower(_ watts: Int) async throws {
         guard trainerReady, let powerRange else { throw BluetoothError.notReady }
         guard watts >= powerRange.minimum, watts <= powerRange.maximum else { throw BluetoothError.targetOutOfRange }
@@ -149,8 +166,14 @@ public enum BluetoothError: Error, LocalizedError {
 
     public func stopTrainer() async throws {
         // Let an in-flight transaction finish before the stop procedure; never interleave FTMS commands.
-        for _ in 0..<60 where pending != nil { try await Task.sleep(for: .milliseconds(100)) }
-        try await command(.stop)
+        do {
+            for _ in 0..<60 where pending != nil { try await Task.sleep(for: .milliseconds(100)) }
+            try await command(.stop)
+        } catch {
+            trainerReady = false; trainerCanPrepare = false; controlHealthy = false
+            status = "Trainer stop was not confirmed. Reconnect before starting another ride."
+            throw error
+        }
     }
 
     private func command(_ command: TrainerCommand) async throws {
@@ -178,7 +201,7 @@ public enum BluetoothError: Error, LocalizedError {
     }
     private func clearTrainer() {
         resolve(.failure(BluetoothError.disconnected))
-        trainerReady = false; trainerCanPrepare = false; powerRange = nil; features = nil; controlHealthy = true
+        trainerReady = false; trainerCanPrepare = false; powerRange = nil; resistanceRange = nil; features = nil; controlHealthy = true
         characteristics = [:]
         measurements.reset(.trainer)
     }
@@ -190,7 +213,7 @@ public enum BluetoothError: Error, LocalizedError {
         selected.first { $0.value === peripheral }?.key
     }
     private func updateReadiness() {
-        trainerCanPrepare = controlHealthy && features?.supportsTargetPower == true && powerRange != nil &&
+        trainerCanPrepare = controlHealthy && ((features?.supportsTargetPower == true && powerRange != nil) || supportsResistance) &&
             characteristics["2AD9"]?.isNotifying == true && characteristics["2AD2"]?.isNotifying == true &&
             characteristics["2ADA"]?.isNotifying == true
     }
@@ -225,6 +248,7 @@ extension BluetoothDevices: @preconcurrency CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         guard let role = role(of: peripheral) else { central.cancelPeripheralConnection(peripheral); return }
         names[role] = peripheral.name ?? role.title
+        if role == .trainer { trainerConnections += 1 }
         peripheral.discoverServices([role.service])
         status = "Discovering \(role.title.lowercased()) services…"
     }
@@ -257,7 +281,7 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
             let uuid = characteristic.uuid.uuidString
             if role == .trainer {
                 characteristics[uuid] = characteristic
-                if ["2ACC", "2AD8"].contains(uuid) { peripheral.readValue(for: characteristic) }
+                if ["2ACC", "2AD8", "2AD6"].contains(uuid) { peripheral.readValue(for: characteristic) }
                 if ["2AD2", "2AD9", "2ADA"].contains(uuid) { peripheral.setNotifyValue(true, for: characteristic) }
             } else if role == .pedals && uuid == "2A63" || role == .heartRate && uuid == "2A37" {
                 peripheral.setNotifyValue(true, for: characteristic)
@@ -268,6 +292,9 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
     public func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: (any Error)?) {
         guard let role = role(of: peripheral) else { return }
         if let error { failure(error, role: role); return }
+        if role == .pedals, characteristic.uuid == CBUUID(string: "2A63"), characteristic.isNotifying {
+            onExternalMeterReady?(names[role] ?? role.title)
+        }
         status = "\(role.title) notifications ready."
         updateReadiness()
     }
@@ -278,7 +305,12 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
     }
     public func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: (any Error)?) {
         guard let role = role(of: peripheral) else { return }
-        if let error { failure(error, role: role); return }
+        if let error {
+            if role == .trainer, characteristic.uuid.uuidString == "2AD6" {
+                resistanceRange = nil; status = "Resistance range unavailable."; updateReadiness(); return
+            }
+            failure(error, role: role); return
+        }
         guard let data = characteristic.value else { return }
         if captureEnabled {
             captures.append(PacketCapture(id: UUID(), date: Date(), role: role,
@@ -290,6 +322,7 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
         do {
             switch (role, characteristic.uuid.uuidString) {
             case (.trainer, "2ACC"): features = try FitnessMachineFeatures.decode(data)
+            case (.trainer, "2AD6"): resistanceRange = try SupportedResistanceRange.decode(data)
             case (.trainer, "2AD8"): powerRange = try SupportedPowerRange.decode(data)
             case (.trainer, "2AD9"):
                 let response = try ControlResponse.decode(data)
@@ -317,6 +350,7 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
         } catch {
             // Malformed measurements are discarded; they never refresh the last valid sample.
             status = "Discarded malformed \(role.title.lowercased()) data."
+            if characteristic.uuid.uuidString == "2AD6" { resistanceRange = nil; updateReadiness() }
             if characteristic.uuid.uuidString == "2AD9" { resolve(.failure(error)); failure(error, role: role) }
         }
     }

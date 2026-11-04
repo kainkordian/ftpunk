@@ -1,0 +1,129 @@
+{
+  "format": "ftpunk-portable",
+  "version": 3,
+  "exportedAt": "2026-11-02T10:45:11.390Z",
+  "profiles": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "You",
+      "weightKG": null,
+      "ftpHistory": [],
+      "currentFTPID": null
+    }
+  ],
+  "activities": [
+    {
+      "schemaVersion": 1,
+      "kind": "freeRide",
+      "session": {
+        "id": "0452c4f4-276d-4f9f-8d08-803002d45a77",
+        "startedAt": "2026-11-02T10:45:11.379Z",
+        "isDemo": false,
+        "outcome": "aborted",
+        "endedAtOffset": 1,
+        "training": {
+          "version": 2,
+          "resistance": 100,
+          "kind": "freeRide",
+          "name": "Resistance ride",
+          "ftpWatts": null,
+          "steps": [
+            {
+              "name": "Ride at your own pace",
+              "seconds": 86400,
+              "watts": 1
+            }
+          ]
+        },
+        "adventureEnabled": true,
+        "eligibleMilliseconds": 0,
+        "adventureStartMilliseconds": 0,
+        "configuration": {
+          "protocolVersion": 3,
+          "preset": "standard",
+          "priorFTP": null,
+          "weightKG": null,
+          "warmupSeconds": 600,
+          "warmupPower": 100,
+          "usesAutomaticWarmup": true,
+          "maximumPower": 600,
+          "maximumRampSeconds": 1800,
+          "cooldownSeconds": 180,
+          "ftpFactor": 0.72,
+          "riderID": "00000000-0000-0000-0000-000000000001",
+          "riderName": "You",
+          "powerSource": "trainer",
+          "cadenceSource": "trainer",
+          "powerMatchingEnabled": false
+        },
+        "devices": [],
+        "samples": [
+          {
+            "time": 0,
+            "power": 100,
+            "cadence": 90
+          }
+        ],
+        "events": [
+          {
+            "time": 0,
+            "message": "Training"
+          },
+          {
+            "time": 1,
+            "message": "Activity saved"
+          }
+        ],
+        "result": null
+      }
+    }
+  ],
+  "workouts": [
+    {
+      "id": "fixture:workout",
+      "riderID": "00000000-0000-0000-0000-000000000001",
+      "source": "Shared fixture",
+      "savedAt": "2026-10-31T12:00:00Z",
+      "plan": {
+        "version": 2,
+        "kind": "workout",
+        "name": "Ramps and repeats",
+        "ftpWatts": 200,
+        "steps": [
+          {
+            "name": "Warm-up",
+            "seconds": 10,
+            "watts": 100,
+            "endWatts": 200
+          },
+          {
+            "name": "Effort",
+            "seconds": 5,
+            "watts": 180
+          },
+          {
+            "name": "Recover",
+            "seconds": 5,
+            "watts": 90
+          },
+          {
+            "name": "Effort",
+            "seconds": 5,
+            "watts": 180
+          },
+          {
+            "name": "Recover",
+            "seconds": 5,
+            "watts": 90
+          },
+          {
+            "name": "Cooldown",
+            "seconds": 10,
+            "watts": 100,
+            "endWatts": 50
+          }
+        ]
+      }
+    }
+  ]
+}

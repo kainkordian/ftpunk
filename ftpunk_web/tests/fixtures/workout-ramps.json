@@ -1,0 +1,1 @@
+{"format":"ftpunk-workout","version":1,"name":"Ramps and repeats","ftpWatts":200,"steps":[{"name":"Warm-up","seconds":10,"watts":100,"endWatts":200},{"repeat":2,"steps":[{"name":"Effort","seconds":5,"watts":180},{"name":"Recover","seconds":5,"watts":90}]},{"name":"Cooldown","seconds":10,"watts":100,"endWatts":50}]}

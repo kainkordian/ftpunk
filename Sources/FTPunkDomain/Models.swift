@@ -79,6 +79,8 @@ public struct SessionConfiguration: Codable, Equatable, Sendable {
     public let riderName: String?
     public let powerSource: PowerSource?
     public let cadenceSource: CadenceSource?
+    public let powerMatchingEnabled: Bool?
+    public var usesPowerMatching: Bool { resolvedPowerSource == .externalPowerMeter && powerMatchingEnabled == true }
     // Earlier recordings always used the external pedals. Preserve that provenance.
     public var resolvedPowerSource: PowerSource { powerSource ?? .externalPowerMeter }
     public var resolvedCadenceSource: CadenceSource { cadenceSource ?? .externalPowerMeter }
@@ -88,7 +90,8 @@ public struct SessionConfiguration: Codable, Equatable, Sendable {
                 maximumPower: Int = 600, maximumRampSeconds: Double = 1800,
                 cooldownSeconds: Double = 180, ftpFactor: Double = 0.72,
                 riderID: UUID? = nil, riderName: String? = nil,
-                powerSource: PowerSource = .trainer, cadenceSource: CadenceSource = .trainer) throws {
+                powerSource: PowerSource = .trainer, cadenceSource: CadenceSource = .trainer,
+                powerMatchingEnabled: Bool = false) throws {
         if let riderName, riderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || riderName.count > 80 {
             throw ConfigurationError.invalidRider
         }
@@ -103,13 +106,14 @@ public struct SessionConfiguration: Codable, Equatable, Sendable {
         }
         guard maximumPower >= preset.startingPower, maximumPower <= 32767,
               maximumRampSeconds.isFinite, maximumRampSeconds >= 60,
-              cooldownSeconds.isFinite, cooldownSeconds >= 0, [0.72, 0.75].contains(ftpFactor) else { throw ConfigurationError.invalidLimits }
+              cooldownSeconds.isFinite, (0...3600).contains(cooldownSeconds), [0.72, 0.75].contains(ftpFactor) else { throw ConfigurationError.invalidLimits }
         self.protocolVersion = 3; self.preset = preset; self.priorFTP = priorFTP; self.weightKG = weightKG
         self.warmupSeconds = warmupSeconds; self.warmupPower = manualWarmupPower ?? Int(derived.rounded())
         self.usesAutomaticWarmup = manualWarmupPower == nil; self.maximumPower = maximumPower
         self.maximumRampSeconds = maximumRampSeconds; self.cooldownSeconds = cooldownSeconds; self.ftpFactor = ftpFactor
         self.riderID = riderID; self.riderName = riderName?.trimmingCharacters(in: .whitespacesAndNewlines)
         self.powerSource = powerSource; self.cadenceSource = cadenceSource
+        self.powerMatchingEnabled = powerMatchingEnabled && powerSource == .externalPowerMeter
     }
 
     public func rampPower(at elapsed: Double) -> Int {
@@ -156,7 +160,7 @@ public struct FTPResult: Codable, Equatable, Sendable {
 }
 
 public enum SessionOutcome: String, Codable, Sendable {
-    case exhaustion, finishedEarly, limitReached, interrupted, aborted
+    case exhaustion, finishedEarly, limitReached, interrupted, aborted, completed
     public var allowsEstimate: Bool { self == .exhaustion || self == .finishedEarly }
     public var title: String {
         switch self {
@@ -165,6 +169,7 @@ public enum SessionOutcome: String, Codable, Sendable {
         case .limitReached: "Test limit reached"
         case .interrupted: "Test interrupted"
         case .aborted: "Stopped"
+        case .completed: "Ride complete"
         }
     }
 }
@@ -197,8 +202,14 @@ public struct TestSession: Identifiable, Codable, Sendable {
     public var endReason: String?
     public var rampStart: Double?
     public var rampEnd: Double?
+    public var cooldownStart: Double?
     public var endedAtOffset: Double?
     public var result: FTPResult?
+    public var training: TrainingPlan?
+    public var adventureStartMilliseconds: Int?
+    public var adventureEnabled: Bool?
+    public var eligibleMilliseconds: Int?
+    public var activityTitle: String { training?.name ?? configuration.preset.title }
     public var riderID: UUID { configuration.riderID ?? RiderProfile.legacyID }
     public var riderName: String { configuration.riderName ?? "You" }
     public init(id: UUID = UUID(), startedAt: Date = Date(), configuration: SessionConfiguration, isDemo: Bool = false,
@@ -215,13 +226,14 @@ public struct RiderProfile: Identifiable, Codable, Sendable {
     public var weightKG: Double?
     public var ftpHistory: [FTPEntry]
     public var currentFTPID: UUID?
+    public var cycleProgress: CycleProgress?
     public init(id: UUID = RiderProfile.legacyID, name: String = "You", weightKG: Double? = nil,
                 ftpHistory: [FTPEntry] = [], currentFTPID: UUID? = nil) {
         self.id = id; self.name = name
         self.weightKG = weightKG; self.ftpHistory = ftpHistory; self.currentFTPID = currentFTPID
     }
     public var currentFTP: FTPEntry? { ftpHistory.first { $0.id == currentFTPID } }
-    private enum CodingKeys: String, CodingKey { case id, name, weightKG, ftpHistory, currentFTPID }
+    private enum CodingKeys: String, CodingKey { case id, name, weightKG, ftpHistory, currentFTPID, cycleProgress }
     public init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? Self.legacyID
@@ -229,5 +241,6 @@ public struct RiderProfile: Identifiable, Codable, Sendable {
         weightKG = try values.decodeIfPresent(Double.self, forKey: .weightKG)
         ftpHistory = try values.decode([FTPEntry].self, forKey: .ftpHistory)
         currentFTPID = try values.decodeIfPresent(UUID.self, forKey: .currentFTPID)
+        cycleProgress = try values.decodeIfPresent(CycleProgress.self, forKey: .cycleProgress)
     }
 }

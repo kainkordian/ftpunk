@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>FTPunk Web · Tests</title><style>body{font:14px/1.7 system-ui;margin:40px;max-width:1000px;background:#f6f7f2;color:#1c281f}li{padding:5px}.fail{color:#a12c35}pre{white-space:pre-wrap}h1{letter-spacing:-.05em}</style><h1>FTPunk Web · Verification</h1><p id="summary">Running protocol, workout, matching, storage, and integration tests…</p><ol id="results"></ol><script type="module">
+import { runSuite } from './suite.mjs';
+import { runStorageSuite } from './storage-suite.mjs';
+const result = await runSuite(r => { const li = document.createElement('li'); li.className = r.ok ? 'pass' : 'fail'; li.textContent = `${r.ok ? 'PASS' : 'FAIL'} ${r.name}${r.ok ? '' : '\n' + r.error}`; document.querySelector('#results').append(li); });
+try {
+  const description = await runStorageSuite();
+  const li = document.createElement('li'); li.textContent = 'PASS Real ' + description; document.querySelector('#results').append(li); result.passed++;
+} catch (error) { const li = document.createElement('li'); li.className = 'fail'; li.textContent = 'FAIL IndexedDB: ' + error.message; document.querySelector('#results').append(li); result.failed++; }
+document.querySelector('#summary').textContent = `${result.passed} passed; ${result.failed} failed.`;
+document.title = `${result.failed ? 'FAIL' : 'PASS'} · FTPunk Web tests`;
+</script></html>

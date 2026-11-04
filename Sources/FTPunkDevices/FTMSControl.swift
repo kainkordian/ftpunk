@@ -22,25 +22,26 @@ public struct SupportedPowerRange: Equatable, Sendable {
 
 public struct FitnessMachineFeatures: Sendable {
     public let supportsTargetPower: Bool
+    public let supportsResistance: Bool
     public static func decode(_ data: Data) throws -> Self {
         var c = ByteCursor(data)
         _ = try c.u32()
         let targets = try c.u32()
         try c.finish()
-        return Self(supportsTargetPower: targets & (1 << 3) != 0)
+        return Self(supportsTargetPower: targets & (1 << 3) != 0, supportsResistance: targets & (1 << 2) != 0)
     }
 }
 
 public enum TrainerCommand: Equatable, Sendable {
-    case requestControl, start, targetPower(Int), stop
+    case requestControl, start, targetPower(Int), targetResistance(Int), stop
     public var opcode: UInt8 {
-        switch self { case .requestControl: 0; case .start: 7; case .targetPower: 5; case .stop: 8 }
+        switch self { case .requestControl: 0; case .start: 7; case .targetPower: 5; case .targetResistance: 4; case .stop: 8 }
     }
     public func encoded() throws -> Data {
         switch self {
         case .requestControl, .start: return Data([opcode])
         case .stop: return Data([opcode, 1])
-        case .targetPower(let watts):
+        case .targetPower(let watts), .targetResistance(let watts):
             guard (0...32767).contains(watts) else { throw PacketError.invalidValue }
             return Data([opcode, UInt8(watts & 255), UInt8((watts >> 8) & 255)])
         }
@@ -58,5 +59,26 @@ public struct ControlResponse: Equatable, Sendable {
         try cursor.finish()
         guard (1...5).contains(response.result) else { throw PacketError.invalidValue }
         return response
+    }
+}
+
+/// Six-byte FTMS range; values and commands use tenths of a unitless level.
+/// Ambiguous/legacy layouts are rejected rather than guessed.
+public struct SupportedResistanceRange: Equatable, Sendable {
+    public let minimum: Int
+    public let maximum: Int
+    public let increment: Int
+    public init(minimum: Int, maximum: Int, increment: Int) throws {
+        guard minimum >= 0, maximum > minimum, maximum <= 32767, increment > 0, increment <= maximum - minimum else { throw PacketError.invalidValue }
+        self.minimum = minimum; self.maximum = maximum; self.increment = increment
+    }
+    public static func decode(_ data: Data) throws -> Self {
+        var c = ByteCursor(data)
+        let range = try Self(minimum: Int(c.i16()), maximum: Int(c.i16()), increment: Int(c.u16()))
+        try c.finish(); return range
+    }
+    public func quantized(_ level: Int) -> Int {
+        let steps = Int((Double(max(minimum, min(maximum, level)) - minimum) / Double(increment)).rounded())
+        return minimum + min((maximum - minimum) / increment, steps) * increment
     }
 }

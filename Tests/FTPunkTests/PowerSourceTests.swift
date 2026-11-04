@@ -125,3 +125,18 @@ import FTPunkStorage
     #expect(sample.power == sample.trainerPower)
     model.stop()
 }
+
+@Test func powerModeMapsToAndFromModelValues() {
+    #expect(PowerMode.resolve(powerSource: .externalPowerMeter, matchingEnabled: true, meterConnected: true) == .meterMatched)
+    #expect(PowerMode.resolve(powerSource: .externalPowerMeter, matchingEnabled: false, meterConnected: true) == .meterRecordOnly)
+    #expect(PowerMode.resolve(powerSource: .trainer, matchingEnabled: true, meterConnected: true) == .trainer)
+    // Meter disconnected: always the trainer, whatever is stored.
+    #expect(PowerMode.resolve(powerSource: .externalPowerMeter, matchingEnabled: true, meterConnected: false) == .trainer)
+    #expect(PowerMode.meterMatched.settings(currentMatching: false) == (.externalPowerMeter, true))
+    #expect(PowerMode.meterRecordOnly.settings(currentMatching: true) == (.externalPowerMeter, false))
+    #expect(PowerMode.trainer.settings(currentMatching: false) == (.trainer, false))
+    for mode in PowerMode.allCases {
+        let values = mode.settings(currentMatching: true)
+        #expect(PowerMode.resolve(powerSource: values.powerSource, matchingEnabled: values.matchingEnabled, meterConnected: true) == mode)
+    }
+}

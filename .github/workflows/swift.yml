@@ -11,3 +11,5 @@ jobs:
         run: xcodebuild -project FTPunk.xcodeproj -scheme FTPunk -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
       - name: Build native macOS application
         run: xcodebuild -project FTPunk.xcodeproj -scheme FTPunkMac -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
+      - name: Compile UI tests
+        run: xcodebuild -project FTPunk.xcodeproj -scheme FTPunk -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build-for-testing

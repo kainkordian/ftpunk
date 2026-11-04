@@ -3,11 +3,35 @@ import FTPunkDomain
 
 public enum ExportError: Error { case notFinalized, emptyActivity }
 
+public enum ActivityFileFormat: String, CaseIterable, Sendable {
+    case fit, tcx, csv, json
+    public var title: String { rawValue.uppercased() }
+}
+
 public enum ActivityExport {
     public static func json(_ session: TestSession) throws -> Data {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(session)
+    }
+    public static func data(_ session: TestSession, format: ActivityFileFormat) throws -> Data {
+        switch format {
+        case .fit: try FITEncoder.fileData(session)
+        case .tcx: try tcx(session)
+        case .csv: csv(session)
+        case .json: try json(session)
+        }
+    }
+    /// `FTPunk-yyyy-MM-dd-<activity title>.<ext>` with the title reduced to letters, digits and hyphens; debug rides start with `DEMO-`.
+    public static func fileName(_ session: TestSession, format: ActivityFileFormat) -> String {
+        let day = DateFormatter(); day.dateFormat = "yyyy-MM-dd"; day.locale = Locale(identifier: "en_US_POSIX")
+        let allowed = Set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+        var title = ""
+        for character in session.activityTitle {
+            if allowed.contains(character) { title.append(character) } else if title.last != "-" { title.append("-") }
+        }
+        title = title.trimmingCharacters(in: CharacterSet(charactersIn: "-"))
+        return (session.isDemo ? "DEMO-" : "") + "FTPunk-\(day.string(from: session.startedAt))-\(title.isEmpty ? "Activity" : title).\(format.rawValue)"
     }
     public static func csv(_ session: TestSession) -> Data {
         let rows: [String] = session.samples.map { s in
@@ -23,7 +47,7 @@ public enum ActivityExport {
         guard !session.samples.isEmpty else { throw ExportError.emptyActivity }
         let iso = ISO8601DateFormatter(); iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         func timestamp(_ offset: Double) -> String { iso.string(from: session.startedAt.addingTimeInterval(offset)) }
-        let boundaries = Set([0, session.rampStart, session.rampEnd, end].compactMap { $0 }.filter { $0 >= 0 && $0 <= end }).sorted()
+        let boundaries = phaseBoundaries(session, end: end)
         var laps = ""
         for (a, b) in zip(boundaries, boundaries.dropFirst()) where b > a {
             let points = session.samples.filter { $0.time >= a && ($0.time < b || b == end && $0.time == b) }.map { sample -> String in
@@ -41,8 +65,12 @@ public enum ActivityExport {
         """
         return Data(xml.utf8)
     }
+    /// Warm-up, ramp and cool-down edges (plus the start and the end), shared by the TCX and FIT laps.
+    static func phaseBoundaries(_ session: TestSession, end: Double) -> [Double] {
+        Set([0, session.rampStart, session.rampEnd, end].compactMap { $0 }.filter { $0 >= 0 && $0 <= end }).sorted()
+    }
     public static func description(_ session: TestSession) -> String {
-        var text = "FTPunk \(session.configuration.preset.title). \(session.outcome?.title ?? "Recording")."
+        var text = "FTPunk \(session.activityTitle). \(session.outcome?.title ?? "Recording")."
         text += " Rider: \(session.riderName)."
         text += " Power source: \(session.configuration.resolvedPowerSource.title). Cadence source: \(session.configuration.resolvedCadenceSource.title)."
         if session.isDemo { text = "DEMO — synthetic activity. " + text }

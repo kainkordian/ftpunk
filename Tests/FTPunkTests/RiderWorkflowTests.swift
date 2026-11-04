@@ -68,6 +68,56 @@ private func finalizedSession(rider: RiderProfile, demo: Bool = false) throws ->
     return session
 }
 
+@Test @MainActor func selectedDurationsControlPhaseBoundariesAndAreSaved() async throws {
+    let store = try LocalStore(inMemory: true)
+    let model = try AppModel(store: store, preview: true)
+    model.quickDebugTest = false
+    model.warmupMinutes = 2; model.cooldownMinutes = 1
+    model.mockScenario = .steadyRider
+    await model.start(); model.mockPaused = true
+    model.advanceMock(seconds: 120)
+    #expect(model.engine?.phase == .warmup)
+    model.advanceMock(seconds: 0.5)
+    #expect(model.engine?.phase == .ramp)
+    model.advanceMock(seconds: 65)
+    model.finishRamp()
+    #expect(model.engine?.phase == .cooldown)
+    model.advanceMock(seconds: 59.5)
+    #expect(model.engine?.phase == .cooldown)
+    model.advanceMock(seconds: 0.5)
+    #expect(model.engine?.phase == .completed)
+    let saved = try #require(store.sessions().first)
+    #expect(saved.configuration.warmupSeconds == 120)
+    #expect(saved.configuration.cooldownSeconds == 60)
+    #expect(saved.result != nil)
+}
+
+@Test @MainActor func skippedDurationsFinishAndSaveImmediately() async throws {
+    let store = try LocalStore(inMemory: true)
+    let model = try AppModel(store: store, preview: true)
+    model.quickDebugTest = false
+    model.warmupMinutes = 0; model.cooldownMinutes = 0
+    model.mockScenario = .steadyRider
+    await model.start(); model.mockPaused = true
+    model.advanceMock(seconds: 0.5)
+    #expect(model.engine?.phase == .ramp)
+    model.advanceMock(seconds: 65)
+    model.finishRamp()
+    #expect(model.engine?.phase == .completed)
+    #expect(model.engine?.session.result != nil)
+    #expect(model.history.count == 1)
+    #expect(try store.sessions().first?.endedAtOffset == model.elapsed)
+}
+
+@Test @MainActor func quickDebugTimingOverridesBothSelectedDurations() async throws {
+    let model = try AppModel(store: LocalStore(inMemory: true), preview: true)
+    model.warmupMinutes = 60; model.cooldownMinutes = 60
+    await model.start(); model.mockPaused = true
+    #expect(model.engine?.session.configuration.warmupSeconds == 10)
+    #expect(model.engine?.session.configuration.cooldownSeconds == 10)
+    model.stop()
+}
+
 @Test @MainActor func uploadRequiresConsentAndRejectsAccountChangesAndMockRides() async throws {
     let store = try LocalStore(inMemory: true)
     let model = try AppModel(store: store, preview: true)

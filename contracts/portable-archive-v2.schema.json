@@ -1,0 +1,636 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FTPunk portable archive v2",
+  "type": "object",
+  "properties": {
+    "format": {
+      "const": "ftpunk-portable"
+    },
+    "version": {
+      "const": 2
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/profile"
+      }
+    },
+    "activities": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "kind": {
+            "enum": [
+              "rampTest",
+              "workout",
+              "freeRide"
+            ]
+          },
+          "session": {
+            "$ref": "#/$defs/session"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "kind",
+          "session"
+        ]
+      }
+    }
+  },
+  "required": [
+    "format",
+    "version",
+    "exportedAt",
+    "profiles",
+    "activities"
+  ],
+  "$defs": {
+    "ftpEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "watts": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 32767
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "watts",
+        "date",
+        "source"
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "weightKG": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ftpHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ftpEntry"
+          }
+        },
+        "currentFTPID": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cycleProgress": {
+          "$ref": "#/$defs/cycleProgress"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "ftpHistory"
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "preset": {
+          "enum": [
+            "standard",
+            "gentle",
+            "zwift"
+          ]
+        },
+        "priorFTP": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ftpEntry"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "weightKG": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "warmupSeconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3600
+        },
+        "warmupPower": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767
+        },
+        "usesAutomaticWarmup": {
+          "type": "boolean"
+        },
+        "maximumPower": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767
+        },
+        "maximumRampSeconds": {
+          "type": "number",
+          "minimum": 60
+        },
+        "cooldownSeconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3600
+        },
+        "ftpFactor": {
+          "enum": [
+            0.72,
+            0.75
+          ]
+        },
+        "riderID": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "riderName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "powerSource": {
+          "anyOf": [
+            {
+              "enum": [
+                "trainer",
+                "externalPowerMeter"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cadenceSource": {
+          "anyOf": [
+            {
+              "enum": [
+                "trainer",
+                "externalPowerMeter",
+                "unavailable"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "powerMatchingEnabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "preset",
+        "warmupSeconds",
+        "warmupPower",
+        "usesAutomaticWarmup",
+        "maximumPower",
+        "maximumRampSeconds",
+        "cooldownSeconds",
+        "ftpFactor"
+      ]
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "bestMinutePower": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "windowStart": {
+          "type": "number",
+          "minimum": 0
+        },
+        "windowEnd": {
+          "type": "number",
+          "minimum": 60
+        },
+        "factor": {
+          "enum": [
+            0.72,
+            0.75
+          ]
+        },
+        "weightKG": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "algorithmVersion": {
+          "const": 1
+        }
+      },
+      "required": [
+        "bestMinutePower",
+        "windowStart",
+        "windowEnd",
+        "factor",
+        "algorithmVersion"
+      ]
+    },
+    "sample": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "number",
+          "minimum": 0
+        },
+        "power": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trainerPower": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cadence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "heartRate": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "time"
+      ]
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "isDemo": {
+          "type": "boolean"
+        },
+        "devices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "capabilities": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "role",
+              "name",
+              "localIdentifier",
+              "capabilities"
+            ]
+          }
+        },
+        "samples": {
+          "type": "array",
+          "maxItems": 2000000,
+          "items": {
+            "$ref": "#/$defs/sample"
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "time": {
+                "type": "number",
+                "minimum": 0
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "time",
+              "message"
+            ]
+          }
+        },
+        "outcome": {
+          "enum": [
+            "exhaustion",
+            "finishedEarly",
+            "limitReached",
+            "interrupted",
+            "aborted",
+            "completed"
+          ]
+        },
+        "endReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rampStart": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rampEnd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cooldownStart": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "endedAtOffset": {
+          "type": "number",
+          "minimum": 0
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/result"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "training": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/training"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adventureEnabled": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "eligibleMilliseconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 86400000
+        }
+      },
+      "required": [
+        "id",
+        "startedAt",
+        "configuration",
+        "isDemo",
+        "devices",
+        "samples",
+        "events",
+        "outcome",
+        "endedAtOffset"
+      ]
+    },
+    "cycleProgress": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "credits": {
+          "type": "object",
+          "maxProperties": 100000,
+          "propertyNames": {
+            "format": "uuid"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 86400000
+          }
+        }
+      },
+      "required": [
+        "version",
+        "credits"
+      ]
+    },
+    "training": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "kind": {
+          "enum": [
+            "workout",
+            "freeRide"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ftpWatts": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 32767
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 500,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 86400
+              },
+              "watts": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 32767
+              }
+            },
+            "required": [
+              "name",
+              "seconds",
+              "watts"
+            ]
+          }
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "name",
+        "steps"
+      ]
+    }
+  }
+}

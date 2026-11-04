@@ -16,6 +16,9 @@ if args.output is None:
 executable = "FTPunk" if args.production else "FTPunkPreview"
 contents = args.output / "Contents"
 (contents / "MacOS").mkdir(parents=True, exist_ok=True)
+(contents / "Resources").mkdir(parents=True, exist_ok=True)
+icon = Path(__file__).resolve().parents[1] / "design" / "app-icon" / "FTPunk.icns"
+shutil.copy2(icon, contents / "Resources" / "FTPunk.icns")
 # Replace atomically so rebuilding does not overwrite a running executable's inode.
 staged_binary = contents / "MacOS" / (executable + ".next")
 shutil.copy2(args.binary, staged_binary)
@@ -26,6 +29,7 @@ with (contents / "Info.plist").open("wb") as file:
         "CFBundleExecutable": executable, "CFBundleName": "FTPunk" if args.production else "FTPunk Debug Preview",
         "CFBundleDisplayName": "FTPunk" if args.production else "FTPunk Debug Preview", "CFBundlePackageType": "APPL",
         "CFBundleVersion": "1", "CFBundleShortVersionString": "1.0",
+        "CFBundleIconFile": "FTPunk.icns",
         "NSPrincipalClass": "NSApplication", "LSMinimumSystemVersion": "14.0",
         "NSBluetoothAlwaysUsageDescription": "Connect to cycling devices when real-device mode is explicitly selected.",
         "CFBundleURLTypes": [{"CFBundleURLName": "com.kainkordian.ftpunk.oauth",

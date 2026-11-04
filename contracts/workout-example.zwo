@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Every element FTPunk imports. Powers are fractions of FTP; the importer resolves them to whole watts at the rider's FTP.
+     Ignored on purpose: textevent, Cadence and any other metadata. Rejected: FreeRide, MaxEffort, SolidState without power. -->
+<workout_file>
+    <author>FTPunk</author>
+    <name>ZWO example</name>
+    <description>One of each supported step.</description>
+    <sportType>bike</sportType>
+    <tags>
+        <tag name="example"/>
+    </tags>
+    <workout>
+        <Warmup Duration="300" PowerLow="0.5" PowerHigh="0.75"/>
+        <SteadyState Duration="120" Power="0.65" Cadence="90">
+            <textevent timeoffset="10" message="Settle in"/>
+        </SteadyState>
+        <Ramp Duration="120" PowerLow="0.7" PowerHigh="0.95"/>
+        <IntervalsT Repeat="3" OnDuration="180" OffDuration="120" OnPower="1.05" OffPower="0.55"/>
+        <IntervalsT Repeat="2" OnDuration="60" OffDuration="60" PowerOnLow="0.9" PowerOnHigh="1.2" PowerOffLow="0.6" PowerOffHigh="0.5"/>
+        <SolidState Duration="60" Power="0.8"/>
+        <Cooldown Duration="300" PowerLow="0.75" PowerHigh="0.4"/>
+    </workout>
+</workout_file>

@@ -1,0 +1,578 @@
+{
+  "format": "ftpunk-portable",
+  "version": 1,
+  "exportedAt": "2026-10-30T09:00:00.000Z",
+  "profiles": [
+    {
+      "id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "name": "Alex",
+      "weightKG": 75,
+      "ftpHistory": [
+        {
+          "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+          "watts": 250,
+          "date": "2026-10-30T09:00:00.000Z",
+          "source": "Manual"
+        }
+      ],
+      "currentFTPID": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+    }
+  ],
+  "activities": [
+    {
+      "schemaVersion": 1,
+      "kind": "rampTest",
+      "session": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "startedAt": "2026-10-30T09:00:00.000Z",
+        "configuration": {
+          "protocolVersion": 3,
+          "preset": "standard",
+          "priorFTP": {
+            "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+            "watts": 250,
+            "date": "2026-10-30T09:00:00.000Z",
+            "source": "Manual"
+          },
+          "weightKG": 75,
+          "warmupSeconds": 0,
+          "warmupPower": 125,
+          "usesAutomaticWarmup": true,
+          "maximumPower": 600,
+          "maximumRampSeconds": 1800,
+          "cooldownSeconds": 180,
+          "ftpFactor": 0.75,
+          "riderID": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "riderName": "Alex",
+          "powerSource": "externalPowerMeter",
+          "cadenceSource": "trainer",
+          "powerMatchingEnabled": true
+        },
+        "isDemo": false,
+        "devices": [],
+        "samples": [
+          {
+            "time": 0,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 1,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 2,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 3,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 4,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 5,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 6,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 7,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 8,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 9,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 10,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 11,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 12,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 13,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 14,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 15,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 16,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 17,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 18,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 19,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 20,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 21,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 22,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 23,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 24,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 25,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 26,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 27,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 28,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 29,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 30,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 31,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 32,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 33,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 34,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 35,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 36,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 37,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 38,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 39,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 40,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 41,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 42,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 43,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 44,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 45,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 46,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 47,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 48,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 49,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 50,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 51,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 52,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 53,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 54,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 55,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 56,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 57,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 58,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 59,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 60,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 61,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 62,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 63,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 64,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 65,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 66,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 67,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 68,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 69,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          },
+          {
+            "time": 70,
+            "power": 300,
+            "cadence": 90,
+            "trainerPower": 280,
+            "heartRate": 130
+          }
+        ],
+        "events": [
+          {
+            "time": 0,
+            "message": "Ramp test"
+          },
+          {
+            "time": 70,
+            "message": "Cooldown"
+          }
+        ],
+        "outcome": "finishedEarly",
+        "rampStart": 0,
+        "rampEnd": 70,
+        "cooldownStart": 70,
+        "endedAtOffset": 71,
+        "result": {
+          "bestMinutePower": 300,
+          "windowStart": 0,
+          "windowEnd": 60,
+          "factor": 0.75,
+          "weightKG": 75,
+          "algorithmVersion": 1
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,28 @@
 # FTPunk
 
+Home is a ride picker: today’s Intervals.icu workout, your FTP card (with the FTP test button), quick
+rides (free ERG, resistance) and a library of classic workouts grouped by type. The FTP test stays the
+key feature, with a permanent place on Home. Pause releases the trainer and freezes workout progress. A pixel
+ride (a short rainy-night city strip whose rider shows your effort) can sit in every cockpit. Mac, iPhone and
+web transfer history and workouts through portable backups. See the [roadmap](docs/ROADMAP.md) for status and next steps, and the
+[workout example](contracts/workout-example.json).
+
 Native iPhone and Mac apps for FTP ramp tests with a smart trainer, including the Elite Suito-T. The trainer controls resistance and supplies measured power by default. An external Bluetooth power meter, such as Favero Assioma PRO MX-2 pedals, is optional. Riders, recordings and progress work locally. Intervals.icu upload is optional and asks for confirmation.
+
+Power matching is enabled by default for external meters. Once a meter’s measurement connection is ready, FTPunk asks whether to use it to control trainer power or only to record power. Change this in **Settings → Devices & trainer control → Power matching** before a test. The choice is fixed in each recording; older recordings retain their original behavior. Corrections settle for five seconds after target changes, update at most every three seconds, and are limited to 3 W per update and ±20% (at most 60 W), within the trainer’s supported range. Zero power or low cadence suspends correction; loss of the selected meter still interrupts the test. Validate response with your trainer at low load before a maximal test.
+
+The selected app icon is the 8-bit cyclist wearing a magenta helmet. Source artwork, the edit prompt and export instructions are in [design/app-icon](design/app-icon/README.md); both iPhone and Mac builds use it.
+
+## Chrome web app
+
+The self-contained Chrome port lives in [`ftpunk_web/`](ftpunk_web/README.md), ready to split into a separate repository later. It includes Web Bluetooth trainer control, external power matching, mock rides, local browser history, exports, and optional approved Intervals.icu uploads.
+
+```sh
+cd ftpunk_web
+python3 tools/serve.py
+```
+
+Open **http://localhost:8080** in Chrome. See the web README for tests, deployment, and browser/hardware verification limits.
 
 ## Use the Mac app
 
@@ -13,42 +35,58 @@ open dist/FTPunk.app
 
 This packages a release executable for the build Mac's architecture (Apple silicon in this workspace), with an ad-hoc local signature. A Developer ID signature and notarization remain necessary for normal public distribution to other Macs. The full Xcode project also includes a **FTPunkMac** scheme, with Bluetooth/network sandbox entitlements for signed builds. Minimum macOS: 14.
 
-Mac and iPhone stores are independent. Future server sync can connect them without changing the workout engine or repository boundaries.
+Mac, iPhone and web stores remain independent. Use **Settings → Backup & transfer** to export a portable JSON archive and import it on another device. Imports preview the riders, replace matching identities, preserve unrelated riders and save a rollback backup first. Accounts and upload approvals are not transferred. This is manual transfer, not automatic sync; see the [archive contract](contracts/README.md).
+
+The [roadmap](docs/ROADMAP.md) lists what is built, the next steps in order and what is parked. [Device and account checks](docs/DEVICE_CHECKS.md) are deferred to the owner. iOS may remain foreground-only; locked-screen operation is out of scope.
 
 ## Run on iPhone
 
 1. Install full Xcode and an iOS Simulator runtime. Command-line tools alone are insufficient.
 2. Open `FTPunk.xcodeproj`, select **FTPunk**, and choose an iPhone simulator or an iOS 18+ device.
 3. For a physical iPhone, choose your signing team and, if needed, a unique bundle identifier.
-4. Use **Debug mode · no devices** first. For hardware, turn it off on the Ready step, connect the trainer and enable trainer control. Trainer power is the default. Select External power meter only if you want to use a separate sensor. Heart rate is optional.
+4. To try mock input first, open **Settings → About FTPunk**, activate the version/info bubble ten times, then enable **Mock sensors** under Debug tools. For hardware, turn mock sensors off in Settings, then tap the **Devices** pill on Home to connect the trainer and enable trainer control. Trainer power is the default. Trainer, External power meter and Heart rate each have a separate row in the Devices sheet. Connecting an external meter selects it for power; Measure power with lets you choose the source explicitly. Heart rate is optional.
 
-To build and open a dedicated virtual iPhone with an isolated mock profile:
+UI optimization targets **iPhone 15 Pro** first, in portrait, with both light and dark appearance. To build and open that exact simulator model with an isolated mock profile:
 
 ```sh
 sh Tools/run_simulator.sh
 ```
 
+The launcher selects an installed runtime that explicitly supports iPhone 15 Pro and never falls back to another model. Only one compatible runtime is needed; the Duo-only iOS 27.1 runtime is unnecessary. Add `--autostart-debug` to open a mock ride directly.
+
 If using an external meter, configure/calibrate it in its vendor app. For dual-sided Assioma pedals, verify total power and crank length in Favero's app or with a bike computer. Before a maximal test, validate acknowledged target changes and stopping at a low load on your actual trainer firmware. Keep other trainer-control apps closed.
 
 ## Workflow and features
 
-**New test → Rider → Protocol → Ready → Ride → Result** keeps preparation separate from the active effort. Back/Continue/Start controls stay visible below the scrollable setup form.
+**Stop & save** requests release immediately, without a confirmation dialog. A new session remains unavailable until cleanup finishes; an unconfirmed stop requires reconnecting trainer control.
 
-- **Named riders:** choose or add a local person. Each has separate FTP history and weight. Tests snapshot rider identity/name, selected FTP, weight, protocol, factor and measurement sources. Adopting an old test's FTP updates its owner, even when another rider is selected.
-- **Starting FTP:** select a current or historical value, enter one manually, or leave it unspecified. Automatic warm-up uses 50% of the selected value. Without FTP, fallback power is 75 W for the 15 W/min protocol and 100 W for the others. A manual override is available.
-- **Three protocols:** 15 W/min (50 W start, +5 W/20 s), 25 W/min (100 W start, +5 W/12 s), and 20 W/min Zwift-style (100 W start, +20 W/60 s). Choose manually. The in-app guide explains the reference's 60 kg guideline and attributes the original protocol reasoning to Richard Stern.
-- **Power source:** Trainer is the default; no separate meter is required. Choose an optional external Bluetooth Cycling Power meter on pedals, a crank or a hub. Power and cadence sources are fixed when a test starts. Cadence prefers the selected meter when available, then the trainer. If neither reports fresh cadence, the test uses manual ramp finishing and says so. A selected meter disconnect interrupts the test; it never silently switches power sources.
-- **Dashboard:** large target and actual watts, next-step countdown/progress, ramp/total time, cadence, optional heart rate, a power trace and clear finish/stop actions. Debug controls are collapsible.
-- **Results:** best valid continuous 60-second ramp power, a selected 72% or 75% estimate, the 72–77% range, and W/kg from session weight. In-app information explains the range and its limitations.
-- **Progress:** rider-grouped recordings, a rider filter and FTP/W/kg trend charts. Debug points are hidden by default and use diamond symbols when included. Compare matching protocols, factors and power sources.
-- **Deletion:** visible trash buttons, swipe/context actions and a detail-screen action, all with confirmation. Deleting removes local samples and pending jobs; adopted FTP values and activities already on Intervals.icu remain.
-- **Appearance:** System, Light and Dark under Settings, remembered per device. Native surfaces/text and adaptive accents support both themes.
+**Home → pre-flight → cockpit → result.** Every ride passes through one pre-flight checklist with Start always visible; when Start is disabled, the reason sits directly above it. The cockpit fills the screen during a ride (minimise it to get the live-ride bar above the tabs), and the result shows the training result first, then what it means for training, then sharing.
 
-The [UI review](docs/UX_REVIEW.md) explains the design decisions and remaining validation.
+- **Navigation:** Home, Progress and Settings, as tabs on iPhone and a sidebar on Mac. The rider chip and the Devices pill sit on Home’s toolbar; the rider chip is the only place the rider is chosen, and Devices is one shared sheet.
+- **Named riders:** choose or add a local person in the rider sheet. Each has separate FTP history and weight. Tests snapshot rider identity/name, FTP, weight, protocol, factor and measurement sources. Adopting a test’s FTP updates its owner, even when another rider is selected. A first launch with no rider data asks for a name, optional weight and FTP.
+- **FTP card:** current FTP, W/kg, date and source; after eight weeks it suggests a retest. With no FTP it moves to the top as the main call to action and library workouts say “Needs FTP”.
+- **FTP test pre-flight:** the protocol is recommended from your weight (below 60 kg: 15 W/min, otherwise 25 W/min) with its reason, and can be changed (the in-app guide attributes the original protocol reasoning to Richard Stern). Warm-up and cool-down default to 10 and 3 minutes, from 0 to 60 whole minutes each (zero skips the phase), with an optional manual warm-up target; the warm-up uses 50% of FTP, or 75 W (15 W/min) / 100 W (others) without one. Quick debug timing (10 s each) appears only with mock sensors.
+- **Estimate:** always 72% of the best valid continuous 60-second ramp power; there is no factor picker. Recordings and archives made with 75% in earlier versions load unchanged and show their original factor. The result shows the 72–77% range under “How this is calculated”.
+- **Three protocols:** 15 W/min (50 W start, +5 W/20 s), 25 W/min (100 W start, +5 W/12 s), and 20 W/min Zwift-style (100 W start, +20 W/60 s).
+- **Power source:** Trainer is the default; no separate meter is required. Choose an optional external Bluetooth Cycling Power meter on pedals, a crank or a hub. Power and cadence sources are fixed when a ride starts. Cadence prefers the selected meter when available, then the trainer. If neither reports fresh cadence, the test uses manual ramp finishing and says so. A selected meter disconnect interrupts the ride; it never silently switches power sources.
+- **FTP test cockpit:** large target and actual watts, the ramp step and ramp time, a next-step countdown ring, heart rate, cadence and live **MAX 60 S**. Below 60 rpm the cadence tile turns amber with “Ramp ends below 45 rpm”; the automatic finish (cadence under 45 rpm for 5 s) is unchanged. **Hold to finish** needs a 1.5 s press (VoiceOver action and ⌘⇧F on Mac); **Stop & save** is a single tap. MAX 60 S is the best complete, valid 60-second ramp average so far, not FTP; it waits for coverage, counts zeros, and excludes warm-up/cool-down. The final score rechecks the exact ramp endpoint. The **Chaindance** (below) sits under the numbers. Debug controls live in a sheet.
+- **Result:** the estimate with its change from your current FTP, the power chart with the best minute shaded, and a pinned “Use 209 W as Alex’s FTP” / “Keep 250 W” choice. After adopting, a hand-off card shows what changes in the library. Interrupted results explain what was saved; debug results cannot be adopted or uploaded.
+- **Workouts:** 14 built-in classics (endurance, tempo, sweet spot, over-unders, threshold, VO2max) resolved at your FTP when shown and snapshotted when a ride starts, plus Intervals.icu workouts and imported JSON files. Intensity is 50–150% in 5-point steps. The workout cockpit shows the step, the next step and a profile with a progress marker; Pause/Resume is the primary action. Free ERG changes by ±10 W and resistance rides by one level.
+- **Intervals.icu calendar:** when connected, Home refreshes the next 14 days on appear if the last download is over an hour old (never during a ride) and on pull-to-refresh. Cached workouts carry an optional `scheduledDate` (local `yyyy-MM-dd`); older caches show under Upcoming without a date until the next download.
+- **Chaindance:** a short, full-width night-city strip (192 × 60 pixels, 16:5, enlarged crisply) in both cockpits, directly under the target and actual numbers in every phase and every ride type. It is on by default; switch it off in the pre-flight (tests and workouts), live in the cockpit ⋯ menu, or in Settings → Ride display (`rideVisualEnabled`, migrated from the old `showStelvioASCII`: absent means on, a stored off stays off). The rider (magenta helmet, lime jacket, cyan-rimmed bike) shows the current intensity, from power smoothed over 3 s against the FTP of the ride, using the same zones and colours as the workout profile charts: upright and dim trail in recovery, hoods in endurance, lower in tempo and sweet spot with a growing trail in the zone colour, and in the drops with sweat and speed lines at threshold, plus sparks above it. Pedalling follows measured cadence in four frames a turn and coasts when cadence is stale or zero; the scenery scrolls faster with power. The FTP test rides a boulevard towards the Spire in warm-up, climbs its skyway during the ramp (a `LVL n` sign passes at every step; the climb is endless and never hints where the ramp will end), shows a rooftop sign such as `LVL 23 · 290 W` when the ramp ends and glides down in cool-down. Workouts ride the Neon Boulevard: a gantry at every step boundary, calm teal blocks for recoveries, a bright market district in the step's zone colour for work, and a `NEXT 5:00 · 225 W` billboard ten seconds ahead. Free ERG passes a gate at each target change; resistance shows the level. Paused rides stop with a foot down and a `PAUSED` sign. It is decorative (one summary label, no announcements), always night, animates at about 12 frames a second only while visible, and under Reduce Motion stops scrolling, rain and pedalling while pose, colour and signs keep following the ride. Increase Contrast adds a dark outline around the rider. It only reads the ride and never changes a trainer target.
+- **No story:** the Lowline story was removed from the native app. Riders, recordings and backups still carry its old progress fields so web backups round-trip unchanged; nothing in the native app grants, shows or edits them.
+- **Progress:** the FTP trend for the selected rider (real results by default, debug on request; one colour per rider, one shape for real/debug, one legend) above an activity list filtered by All / FTP tests / Workouts / Free rides. Deleting is by swipe, context menu or the detail menu, always with confirmation; it removes local samples and pending jobs, while adopted FTP values and activities already on Intervals.icu remain.
+- **Appearance:** System, Light and Dark under Settings → Ride display, remembered per device.
+- **Readability:** primary actions use explicit text/fill colors tested above 4.5:1 contrast in light and dark mode. Larger ride numbers follow Dynamic Type, with an extra-large option in Settings. Accessibility text sizes stack metrics/actions vertically. Labels, units, icons, stronger text colors, optional increased-contrast borders, VoiceOver values/iPhone phase announcements, and Reduce Motion support the ride workflow. See the [accessibility review](docs/archive/ux-review.md#accessibility-and-readability-review).
+- **About:** Settings shows the bundle’s version/build number and “Created by Kordian Gontarska · Developed with assistance from OpenAI Codex” credits. Ten button activations unlock persistent debug tools. Mock mode cannot be changed while a session is active; Hide debug tools locks it again. Normal launches default to real sensors, while explicit in-memory preview launches retain direct mock access.
+
+Disclosure headers, toggles, selection rows, device connections and form actions respond across their full row, with 44-point targets. Numeric duration fields show units and validation; invalid entries block Start and say why, and the iPhone number pad has a Done button.
+
+Design history: the [UX rework plan](docs/archive/ux-rework-plan.md) and the earlier [UI review](docs/archive/ux-review.md).
 
 ## Try without cycling devices
 
-Debug mode generates power, cadence and heart rate through the real ramp engine and FTP analysis. It offers 1×/4×/12×/60× playback, exact manual sliders, pause/resume, skip warm-up, advance 60 seconds, lost power/cadence signals and simulated trainer disconnection. Quick tests use a 10-second warm-up/cooldown. The default mock rider exhausts when the ramp passes 300 W. Debug recordings never upload or become adopted FTP.
+Unlock Debug tools with ten activations of **Settings → About FTPunk**, then enable mock sensors there. Mock input generates power, cadence and heart rate through the real ramp engine and FTP analysis. It offers 1×/4×/12×/60× playback, exact manual sliders, pause/resume, skip warm-up, advance 60 seconds, lost signals and simulated trainer disconnection. Quick tests use a 10-second warm-up/cooldown. The default mock rider exhausts when the ramp passes 300 W. Debug recordings never upload or become adopted FTP. The About button is accessible to VoiceOver, Switch Control and keyboard activation; it does not depend on a raw multi-tap gesture.
 
 For an isolated in-memory Mac preview:
 
@@ -56,21 +94,26 @@ For an isolated in-memory Mac preview:
 sh Tools/run_preview.sh
 ```
 
-For a repeatable visual walkthrough with two synthetic riders and dated mock history:
+Preview scenarios open a seeded state in the in-memory store only; they never read or change real history. Names: `first-launch`, `home-today`, `home-not-connected`, `home-no-ftp`, `home-retest-due`, `library`, `preflight-blocked`, `ride-warmup`, `ride-ramp`, `ride-ramp-low-cadence`, `ride-cooldown`, `result-new-ftp`, `result-interrupted`, `result-upload-prompt`, `workout-running`, `workout-paused`, `free-ride`, `resistance`, `progress-two-riders`, and the Chaindance states `visual-ramp-threshold`, `visual-workout-vo2`, `visual-recovery`, `visual-summit`, `visual-paused`, `visual-off`, `visual-hero`, `visual-sprint`, plus `settings-devices`, `settings-intervals`, `settings-intervals-connected` (a fake connection and seeded sync state), `workout-detail`, and the workout builder in `builder-blocks` and `builder-text`. Existing ride scenarios show Chaindance by default. A preview launched with `--debug-preview --mock-speed 4` runs its mock sensors at 4× instead of 12×.
 
 ```sh
-sh Tools/run_preview.sh --preview-walkthrough
+sh Tools/run_preview.sh --scenario ride-ramp                   # one state on the Mac
+sh Tools/run_preview.sh --preview-walkthrough                  # screenshot every scenario
+sh Tools/run_simulator.sh --scenario result-new-ftp            # one state on the iPhone 15 Pro simulator
+sh Tools/run_simulator.sh --matrix [directory] [scenario ...]  # simulator screenshots, light/dark x text size
 ```
 
-It captures this app's own views in `/tmp/ftpunk-preview`, including all setup stages, the ride dashboard, results, progress, settings and light-theme screens. The preview skips loading existing credentials. Normal app launches use persistent history.
+The simulator matrix waits longer for the first launch after an appearance or text-size change and retakes any screenshot smaller than `FTPUNK_MIN_SCREENSHOT_BYTES` (default 150000; a blank frame is far smaller), up to three times, then warns.
+
+The Mac walkthrough captures this app’s own views in `/tmp/ftpunk-preview` (or `--capture-dir`): each scenario in dark and light, at the default and an accessibility text size, in a 393 × 852 iPhone layout, plus the Mac window. The preview skips loading existing credentials. Normal app launches use persistent history.
 
 ## Intervals.icu
 
 **Settings → Connect with an API key** is available in either real-device or debug mode. Copy your personal key from Intervals.icu Settings → Developer settings. The app verifies the athlete, stores the key in Keychain and excludes it from exports.
 
-The alternative sign-in button uses Apple's authentication browser with OAuth/S256 PKCE. Its implementation is present, but live sign-in needs FTPunk's one-time public-client registration and approval. No server or embedded client secret is required. See [configuration](Configuration/IntervalsOAuth.md) and the [official OAuth documentation](https://forum.intervals.icu/t/intervals-icu-oauth-support/2759).
+The future sign-in flow uses Apple's authentication browser with OAuth/S256 PKCE. Its implementation is retained but the sign-in UI is hidden for now. Live sign-in needs FTPunk's one-time public-client registration and approval. No server or embedded client secret is required. See [configuration](Configuration/IntervalsOAuth.md) and the [official OAuth documentation](https://forum.intervals.icu/t/intervals-icu-oauth-support/2759).
 
-After a real test is finalized and saved, the app asks whether to upload it. The prompt identifies **the test's rider and the connected athlete account**, so guests' tests do not silently go to the app owner's account. Choose Upload or Keep local. History provides the same deliberate upload flow for older recordings. Connecting while a finalized real test is on the Ride screen also offers its upload. Debug tests are always excluded.
+After a real test is finalized and saved, the app asks whether to upload it. The prompt identifies **the test's rider and the connected athlete account**, so guests' tests do not silently go to the app owner's account. Choose Upload or Keep local. An activity’s detail in Progress provides the same deliberate upload flow for older recordings. Connecting while a finalized real test is on the result screen also offers its upload. Debug tests are always excluded.
 
 Only an approved upload enters the durable queue. Approved jobs retry on launch, network recovery and foreground scheduling, retaining the same TCX bytes for file-hash deduplication. Force-quitting/suspension cannot guarantee immediate delivery. Old pending automatic jobs from earlier prototypes are cancelled during migration; no new automatic uploads are created. Uploads never update remote FTP, weight or wellness settings. No COROS integration is included.
 
@@ -91,14 +134,22 @@ xcodebuild -project FTPunk.xcodeproj -scheme FTPunkMac \
   -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
-`python3 Tools/generate_project.py` regenerates both shared schemes/project without extra tooling. Run it after adding/removing top-level Swift files in `App`. Package sources are discovered automatically. GitHub Actions checks tests and unsigned iOS/macOS builds.
+`python3 Tools/generate_project.py` regenerates both shared schemes/project without extra tooling. The iOS target is named `FTPunkiOS` (scheme `FTPunk`, product `FTPunk.app`, bundle id `com.kainkordian.ftpunk`): a target also called `FTPunk` collided with the Swift package's `FTPunk` executable product, and Xcode could not find the app under test for `FTPunkUITests`. Run it after adding, moving or removing Swift files anywhere under `App` or `UITests`. Package sources are discovered automatically. GitHub Actions checks tests, unsigned iOS/macOS builds and that the UI tests compile.
+
+The `FTPunkUITests` target (`UITests/`) holds XCUITest smoke tests for the FTP test, workouts, free ERG, Progress, Chaindance and the absence of the story, using mock sensors and the preview scenarios. They drive the simulator UI, so compile them with `build-for-testing` and run them only when you want a visual run:
+
+```sh
+xcodebuild -project FTPunk.xcodeproj -scheme FTPunk -sdk iphonesimulator \
+  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build-for-testing
+```
+
 
 ## Architecture and validation boundary
 
 | Location | Responsibility |
 | --- | --- |
-| `App` | Shared SwiftUI workflow/dashboard, adaptive theme, native sign-in, rider orchestration and upload consent. |
-| `Sources/FTPunkDomain` | Immutable session snapshots, rider identity/grouping, ramp definitions/state machine, time-weighted analysis and repository interfaces. |
+| `App` | Shared SwiftUI: `DesignSystem/` components, `Features/{Shell,Home,Preflight,Ride,Result,Progress,Settings}/`, preview scenarios, adaptive theme, native sign-in, rider orchestration, the workout catalog and upload consent. |
+| `Sources/FTPunkDomain` | Immutable session snapshots, rider identity/grouping, ramp definitions/state machine, time-weighted analysis, the classic workout library, pure presentation rules (start blockers, retest age, cadence guard, result order), the pure `RideVisualState` behind Chaindance, and repository interfaces. |
 | `Sources/FTPunkDevices` | Bounded FTMS/Cycling Power/HR parsing, cadence rollover, CoreBluetooth discovery and acknowledged commands. |
 | `Sources/FTPunkStorage` | Versioned Core Data SQLite store, independent profiles, append-only samples, checkpoints and CSV/JSON/TCX export. |
 | `Sources/FTPunkIntegrations` | Keychain credentials, Intervals.icu HTTP/OAuth adapters and account-bound retry queue. |
@@ -107,10 +158,12 @@ Core Data avoids third-party dependencies and keeps explicit transactions. Older
 
 This remains a hardware prototype. Validate actual Suito-T control/start/stop and capability ranges, Assioma total-power/cadence semantics, live TCX import and authorization, wider display/accessibility cases, reconnect/device bindings and lifecycle behavior before release. Standard one-byte FTMS resistance decoding is the default; use the explicit two-byte reference layout only when confirmed by packet capture.
 
-The foreground-only test policy interrupts on backgrounding or stale essential data. Stop acknowledgements are checked, but software cannot release braking after communication is lost. At exhaustion the hardware path releases ERG; a manually finished ramp can include cooldown.
+The foreground-only test policy interrupts on backgrounding or stale essential data. Stop acknowledgements are checked, but software cannot release braking after communication is lost. Automatic exhaustion fixes the scored ramp window, releases ERG with an acknowledged stop, and records the chosen free-spin cool-down without issuing another power target. A manually finished ramp retains the preset gentle cool-down target. Zero recovery ends immediately. Fresh power is still required during recovery; losing it preserves the scored result and ends the recording. Actual Suito-T telemetry after an acknowledged stop remains a hardware-validation item.
+
+The pixel scenery uses a deterministic 192 × 96 panorama scaled without interpolation, drawn locally at up to 12 frames per second. The 24-second procedural loop has no downloaded assets or game-engine dependency. It does not claim real GPS position, elevation or distance. Workout phase events, not predicted FTP or elapsed climb loops, control summit/descent transitions. Reduce Motion shows a static victory pose instead of an animated cheer.
 
 CSV exports use `power_watts` for the selected measured stream (replacing the old `pedal_watts` header), retain `trainer_watts` diagnostics, and include `power_source`/`cadence_source` columns. JSON metadata and TCX notes record the source too. History and results label each test’s power source so comparisons stay traceable.
 
 ## Reference and repository
 
-`reference_project/` stays ignored and is not included in the repository or Mac archive. See the [reference audit](docs/REFERENCE_AUDIT.md) and [development plan](docs/DEVELOPMENT_PLAN.md). Generated binaries/archives in `dist/` are also ignored. The repository remains local on `main` with no remote publication.
+`reference_project/` stays ignored and is not included in the repository or Mac archive. See the [reference audit](docs/reference/reference-audit.md) and [architecture](docs/reference/architecture.md). Generated binaries/archives in `dist/` are also ignored. The repository is [github.com/kainkordian/ftpunk](https://github.com/kainkordian/ftpunk). The earlier web-only FTPunk is kept at tag `web-v1`; branch `web-v1-site` serves it on GitHub Pages.

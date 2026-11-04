@@ -5,6 +5,8 @@
 DerivedData/
 build/
 /dist/
+# Local design exploration; selected production artwork stays in design/app-icon/.
+/design/icon-proposals/
 *.xcuserstate
 xcuserdata/
 .env
@@ -13,3 +15,4 @@ xcuserdata/
 *.p12
 *.mobileprovision
 *.log
+.vscode/

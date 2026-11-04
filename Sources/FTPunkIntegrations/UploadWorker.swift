@@ -6,6 +6,7 @@ import FTPunkStorage
     private let repository: any UploadQueueRepository
     private let uploader: any ActivityUploader
     private var running = false
+    public var isRunning: Bool { running }
     public init(repository: any UploadQueueRepository, uploader: any ActivityUploader = IntervalsClient()) {
         self.repository = repository; self.uploader = uploader
     }

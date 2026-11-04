@@ -1,0 +1,35 @@
+{
+  "format": "ftpunk-workout",
+  "version": 1,
+  "name": "Ramps and repeats \u00b7 12 min",
+  "ftpWatts": 200,
+  "steps": [
+    {
+      "name": "Warm-up ramp",
+      "seconds": 180,
+      "watts": 80,
+      "endWatts": 120
+    },
+    {
+      "repeat": 3,
+      "steps": [
+        {
+          "name": "Effort",
+          "seconds": 90,
+          "watts": 160
+        },
+        {
+          "name": "Recover",
+          "seconds": 30,
+          "watts": 90
+        }
+      ]
+    },
+    {
+      "name": "Cooldown ramp",
+      "seconds": 180,
+      "watts": 100,
+      "endWatts": 60
+    }
+  ]
+}
