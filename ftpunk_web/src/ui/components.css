@@ -1,0 +1,51 @@
+/* Shared pieces: checklist rows, select rows, devices, timeline, step ring, hold button, workout profile and cards. */
+.card-title { font-size: 1.05rem; margin: 0 var(--space-xs) var(--space-xs); }
+.check-card { display: block; }
+.check-row { display: flex; align-items: flex-start; gap: var(--space-m); width: 100%; min-height: 44px; padding: var(--space-s) 0; border: 0; background: none; text-align: left; cursor: pointer; color: inherit; }
+div.check-row { cursor: default; }
+.row-icon { flex: none; width: 28px; text-align: center; font-size: 1.15rem; color: var(--accent); }
+.row-icon.attention { color: var(--warning); }
+.row-text { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; min-width: 0; }
+.row-text .caption { color: var(--secondary); }
+.row-detail { font-size: .875rem; color: var(--secondary); } .row-detail.attention { color: var(--warning); }
+.chevron { color: var(--secondary); align-self: center; font-size: 1.25rem; }
+.select-row { display: flex; align-items: center; gap: var(--space-m); width: 100%; min-height: 52px; padding: var(--space-s) var(--space-m); text-align: left; background: color-mix(in srgb, var(--ink) 4%, var(--surface)); border: 1.5px solid var(--card-line); border-radius: var(--radius-control); cursor: pointer; }
+.select-row[aria-pressed="true"] { border-color: var(--accent); }
+.initials { display: inline-grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 18%, transparent); font-size: .75rem; font-weight: 800; }
+.initials.on { background: var(--accent); color: var(--on-accent); }
+.device-row { display: flex; align-items: center; gap: var(--space-m); padding: var(--space-s) 0; }
+.timeline .track { position: relative; height: 10px; }
+.timeline .segment { position: absolute; top: 0; bottom: 0; left: calc(var(--start, 0) * 100%); width: calc((var(--end, 1) - var(--start, 0)) * 100% - 2px); border-radius: 4px; background: color-mix(in srgb, var(--secondary) 16%, transparent); }
+.timeline .segment.current { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.timeline .fill { position: absolute; left: 0; top: 2px; height: 6px; width: calc(var(--progress, 0) * 100%); border-radius: 4px; background: var(--accent); }
+.timeline-labels { display: flex; justify-content: space-between; font-size: .75rem; color: var(--secondary); margin-top: 4px; }
+.timeline-labels .current { color: var(--ink); font-weight: 700; }
+.ring-row { display: flex; align-items: center; gap: var(--space-m); }
+.ring-back { fill: none; stroke: color-mix(in srgb, var(--secondary) 25%, transparent); stroke-width: 6; }
+.ring-fill { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; }
+.ring-row text { fill: var(--ink); font: 700 14px var(--font); }
+.ring-text { font-size: 1.2rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.btn.hold { min-height: 52px; user-select: none; touch-action: none; }
+.btn.hold .ring-back, .btn.hold .ring-fill { stroke-width: 3; }
+.profile { position: relative; border-radius: 8px; background: color-mix(in srgb, var(--secondary) 9%, transparent); overflow: visible; }
+.profile svg { display: block; width: 100%; border-radius: 8px; }
+.profile.small svg { height: 56px; } .profile.normal svg { height: 70px; } .profile.large svg { height: 170px; }
+.profile .bar { stroke: none; transition: opacity .15s; }
+.profile .bar.done { opacity: .45; }
+.profile.interactive svg { cursor: crosshair; touch-action: pan-y; }
+.profile.interactive:has(.bar.selected) .bar:not(.selected) { opacity: .6; }
+.profile .bar.selected { stroke: var(--ink); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.profile .ftp-line { stroke: color-mix(in srgb, var(--secondary) 55%, transparent); stroke-width: 1; stroke-dasharray: 8 8; vector-effect: non-scaling-stroke; }
+.profile .marker { fill: var(--ink); }
+.tooltip { position: absolute; bottom: calc(100% + 6px); left: var(--x, 50%); transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; padding: 4px var(--space-s); background: var(--surface); border: 1px solid var(--card-line-strong); border-radius: 8px; font-size: .8125rem; white-space: nowrap; pointer-events: none; }
+.tooltip.left { left: 0; transform: none; } .tooltip.right { left: auto; right: 0; transform: none; }
+.tooltip span { color: var(--secondary); font-variant-numeric: tabular-nums; }
+.workout-card { display: flex; flex-direction: column; gap: var(--space-s); width: 100%; padding: var(--space-m); text-align: left; background: color-mix(in srgb, var(--ink) 5%, var(--surface)); border: 1px solid var(--card-line); border-radius: var(--radius-card); cursor: pointer; color: inherit; }
+.workout-card .card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-xs); }
+.workout-card:hover { border-color: var(--accent); }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.steps li { display: flex; align-items: center; gap: var(--space-m); min-height: 40px; padding: 4px var(--space-xs); border-bottom: 1px solid var(--card-line); font-size: .9375rem; }
+.steps li.selected { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.steps .num { min-width: 52px; text-align: right; }
+.swatch { flex: none; width: 12px; height: 12px; border-radius: 3px; }
+.empty { text-align: center; display: flex; flex-direction: column; gap: var(--space-s); align-items: center; }

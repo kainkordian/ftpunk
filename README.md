@@ -15,7 +15,7 @@ The selected app icon is the 8-bit cyclist wearing a magenta helmet. Source artw
 
 ## Chrome web app
 
-The self-contained Chrome port lives in [`ftpunk_web/`](ftpunk_web/README.md), ready to split into a separate repository later. It includes Web Bluetooth trainer control, external power matching, mock rides, local browser history, exports, and optional approved Intervals.icu uploads.
+The self-contained Chrome port lives in [`ftpunk_web/`](ftpunk_web/README.md). It follows the native app's screens (Home, pre-flight, cockpit, result, Progress, Settings) and workout library, with Web Bluetooth trainer control, external power matching, debug mock rides, local browser history, exports, and optional approved Intervals.icu uploads. Its tests run in headless Chrome with `python3 ftpunk_web/tools/test.py` (no Node).
 
 ```sh
 cd ftpunk_web
@@ -166,4 +166,4 @@ CSV exports use `power_watts` for the selected measured stream (replacing the ol
 
 ## Reference and repository
 
-`reference_project/` stays ignored and is not included in the repository or Mac archive. See the [reference audit](docs/reference/reference-audit.md) and [architecture](docs/reference/architecture.md). Generated binaries/archives in `dist/` are also ignored. The repository is [github.com/kainkordian/ftpunk](https://github.com/kainkordian/ftpunk). The earlier web-only FTPunk is kept at tag `web-v1`; branch `web-v1-site` serves it on GitHub Pages.
+`reference_project/` stays ignored and is not included in the repository or Mac archive. See the [reference audit](docs/reference/reference-audit.md) and [architecture](docs/reference/architecture.md). Generated binaries/archives in `dist/` are also ignored. The repository is [github.com/kainkordian/ftpunk](https://github.com/kainkordian/ftpunk). GitHub Pages serves the web app in `ftpunk_web/` at [kainkordian.github.io/ftpunk](https://kainkordian.github.io/ftpunk/), deployed by `.github/workflows/pages.yml`. The earlier web-only FTPunk is kept at tag `web-v1`.

@@ -128,7 +128,7 @@ distance, ranges and free-ride steps are rejected.
 
 ## Story fields are legacy
 
-The native apps no longer have the Lowline story (2 November 2026); the web app keeps it until its own port. The
+Neither app has the Lowline story any more (native 2 November 2026, web 5 November 2026). The
 story's data stays in the contract so backups round-trip without losing progress:
 
 - `cycleProgress` on a profile (version 1, a map of lowercase activity UUID to credited milliseconds), and the activity
@@ -143,8 +143,10 @@ story's data stays in the contract so backups round-trip without losing progress
 - The Swift tests `StoryCompatibilityTests` import the shared v2 and v3 fixtures, export, re-import and compare the
   ledger and the session fields.
 
-The earlier text above about beats at 0, 5, 10 and 20 minutes, receipts and ten XP per minute describes the web app
-only. Artwork and story never send trainer commands.
+The earlier text above about beats at 0, 5, 10 and 20 minutes, receipts and ten XP per minute describes the removed
+web story and is kept only to explain the data. The web app preserves the same fields: it validates, stores and exports
+`cycleProgress` and the three activity fields unchanged, never writes them for new recordings, and still credits the
+ledger once for a legacy recording it saves or imports (`ftpunk_web/tests/suite.mjs`, "legacy ledger").
 
 ## Scheduled dates and the workout library fixture
 
@@ -163,10 +165,17 @@ library (UX plan §5) resolved at an FTP of 250 W: id, name, category
 `durationSeconds` and the ordered steps (`name`, `seconds`, `watts`, optional `endWatts`).
 Targets are percentages of FTP rounded to whole watts, before any trainer increment is
 applied. Every workout except the three original starters (Easy spin, Endurance 30,
-Tempo 3×5, which keep their exact steps) has a 10 minute warm-up ramp from 50 to 70 %
-and a 5 minute cool-down ramp from 60 to 40 %; recoveries are at 50 % and sit between
+Tempo 3×5, which keep their exact steps) has a flat 10 minute warm-up at 50 % and a flat
+5 minute cool-down at 50 % (no ramps, decision of 3 November 2026); recoveries are at 50 % and sit between
 efforts. The Swift test `workoutLibraryMatchesTheSharedFixtureAt250Watts` fails if the
 catalog and the file drift apart; regenerate with
 `FTPUNK_WRITE_FIXTURES=1 swift test --filter workoutLibraryMatchesTheSharedFixtureAt250Watts`.
 The web port should copy the file next to its other fixtures so its suite stays
-self-contained, and compare its own catalog against it.
+self-contained, and compare its own catalog against it (done: `ftpunk_web/tests/library.test.mjs`).
+
+`fixtures/workout-preview-250w.json` is what the workout preview shows for each of those workouts at 250 W: total
+duration text, intensity label, `mainSetText` (values on, off and at 110 %), the step texts (`valueText`, spoken text, zone)
+with values on, off and at 110 %, the repeat groups of the compact list and the profile bars (fractions rounded to six
+decimals). The Swift test `workoutPreviewMatchesTheSharedFixtureAt250Watts` fails on drift; regenerate with
+`FTPUNK_WRITE_FIXTURES=1 swift test --filter workoutPreviewMatchesTheSharedFixtureAt250Watts`. The web copies both fixtures to
+`ftpunk_web/tests/fixtures/`; `python3 ftpunk_web/tools/test.py` fails if a copy differs from `contracts/fixtures/`.

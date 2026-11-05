@@ -1,4 +1,4 @@
-import { validatePlan, supportsIntensity, progressMilliseconds } from './training.mjs';
+import { validatePlan, supportsIntensity } from './training.mjs';
 import { RampEngine, PowerMatcher, configuration, PRESETS, mockSample } from './domain.mjs';
 import { route } from './protocol.mjs';
 import { acquireRideLease } from './storage.mjs';
@@ -16,7 +16,7 @@ export class RideController {
   }
   get active() { return this.engine?.active === true; }
   get busy() { return this.starting || this.finishing || this.active; }
-  async start(input, { demo = false, speed = 12, scenario = 'exhaustion', training = null, adventure = false } = {}) {
+  async start(input, { demo = false, speed = 12, scenario = 'exhaustion', training = null, intensity = 100 } = {}) {
     if (this.busy) return;
     this.demo = demo; this.starting = true; this.cancelStart = null; this.onChange();
     let startedHardware = false;
@@ -25,8 +25,6 @@ export class RideController {
       if (this.cancelStart) throw Error(this.cancelStart);
       if (training) training = validatePlan(training);
       let config = configuration({ ...input, ...(training?.resistance == null ? {} : { powerMatchingEnabled: false }) }); this.preparingConfiguration = config;
-      const savedProfile = adventure && !demo ? (await this.store.all('profiles')).find(p => p.id === config.riderID) : null;
-      const adventureStart = adventure && !demo ? progressMilliseconds(savedProfile?.cycleProgress) : null;
       if (this.cancelStart) throw Error(this.cancelStart);
       if (!demo) {
         if (!this.devices.trainerReady || this.devices.measurements.fresh(config.powerSource, 'power', this.now()) == null) throw Error('Connect the trainer and pedal until the selected power source is receiving fresh data.');
@@ -38,16 +36,17 @@ export class RideController {
         } else {
           if (!range) throw Error('This trainer does not expose ERG power control.');
           if (training) {
-            if (!supportsIntensity(training, 100, range.minimum, range.maximum) || !training.steps.every(s => range.quantized(s.watts) > 0 && range.quantized(s.endWatts ?? s.watts) > 0)) throw Error('The workout exceeds the trainer’s supported power range.');
+            if (!supportsIntensity(training, 100, range.minimum, range.maximum) || !supportsIntensity(training, intensity, range.minimum, range.maximum) || !training.steps.every(s => range.quantized(s.watts) > 0 && range.quantized(s.endWatts ?? s.watts) > 0)) throw Error('The workout exceeds the trainer’s supported power range.');
           } else if (![config.warmupPower, p.start, p.cooldown].every(w => range.quantized(w) === w) || p.step % range.increment !== 0) throw Error('This protocol’s targets do not fit the trainer’s supported range or power increment.');
           if (!training) config = configuration({ ...config, maximumPower: Math.min(config.maximumPower, range.maximum) });
-          startedHardware = true; await this.devices.start(range.quantized(training?.steps[0].watts ?? config.warmupPower));
+          startedHardware = true; await this.devices.start(range.quantized(Math.round((training?.steps[0].watts ?? config.warmupPower) * (training ? intensity / 100 : 1))));
         }
       }
       if (this.cancelStart) throw Error(this.cancelStart);
-      this.demo = demo; this.speed = speed; this.scenario = scenario; this.elapsed = 0; this.origin = this.now(); this.lastWall = this.origin;
-      this.lastCheckpoint = -Infinity; this.lastAcknowledged = demo ? null : this.devices.range?.quantized(training?.steps[0].watts ?? config.warmupPower); this.lastResistance = training?.resistance ?? null; this.matcher = new PowerMatcher(); this.released = false; this.finalized = null;
-      this.engine = new RampEngine(config, { demo, devices: demo ? [] : this.devices.snapshots, training, adventure, adventureStart });
+      this.demo = demo; this.speed = speed; this.scenario = scenario; this.mockPaused = false; this.elapsed = 0; this.origin = this.now(); this.lastWall = this.origin;
+      this.lastCheckpoint = -Infinity; this.lastAcknowledged = demo ? null : this.devices.range?.quantized(Math.round((training?.steps[0].watts ?? config.warmupPower) * (training ? intensity / 100 : 1))); this.lastResistance = training?.resistance ?? null; this.matcher = new PowerMatcher(); this.released = false; this.finalized = null;
+      this.engine = new RampEngine(config, { demo, devices: demo ? [] : this.devices.snapshots, training });
+      if (training?.kind === 'workout' && intensity !== 100) { if (!this.engine.setIntensity(intensity, 0)) throw Error('Choose 50–150% intensity within the trainer’s supported power range.'); }
       await this.checkpoint(true);
       if (this.cancelStart) throw Error(this.cancelStart);
       if (!this.engine.active) throw Error('The recording could not be started.');
@@ -66,14 +65,8 @@ export class RideController {
   tick() {
     if (!this.active) return;
     const now = this.now(), delta = Math.max(0, now - this.lastWall); this.lastWall = now;
-    if (this.demo) {
-      const end = this.elapsed + Math.min(delta, 0.5) * this.speed;
-      while (this.elapsed < end && this.active) {
-        this.elapsed = Math.min(end, this.elapsed + 0.5);
-        this.engine.receive(mockSample(this.elapsed, this.engine.target ?? (this.engine.freewheel ? 0 : this.engine.session.configuration.warmupPower), this.engine.phase, this.scenario));
-        this.engine.tick(this.elapsed);
-      }
-    } else {
+    if (this.demo) { if (!this.mockPaused) this.advanceMock(Math.min(delta, 0.5) * this.speed); }
+    else {
       this.elapsed = now - this.origin; this.engine.tick(this.elapsed);
       if (this.active && !this.pending) {
         if (this.engine.freewheel && !this.released) this.send(() => this.devices.stop(), () => { this.released = true; this.engine.event(this.elapsed, 'Trainer released for free-spin cooldown'); });
@@ -90,6 +83,18 @@ export class RideController {
       }
     }
     this.checkpoint().catch(error => this.storageFailed(error));
+    if (!this.active) void this.finalize();
+    this.onChange();
+  }
+  /** Mock rides only: run the simulated sensors forward by `seconds` of ride time (also used by preview scenarios and the debug controls). */
+  advanceMock(seconds) {
+    if (!this.demo || !this.active) return;
+    const end = this.elapsed + seconds;
+    while (this.elapsed < end && this.active) {
+      this.elapsed = Math.min(end, this.elapsed + 0.5);
+      this.engine.receive(mockSample(this.elapsed, this.engine.target ?? (this.engine.freewheel ? 0 : this.engine.session.configuration.warmupPower), this.engine.phase, this.scenario));
+      this.engine.tick(this.elapsed);
+    }
     if (!this.active) void this.finalize();
     this.onChange();
   }

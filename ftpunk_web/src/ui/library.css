@@ -1,0 +1,3 @@
+#library, #upcoming, #my-workouts { scroll-margin-top: var(--space-l); }
+.report { white-space: pre-wrap; user-select: text; }
+[data-slot="my-workouts"] .grid-cards { margin-top: var(--space-s); }

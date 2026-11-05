@@ -42,9 +42,22 @@ export function importWorkout(text, ftp = null) {
   expand(doc.steps, 0);
   return validatePlan({ version: steps.some(s => s.endWatts != null) ? 2 : 1, kind: 'workout', name: object.name ?? 'Imported workout', ftpWatts: ftp, steps });
 }
+/** `scheduledDate` is a local calendar day, `yyyy-MM-dd`, text rather than an instant (a workout planned for Tuesday stays on Tuesday). */
+export const ScheduledDate = Object.freeze({
+  isValid(text) {
+    if (typeof text !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(text)) return false;
+    const [year, month, day] = text.split('-').map(Number), probe = new Date(Date.UTC(year, month - 1, day));
+    return year >= 1970 && year <= 2200 && probe.getUTCFullYear() === year && probe.getUTCMonth() === month - 1 && probe.getUTCDate() === day;
+  },
+  /** "2026-11-02T06:30:00" (Intervals `start_date_local`) becomes "2026-11-02". */
+  fromIntervalsLocal(text) { const day = typeof text === 'string' && text.length >= 10 ? text.slice(0, 10) : null; return day && this.isValid(day) ? day : null; },
+  stringFor(date = new Date()) { return `${String(date.getFullYear()).padStart(4, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; },
+  dateFrom(text) { if (!this.isValid(text)) return null; const [y, m, d] = text.split('-').map(Number); return new Date(y, m - 1, d); },
+});
 export function validateCachedWorkout(record) {
   if (!record || typeof record.id !== 'string' || !record.id.length || record.id.length > 300 || !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(record.riderID) || typeof record.source !== 'string' || !record.source.length || record.source.length > 300 || !Number.isFinite(Date.parse(record.savedAt))) throw Error('Invalid cached workout.');
   const plan = validatePlan(record.plan); if (plan.kind !== 'workout') throw Error('Only structured workouts belong in the library.');
-  return { id: record.id, riderID: record.riderID.toLowerCase(), source: record.source, savedAt: record.savedAt, plan };
+  if (record.scheduledDate != null && !ScheduledDate.isValid(record.scheduledDate)) throw Error('Invalid cached workout.');
+  return { id: record.id, riderID: record.riderID.toLowerCase(), source: record.source, savedAt: record.savedAt, plan, ...(record.scheduledDate == null ? {} : { scheduledDate: record.scheduledDate }) };
 }
 export const exampleWorkout = { format: 'ftpunk-workout', version: 1, name: 'Ramps and repeats · 12 min', ftpWatts: 200, steps: [{ name: 'Warm-up ramp', seconds: 180, watts: 80, endWatts: 120 }, { repeat: 3, steps: [{ name: 'Effort', seconds: 90, watts: 160 }, { name: 'Recover', seconds: 30, watts: 90 }] }, { name: 'Cooldown ramp', seconds: 180, watts: 100, endWatts: 60 }] };

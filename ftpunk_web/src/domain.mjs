@@ -46,11 +46,11 @@ export function analyze(samples, start, end, factor = 0.72, weightKG = null) {
   return best;
 }
 export class RampEngine {
-  constructor(config, { demo = false, date = new Date().toISOString(), devices = [], training = null, adventure = false, adventureStart = null } = {}) {
+  constructor(config, { demo = false, date = new Date().toISOString(), devices = [], training = null } = {}) {
     this.phase = 'waiting'; this.target = null; this.phaseStartedAt = 0; this.lastTick = 0; this.lastAnalysis = -Infinity; this.lowCadenceSince = null; this.lastPower = null; this.lastCadence = null; this.liveBest = null;
     if (training) training = validatePlan(training);
-    this.trainingStartedAt = null; this.pausedAt = null; this.pausedSeconds = 0; this.creditAfterTime = 0; this.eligibleSeconds = 0; this.freeRideTarget = training?.resistance == null ? training?.steps[0].watts : null; this.resistanceLevel = training?.resistance ?? null; this.intensity = 100;
-    this.session = { training, adventureStartMilliseconds: adventureStart, adventureEnabled: adventure, eligibleMilliseconds: 0, id: uuid(), startedAt: date, configuration: structuredClone(config), isDemo: demo, devices, samples: [], events: [], outcome: null, result: null, endedAtOffset: null };
+    this.trainingStartedAt = null; this.pausedAt = null; this.pausedSeconds = 0; this.freeRideTarget = training?.resistance == null ? training?.steps[0].watts : null; this.resistanceLevel = training?.resistance ?? null; this.intensity = 100;
+    this.session = { training, id: uuid(), startedAt: date, configuration: structuredClone(config), isDemo: demo, devices, samples: [], events: [], outcome: null, result: null, endedAtOffset: null };
   }
   get active() { return !['completed', 'interrupted'].includes(this.phase); }
   get freewheel() { return this.phase === 'cooldown' && this.session.outcome === 'exhaustion'; }
@@ -59,10 +59,6 @@ export class RampEngine {
     s = { ...s };
     if (Number.isFinite(s.power)) {
       if (!this.lastPower || s.time > this.lastPower.time) {
-        if (this.session.adventureEnabled && !this.session.isDemo && this.phase !== 'waiting' && this.phase !== 'paused' && this.lastPower?.watts > 0 && s.power > 0 && s.time - this.lastPower.time <= 2) {
-          this.eligibleSeconds += Math.max(0, s.time - Math.max(this.lastPower.time, this.creditAfterTime));
-          this.session.eligibleMilliseconds = Math.min(86400000, Math.floor(this.eligibleSeconds * 1000));
-        }
         this.lastPower = { time: s.time, watts: s.power };
       }
       else delete s.power;
@@ -130,7 +126,7 @@ export class RampEngine {
     if (!this.canResume(time)) return false;
     if (this.trainingStartedAt != null) { this.pausedSeconds += time - this.pausedAt; this.phaseStartedAt += time - this.pausedAt; }
     this.pausedAt = null; this.phase = this.phaseBeforePause; this.phaseBeforePause = null; this.lastTick = time;
-    this.creditAfterTime = time; this.target = this.phase === 'riding' ? this.resumeTarget : null;
+    this.target = this.phase === 'riding' ? this.resumeTarget : null;
     this.event(time, 'Training resumed'); return true;
   }
   get currentStep() { return this.session.training ? stepAt(this.session.training, this.trainingElapsed) : null; }

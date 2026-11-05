@@ -28,7 +28,7 @@ export function validateArchive(input) {
   require(input?.format === 'ftpunk-portable' && [1, 2, 3].includes(input.version), 'This archive format or version is not supported.');
   require(validDate(input.exportedAt), 'Invalid archive date.');
   require(Array.isArray(input.profiles) && input.profiles.length > 0 && input.profiles.length <= 1000 && Array.isArray(input.activities) && input.activities.length <= 100000, 'Invalid archive contents.');
-  require(input.version >= 2 || input.profiles.every(p => p.cycleProgress == null), 'Cyclepunk progress requires archive version 2.');
+  require(input.version >= 2 || input.profiles.every(p => p.cycleProgress == null), 'Legacy progress records require archive version 2.');
   const profiles = input.profiles.map(profile), riders = new Set(profiles.map(p => p.id)), activities = [];
   const workouts = (input.workouts ?? []).map(validateCachedWorkout);
   require(workouts.length <= 2000 && (input.version >= 3 || !workouts.length) && new Set(workouts.map(w => w.id)).size === workouts.length && workouts.every(w => riders.has(w.riderID)), 'Invalid workout library identities or version.');
@@ -39,11 +39,11 @@ export function validateArchive(input) {
     require(s && c && PRESETS[c.preset] && Number.isInteger(c.protocolVersion) && c.protocolVersion >= 1 && c.protocolVersion <= 3, 'Invalid ramp configuration.');
     if (s.training != null) s.training = validatePlan(s.training);
     require(input.version >= 3 || (s.training?.version ?? 1) === 1, "Ramp and resistance plans require archive version 3.");
-    require(s.adventureStartMilliseconds == null || input.version >= 3 && Number.isSafeInteger(s.adventureStartMilliseconds) && s.adventureStartMilliseconds >= 0 && s.adventureStartMilliseconds <= 8640000000000, 'Invalid adventure starting point.');
+    require(s.adventureStartMilliseconds == null || input.version >= 3 && Number.isSafeInteger(s.adventureStartMilliseconds) && s.adventureStartMilliseconds >= 0 && s.adventureStartMilliseconds <= 8640000000000, 'Invalid legacy progress starting point.');
     require(record.kind === (s.training?.kind ?? 'rampTest'), 'Activity kind does not match its plan.');
-    require(input.version >= 2 || (!s.training && s.adventureEnabled !== true), 'Training and adventure require archive version 2.');
+    require(input.version >= 2 || (!s.training && s.adventureEnabled !== true), 'Training activities and legacy progress fields require archive version 2.');
     require(!s.training || s.result == null, 'Training activities cannot contain FTP estimates.');
-    require(optional(s.adventureEnabled, v => typeof v === 'boolean') && optional(s.eligibleMilliseconds, v => Number.isSafeInteger(v) && v >= 0 && v <= Math.min(86400000, (s.endedAtOffset + .001) * 1000)), 'Invalid adventure time.');
+    require(optional(s.adventureEnabled, v => typeof v === 'boolean') && optional(s.eligibleMilliseconds, v => Number.isSafeInteger(v) && v >= 0 && v <= Math.min(86400000, (s.endedAtOffset + .001) * 1000)), 'Invalid legacy progress time.');
     s.id = id(s.id); c.riderID = id(c.riderID ?? LEGACY_RIDER);
     require(riders.has(c.riderID), 'An activity references a missing rider.');
     require(validDate(s.startedAt) && typeof s.isDemo === 'boolean', 'Invalid activity metadata.');

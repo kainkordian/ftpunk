@@ -1,4 +1,4 @@
-// Immutable, resolved training plans. The game never supplies trainer targets.
+// Immutable, resolved training plans. Only the ride engine ever supplies trainer targets.
 export function validatePlan(plan) {
   if (!plan || ![1, 2].includes(plan.version) || !['workout', 'freeRide'].includes(plan.kind) || typeof plan.name !== 'string' || !plan.name.length || plan.name.length > 100 || plan.ftpWatts != null && (!Number.isFinite(plan.ftpWatts) || plan.ftpWatts <= 0 || plan.ftpWatts > 32767) || !Array.isArray(plan.steps) || !plan.steps.length || plan.steps.length > 500 || !plan.steps.every(s => typeof s.name === 'string' && s.name.length > 0 && s.name.length <= 100 && Number.isFinite(s.seconds) && s.seconds > 0 && Number.isInteger(s.watts) && s.watts > 0 && s.watts <= 32767 && (s.endWatts == null || Number.isInteger(s.endWatts) && s.endWatts >= 1 && s.endWatts <= 32767)) || duration(plan) > 86400 || plan.kind === 'freeRide' && plan.steps.length !== 1) throw Error('Invalid workout duration or power target.');
   if (plan.version === 1 && (plan.resistance != null || plan.steps.some(s => s.endWatts != null)) || plan.resistance != null && (plan.kind !== 'freeRide' || !Number.isInteger(plan.resistance) || plan.resistance < 0 || plan.resistance > 32767)) throw Error('Invalid training control mode or version.');
@@ -11,18 +11,10 @@ export function stepAt(plan, elapsed) {
   return null;
 }
 export function freeRide(watts) { return validatePlan({ version: 1, kind: 'freeRide', name: 'Free ERG ride', ftpWatts: null, steps: [{ name: 'Ride at your own pace', seconds: 86400, watts }] }); }
-export function starterPlans(ftp) {
-  if (!Number.isFinite(ftp) || ftp <= 0 || ftp > 32767) throw Error('Set your FTP before choosing a workout.');
-  const step = (name, minutes, fraction) => ({ name, seconds: minutes * 60, watts: Math.max(1, Math.round(ftp * fraction)) });
-  return [
-    ['Easy spin · 20 min', [step('Warm-up', 3, .45), step('Easy spin', 14, .55), step('Cooldown', 3, .40)]],
-    ['Endurance · 30 min', [step('Warm-up', 5, .50), step('Endurance', 20, .65), step('Cooldown', 5, .40)]],
-    ['Tempo intervals · 30 min', [step('Warm-up', 5, .50), ...[1, 2, 3].flatMap(n => [step(`Tempo ${n} of 3`, 5, .80), step('Recovery', 2, .45)]), step('Cooldown', 4, .40)]],
-  ].map(([name, steps]) => validatePlan({ version: 1, kind: 'workout', name, ftpWatts: ftp, steps }));
-}
-export const LAST_LIGHT_MS = 20 * 60 * 1000;
+// Legacy progress ledger: recordings made before the story was removed still carry credits. They are validated, stored and
+// exported unchanged (contracts/README.md, "Story fields are legacy"). Nothing in the UI reads them and new recordings never add credits.
 export function validateProgress(progress) {
-  if (!progress || progress.version !== 1 || !progress.credits || typeof progress.credits !== 'object' || Array.isArray(progress.credits) || Object.keys(progress.credits).length > 100000 || !Object.entries(progress.credits).every(([id, ms]) => /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(id) && Number.isSafeInteger(ms) && ms >= 0 && ms <= 86400000)) throw Error('Invalid Cyclepunk progress.');
+  if (!progress || progress.version !== 1 || !progress.credits || typeof progress.credits !== 'object' || Array.isArray(progress.credits) || Object.keys(progress.credits).length > 100000 || !Object.entries(progress.credits).every(([id, ms]) => /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(id) && Number.isSafeInteger(ms) && ms >= 0 && ms <= 86400000)) throw Error('Invalid legacy progress record.');
   return { version: 1, credits: { ...progress.credits } };
 }
 export function creditSession(progress, session) {

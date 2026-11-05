@@ -2,13 +2,29 @@ import { validateCachedWorkout } from './workouts.mjs';
 import { creditSession } from './training.mjs';
 import { makeArchive, validateArchive, archiveSessions, archiveText } from './archive.mjs';
 export const DB_NAME = 'ftpunk-web-v1';
+export const DB_VERSION = 4;
+// Archive replacement and rollback backups cover these stores (portable archive v1-v3).
 const STORES = ['sessions', 'profiles', 'jobs', 'backups', 'workouts'];
+// Created once here (version 4) so later features never change the schema: the riders' own workouts (`customWorkouts`, indexed by rider),
+// remembered Intervals.icu keys (`credentials`, one encrypted record per rider) and per-rider settings (`riderSettings`).
+export const DB_SCHEMA = Object.freeze({
+  sessions: { keyPath: 'id' }, profiles: { keyPath: 'id' }, jobs: { keyPath: 'id' }, backups: { keyPath: 'id' }, workouts: { keyPath: 'id' },
+  customWorkouts: { keyPath: 'id', indexes: ['riderID'] }, credentials: { keyPath: 'riderID' }, riderSettings: { keyPath: 'riderID' },
+});
+export const defaultRiderSettings = riderID => ({ riderID, askToUpload: true, sync: { enabled: false, linkedAccountID: null, lastSynced: null, state: { lastSeenFTP: null, lastSeenWeight: null } } });
 export class LocalStore {
   static async open(name = DB_NAME) {
     if (!globalThis.indexedDB) throw Error('Local storage is unavailable. Enable browser storage before starting a test.');
     const db = await new Promise((resolve, reject) => {
-      const request = indexedDB.open(name, 3);
-      request.onupgradeneeded = () => { for (const name of STORES) if (!request.result.objectStoreNames.contains(name)) request.result.createObjectStore(name, { keyPath: 'id' }); };
+      const request = indexedDB.open(name, DB_VERSION);
+      request.onupgradeneeded = () => {
+        // Only ever adds: existing stores and their records are kept, so an upgrade from any earlier version loses nothing.
+        const db = request.result, tx = request.transaction;
+        for (const [store, { keyPath, indexes = [] }] of Object.entries(DB_SCHEMA)) {
+          const table = db.objectStoreNames.contains(store) ? tx.objectStore(store) : db.createObjectStore(store, { keyPath });
+          for (const index of indexes) if (!table.indexNames.contains(index)) table.createIndex(index, index);
+        }
+      };
       request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
       request.onblocked = () => reject(Error('Close other FTPunk tabs to update local storage.'));
     });
@@ -22,6 +38,9 @@ export class LocalStore {
     });
   }
   all(store) { return this.request(store, 'readonly', s => s.getAll()); }
+  get(store, key) { return this.request(store, 'readonly', s => s.get(key)); }
+  /** A rider's settings, with defaults for a rider who has none saved yet. */
+  async riderSettings(riderID) { const saved = await this.get('riderSettings', riderID); return saved ? { ...defaultRiderSettings(riderID), ...saved, sync: { ...defaultRiderSettings(riderID).sync, ...saved.sync } } : defaultRiderSettings(riderID); }
   put(store, value) {
     if (store !== 'profiles') return this.request(store, 'readwrite', s => s.put(structuredClone(value)));
     return new Promise((resolve, reject) => {
@@ -133,8 +152,14 @@ export async function acquireRideLease(locks = globalThis.navigator?.locks) {
     }).catch(reject);
   });
 }
+// Preferences live in localStorage (never in backups). Known keys are validated; any other plain key is passed through so a
+// later feature can add its own preference without touching this file. The retired `adventure` key is dropped.
 export function loadPreferences(storage = globalThis.localStorage) {
-  const defaults = { appearance: 'system', extraLarge: false, powerMatching: true, adventure: false, selectedRider: null };
-  try { const p = JSON.parse(storage.getItem('ftpunk.preferences') || '{}'); return { ...defaults, appearance: ['light', 'dark', 'system'].includes(p.appearance) ? p.appearance : 'system', extraLarge: p.extraLarge === true, powerMatching: p.powerMatching !== false, adventure: p.adventure === true, selectedRider: typeof p.selectedRider === 'string' ? p.selectedRider : null }; } catch { return defaults; }
+  const defaults = { appearance: 'system', extraLarge: false, powerMatching: true, selectedRider: null, debugUnlocked: false, intervalsHintDismissed: false };
+  try {
+    const p = JSON.parse(storage.getItem('ftpunk.preferences') || '{}'), extra = {};
+    for (const [key, value] of Object.entries(p ?? {})) if (!(key in defaults) && key !== 'adventure' && ['string', 'number', 'boolean'].includes(typeof value)) extra[key] = value;
+    return { ...extra, ...defaults, appearance: ['light', 'dark', 'system'].includes(p.appearance) ? p.appearance : 'system', extraLarge: p.extraLarge === true, powerMatching: p.powerMatching !== false, selectedRider: typeof p.selectedRider === 'string' ? p.selectedRider : null, debugUnlocked: p.debugUnlocked === true, intervalsHintDismissed: p.intervalsHintDismissed === true };
+  } catch { return defaults; }
 }
 export function savePreferences(p, storage = globalThis.localStorage) { storage.setItem('ftpunk.preferences', JSON.stringify(p)); }

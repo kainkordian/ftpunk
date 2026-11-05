@@ -1,33 +1,30 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#c4f44b"><meta name="description" content="FTP ramp tests for your smart trainer. Power matching, local recordings, and a little punk spirit.">
-  <title>FTPunk · Ride your limit</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1f6330"><meta name="description" content="FTP ramp tests for your smart trainer, structured workouts and your progress. Everything stays in this browser.">
+  <title>FTPunk</title>
   <link rel="icon" type="image/png" href="assets/icon-256.png"><link rel="apple-touch-icon" href="assets/icon-256.png">
-  <link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="src/style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="src/ui/base.css"><link rel="stylesheet" href="src/ui/shell.css"><link rel="stylesheet" href="src/ui/components.css">
+  <link rel="stylesheet" href="src/ui/home.css"><link rel="stylesheet" href="src/ui/library.css"><link rel="stylesheet" href="src/ui/preflight.css">
+  <link rel="stylesheet" href="src/ui/ride.css"><link rel="stylesheet" href="src/ui/result.css"><link rel="stylesheet" href="src/ui/progress.css"><link rel="stylesheet" href="src/ui/settings.css">
   <script type="module" src="src/app.mjs"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <aside class="sidebar">
-    <a class="brand" href="#train" aria-label="FTPunk home"><img src="assets/icon-256.png" alt="" width="42" height="42"><span>FTP<span class="brand-punk">unk</span><small>RIDE YOUR LIMIT.</small></span></a>
-    <div class="sidebar-caption">YOUR TRAINING SPACE</div>
-    <nav aria-label="Main navigation">
-      <a href="#train" data-tab="train"><span aria-hidden="true">◉</span> Train</a>
-      <a href="#setup" data-tab="setup"><span aria-hidden="true">＋</span> FTP Test</a>
-      <a href="#city" data-tab="city"><span aria-hidden="true">⌂</span> City</a>
-      <a href="#history" data-tab="history"><span aria-hidden="true">↗</span> History</a>
-      <a href="#settings" data-tab="settings"><span aria-hidden="true">⚙</span> Settings</a>
-    </nav>
-    <div class="sidebar-bottom"><span class="local-dot"></span> Local first. Always your ride.<small>FTPunk for Chrome · v0.1</small></div>
-  </aside>
-  <div class="workspace">
-    <header class="topbar"><span id="breadcrumb">TRAINING / NEW TEST</span><span class="browser-badge" id="connection-badge">BROWSER EDITION <span class="local-dot"></span></span></header>
-    <div id="live-link" class="live-link" hidden><a href="#ride">Return to ride <i id="ride-dot" hidden>●</i> →</a><button id="quick-stop" class="danger-button" hidden>Stop &amp; save</button></div>
-    <div id="notice" role="status" hidden></div>
-    <main id="main" tabindex="-1"><p class="loading">Loading your training space…</p></main>
-    <footer>BUILT FOR THE EFFORT. <span>Saved on this browser · no account required</span></footer>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#/home" aria-label="FTPunk home"><img src="assets/icon-256.png" alt="" width="36" height="36"><span>FTP<span class="brand-accent">unk</span></span></a>
+      <nav id="sidebar-nav" aria-label="Main navigation"></nav>
+      <p class="sidebar-note footnote">Saved on this browser. No account.</p>
+    </aside>
+    <div class="workspace">
+      <div id="notice" role="status" hidden></div>
+      <main id="main" tabindex="-1"><p class="loading">Loading…</p></main>
+      <div id="live-bar" class="live-bar" hidden></div>
+      <nav id="tabbar" class="tabbar" aria-label="Main navigation"></nav>
+    </div>
   </div>
   <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
   <div id="announce" class="sr-only" role="status" aria-live="polite"></div>

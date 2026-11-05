@@ -1,0 +1,739 @@
+{
+  "format" : "ftpunk-workout-library",
+  "ftpWatts" : 250,
+  "version" : 1,
+  "workouts" : [
+    {
+      "category" : "endurance",
+      "durationSeconds" : 1200,
+      "id" : "easy-spin",
+      "name" : "Easy spin",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "Easy spin",
+          "seconds" : 840,
+          "watts" : 138
+        },
+        {
+          "name" : "Cooldown",
+          "seconds" : 180,
+          "watts" : 100
+        }
+      ]
+    },
+    {
+      "category" : "endurance",
+      "durationSeconds" : 1800,
+      "id" : "endurance-30",
+      "name" : "Endurance 30",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Endurance",
+          "seconds" : 1200,
+          "watts" : 163
+        },
+        {
+          "name" : "Cooldown",
+          "seconds" : 300,
+          "watts" : 100
+        }
+      ]
+    },
+    {
+      "category" : "endurance",
+      "durationSeconds" : 3600,
+      "id" : "endurance-60",
+      "name" : "Endurance 60",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Endurance",
+          "seconds" : 2700,
+          "watts" : 170
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "tempo",
+      "durationSeconds" : 1800,
+      "id" : "tempo-3x5",
+      "name" : "Tempo 3×5",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 1 of 3",
+          "seconds" : 300,
+          "watts" : 200
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 120,
+          "watts" : 113
+        },
+        {
+          "name" : "Tempo 2 of 3",
+          "seconds" : 300,
+          "watts" : 200
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 120,
+          "watts" : 113
+        },
+        {
+          "name" : "Tempo 3 of 3",
+          "seconds" : 300,
+          "watts" : 200
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 120,
+          "watts" : 113
+        },
+        {
+          "name" : "Cooldown",
+          "seconds" : 240,
+          "watts" : 100
+        }
+      ]
+    },
+    {
+      "category" : "tempo",
+      "durationSeconds" : 3060,
+      "id" : "tempo-3x10",
+      "name" : "Tempo 3×10",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 1 of 3",
+          "seconds" : 600,
+          "watts" : 208
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 2 of 3",
+          "seconds" : 600,
+          "watts" : 208
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 3 of 3",
+          "seconds" : 600,
+          "watts" : 208
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "tempo",
+      "durationSeconds" : 3600,
+      "id" : "tempo-2x20",
+      "name" : "Tempo 2×20",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 1 of 2",
+          "seconds" : 1200,
+          "watts" : 205
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Tempo 2 of 2",
+          "seconds" : 1200,
+          "watts" : 205
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "sweetSpot",
+      "durationSeconds" : 3300,
+      "id" : "sweet-spot-3x10",
+      "name" : "Sweet spot 3×10",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Sweet spot 1 of 3",
+          "seconds" : 600,
+          "watts" : 225
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Sweet spot 2 of 3",
+          "seconds" : 600,
+          "watts" : 225
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Sweet spot 3 of 3",
+          "seconds" : 600,
+          "watts" : 225
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "sweetSpot",
+      "durationSeconds" : 3600,
+      "id" : "sweet-spot-2x20",
+      "name" : "Sweet spot 2×20",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Sweet spot 1 of 2",
+          "seconds" : 1200,
+          "watts" : 225
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Sweet spot 2 of 2",
+          "seconds" : 1200,
+          "watts" : 225
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "overUnders",
+      "durationSeconds" : 3120,
+      "id" : "over-unders-3x9",
+      "name" : "Over-unders 3×9",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 1 · under 1",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 1 · over 1",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 1 · under 2",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 1 · over 2",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 1 · under 3",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 1 · over 3",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 2 · under 1",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 2 · over 1",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 2 · under 2",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 2 · over 2",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 2 · under 3",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 2 · over 3",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 3 · under 1",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 3 · over 1",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 3 · under 2",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 3 · over 2",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Set 3 · under 3",
+          "seconds" : 120,
+          "watts" : 238
+        },
+        {
+          "name" : "Set 3 · over 3",
+          "seconds" : 60,
+          "watts" : 263
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "overUnders",
+      "durationSeconds" : 3060,
+      "id" : "over-unders-4x6",
+      "name" : "Over-unders 4×6",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 1 · under 1",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 1 · over 1",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 1 · under 2",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 1 · over 2",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 1 · under 3",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 1 · over 3",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 2 · under 1",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 2 · over 1",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 2 · under 2",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 2 · over 2",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 2 · under 3",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 2 · over 3",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 3 · under 1",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 3 · over 1",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 3 · under 2",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 3 · over 2",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 3 · under 3",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 3 · over 3",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "Set 4 · under 1",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 4 · over 1",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 4 · under 2",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 4 · over 2",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Set 4 · under 3",
+          "seconds" : 60,
+          "watts" : 225
+        },
+        {
+          "name" : "Set 4 · over 3",
+          "seconds" : 60,
+          "watts" : 275
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "threshold",
+      "durationSeconds" : 3600,
+      "id" : "threshold-2x20",
+      "name" : "Threshold 2×20",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Threshold 1 of 2",
+          "seconds" : 1200,
+          "watts" : 243
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 300,
+          "watts" : 125
+        },
+        {
+          "name" : "Threshold 2 of 2",
+          "seconds" : 1200,
+          "watts" : 243
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "threshold",
+      "durationSeconds" : 3780,
+      "id" : "threshold-3x12",
+      "name" : "Threshold 3×12",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "Threshold 1 of 3",
+          "seconds" : 720,
+          "watts" : 250
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 360,
+          "watts" : 125
+        },
+        {
+          "name" : "Threshold 2 of 3",
+          "seconds" : 720,
+          "watts" : 250
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 360,
+          "watts" : 125
+        },
+        {
+          "name" : "Threshold 3 of 3",
+          "seconds" : 720,
+          "watts" : 250
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "vo2max",
+      "durationSeconds" : 2520,
+      "id" : "vo2max-5x3",
+      "name" : "VO2max 5×3",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 1 of 5",
+          "seconds" : 180,
+          "watts" : 288
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 2 of 5",
+          "seconds" : 180,
+          "watts" : 288
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 3 of 5",
+          "seconds" : 180,
+          "watts" : 288
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 4 of 5",
+          "seconds" : 180,
+          "watts" : 288
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 180,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 5 of 5",
+          "seconds" : 180,
+          "watts" : 288
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    },
+    {
+      "category" : "vo2max",
+      "durationSeconds" : 2580,
+      "id" : "vo2max-4x4",
+      "name" : "VO2max 4×4",
+      "steps" : [
+        {
+          "name" : "Warm-up",
+          "seconds" : 600,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 1 of 4",
+          "seconds" : 240,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 2 of 4",
+          "seconds" : 240,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 3 of 4",
+          "seconds" : 240,
+          "watts" : 275
+        },
+        {
+          "name" : "Recovery",
+          "seconds" : 240,
+          "watts" : 125
+        },
+        {
+          "name" : "VO2max 4 of 4",
+          "seconds" : 240,
+          "watts" : 275
+        },
+        {
+          "name" : "Cool-down",
+          "seconds" : 300,
+          "watts" : 125
+        }
+      ]
+    }
+  ]
+}

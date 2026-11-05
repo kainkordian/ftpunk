@@ -1,8 +1,7 @@
 import { importWorkout } from '../src/workouts.mjs';
-import { rideRewards } from '../src/city.mjs';
 import { resistanceRide, trainingTarget } from '../src/training.mjs';
 import { ResistanceRange, supportsResistance } from '../src/protocol.mjs';
-import { starterPlans, freeRide, validatePlan, creditSession, progressMilliseconds } from '../src/training.mjs';
+import { freeRide, validatePlan, creditSession, progressMilliseconds } from '../src/training.mjs';
 import { makeArchive, archiveText, parseArchive, archiveSessions, validateArchive } from '../src/archive.mjs';
 import { configuration, PRESETS, rampPower, analyze, RampEngine, PowerMatcher, mockSample } from '../src/domain.mjs';
 import { indoorBike, cyclingPower, heartRate, PowerRange, supportsTargetPower, command, controlResponse, BikeAssembler, CadenceTracker, Measurements, route } from '../src/protocol.mjs';
@@ -12,13 +11,7 @@ import { RideController } from '../src/controller.mjs';
 import { csv, tcx } from '../src/export.mjs';
 import { IntervalsClient } from '../src/intervals.mjs';
 
-const tests = [];
-const test = (name, body) => tests.push({ name, body });
-function assert(value, message = 'Assertion failed') { if (!value) throw Error(message); }
-function equal(a, b) { assert(JSON.stringify(a) === JSON.stringify(b), `Expected ${JSON.stringify(b)}, got ${JSON.stringify(a)}`); }
-function near(a, b, tolerance = 1e-5) { assert(Math.abs(a - b) <= tolerance, `${a} differs from ${b}`); }
-function throws(body) { let threw = false; try { body(); } catch { threw = true; } assert(threw, 'Expected rejection'); }
-async function rejects(body) { let threw = false; try { await body(); } catch { threw = true; } assert(threw, 'Expected async rejection'); }
+import { test, assert, equal, near, throws, rejects, fixtureText } from './harness.mjs';
 const view = bytes => new DataView(Uint8Array.from(bytes).buffer);
 const range = () => new PowerRange(0, 1000, 1);
 const config = input => configuration({ warmupSeconds: 0, ...input });
@@ -32,10 +25,7 @@ class MemoryStore {
 function fakeDevices() { return { measurements: new Measurements(), trainerReady: true, range: range(), snapshots: [], commands: [], async start(w) { this.commands.push(['start', w]); }, async setTarget(w) { this.commands.push(['target', w]); }, async stop() { this.commands.push(['stop']); } }; }
 const drain = async () => { for (let i = 0; i < 25; i++) await Promise.resolve(); };
 
-const featureFixture = async name => {
-  const url = new URL(`./fixtures/${name}.json`, import.meta.url);
-  return typeof window === 'undefined' ? (await import('node:fs/promises')).readFile(url, 'utf8') : (await fetch(url)).text();
-};
+const featureFixture = fixtureText;
 test('Shared workout imports expand repeats, preserve resolved watts and interpolate ramps', async () => {
   const plan = importWorkout(await featureFixture('workout-ramps'));
   equal(plan.version, 2); equal(plan.steps.length, 6);
@@ -111,16 +101,9 @@ test('Intervals download resolves targets, skips unsupported entries and rejects
   client.fetcher = async () => { client.disconnect(); return { ok: true, text: async () => '[]' }; };
   await rejects(() => client.workouts(crypto.randomUUID(), 200, '2026-10-31', '2026-11-14'));
 });
-test('City receipts report crossings and fractional XP but never duplicate or demo unlocks', () => {
-  const e = new RampEngine(config(), { training: freeRide(100), adventure: true, adventureStart: 1199500 });
-  for (const time of [0, 1]) { e.receive({ time, power: 100, cadence: 90 }); e.tick(time); } e.end(1);
-  const reward = rideRewards(e.session); equal(reward.unlocked.map(b => b.id), ['last-light-radio']); equal(reward.xp, 0); equal(reward.partial, 1000);
-  equal(rideRewards({ ...e.session, adventureStartMilliseconds: 1200000 }).unlocked, []);
-  equal(rideRewards({ ...e.session, isDemo: true }).milliseconds, 0);
-});
 test('Portable v3 carries libraries, ramps, resistance and receipts and rejects downgrade', async () => {
   const rider = { id: '00000000-0000-0000-0000-000000000001', name: 'Rider', ftpHistory: [], currentFTPID: null };
-  const e = new RampEngine(config({ riderID: rider.id }), { training: resistanceRide(100), adventure: true, adventureStart: 0 });
+  const e = new RampEngine(config({ riderID: rider.id }), { training: resistanceRide(100) });
   e.receive({ time: 0, power: 100, cadence: 90 }); e.tick(0); e.end(1);
   const workout = { id: 'download:123', riderID: rider.id, source: 'Fixture', savedAt: new Date().toISOString(), plan: importWorkout(await featureFixture('workout-ramps')) };
   const archive = parseArchive(archiveText(makeArchive([rider], [e.session], undefined, [workout])));
@@ -131,12 +114,12 @@ test('Portable v3 carries libraries, ramps, resistance and receipts and rejects 
 
 const shortPlan = () => validatePlan({ version: 1, kind: 'workout', name: 'Boundary check', ftpWatts: 200, steps: [{ name: 'Warm-up', seconds: 3, watts: 100 }, { name: 'Effort', seconds: 2, watts: 150 }, { name: 'Cooldown', seconds: 1, watts: 50 }] });
 test('Workout waits for movement, follows boundaries and completes without estimating FTP', () => {
-  const e = new RampEngine(config(), { training: shortPlan(), adventure: true }); e.tick(10); equal(e.phase, 'waiting');
+  const e = new RampEngine(config(), { training: shortPlan() }); e.tick(10); equal(e.phase, 'waiting');
   for (let t = 10; t <= 16; t++) {
     e.receive({ time: t, power: 100, cadence: 90 }); e.tick(t);
     equal(e.target, t < 13 ? 100 : t < 15 ? 150 : t === 15 ? 50 : null);
   }
-  equal(e.session.outcome, 'completed'); equal(e.session.result, null); equal(e.session.eligibleMilliseconds, 6000);
+  equal(e.session.outcome, 'completed'); equal(e.session.result, null); assert(!('eligibleMilliseconds' in e.session) && !('adventureEnabled' in e.session));
 });
 test('Free ERG changes persist until changed, and cannot restart an ended ride', () => {
   const e = new RampEngine(config(), { training: freeRide(100) });
@@ -144,34 +127,32 @@ test('Free ERG changes persist until changed, and cannot restart an ended ride',
   e.adjustERG(120, .5); e.adjustERG(-10, .5); equal(e.target, 120); e.end(1); e.adjustERG(400, 2); equal(e.target, null);
   assert(e.session.events.some(v => v.message === 'ERG target changed to 120 W')); equal(e.session.result, null);
 });
-test('Workout signal loss and clock suspension stop targets and do not award missing time', () => {
+test('Workout signal loss and clock suspension stop targets', () => {
   for (const time of [2.01, 10]) {
-    const e = new RampEngine(config(), { training: shortPlan(), adventure: true });
+    const e = new RampEngine(config(), { training: shortPlan() });
     e.receive({ time: 0, power: 100, cadence: 90 }); e.tick(0); e.tick(time);
-    equal(e.phase, 'interrupted'); equal(e.target, null); equal(e.session.eligibleMilliseconds, 0);
+    equal(e.phase, 'interrupted'); equal(e.target, null);
   }
 });
-test('Adventure ignores watts magnitude, zero intervals, gaps, duplicate saves and mock rides', () => {
-  const e = new RampEngine(config(), { training: freeRide(10), adventure: true });
-  for (const [time, power] of [[0, 1], [.25, 1], [1, 500], [2, 0], [3, 100], [4, 100], [7, 100]]) { e.receive({ time, power, cadence: 90 }); e.tick(time); }
-  equal(e.session.eligibleMilliseconds, 2000);
-  let p = creditSession(null, e.session); p = creditSession(p, e.session); equal(progressMilliseconds(p), 2000);
-  p = creditSession(p, { ...e.session, id: crypto.randomUUID(), eligibleMilliseconds: 4000 }); equal(progressMilliseconds(p), 6000);
-  p = creditSession(p, { ...e.session, id: crypto.randomUUID(), isDemo: true, eligibleMilliseconds: 1200000 }); equal(progressMilliseconds(p), 6000);
-  const demo = new RampEngine(config(), { demo: true, training: shortPlan(), adventure: true });
-  for (let t = 0; t <= 6; t++) { demo.receive({ time: t, power: 100, cadence: 90 }); demo.tick(t); }
-  equal(demo.session.eligibleMilliseconds, 0);
+test('A legacy progress ledger credits idempotently, ignores mock rides and new recordings add nothing', () => {
+  const legacy = (ms, extra = {}) => ({ id: crypto.randomUUID(), isDemo: false, adventureEnabled: true, eligibleMilliseconds: ms, ...extra });
+  const first = legacy(2000);
+  let p = creditSession(null, first); p = creditSession(p, first); equal(progressMilliseconds(p), 2000);
+  p = creditSession(p, legacy(4000)); equal(progressMilliseconds(p), 6000);
+  p = creditSession(p, legacy(1200000, { isDemo: true })); equal(progressMilliseconds(p), 6000);
+  p = creditSession(p, { id: crypto.randomUUID(), isDemo: false }); equal(progressMilliseconds(p), 6000);
+  const e = new RampEngine(config(), { training: freeRide(10) });
+  for (let t = 0; t <= 6; t++) { e.receive({ time: t, power: 100, cadence: 90 }); e.tick(t); }
+  equal(progressMilliseconds(creditSession(null, e.session)), 0);
 });
-test('Offline plans resolve targets once and reject invalid duration or power', () => {
-  const plans = starterPlans(200); equal(plans.map(p => p.steps.reduce((n, s) => n + s.seconds, 0)), [1200, 1800, 1800]);
-  equal(plans[1].steps[1].watts, 130);
-  throws(() => freeRide(0)); throws(() => starterPlans(Infinity));
+test('Offline plans reject invalid duration or power', () => {
+  throws(() => freeRide(0));
   const bad = shortPlan(); bad.steps[0].seconds = -1; throws(() => validatePlan(bad));
 });
 test('Controller uses workout targets, adjusts free ERG, and releases when finished', async () => {
   const devices = fakeDevices(); devices.measurements.receive({ role: 'trainer', time: 0, power: 100 });
   let now = 0; const store = new MemoryStore(), ride = new RideController(devices, store, { now: () => now, lease: async () => () => {} });
-  await ride.start(config(), { training: freeRide(150), adventure: true }); clearInterval(ride.timer);
+  await ride.start(config(), { training: freeRide(150) }); clearInterval(ride.timer);
   equal(devices.commands[0], ['start', 150]);
   devices.onReading({ role: 'trainer', time: 0, power: 150, cadence: 90 }); ride.tick();
   ride.adjustERG(10); now = .5; devices.onReading({ role: 'trainer', time: now, power: 150, cadence: 90 }); ride.tick(); await drain();
@@ -179,25 +160,27 @@ test('Controller uses workout targets, adjusts free ERG, and releases when finis
   ride.stop(); await drain(); equal(devices.commands.at(-1), ['stop']); assert(!ride.busy);
   const saved = (await store.all('sessions'))[0]; equal(saved.training.kind, 'freeRide'); equal(saved.result, null);
 });
-test('Portable v2 round-trips training and progression and rejects invalid or downgraded data', () => {
+test('Portable v2 round-trips training and the legacy ledger and rejects invalid or downgraded data', () => {
   const p = { id: crypto.randomUUID(), name: 'Rider', ftpHistory: [], currentFTPID: null };
-  const e = new RampEngine(config({ riderID: p.id }), { training: shortPlan(), adventure: true });
+  const e = new RampEngine(config({ riderID: p.id }), { training: shortPlan() });
   for (let t = 0; t <= 6; t++) { e.receive({ time: t, power: 100, cadence: 90 }); e.tick(t); }
+  // A recording from before the story was removed carries its three legacy fields; the archive must keep them unchanged.
+  Object.assign(e.session, { adventureEnabled: true, eligibleMilliseconds: 6000 });
   p.cycleProgress = creditSession(null, e.session);
   const archive = parseArchive(archiveText(makeArchive([p], [e.session])));
   equal(archive.version, 2); equal(archive.activities[0].kind, 'workout'); equal(archiveSessions(archive)[0].training, shortPlan());
-  equal(progressMilliseconds(archive.profiles[0].cycleProgress), 6000);
+  equal(progressMilliseconds(archive.profiles[0].cycleProgress), 6000); equal(archive.activities[0].session.eligibleMilliseconds, 6000); equal(archive.activities[0].session.adventureEnabled, true);
   throws(() => validateArchive({ ...archive, version: 1 }));
   const bad = structuredClone(archive); bad.activities[0].session.training.steps[0].watts = 0; throws(() => validateArchive(bad));
 });
 
-test('Both apps read the same v2 workout, XP total and Last Light unlock', async () => {
+test('Both apps read the same v2 workout and legacy ledger unchanged', async () => {
   const url = new URL('./fixtures/portable-v2.json', import.meta.url);
-  const text = typeof window === 'undefined' ? await (await import('node:fs/promises')).readFile(url, 'utf8') : await (await fetch(url)).text();
+  const text = await (await fetch(url)).text();
   const archive = parseArchive(text), again = parseArchive(archiveText(archive));
   equal(archive.activities[0].session.training, shortPlan()); equal(archive.activities[0].session.result, null);
-  equal(Math.floor(progressMilliseconds(again.profiles[0].cycleProgress) / 6000), 201);
-  assert(progressMilliseconds(again.profiles[0].cycleProgress) >= 1200000);
+  equal(again.profiles[0].cycleProgress, archive.profiles[0].cycleProgress); equal(progressMilliseconds(again.profiles[0].cycleProgress), 201 * 6000);
+  equal(again.activities.map(a => [a.session.adventureEnabled, a.session.eligibleMilliseconds]), archive.activities.map(a => [a.session.adventureEnabled, a.session.eligibleMilliseconds]));
 });
 test('Workout preparation rounds trainer increments but refuses targets outside capability', async () => {
   const d = fakeDevices(); d.range = new PowerRange(0, 1000, 5); d.measurements.receive({ role: 'trainer', time: 0, power: 100 });
@@ -209,20 +192,20 @@ test('Workout preparation rounds trainer increments but refuses targets outside 
   equal(d.commands.length, count); assert(!c.busy);
 });
 
-test('Pause freezes workout time and XP while measurements continue, then resumes exact boundaries', () => {
-  const e = new RampEngine(config(), { training: shortPlan(), adventure: true });
+test('Pause freezes workout time while measurements continue, then resumes exact boundaries', () => {
+  const e = new RampEngine(config(), { training: shortPlan() });
   for (let time = 0; time <= 2; time++) { e.receive({ time, power: 100, cadence: 90 }); e.tick(time); }
   assert(e.pause(2)); e.tick(100); equal(e.phase, 'paused'); equal(e.trainingElapsed, 2); equal(e.currentStep.remaining, 1);
-  assert(!e.resume(100)); e.receive({ time: 100, power: 100, cadence: 90 }); equal(e.session.eligibleMilliseconds, 2000);
+  assert(!e.resume(100)); e.receive({ time: 100, power: 100, cadence: 90 });
   assert(e.resume(100)); equal(e.target, 100);
   for (let time = 101; time <= 104; time++) { e.receive({ time, power: 100, cadence: 90 }); e.tick(time); if (time === 101) equal(e.target, 150); }
-  equal(e.phase, 'completed'); equal(e.trainingElapsed, 6); equal(e.session.eligibleMilliseconds, 6000); equal(e.session.endedAtOffset, 104);
+  equal(e.phase, 'completed'); equal(e.trainingElapsed, 6); equal(e.session.endedAtOffset, 104);
 });
-test('Paused readings never bridge XP across resume, and zero power cannot resume', () => {
-  const e = new RampEngine(config(), { training: freeRide(100), adventure: true });
+test('Zero power cannot resume a paused workout', () => {
+  const e = new RampEngine(config(), { training: freeRide(100) });
   e.receive({ time: 0, power: 100, cadence: 90 }); e.tick(0); assert(e.pause(.5));
   e.receive({ time: 1, power: 100, cadence: 90 }); assert(e.resume(1.5));
-  e.receive({ time: 2, power: 100, cadence: 90 }); e.tick(2); equal(e.session.eligibleMilliseconds, 500);
+  e.receive({ time: 2, power: 100, cadence: 90 }); e.tick(2);
   assert(e.pause(2)); e.receive({ time: 3, power: 0, cadence: 0 }); assert(!e.resume(3)); equal(e.target, null);
 });
 test('Waiting pauses and repeated pauses preserve remaining time; FTP tests never pause', () => {
@@ -549,7 +532,7 @@ test('Losing trainer control rejects control and reports the takeover', async ()
 });
 test('Portable archive fixture preserves native results, sources and profile history', async () => {
   const url = new URL('./fixtures/portable-v1.json', import.meta.url);
-  const text = typeof window === 'undefined' ? await (await import('node:fs/promises')).readFile(url, 'utf8') : await (await fetch(url)).text();
+  const text = await (await fetch(url)).text();
   const archive = parseArchive(text), sessions = archiveSessions(archive), c = sessions[0].configuration;
   equal(c.priorFTP, 250); equal(c.powerSource, 'externalPowerMeter'); equal(c.cadenceSource, 'trainer'); assert(c.powerMatchingEnabled);
   equal(sessions[0].result.estimatedFTP, 225); equal(sessions[0].result.wattsPerKG, 3);
@@ -630,8 +613,3 @@ test('Optional heart-rate loss during preparation does not cancel the ride', asy
   prepared(); await starting; assert(controller.active); clearInterval(controller.timer);
   controller.stop(); await drain(); assert(!controller.busy);
 });
-export async function runSuite(report = () => {}) {
-  const results = [];
-  for (const { name, body } of tests) { try { await body(); results.push({ name, ok: true }); } catch (error) { results.push({ name, ok: false, error: error.stack ?? error.message }); } report(results.at(-1)); }
-  return { passed: results.filter(r => r.ok).length, failed: results.filter(r => !r.ok).length, results };
-}

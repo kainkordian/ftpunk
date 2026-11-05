@@ -1,0 +1,4739 @@
+{
+  "format" : "ftpunk-workout-preview",
+  "ftpWatts" : 250,
+  "version" : 1,
+  "workouts" : [
+    {
+      "averageWatts" : 130.34999999999999,
+      "bars" : [
+        {
+          "end" : 0.14999999999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.84999999999999998,
+          "endHeight" : 0.42461500000000002,
+          "start" : 0.14999999999999999,
+          "startHeight" : 0.42461500000000002,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.30769200000000002,
+          "start" : 0.84999999999999998,
+          "startHeight" : 0.30769200000000002,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 1200,
+      "durationText" : "20 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 3:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 2,
+          "repeats" : 1,
+          "start" : 1,
+          "text" : "Easy spin 14:00 @ 55 % (138 W)"
+        },
+        {
+          "end" : 3,
+          "repeats" : 1,
+          "start" : 2,
+          "text" : "Cooldown 3:00 @ 40 % (100 W)"
+        }
+      ],
+      "id" : "easy-spin",
+      "intensityLabel" : "Easy · active recovery",
+      "mainSetText" : "14:00 @ 55 % (138 W)",
+      "mainSetText110" : "14:00 @ 61 % (152 W)",
+      "mainSetTextNoValues" : "14:00",
+      "mainSetWatts" : 138,
+      "steps" : [
+        {
+          "durationText" : "3:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "14:00",
+          "name" : "Easy spin",
+          "percentText" : "55 %",
+          "spokenText" : "Easy spin, 14 min, 55 %, 138 W",
+          "valueText" : "14:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Cooldown",
+          "percentText" : "40 %",
+          "spokenText" : "Cooldown, 3 min, 40 %, 100 W",
+          "valueText" : "3:00 · 40 % · 100 W",
+          "wattsText" : "100 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "3:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "14:00",
+          "name" : "Easy spin",
+          "percentText" : "61 %",
+          "spokenText" : "Easy spin, 14 min, 61 %, 152 W",
+          "valueText" : "14:00 · 61 % · 152 W",
+          "wattsText" : "152 W",
+          "zone" : "Endurance"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Cooldown",
+          "percentText" : "44 %",
+          "spokenText" : "Cooldown, 3 min, 44 %, 110 W",
+          "valueText" : "3:00 · 44 % · 110 W",
+          "wattsText" : "110 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "3:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "14:00",
+          "name" : "Easy spin",
+          "percentText" : null,
+          "spokenText" : "Easy spin, 14 min",
+          "valueText" : "14:00",
+          "wattsText" : "138 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Cooldown",
+          "percentText" : null,
+          "spokenText" : "Cooldown, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "100 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 146.16666699999999,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.83333299999999999,
+          "endHeight" : 0.50153800000000004,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.50153800000000004,
+          "zone" : "Endurance"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.30769200000000002,
+          "start" : 0.83333299999999999,
+          "startHeight" : 0.30769200000000002,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 1800,
+      "durationText" : "30 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 5:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 2,
+          "repeats" : 1,
+          "start" : 1,
+          "text" : "Endurance 20:00 @ 65 % (163 W)"
+        },
+        {
+          "end" : 3,
+          "repeats" : 1,
+          "start" : 2,
+          "text" : "Cooldown 5:00 @ 40 % (100 W)"
+        }
+      ],
+      "id" : "endurance-30",
+      "intensityLabel" : "Endurance",
+      "mainSetText" : "20:00 @ 65 % (163 W)",
+      "mainSetText110" : "20:00 @ 72 % (179 W)",
+      "mainSetTextNoValues" : "20:00",
+      "mainSetWatts" : 163,
+      "steps" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Endurance",
+          "percentText" : "65 %",
+          "spokenText" : "Endurance, 20 min, 65 %, 163 W",
+          "valueText" : "20:00 · 65 % · 163 W",
+          "wattsText" : "163 W",
+          "zone" : "Endurance"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cooldown",
+          "percentText" : "40 %",
+          "spokenText" : "Cooldown, 5 min, 40 %, 100 W",
+          "valueText" : "5:00 · 40 % · 100 W",
+          "wattsText" : "100 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Endurance",
+          "percentText" : "72 %",
+          "spokenText" : "Endurance, 20 min, 72 %, 179 W",
+          "valueText" : "20:00 · 72 % · 179 W",
+          "wattsText" : "179 W",
+          "zone" : "Endurance"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cooldown",
+          "percentText" : "44 %",
+          "spokenText" : "Cooldown, 5 min, 44 %, 110 W",
+          "valueText" : "5:00 · 44 % · 110 W",
+          "wattsText" : "110 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Endurance",
+          "percentText" : null,
+          "spokenText" : "Endurance, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "163 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cooldown",
+          "percentText" : null,
+          "spokenText" : "Cooldown, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "100 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 158.75,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.91666700000000001,
+          "endHeight" : 0.52307700000000001,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.52307700000000001,
+          "zone" : "Endurance"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.91666700000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3600,
+      "durationText" : "60 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 2,
+          "repeats" : 1,
+          "start" : 1,
+          "text" : "Endurance 45:00 @ 68 % (170 W)"
+        },
+        {
+          "end" : 3,
+          "repeats" : 1,
+          "start" : 2,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "endurance-60",
+      "intensityLabel" : "Endurance",
+      "mainSetText" : "45:00 @ 68 % (170 W)",
+      "mainSetText110" : "45:00 @ 75 % (187 W)",
+      "mainSetTextNoValues" : "45:00",
+      "mainSetWatts" : 170,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "45:00",
+          "name" : "Endurance",
+          "percentText" : "68 %",
+          "spokenText" : "Endurance, 45 min, 68 %, 170 W",
+          "valueText" : "45:00 · 68 % · 170 W",
+          "wattsText" : "170 W",
+          "zone" : "Endurance"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "45:00",
+          "name" : "Endurance",
+          "percentText" : "75 %",
+          "spokenText" : "Endurance, 45 min, 75 %, 187 W",
+          "valueText" : "45:00 · 75 % · 187 W",
+          "wattsText" : "187 W",
+          "zone" : "Endurance"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "45:00",
+          "name" : "Endurance",
+          "percentText" : null,
+          "spokenText" : "Endurance, 45 min",
+          "valueText" : "45:00",
+          "wattsText" : "170 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 156.76666700000001,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.33333299999999999,
+          "endHeight" : 0.61538499999999996,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.61538499999999996,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.40000000000000002,
+          "endHeight" : 0.347692,
+          "start" : 0.33333299999999999,
+          "startHeight" : 0.347692,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.56666700000000003,
+          "endHeight" : 0.61538499999999996,
+          "start" : 0.40000000000000002,
+          "startHeight" : 0.61538499999999996,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.63333300000000003,
+          "endHeight" : 0.347692,
+          "start" : 0.56666700000000003,
+          "startHeight" : 0.347692,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.80000000000000004,
+          "endHeight" : 0.61538499999999996,
+          "start" : 0.63333300000000003,
+          "startHeight" : 0.61538499999999996,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.86666699999999997,
+          "endHeight" : 0.347692,
+          "start" : 0.80000000000000004,
+          "startHeight" : 0.347692,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.30769200000000002,
+          "start" : 0.86666699999999997,
+          "startHeight" : 0.30769200000000002,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 1800,
+      "durationText" : "30 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 5:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 7,
+          "repeats" : 3,
+          "start" : 1,
+          "text" : "3× Tempo 5:00 @ 80 % (200 W) \/ Recovery 2:00 @ 45 % (113 W)"
+        },
+        {
+          "end" : 8,
+          "repeats" : 1,
+          "start" : 7,
+          "text" : "Cooldown 4:00 @ 40 % (100 W)"
+        }
+      ],
+      "id" : "tempo-3x5",
+      "intensityLabel" : "Tempo",
+      "mainSetText" : "3 × 5:00 @ 80 % (200 W)",
+      "mainSetText110" : "3 × 5:00 @ 88 % (220 W)",
+      "mainSetTextNoValues" : "3 × 5:00",
+      "mainSetWatts" : 200,
+      "steps" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : "80 %",
+          "spokenText" : "Tempo 1 of 3, 5 min, 80 %, 200 W",
+          "valueText" : "5:00 · 80 % · 200 W",
+          "wattsText" : "200 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "45 %",
+          "spokenText" : "Recovery, 2 min, 45 %, 113 W",
+          "valueText" : "2:00 · 45 % · 113 W",
+          "wattsText" : "113 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : "80 %",
+          "spokenText" : "Tempo 2 of 3, 5 min, 80 %, 200 W",
+          "valueText" : "5:00 · 80 % · 200 W",
+          "wattsText" : "200 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "45 %",
+          "spokenText" : "Recovery, 2 min, 45 %, 113 W",
+          "valueText" : "2:00 · 45 % · 113 W",
+          "wattsText" : "113 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : "80 %",
+          "spokenText" : "Tempo 3 of 3, 5 min, 80 %, 200 W",
+          "valueText" : "5:00 · 80 % · 200 W",
+          "wattsText" : "200 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "45 %",
+          "spokenText" : "Recovery, 2 min, 45 %, 113 W",
+          "valueText" : "2:00 · 45 % · 113 W",
+          "wattsText" : "113 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Cooldown",
+          "percentText" : "40 %",
+          "spokenText" : "Cooldown, 4 min, 40 %, 100 W",
+          "valueText" : "4:00 · 40 % · 100 W",
+          "wattsText" : "100 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : "88 %",
+          "spokenText" : "Tempo 1 of 3, 5 min, 88 %, 220 W",
+          "valueText" : "5:00 · 88 % · 220 W",
+          "wattsText" : "220 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 2 min, 50 %, 124 W",
+          "valueText" : "2:00 · 50 % · 124 W",
+          "wattsText" : "124 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : "88 %",
+          "spokenText" : "Tempo 2 of 3, 5 min, 88 %, 220 W",
+          "valueText" : "5:00 · 88 % · 220 W",
+          "wattsText" : "220 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 2 min, 50 %, 124 W",
+          "valueText" : "2:00 · 50 % · 124 W",
+          "wattsText" : "124 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : "88 %",
+          "spokenText" : "Tempo 3 of 3, 5 min, 88 %, 220 W",
+          "valueText" : "5:00 · 88 % · 220 W",
+          "wattsText" : "220 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 2 min, 50 %, 124 W",
+          "valueText" : "2:00 · 50 % · 124 W",
+          "wattsText" : "124 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Cooldown",
+          "percentText" : "44 %",
+          "spokenText" : "Cooldown, 4 min, 44 %, 110 W",
+          "valueText" : "4:00 · 44 % · 110 W",
+          "wattsText" : "110 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "5:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 1 of 3, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "200 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "113 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 2 of 3, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "200 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "113 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 3 of 3, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "200 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "113 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Cooldown",
+          "percentText" : null,
+          "spokenText" : "Cooldown, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "100 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 173.82352900000001,
+      "bars" : [
+        {
+          "end" : 0.196078,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.39215699999999998,
+          "endHeight" : 0.64000000000000001,
+          "start" : 0.196078,
+          "startHeight" : 0.64000000000000001,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.45097999999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.39215699999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.64705900000000005,
+          "endHeight" : 0.64000000000000001,
+          "start" : 0.45097999999999999,
+          "startHeight" : 0.64000000000000001,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.70588200000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.64705900000000005,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.90196100000000001,
+          "endHeight" : 0.64000000000000001,
+          "start" : 0.70588200000000001,
+          "startHeight" : 0.64000000000000001,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.90196100000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3060,
+      "durationText" : "51 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 6,
+          "repeats" : 3,
+          "start" : 1,
+          "text" : "3× Tempo 10:00 @ 83 % (208 W) \/ Recovery 3:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 7,
+          "repeats" : 1,
+          "start" : 6,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "tempo-3x10",
+      "intensityLabel" : "Tempo",
+      "mainSetText" : "3 × 10:00 @ 83 % (208 W)",
+      "mainSetText110" : "3 × 10:00 @ 92 % (229 W)",
+      "mainSetTextNoValues" : "3 × 10:00",
+      "mainSetWatts" : 208,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : "83 %",
+          "spokenText" : "Tempo 1 of 3, 10 min, 83 %, 208 W",
+          "valueText" : "10:00 · 83 % · 208 W",
+          "wattsText" : "208 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : "83 %",
+          "spokenText" : "Tempo 2 of 3, 10 min, 83 %, 208 W",
+          "valueText" : "10:00 · 83 % · 208 W",
+          "wattsText" : "208 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : "83 %",
+          "spokenText" : "Tempo 3 of 3, 10 min, 83 %, 208 W",
+          "valueText" : "10:00 · 83 % · 208 W",
+          "wattsText" : "208 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : "92 %",
+          "spokenText" : "Tempo 1 of 3, 10 min, 92 %, 229 W",
+          "valueText" : "10:00 · 92 % · 229 W",
+          "wattsText" : "229 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : "92 %",
+          "spokenText" : "Tempo 2 of 3, 10 min, 92 %, 229 W",
+          "valueText" : "10:00 · 92 % · 229 W",
+          "wattsText" : "229 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : "92 %",
+          "spokenText" : "Tempo 3 of 3, 10 min, 92 %, 229 W",
+          "valueText" : "10:00 · 92 % · 229 W",
+          "wattsText" : "229 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 1 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 1 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "208 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 2 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 2 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "208 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Tempo 3 of 3",
+          "percentText" : null,
+          "spokenText" : "Tempo 3 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "208 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 178.33333300000001,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.5,
+          "endHeight" : 0.63076900000000002,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.63076900000000002,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 0.58333299999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.5,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.91666700000000001,
+          "endHeight" : 0.63076900000000002,
+          "start" : 0.58333299999999999,
+          "startHeight" : 0.63076900000000002,
+          "zone" : "Tempo"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.91666700000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3600,
+      "durationText" : "60 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 5,
+          "repeats" : 2,
+          "start" : 1,
+          "text" : "2× Tempo 20:00 @ 82 % (205 W) \/ Recovery 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "tempo-2x20",
+      "intensityLabel" : "Tempo",
+      "mainSetText" : "2 × 20:00 @ 82 % (205 W)",
+      "mainSetText110" : "2 × 20:00 @ 90 % (226 W)",
+      "mainSetTextNoValues" : "2 × 20:00",
+      "mainSetWatts" : 205,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 1 of 2",
+          "percentText" : "82 %",
+          "spokenText" : "Tempo 1 of 2, 20 min, 82 %, 205 W",
+          "valueText" : "20:00 · 82 % · 205 W",
+          "wattsText" : "205 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 2 of 2",
+          "percentText" : "82 %",
+          "spokenText" : "Tempo 2 of 2, 20 min, 82 %, 205 W",
+          "valueText" : "20:00 · 82 % · 205 W",
+          "wattsText" : "205 W",
+          "zone" : "Tempo"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 1 of 2",
+          "percentText" : "90 %",
+          "spokenText" : "Tempo 1 of 2, 20 min, 90 %, 226 W",
+          "valueText" : "20:00 · 90 % · 226 W",
+          "wattsText" : "226 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 2 of 2",
+          "percentText" : "90 %",
+          "spokenText" : "Tempo 2 of 2, 20 min, 90 %, 226 W",
+          "valueText" : "20:00 · 90 % · 226 W",
+          "wattsText" : "226 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 1 of 2",
+          "percentText" : null,
+          "spokenText" : "Tempo 1 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "205 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Tempo 2 of 2",
+          "percentText" : null,
+          "spokenText" : "Tempo 2 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "205 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 179.545455,
+      "bars" : [
+        {
+          "end" : 0.18181800000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.36363600000000001,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.18181800000000001,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.45454499999999998,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.36363600000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.63636400000000004,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.45454499999999998,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.72727299999999995,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.63636400000000004,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.90909099999999998,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.72727299999999995,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.90909099999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3300,
+      "durationText" : "55 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 7,
+          "repeats" : 3,
+          "start" : 1,
+          "text" : "3× Sweet spot 10:00 @ 90 % (225 W) \/ Recovery 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "sweet-spot-3x10",
+      "intensityLabel" : "Tempo",
+      "mainSetText" : "3 × 10:00 @ 90 % (225 W)",
+      "mainSetText110" : "3 × 10:00 @ 99 % (248 W)",
+      "mainSetTextNoValues" : "3 × 10:00",
+      "mainSetWatts" : 225,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 1 of 3",
+          "percentText" : "90 %",
+          "spokenText" : "Sweet spot 1 of 3, 10 min, 90 %, 225 W",
+          "valueText" : "10:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 2 of 3",
+          "percentText" : "90 %",
+          "spokenText" : "Sweet spot 2 of 3, 10 min, 90 %, 225 W",
+          "valueText" : "10:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 3 of 3",
+          "percentText" : "90 %",
+          "spokenText" : "Sweet spot 3 of 3, 10 min, 90 %, 225 W",
+          "valueText" : "10:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 1 of 3",
+          "percentText" : "99 %",
+          "spokenText" : "Sweet spot 1 of 3, 10 min, 99 %, 248 W",
+          "valueText" : "10:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 2 of 3",
+          "percentText" : "99 %",
+          "spokenText" : "Sweet spot 2 of 3, 10 min, 99 %, 248 W",
+          "valueText" : "10:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 3 of 3",
+          "percentText" : "99 %",
+          "spokenText" : "Sweet spot 3 of 3, 10 min, 99 %, 248 W",
+          "valueText" : "10:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 1 of 3",
+          "percentText" : null,
+          "spokenText" : "Sweet spot 1 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 2 of 3",
+          "percentText" : null,
+          "spokenText" : "Sweet spot 2 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "10:00",
+          "name" : "Sweet spot 3 of 3",
+          "percentText" : null,
+          "spokenText" : "Sweet spot 3 of 3, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 191.66666699999999,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.5,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.58333299999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.5,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.91666700000000001,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.58333299999999999,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.91666700000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3600,
+      "durationText" : "60 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 5,
+          "repeats" : 2,
+          "start" : 1,
+          "text" : "2× Sweet spot 20:00 @ 90 % (225 W) \/ Recovery 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "sweet-spot-2x20",
+      "intensityLabel" : "Tempo",
+      "mainSetText" : "2 × 20:00 @ 90 % (225 W)",
+      "mainSetText110" : "2 × 20:00 @ 99 % (248 W)",
+      "mainSetTextNoValues" : "2 × 20:00",
+      "mainSetWatts" : 225,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 1 of 2",
+          "percentText" : "90 %",
+          "spokenText" : "Sweet spot 1 of 2, 20 min, 90 %, 225 W",
+          "valueText" : "20:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 2 of 2",
+          "percentText" : "90 %",
+          "spokenText" : "Sweet spot 2 of 2, 20 min, 90 %, 225 W",
+          "valueText" : "20:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 1 of 2",
+          "percentText" : "99 %",
+          "spokenText" : "Sweet spot 1 of 2, 20 min, 99 %, 248 W",
+          "valueText" : "20:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 2 of 2",
+          "percentText" : "99 %",
+          "spokenText" : "Sweet spot 2 of 2, 20 min, 99 %, 248 W",
+          "valueText" : "20:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 1 of 2",
+          "percentText" : null,
+          "spokenText" : "Sweet spot 1 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Sweet spot 2 of 2",
+          "percentText" : null,
+          "spokenText" : "Sweet spot 2 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 188,
+      "bars" : [
+        {
+          "end" : 0.19230800000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.230769,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.19230800000000001,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.25,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.230769,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.288462,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.25,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.30769200000000002,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.288462,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.34615400000000002,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.30769200000000002,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.36538500000000002,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.34615400000000002,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.461538,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.36538500000000002,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.5,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.461538,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.519231,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.5,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.55769199999999997,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.519231,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.57692299999999996,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.55769199999999997,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.61538499999999996,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.57692299999999996,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.63461500000000004,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.61538499999999996,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.730769,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.63461500000000004,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.769231,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.730769,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.788462,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.769231,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.82692299999999996,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.788462,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.84615399999999996,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.82692299999999996,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.88461500000000004,
+          "endHeight" : 0.73230799999999996,
+          "start" : 0.84615399999999996,
+          "startHeight" : 0.73230799999999996,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.90384600000000004,
+          "endHeight" : 0.80923100000000003,
+          "start" : 0.88461500000000004,
+          "startHeight" : 0.80923100000000003,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.90384600000000004,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3120,
+      "durationText" : "52 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 22,
+          "repeats" : 3,
+          "start" : 1,
+          "text" : "3× Set 1 · under 1 2:00 @ 95 % (238 W) \/ Set 1 · over 1 1:00 @ 105 % (263 W) \/ Set 1 · under 2 2:00 @ 95 % (238 W) \/ Set 1 · over 2 1:00 @ 105 % (263 W) \/ Set 1 · under 3 2:00 @ 95 % (238 W) \/ Set 1 · over 3 1:00 @ 105 % (263 W) \/ Recovery 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "over-unders-3x9",
+      "intensityLabel" : "Threshold",
+      "mainSetText" : "9 × 2:00 @ 95 % (238 W)",
+      "mainSetText110" : "9 × 2:00 @ 105 % (262 W)",
+      "mainSetTextNoValues" : "9 × 2:00",
+      "mainSetWatts" : 263,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : "95 %",
+          "spokenText" : "Set 1 · under 1, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · over 1, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : "95 %",
+          "spokenText" : "Set 1 · under 2, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · over 2, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : "95 %",
+          "spokenText" : "Set 1 · under 3, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · over 3, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : "95 %",
+          "spokenText" : "Set 2 · under 1, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · over 1, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : "95 %",
+          "spokenText" : "Set 2 · under 2, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · over 2, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : "95 %",
+          "spokenText" : "Set 2 · under 3, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · over 3, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : "95 %",
+          "spokenText" : "Set 3 · under 1, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · over 1, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : "95 %",
+          "spokenText" : "Set 3 · under 2, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · over 2, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : "95 %",
+          "spokenText" : "Set 3 · under 3, 2 min, 95 %, 238 W",
+          "valueText" : "2:00 · 95 % · 238 W",
+          "wattsText" : "238 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · over 3, 1 min, 105 %, 263 W",
+          "valueText" : "1:00 · 105 % · 263 W",
+          "wattsText" : "263 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · under 1, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : "116 %",
+          "spokenText" : "Set 1 · over 1, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · under 2, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : "116 %",
+          "spokenText" : "Set 1 · over 2, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 1 · under 3, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : "116 %",
+          "spokenText" : "Set 1 · over 3, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · under 1, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : "116 %",
+          "spokenText" : "Set 2 · over 1, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · under 2, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : "116 %",
+          "spokenText" : "Set 2 · over 2, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 2 · under 3, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : "116 %",
+          "spokenText" : "Set 2 · over 3, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · under 1, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : "116 %",
+          "spokenText" : "Set 3 · over 1, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · under 2, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : "116 %",
+          "spokenText" : "Set 3 · over 2, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : "105 %",
+          "spokenText" : "Set 3 · under 3, 2 min, 105 %, 262 W",
+          "valueText" : "2:00 · 105 % · 262 W",
+          "wattsText" : "262 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : "116 %",
+          "spokenText" : "Set 3 · over 3, 1 min, 116 %, 289 W",
+          "valueText" : "1:00 · 116 % · 289 W",
+          "wattsText" : "289 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 1, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 2, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 3, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 1, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 2, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 3, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 1, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 2, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "2:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 3, 2 min",
+          "valueText" : "2:00",
+          "wattsText" : "238 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "263 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 183.82352900000001,
+      "bars" : [
+        {
+          "end" : 0.196078,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.21568599999999999,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.196078,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.235294,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.21568599999999999,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.25490200000000002,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.235294,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.27450999999999998,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.25490200000000002,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.29411799999999999,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.27450999999999998,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.31372499999999998,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.29411799999999999,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.39215699999999998,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.31372499999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.41176499999999999,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.39215699999999998,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.43137300000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.41176499999999999,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.45097999999999999,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.43137300000000001,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.47058800000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.45097999999999999,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.49019600000000002,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.47058800000000001,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.50980400000000003,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.49019600000000002,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.58823499999999995,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.50980400000000003,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.60784300000000002,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.58823499999999995,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.62745099999999998,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.60784300000000002,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.64705900000000005,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.62745099999999998,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.66666700000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.64705900000000005,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.68627499999999997,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.66666700000000001,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.70588200000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.68627499999999997,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.78431399999999996,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.70588200000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.80392200000000003,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.78431399999999996,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.82352899999999996,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.80392200000000003,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.84313700000000003,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.82352899999999996,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.86274499999999998,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.84313700000000003,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.88235300000000005,
+          "endHeight" : 0.69230800000000003,
+          "start" : 0.86274499999999998,
+          "startHeight" : 0.69230800000000003,
+          "zone" : "Sweet spot"
+        },
+        {
+          "end" : 0.90196100000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.88235300000000005,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.90196100000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3060,
+      "durationText" : "51 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 28,
+          "repeats" : 4,
+          "start" : 1,
+          "text" : "4× Set 1 · under 1 1:00 @ 90 % (225 W) \/ Set 1 · over 1 1:00 @ 110 % (275 W) \/ Set 1 · under 2 1:00 @ 90 % (225 W) \/ Set 1 · over 2 1:00 @ 110 % (275 W) \/ Set 1 · under 3 1:00 @ 90 % (225 W) \/ Set 1 · over 3 1:00 @ 110 % (275 W) \/ Recovery 4:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 29,
+          "repeats" : 1,
+          "start" : 28,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "over-unders-4x6",
+      "intensityLabel" : "VO2max and above",
+      "mainSetText" : "12 × 1:00 @ 110 % (275 W)",
+      "mainSetText110" : "12 × 1:00 @ 121 % (303 W)",
+      "mainSetTextNoValues" : "12 × 1:00",
+      "mainSetWatts" : 275,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : "90 %",
+          "spokenText" : "Set 1 · under 1, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : "110 %",
+          "spokenText" : "Set 1 · over 1, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : "90 %",
+          "spokenText" : "Set 1 · under 2, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : "110 %",
+          "spokenText" : "Set 1 · over 2, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : "90 %",
+          "spokenText" : "Set 1 · under 3, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : "110 %",
+          "spokenText" : "Set 1 · over 3, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : "90 %",
+          "spokenText" : "Set 2 · under 1, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : "110 %",
+          "spokenText" : "Set 2 · over 1, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : "90 %",
+          "spokenText" : "Set 2 · under 2, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : "110 %",
+          "spokenText" : "Set 2 · over 2, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : "90 %",
+          "spokenText" : "Set 2 · under 3, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : "110 %",
+          "spokenText" : "Set 2 · over 3, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : "90 %",
+          "spokenText" : "Set 3 · under 1, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : "110 %",
+          "spokenText" : "Set 3 · over 1, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : "90 %",
+          "spokenText" : "Set 3 · under 2, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : "110 %",
+          "spokenText" : "Set 3 · over 2, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : "90 %",
+          "spokenText" : "Set 3 · under 3, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : "110 %",
+          "spokenText" : "Set 3 · over 3, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 1",
+          "percentText" : "90 %",
+          "spokenText" : "Set 4 · under 1, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 1",
+          "percentText" : "110 %",
+          "spokenText" : "Set 4 · over 1, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 2",
+          "percentText" : "90 %",
+          "spokenText" : "Set 4 · under 2, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 2",
+          "percentText" : "110 %",
+          "spokenText" : "Set 4 · over 2, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 3",
+          "percentText" : "90 %",
+          "spokenText" : "Set 4 · under 3, 1 min, 90 %, 225 W",
+          "valueText" : "1:00 · 90 % · 225 W",
+          "wattsText" : "225 W",
+          "zone" : "Sweet spot"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 3",
+          "percentText" : "110 %",
+          "spokenText" : "Set 4 · over 3, 1 min, 110 %, 275 W",
+          "valueText" : "1:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : "99 %",
+          "spokenText" : "Set 1 · under 1, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : "121 %",
+          "spokenText" : "Set 1 · over 1, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : "99 %",
+          "spokenText" : "Set 1 · under 2, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : "121 %",
+          "spokenText" : "Set 1 · over 2, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : "99 %",
+          "spokenText" : "Set 1 · under 3, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : "121 %",
+          "spokenText" : "Set 1 · over 3, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : "99 %",
+          "spokenText" : "Set 2 · under 1, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : "121 %",
+          "spokenText" : "Set 2 · over 1, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : "99 %",
+          "spokenText" : "Set 2 · under 2, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : "121 %",
+          "spokenText" : "Set 2 · over 2, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : "99 %",
+          "spokenText" : "Set 2 · under 3, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : "121 %",
+          "spokenText" : "Set 2 · over 3, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : "99 %",
+          "spokenText" : "Set 3 · under 1, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : "121 %",
+          "spokenText" : "Set 3 · over 1, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : "99 %",
+          "spokenText" : "Set 3 · under 2, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : "121 %",
+          "spokenText" : "Set 3 · over 2, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : "99 %",
+          "spokenText" : "Set 3 · under 3, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : "121 %",
+          "spokenText" : "Set 3 · over 3, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 1",
+          "percentText" : "99 %",
+          "spokenText" : "Set 4 · under 1, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 1",
+          "percentText" : "121 %",
+          "spokenText" : "Set 4 · over 1, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 2",
+          "percentText" : "99 %",
+          "spokenText" : "Set 4 · under 2, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 2",
+          "percentText" : "121 %",
+          "spokenText" : "Set 4 · over 2, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 3",
+          "percentText" : "99 %",
+          "spokenText" : "Set 4 · under 3, 1 min, 99 %, 248 W",
+          "valueText" : "1:00 · 99 % · 248 W",
+          "wattsText" : "248 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 3",
+          "percentText" : "121 %",
+          "spokenText" : "Set 4 · over 3, 1 min, 121 %, 303 W",
+          "valueText" : "1:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 1 · under 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 1 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 1 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 2 · under 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 2 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 2 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 3 · under 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 3 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 3 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 1",
+          "percentText" : null,
+          "spokenText" : "Set 4 · under 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 1",
+          "percentText" : null,
+          "spokenText" : "Set 4 · over 1, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 2",
+          "percentText" : null,
+          "spokenText" : "Set 4 · under 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 2",
+          "percentText" : null,
+          "spokenText" : "Set 4 · over 2, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · under 3",
+          "percentText" : null,
+          "spokenText" : "Set 4 · under 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "225 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "1:00",
+          "name" : "Set 4 · over 3",
+          "percentText" : null,
+          "spokenText" : "Set 4 · over 3, 1 min",
+          "valueText" : "1:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 203.66666699999999,
+      "bars" : [
+        {
+          "end" : 0.16666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.5,
+          "endHeight" : 0.74769200000000002,
+          "start" : 0.16666700000000001,
+          "startHeight" : 0.74769200000000002,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.58333299999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.5,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.91666700000000001,
+          "endHeight" : 0.74769200000000002,
+          "start" : 0.58333299999999999,
+          "startHeight" : 0.74769200000000002,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.91666700000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3600,
+      "durationText" : "60 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 5,
+          "repeats" : 2,
+          "start" : 1,
+          "text" : "2× Threshold 20:00 @ 97 % (243 W) \/ Recovery 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "threshold-2x20",
+      "intensityLabel" : "Threshold",
+      "mainSetText" : "2 × 20:00 @ 97 % (243 W)",
+      "mainSetText110" : "2 × 20:00 @ 107 % (267 W)",
+      "mainSetTextNoValues" : "2 × 20:00",
+      "mainSetWatts" : 243,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 1 of 2",
+          "percentText" : "97 %",
+          "spokenText" : "Threshold 1 of 2, 20 min, 97 %, 243 W",
+          "valueText" : "20:00 · 97 % · 243 W",
+          "wattsText" : "243 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 2 of 2",
+          "percentText" : "97 %",
+          "spokenText" : "Threshold 2 of 2, 20 min, 97 %, 243 W",
+          "valueText" : "20:00 · 97 % · 243 W",
+          "wattsText" : "243 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 1 of 2",
+          "percentText" : "107 %",
+          "spokenText" : "Threshold 1 of 2, 20 min, 107 %, 267 W",
+          "valueText" : "20:00 · 107 % · 267 W",
+          "wattsText" : "267 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 2 of 2",
+          "percentText" : "107 %",
+          "spokenText" : "Threshold 2 of 2, 20 min, 107 %, 267 W",
+          "valueText" : "20:00 · 107 % · 267 W",
+          "wattsText" : "267 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 1 of 2",
+          "percentText" : null,
+          "spokenText" : "Threshold 1 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "243 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "20:00",
+          "name" : "Threshold 2 of 2",
+          "percentText" : null,
+          "spokenText" : "Threshold 2 of 2, 20 min",
+          "valueText" : "20:00",
+          "wattsText" : "243 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 196.42857100000001,
+      "bars" : [
+        {
+          "end" : 0.15873000000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.34920600000000002,
+          "endHeight" : 0.769231,
+          "start" : 0.15873000000000001,
+          "startHeight" : 0.769231,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.44444400000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.34920600000000002,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.63492099999999996,
+          "endHeight" : 0.769231,
+          "start" : 0.44444400000000001,
+          "startHeight" : 0.769231,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 0.730159,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.63492099999999996,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.92063499999999998,
+          "endHeight" : 0.769231,
+          "start" : 0.730159,
+          "startHeight" : 0.769231,
+          "zone" : "Threshold"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.92063499999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 3780,
+      "durationText" : "63 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 6,
+          "repeats" : 3,
+          "start" : 1,
+          "text" : "3× Threshold 12:00 @ 100 % (250 W) \/ Recovery 6:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 7,
+          "repeats" : 1,
+          "start" : 6,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "threshold-3x12",
+      "intensityLabel" : "Threshold",
+      "mainSetText" : "3 × 12:00 @ 100 % (250 W)",
+      "mainSetText110" : "3 × 12:00 @ 110 % (275 W)",
+      "mainSetTextNoValues" : "3 × 12:00",
+      "mainSetWatts" : 250,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 1 of 3",
+          "percentText" : "100 %",
+          "spokenText" : "Threshold 1 of 3, 12 min, 100 %, 250 W",
+          "valueText" : "12:00 · 100 % · 250 W",
+          "wattsText" : "250 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 6 min, 50 %, 125 W",
+          "valueText" : "6:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 2 of 3",
+          "percentText" : "100 %",
+          "spokenText" : "Threshold 2 of 3, 12 min, 100 %, 250 W",
+          "valueText" : "12:00 · 100 % · 250 W",
+          "wattsText" : "250 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 6 min, 50 %, 125 W",
+          "valueText" : "6:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 3 of 3",
+          "percentText" : "100 %",
+          "spokenText" : "Threshold 3 of 3, 12 min, 100 %, 250 W",
+          "valueText" : "12:00 · 100 % · 250 W",
+          "wattsText" : "250 W",
+          "zone" : "Threshold"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 1 of 3",
+          "percentText" : "110 %",
+          "spokenText" : "Threshold 1 of 3, 12 min, 110 %, 275 W",
+          "valueText" : "12:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 6 min, 55 %, 138 W",
+          "valueText" : "6:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 2 of 3",
+          "percentText" : "110 %",
+          "spokenText" : "Threshold 2 of 3, 12 min, 110 %, 275 W",
+          "valueText" : "12:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 6 min, 55 %, 138 W",
+          "valueText" : "6:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 3 of 3",
+          "percentText" : "110 %",
+          "spokenText" : "Threshold 3 of 3, 12 min, 110 %, 275 W",
+          "valueText" : "12:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 1 of 3",
+          "percentText" : null,
+          "spokenText" : "Threshold 1 of 3, 12 min",
+          "valueText" : "12:00",
+          "wattsText" : "250 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 6 min",
+          "valueText" : "6:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 2 of 3",
+          "percentText" : null,
+          "spokenText" : "Threshold 2 of 3, 12 min",
+          "valueText" : "12:00",
+          "wattsText" : "250 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "6:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 6 min",
+          "valueText" : "6:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "12:00",
+          "name" : "Threshold 3 of 3",
+          "percentText" : null,
+          "spokenText" : "Threshold 3 of 3, 12 min",
+          "valueText" : "12:00",
+          "wattsText" : "250 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 183.21428599999999,
+      "bars" : [
+        {
+          "end" : 0.238095,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.30952400000000002,
+          "endHeight" : 0.886154,
+          "start" : 0.238095,
+          "startHeight" : 0.886154,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.38095200000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.30952400000000002,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.45238099999999998,
+          "endHeight" : 0.886154,
+          "start" : 0.38095200000000001,
+          "startHeight" : 0.886154,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.52381,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.45238099999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.59523800000000004,
+          "endHeight" : 0.886154,
+          "start" : 0.52381,
+          "startHeight" : 0.886154,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.66666700000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.59523800000000004,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.73809499999999995,
+          "endHeight" : 0.886154,
+          "start" : 0.66666700000000001,
+          "startHeight" : 0.886154,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.80952400000000002,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.73809499999999995,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.88095199999999996,
+          "endHeight" : 0.886154,
+          "start" : 0.80952400000000002,
+          "startHeight" : 0.886154,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.88095199999999996,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 2520,
+      "durationText" : "42 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 10,
+          "repeats" : 5,
+          "start" : 1,
+          "text" : "5× VO2max 3:00 @ 115 % (288 W) \/ Recovery 3:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 11,
+          "repeats" : 1,
+          "start" : 10,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "vo2max-5x3",
+      "intensityLabel" : "VO2max and above",
+      "mainSetText" : "5 × 3:00 @ 115 % (288 W)",
+      "mainSetText110" : "5 × 3:00 @ 127 % (317 W)",
+      "mainSetTextNoValues" : "5 × 3:00",
+      "mainSetWatts" : 288,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 1 of 5",
+          "percentText" : "115 %",
+          "spokenText" : "VO2max 1 of 5, 3 min, 115 %, 288 W",
+          "valueText" : "3:00 · 115 % · 288 W",
+          "wattsText" : "288 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 2 of 5",
+          "percentText" : "115 %",
+          "spokenText" : "VO2max 2 of 5, 3 min, 115 %, 288 W",
+          "valueText" : "3:00 · 115 % · 288 W",
+          "wattsText" : "288 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 3 of 5",
+          "percentText" : "115 %",
+          "spokenText" : "VO2max 3 of 5, 3 min, 115 %, 288 W",
+          "valueText" : "3:00 · 115 % · 288 W",
+          "wattsText" : "288 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 4 of 5",
+          "percentText" : "115 %",
+          "spokenText" : "VO2max 4 of 5, 3 min, 115 %, 288 W",
+          "valueText" : "3:00 · 115 % · 288 W",
+          "wattsText" : "288 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 3 min, 50 %, 125 W",
+          "valueText" : "3:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 5 of 5",
+          "percentText" : "115 %",
+          "spokenText" : "VO2max 5 of 5, 3 min, 115 %, 288 W",
+          "valueText" : "3:00 · 115 % · 288 W",
+          "wattsText" : "288 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 1 of 5",
+          "percentText" : "127 %",
+          "spokenText" : "VO2max 1 of 5, 3 min, 127 %, 317 W",
+          "valueText" : "3:00 · 127 % · 317 W",
+          "wattsText" : "317 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 2 of 5",
+          "percentText" : "127 %",
+          "spokenText" : "VO2max 2 of 5, 3 min, 127 %, 317 W",
+          "valueText" : "3:00 · 127 % · 317 W",
+          "wattsText" : "317 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 3 of 5",
+          "percentText" : "127 %",
+          "spokenText" : "VO2max 3 of 5, 3 min, 127 %, 317 W",
+          "valueText" : "3:00 · 127 % · 317 W",
+          "wattsText" : "317 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 4 of 5",
+          "percentText" : "127 %",
+          "spokenText" : "VO2max 4 of 5, 3 min, 127 %, 317 W",
+          "valueText" : "3:00 · 127 % · 317 W",
+          "wattsText" : "317 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 3 min, 55 %, 138 W",
+          "valueText" : "3:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 5 of 5",
+          "percentText" : "127 %",
+          "spokenText" : "VO2max 5 of 5, 3 min, 127 %, 317 W",
+          "valueText" : "3:00 · 127 % · 317 W",
+          "wattsText" : "317 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 1 of 5",
+          "percentText" : null,
+          "spokenText" : "VO2max 1 of 5, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "288 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 2 of 5",
+          "percentText" : null,
+          "spokenText" : "VO2max 2 of 5, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "288 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 3 of 5",
+          "percentText" : null,
+          "spokenText" : "VO2max 3 of 5, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "288 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 4 of 5",
+          "percentText" : null,
+          "spokenText" : "VO2max 4 of 5, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "288 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "3:00",
+          "name" : "VO2max 5 of 5",
+          "percentText" : null,
+          "spokenText" : "VO2max 5 of 5, 3 min",
+          "valueText" : "3:00",
+          "wattsText" : "288 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    },
+    {
+      "averageWatts" : 180.813953,
+      "bars" : [
+        {
+          "end" : 0.23255799999999999,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.32558100000000001,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.23255799999999999,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.418605,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.32558100000000001,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.51162799999999997,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.418605,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.60465100000000005,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.51162799999999997,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.69767400000000002,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.60465100000000005,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 0.79069800000000001,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.69767400000000002,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        },
+        {
+          "end" : 0.88372099999999998,
+          "endHeight" : 0.84615399999999996,
+          "start" : 0.79069800000000001,
+          "startHeight" : 0.84615399999999996,
+          "zone" : "VO2max"
+        },
+        {
+          "end" : 1,
+          "endHeight" : 0.38461499999999998,
+          "start" : 0.88372099999999998,
+          "startHeight" : 0.38461499999999998,
+          "zone" : "Recovery"
+        }
+      ],
+      "durationSeconds" : 2580,
+      "durationText" : "43 min",
+      "groups" : [
+        {
+          "end" : 1,
+          "repeats" : 1,
+          "start" : 0,
+          "text" : "Warm-up 10:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 8,
+          "repeats" : 4,
+          "start" : 1,
+          "text" : "4× VO2max 4:00 @ 110 % (275 W) \/ Recovery 4:00 @ 50 % (125 W)"
+        },
+        {
+          "end" : 9,
+          "repeats" : 1,
+          "start" : 8,
+          "text" : "Cool-down 5:00 @ 50 % (125 W)"
+        }
+      ],
+      "id" : "vo2max-4x4",
+      "intensityLabel" : "VO2max and above",
+      "mainSetText" : "4 × 4:00 @ 110 % (275 W)",
+      "mainSetText110" : "4 × 4:00 @ 121 % (303 W)",
+      "mainSetTextNoValues" : "4 × 4:00",
+      "mainSetWatts" : 275,
+      "steps" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "50 %",
+          "spokenText" : "Warm-up, 10 min, 50 %, 125 W",
+          "valueText" : "10:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 1 of 4",
+          "percentText" : "110 %",
+          "spokenText" : "VO2max 1 of 4, 4 min, 110 %, 275 W",
+          "valueText" : "4:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 2 of 4",
+          "percentText" : "110 %",
+          "spokenText" : "VO2max 2 of 4, 4 min, 110 %, 275 W",
+          "valueText" : "4:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 3 of 4",
+          "percentText" : "110 %",
+          "spokenText" : "VO2max 3 of 4, 4 min, 110 %, 275 W",
+          "valueText" : "4:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "50 %",
+          "spokenText" : "Recovery, 4 min, 50 %, 125 W",
+          "valueText" : "4:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 4 of 4",
+          "percentText" : "110 %",
+          "spokenText" : "VO2max 4 of 4, 4 min, 110 %, 275 W",
+          "valueText" : "4:00 · 110 % · 275 W",
+          "wattsText" : "275 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "50 %",
+          "spokenText" : "Cool-down, 5 min, 50 %, 125 W",
+          "valueText" : "5:00 · 50 % · 125 W",
+          "wattsText" : "125 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "steps110" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : "55 %",
+          "spokenText" : "Warm-up, 10 min, 55 %, 138 W",
+          "valueText" : "10:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 1 of 4",
+          "percentText" : "121 %",
+          "spokenText" : "VO2max 1 of 4, 4 min, 121 %, 303 W",
+          "valueText" : "4:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 2 of 4",
+          "percentText" : "121 %",
+          "spokenText" : "VO2max 2 of 4, 4 min, 121 %, 303 W",
+          "valueText" : "4:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 3 of 4",
+          "percentText" : "121 %",
+          "spokenText" : "VO2max 3 of 4, 4 min, 121 %, 303 W",
+          "valueText" : "4:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : "55 %",
+          "spokenText" : "Recovery, 4 min, 55 %, 138 W",
+          "valueText" : "4:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 4 of 4",
+          "percentText" : "121 %",
+          "spokenText" : "VO2max 4 of 4, 4 min, 121 %, 303 W",
+          "valueText" : "4:00 · 121 % · 303 W",
+          "wattsText" : "303 W",
+          "zone" : "VO2max"
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : "55 %",
+          "spokenText" : "Cool-down, 5 min, 55 %, 138 W",
+          "valueText" : "5:00 · 55 % · 138 W",
+          "wattsText" : "138 W",
+          "zone" : "Recovery"
+        }
+      ],
+      "stepsNoValues" : [
+        {
+          "durationText" : "10:00",
+          "name" : "Warm-up",
+          "percentText" : null,
+          "spokenText" : "Warm-up, 10 min",
+          "valueText" : "10:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 1 of 4",
+          "percentText" : null,
+          "spokenText" : "VO2max 1 of 4, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 2 of 4",
+          "percentText" : null,
+          "spokenText" : "VO2max 2 of 4, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 3 of 4",
+          "percentText" : null,
+          "spokenText" : "VO2max 3 of 4, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "Recovery",
+          "percentText" : null,
+          "spokenText" : "Recovery, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "4:00",
+          "name" : "VO2max 4 of 4",
+          "percentText" : null,
+          "spokenText" : "VO2max 4 of 4, 4 min",
+          "valueText" : "4:00",
+          "wattsText" : "275 W",
+          "zone" : null
+        },
+        {
+          "durationText" : "5:00",
+          "name" : "Cool-down",
+          "percentText" : null,
+          "spokenText" : "Cool-down, 5 min",
+          "valueText" : "5:00",
+          "wattsText" : "125 W",
+          "zone" : null
+        }
+      ]
+    }
+  ]
+}

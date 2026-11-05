@@ -1,0 +1,12 @@
+.preflight { padding-bottom: 150px; }
+.action-bar { position: sticky; bottom: 0; z-index: 4; display: flex; flex-direction: column; gap: var(--space-s); padding: var(--space-m) var(--space-l) calc(var(--space-m) + env(safe-area-inset-bottom)); margin: 0 calc(-1 * var(--space-l)); background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--card-line); }
+.action-bar .reason { color: var(--warning); font-weight: 600; }
+.action-bar .row.nowrap { align-items: stretch; }
+.stepper-row { display: flex; align-items: center; gap: var(--space-m); padding: var(--space-s) 0; }
+.stepper-row .row-value { display: block; font-size: 1.1rem; }
+.stepper-row .row-detail { display: block; font-size: .875rem; color: var(--secondary); }
+.stepper-row .btn { font-size: 1.4rem; min-width: 52px; }
+.warmup-details summary { list-style: none; cursor: pointer; }
+.warmup-details summary::-webkit-details-marker { display: none; }
+.details-body { padding: var(--space-s) 0 var(--space-m); }
+.profile-wrap { padding: 0 0 var(--space-s) 40px; }

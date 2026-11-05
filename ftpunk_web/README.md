@@ -1,129 +1,106 @@
 # FTPunk Web
 
-Chrome browser port of FTPunk, currently nested in the Apple app repository. This directory is self-contained: copy it into a separate repository later without changing runtime paths. The web app has no runtime packages, external scripts, fonts, or image services.
+The browser edition of FTPunk: FTP ramp tests on a smart trainer through Web Bluetooth (Chrome), structured workouts, free ERG and
+resistance rides, history and progress. It follows the native iPhone and Mac app (the code in `../Sources` and `../App` wins when this
+file and the code disagree): the same Home, Pre-flight, Cockpit, Result, Progress and Settings screens, the same workout library, the same
+portable backups. Everything stays in this browser. There is no server, no account and no analytics; the only network calls go to
+Intervals.icu, and only after you connect and confirm. The story mode (Lowline, Cyclepunk) was removed on 2026-11-05; its data fields stay
+in backups unchanged (`../contracts/README.md`, "Story fields are legacy").
 
-## Training and Cyclepunk
+**The FTP test is the core feature.** Three ramp presets (25, 15 and 20 W/min), the scoring (best complete 60 seconds, time weighted) and the
+**72 % estimate** are unchanged. New tests always use 72 %; recordings made with 75 % still load and show their own factor.
 
-Train offers free ERG with ±10 W controls and offline Easy spin (20 min), Endurance
-(30 min), and Tempo intervals (30 min) workouts. Set current FTP to resolve workout
-targets. Trainer increments are applied to each outgoing command; out-of-range plans are
-rejected. Workout and free ERG rides can pause: the trainer is released, step time
-and XP freeze, and fresh pedaling is required to resume at the saved target.
-Stop & save remains available while releasing or restarting. FTP ramp tests do
-not pause and training rides do not produce FTP estimates.
+This directory is self-contained: it has no runtime packages and no build step, and no Node. The development tools are Python 3 and Google Chrome.
 
-Enable adventure progress in Train or City. Last Light restores the Lowline radio
-and awards a patch after 20 cumulative riding minutes. Fresh, positive power earns
-10 XP/minute regardless of intensity; zeros, gaps, waiting and mock rides earn no
-credit. Fractional XP survives between rides. Progress and recordings commit in
-one IndexedDB transaction, and progress survives recording deletion. Portable v3
-backups transfer the library, recordings and progress to the native app; v1/v2 still import.
-
-The library imports FTPunk workout JSON or Intervals cycling event JSON, with timed
-ramps and nested repeats. Download an example from Train. Connected Intervals
-accounts can download the next 14 days for offline use; unsupported workouts are
-listed in the report. Targets resolve once and never follow later FTP/calendar edits.
-Workout intensity adjusts ±5 points within 50–150% and trainer capability bounds.
-ZWO/FIT/MRC/ERG import is not implemented.
-
-Resistance rides require the advertised FTMS capability plus a valid six-byte
-level range. Unsupported/ambiguous ranges disable this option. Levels are trainer
-specific, not watts or percentages; matching is off. The City now has original
-vector artwork, 0/5/10/20-minute story beats and post-ride unlock receipts.
-
-Hidden-tab hosting remains planned. The standalone browser requires a visible tab
-during real rides. Physical trainer behavior, live Intervals CORS and visual review
-remain unverified.
-
-## Run locally
-
-From this repository’s root:
+## Run
 
 ```sh
 cd ftpunk_web
-python3 tools/serve.py
+python3 tools/serve.py          # http://localhost:8080 in Chrome
 ```
 
-Open **http://localhost:8080** in Chrome. Python 3 is the only development-server requirement. No `npm install` is needed. Use `--port 8081` if port 8080 is occupied; browser storage belongs to the origin, so keep the same port to retain access to the same history.
+Browser storage belongs to the origin, so keep the same port to keep your riders and recordings. Opening `index.html` through `file://`
+does not work. Web Bluetooth needs a secure context (localhost or HTTPS) and a user-started device chooser.
 
-For a device-free walkthrough, choose **No trainer nearby? Try a mock ride** on FTP Test, then Start ramp test. Quick mock mode uses ten-second warm-up and cooldown periods. Choose 60× speed for a short walkthrough. Mock recordings are clearly marked, excluded from real FTP progress, cannot become your current FTP, and cannot upload.
+A device-free walkthrough: Settings → About, activate the About card ten times to unlock **Debug**; mock sensors turn on. Rides then run
+on simulated sensors (the playback speed and signal scenario are in the pre-flight and in the cockpit's "⋯" menu), are marked as debug
+recordings and never upload. Without a trainer you can also open a preview scenario (below).
 
-For a live test:
+For a live ride: close other apps that control the trainer, connect the trainer from the Devices pill (the app checks ERG support and
+asks for control), optionally a power meter (then choose power matching or recording only) and a heart-rate strap, then pick a ride on Home.
+The pre-flight lists what is missing and keeps Start disabled with the reason above it. Keep the tab visible: a live ride interrupts and tries
+to release the trainer if the tab is hidden. Validate pairing, target changes and Stop at a low load before a maximal test.
 
-1. Close other applications controlling the trainer. Connect the smart trainer; FTPunk checks ERG support, subscribes to measurements and control indications, reads supported power limits, and requests control.
-2. Optionally connect an external Cycling Power meter and heart-rate sensor. For dual-sided pedals, choose the master sensor reporting total power. Once the meter’s notifications are ready, choose **Use power matching** or **Recording only**. The preference defaults to matching on and is also available in Settings.
-3. Choose the power source and pedal until fresh readings appear. Cadence comes from the external meter when available, then the trainer. With no fresh cadence, use Finish ramp manually.
-4. Select the rider, protocol, warm-up, cooldown, and estimate factor. Start the test. These settings and measurement sources are snapshotted for the recording.
-5. Keep the app visible. A live test interrupts and attempts to stop the trainer if the tab becomes hidden; it does not promise background or screen-locked trainer control. Large scheduling gaps and stale essential signals also interrupt the test.
-6. Review the saved recording in History. Download JSON, CSV, or TCX; optionally adopt a real result as that rider’s current FTP.
+## Screens
 
-Before a maximal test, validate pairing, target changes, meter matching, and stop behavior at a low load with your actual trainer. Browser/process termination can prevent a final Bluetooth stop command from being delivered.
+Hash routes: `#/home`, `#/progress`, `#/settings` (a sidebar from 860 px wide, otherwise a tab bar), pushed screens `#/preflight/<ftpTest|freeERG|resistance|workout/<ref>>`,
+`#/ride`, `#/result`, `#/activity/<id>`. First launch asks for a name, optional weight and FTP.
 
-## What is implemented
+- **Home:** rider chip and rider sheet, Devices pill, Today and Upcoming from the Intervals.icu cache (refreshes when over an hour old), the FTP card with
+  the retest advice (after eight weeks), quick rides, the 14 classic workouts by category with a detail sheet (profile, steps with % FTP and watts, main set),
+  and My workouts (imported JSON for now).
+- **Pre-flight:** checklist for every ride, start blockers in the order a rider can fix them, protocol recommendation by weight, workout intensity ±5 within 50–150 %.
+- **Cockpit:** target and actual, step countdown, phase timeline, workout profile with a progress marker, Pause/Resume, Stop & save, hold-to-finish for the ramp.
+- **Result:** the training result first (delta against the current FTP), then what it changes, then sharing; adopt the FTP.
+- **Progress:** FTP trend per rider, activity filters, rows with badges, delete with confirmation, activity detail.
+- **Settings:** riders, devices and power source, ride display (theme, extra-large numbers), Intervals.icu, backup export/import, debug, about.
 
-- Responsive Train, FTP Test, City, History, and Settings screens with a persistent live-ride link; light, dark, and system appearances; larger ride numbers; keyboard and screen-reader labels; reduced-motion support.
-- Standard +5 W / 12 seconds, gentle +5 W / 20 seconds, and Zwift-style +20 W / minute protocols.
-- The native app’s deterministic workout state machine, time-weighted best complete 60-second ramp window, 72%/75% estimate, and 72–77% reference range. Zeros count; missing measurements do not fill themselves.
-- Sustained fresh low-cadence exhaustion detection, optional cadence, manual finish, target/cadence/power freshness policies, and free-spin recovery after automatic exhaustion.
-- FTMS ERG, Cycling Power meters, and Heart Rate sensors through Web Bluetooth. Packet validation, explicit resistance-field layouts, and bounded packet capture.
-- Serialized FTMS control commands that wait for matching Control Point indications. A successful GATT write alone is insufficient.
-- Power matching: five-second settling after target changes; correction updates at most every three seconds; at most 3 W of correction per update before trainer quantization; maximum correction ±20% or ±60 W, whichever is smaller; clamped to the trainer range without integrator windup. Zero watts and low cadence suspend correction.
-- Fixed per-session measurement sources, independent freshness timestamps, and no silent fallback from a lost external meter to trainer watts.
-- IndexedDB rider profiles, current FTP and FTP history, per-second session checkpoints, interruption recovery, JSON backups, and recording deletion. Web Locks prevent two tabs owning workouts simultaneously.
-- Optional Intervals.icu API-key connection and explicit per-recording upload consent naming the rider and destination. Only approved, account-bound queued jobs retry; a stable external ID supports duplicate detection. Credentials exist in memory for the current tab and are never stored in IndexedDB, preferences, or backups.
-- Offline app-shell caching and an install manifest. A service-worker update does not forcibly replace an active ride.
-- Procedural pixel cycling scene and a measured-power chart, with numeric equivalents on the dashboard.
+## Preview scenarios
 
-## Browser and integration boundaries
-
-Use current Chrome on a supported platform, over HTTPS or localhost. Opening `index.html` through `file://` does not work. Web Bluetooth requires a user-initiated device chooser. On Linux, Chrome’s Web Bluetooth support may require its experimental web-platform feature flag; the exact Linux Bluetooth stack must be tested.
-
-The web app does not synchronize history with the Mac/iPhone apps. Browser-local data is tied to the scheme, host, and port; clearing site data removes it. Settings offers portable backup export/import shared with Mac and iPhone. Import previews the riders, replaces matching identities (not matching names), preserves unrelated riders, and atomically stores a rollback backup before replacing data. Download the latest rollback through **Download pre-import backup**; the browser retains three. Importing does not recreate upload approvals or include credentials. Archives are limited to 64 MiB and finalized ramp tests, training activities, cached workouts and Cyclepunk progress. Older `ftpunk-web` backups also import through the browser adapter. Individual raw session JSON exports are not portable profile archives.
-
-Intervals.icu uses the API-key option in this version. Registered browser OAuth redirects and production OAuth setup are not included. API requests go directly to Intervals.icu, so the service must permit the web origin through CORS. Live API access has not been exercised with user credentials. Reconnect after refreshing or closing the tab to retry approved uploads. Disconnecting does not delete remote activities or pending local approvals.
+`?scenario=<name>` boots the real app against an in-memory store seeded with a made-up rider (Alex, 71 kg, 230 W). It never reads or writes the real
+database or settings. Names: see `src/ui/scenarios.mjs` (`home`, `home-empty`, `preflight-ftp`, `ride-ftp`, `ride-workout`, `result`, `progress`, `settings`, ...).
+`python3 tools/capture.py OUT_DIR` writes a PNG per scenario at 390×844 and 1280×800 with headless Chrome. Taking screenshots needs the owner's permission
+(`../AGENTS.md`); use `--dry-run` to print the commands.
 
 ## Tests and build
 
-With Node 22 or later:
-
 ```sh
-npm test
-```
-
-There are no dependencies to install. This checks syntax, self-contained import paths, and asset references, then runs the domain/protocol/controller/archive/integration suite using simulated devices and HTTP responses. The packet and workout fixtures are ported from the Swift tests. The shared portable v1/v2/v3 and ramp/repeat import fixtures are also read directly by Swift tests. Coverage includes control acknowledgements and timeouts, connection setup, malformed data, meter dropouts, source isolation, scoring boundaries, delayed trainer response, power matching, session recovery, persistence failure, tab ownership, and upload consent/account isolation.
-
-Alternatively, with the development server running, open **http://localhost:8080/tests/**. It runs the same suite plus isolated real-IndexedDB round-trip, restore, rollback-backup and duplicate-import checks. Test storage uses a unique database, not your real recordings.
-
-Create a static deployable directory:
-
-```sh
-python3 tools/build.py
+python3 tools/test.py     # static checks, then every suite in real headless Chrome (real IndexedDB, DOMParser, WebCrypto)
+python3 tools/build.py    # empties dist/ and copies the static site into it
 python3 tools/serve.py --dist
 ```
 
-Deploy the contents of `dist/` to an HTTPS static host. There is no backend. Generated output is ignored by Git. The app is designed for a subdirectory as well as a domain root; all runtime assets and service-worker paths are relative.
+`tools/test.py` needs Google Chrome (the macOS app, or `google-chrome` / `chromium` on PATH). It starts `tools/serve.py` in test mode, opens `/tests/`, and
+waits for the page to POST its result to `/__test-result` (only `serve.py --test` accepts that). It exits non-zero on a failure or after five minutes.
+The static checks cover import paths, orphaned modules, the service worker's precache list, asset references, byte-identical fixture copies and the absence of story wording.
+Opening `http://localhost:8080/tests/` by hand runs the same suites. Every `tests/*.test.mjs` is picked up automatically.
+
+**Shared fixtures.** Where native logic is ported, a Swift test writes a golden file into `../contracts/fixtures/` (`FTPUNK_WRITE_FIXTURES=1 swift test --filter ...`);
+the web keeps a byte-identical copy in `tests/fixtures/` (the test run fails if they differ) and compares its own output field for field: the workout library
+(`workout-library-250w.json`) and the workout preview texts, groups and profile bars (`workout-preview-250w.json`). Never edit a fixture by hand.
+GitHub Pages serves `dist/` through `../.github/workflows/pages.yml`, which runs `tools/test.py` before it builds.
 
 ## Structure
 
 | Path | Purpose |
 | --- | --- |
-| `src/domain.mjs` | Configuration, ramp engine, FTP analysis, matching, synthetic ride input |
-| `src/protocol.mjs` | Packet decoders, command encoding, source routing, freshness |
-| `src/bluetooth.mjs` | Browser pairing, GATT notifications, acknowledged FTMS commands |
-| `src/controller.mjs` | Workout ownership, scheduling, trainer commands, checkpoints, stopping |
-| `src/storage.mjs` | IndexedDB, preferences, cross-tab ride lease, recovery and atomic archive restore |
-| `src/archive.mjs` | Portable archive validation and native/browser adapters |
-| `src/export.mjs` | JSON download, CSV, TCX |
-| `src/intervals.mjs` | Memory-only credentials, explicit approvals, queued upload retries |
-| `src/app.mjs`, `src/style.css` | Browser interface |
-| `src/scene.mjs` | Pixel cycling scene and measured-power chart |
-| `tests/` | Portable test suite and browser test page |
-| `tools/` | Local server, static export, syntax/asset checks |
+| `src/app.mjs` | Boot only: open storage, build the app model, register the screens, start the shell, `?scenario=` |
+| `src/app-model.mjs` | State and actions the screens call: riders, FTP, pre-flight, starting rides, workouts, calendar, recordings (no DOM) |
+| `src/domain.mjs`, `src/protocol.mjs`, `src/bluetooth.mjs`, `src/controller.mjs` | Ramp engine and FTP analysis, packet decoding, Web Bluetooth, ride ownership |
+| `src/catalog.mjs` | The classic workout library (flat 50 % warm-ups), intensity labels, retarget example |
+| `src/training.mjs`, `src/workouts.mjs` | Training plans, JSON/Intervals imports, cached workouts, scheduled dates |
+| `src/rules/presentation.mjs`, `home.mjs`, `progress.mjs`, `preview.mjs`, `preflight.mjs` | Pure rules ported from the native `Sources/FTPunkDomain`; no DOM |
+| `src/storage.mjs`, `src/memory-store.mjs`, `src/archive.mjs` | IndexedDB (version 4), the in-memory store for scenarios, portable archive v1–v3 |
+| `src/export.mjs`, `src/intervals.mjs`, `src/scene.mjs` | CSV/TCX/JSON download, Intervals.icu client, live power chart |
+| `src/preview-fixtures.mjs` | Deterministic riders and recordings for scenarios |
+| `src/ui/shell.mjs` | Hash router, nav, live-ride bar, notices, sheets, ride guards, `registerRoute` |
+| `src/ui/components.mjs`, `charts.mjs`, `sheets.mjs` | Shared view pieces, SVG charts, rider/devices/protocol/info sheets |
+| `src/ui/home.mjs`, `library.mjs` | Home, onboarding; the library, Today, Upcoming, My workouts, workout detail sheet |
+| `src/ui/preflight.mjs`, `ride.mjs`, `result.mjs`, `progress.mjs`, `settings.mjs` | The other screens |
+| `src/ui/scenarios.mjs` | Preview scenarios, one marked block per feature plan |
+| `src/ui/*.css` | `base.css` (tokens: colours in light/dark pairs, spacing, radii, type) and one stylesheet per module |
+| `tests/` | `harness.mjs`, `suite.mjs` and `storage-suite.mjs`, the `*.test.mjs` files, `fixtures/` |
+| `tools/` | `serve.py`, `test.py`, `build.py`, `capture.py` |
 
-Modern ES modules keep this initial port runnable without a frontend toolchain. Pure workout logic and device adapters are separate so a future TypeScript migration or native adapter can be introduced independently.
+Extension points for features added later: `registerRoute(name, spec)`, `registerPreflightRows(fn)` (pre-flight), `registerSettingsSlot('rideDisplay', fn)`,
+`model.workoutResolvers.set(prefix, fn)` (workout references such as `custom:<id>`), `model.hooks.saved` (after a recording is saved), and the scenario blocks.
+IndexedDB version 4 already holds `customWorkouts` (index `riderID`), `credentials` and `riderSettings`; trainer warmth is not stored.
 
-## Verification status
+## Not verified
 
-The automated 58-test suite, JavaScript syntax/import/asset checks, static export, and local HTTP content-type checks pass. Chrome/Brave UI automation was blocked by the development environment’s organization policy, and its in-app browser was unavailable. Visual layout, actual browser IndexedDB execution, offline installation, real Bluetooth hardware, and live Intervals.icu access still need browser/device acceptance testing. These are not claimed as verified by the simulated tests. The separate `tests/storage-suite.mjs` passed under a temporary `fake-indexeddb` 6.2.7 implementation, exercising the v1 database upgrade, repeated imports, unrelated rider preservation, rollback retention, transaction abort after scheduled writes, and reopen. This adds no runtime dependency and does not replace the real-Chrome storage check.
+No screen of this version has been looked at by a person (the capture tool was built, not run). The tests read the DOM and check layout bounds in headless Chrome; they do
+not judge appearance. Physical trainer, power meter and heart-rate behaviour, the Intervals.icu browser calls with a real key (CORS is documented as allowed for localhost and
+github.io), the service worker's update path and Web Locks across real tabs have not been exercised. The workout detail sheet has no axis labels on the profile chart
+(the native chart has an optional one); intensity is changed in the pre-flight and cockpit, as in the native app.
 
-References: [Chrome Web Bluetooth](https://developer.chrome.com/docs/capabilities/bluetooth), [page lifecycle](https://developer.chrome.com/docs/web-platform/page-lifecycle-api), [Screen Wake Lock](https://www.w3.org/TR/screen-wake-lock/), [Intervals.icu API](https://www.intervals.icu/features/open-api/).
+References: [Chrome Web Bluetooth](https://developer.chrome.com/docs/capabilities/bluetooth), [page lifecycle](https://developer.chrome.com/docs/web-platform/page-lifecycle-api), [Screen Wake Lock](https://www.w3.org/TR/screen-wake-lock/), [Intervals.icu API](https://intervals.icu/api-docs.html).

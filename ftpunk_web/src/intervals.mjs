@@ -1,4 +1,4 @@
-import { importWorkout } from './workouts.mjs';
+import { importWorkout, ScheduledDate } from './workouts.mjs';
 import { uuid } from './domain.mjs';
 import { description, tcx } from './export.mjs';
 const BASE = 'https://intervals.icu/api/v1';
@@ -31,7 +31,8 @@ export class IntervalsClient {
       try {
         if (!['string', 'number'].includes(typeof event.id) || !String(event.id).length || String(event.id).length > 80 || typeof event.id === 'number' && !Number.isSafeInteger(event.id)) throw Error('Missing workout identity.');
         const plan = importWorkout(JSON.stringify(event), ftp);
-        workouts.push({ id: `intervals:${connection.id}:${riderID}:${event.id}`, riderID, source: `Intervals.icu · ${plan.name}`, savedAt: new Date().toISOString(), plan });
+        const scheduledDate = ScheduledDate.fromIntervalsLocal(event.start_date_local);
+        workouts.push({ id: `intervals:${connection.id}:${riderID}:${event.id}`, riderID, source: `Intervals.icu · ${plan.name}`, savedAt: new Date().toISOString(), plan, ...(scheduledDate ? { scheduledDate } : {}) });
       } catch (e) { skipped.push(`${event?.name ?? 'Untitled workout'}: ${e.message}`); }
     }
     return { workouts, skipped };

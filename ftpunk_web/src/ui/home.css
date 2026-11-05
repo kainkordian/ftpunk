@@ -1,0 +1,13 @@
+.ftp-card .big { font-size: 2.2rem; line-height: 1.1; }
+.ftp-figures { align-items: baseline; }
+.ftp-card .retest { font-weight: 600; }
+.quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-s); }
+.quick-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 90px; padding: var(--space-s); text-align: center; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--ink) 5%, var(--surface)); border: 1px solid var(--card-line); border-radius: var(--radius-card); }
+.quick-tile .symbol { font-size: 1.5rem; }
+.quick-tile.disabled { color: var(--secondary); pointer-events: none; }
+.quick-tile small { color: var(--secondary); font-size: .8125rem; }
+.hint { background: none; }
+.onboarding { max-width: 520px; margin: var(--space-xl) auto; }
+.today-card { display: flex; flex-direction: column; gap: var(--space-s); }
+.today-open { display: flex; flex-direction: column; gap: var(--space-s); width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; color: inherit; }
+.today-open .title { font-size: 1.2rem; }
