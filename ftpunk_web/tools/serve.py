@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class Handler(SimpleHTTPRequestHandler):
+    # HTTP/1.1 keep-alive: the test page loads ~60 modules per frame in ~70 frames; one connection per file made a rare request go missing.
+    protocol_version = 'HTTP/1.1'
     extensions_map = {**SimpleHTTPRequestHandler.extensions_map, '.mjs': 'text/javascript', '.webmanifest': 'application/manifest+json'}
     test_results = None  # set to a list by make_server(test=True)
     web_root = ROOT

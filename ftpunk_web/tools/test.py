@@ -120,20 +120,26 @@ def run_browser():
     port = server.server_address[1]
     threading.Thread(target=server.serve_forever, daemon=True).start()
     profile = tempfile.mkdtemp(prefix='ftpunk-chrome-', dir=os.environ.get('FTPUNK_TMP'))
+    # GitHub-hosted Ubuntu runners restrict the unprivileged user namespaces Chrome's sandbox needs ("No usable sandbox"), and the
+    # runner is a throwaway VM that only opens this app's own test page, so the sandbox is switched off there (CI=true) and nowhere else.
+    sandbox = ['--no-sandbox'] if os.environ.get('CI') else []
+    log = Path(profile) / 'chrome.log'
     chrome = subprocess.Popen(
         [chrome_path(), '--headless=new', f'--user-data-dir={profile}', '--remote-debugging-port=0', '--no-first-run',
-         '--no-default-browser-check', '--disable-gpu', '--disable-extensions', '--disable-background-networking',
+         '--no-default-browser-check', '--disable-gpu', '--disable-extensions', '--disable-background-networking', *sandbox,
          f'http://localhost:{port}/tests/'],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        stdout=subprocess.DEVNULL, stderr=log.open('wb'), start_new_session=True)
     try:
         deadline = time.time() + TIMEOUT
         while time.time() < deadline:
             if results:
                 return results[0]
             if chrome.poll() is not None:
-                return {'passed': 0, 'failed': 1, 'failures': ['Chrome exited before the suite reported a result.']}
+                tail = log.read_text(errors='replace').strip().splitlines()[-15:] if log.exists() else []
+                return {'passed': 0, 'failed': 1, 'failures': ['Chrome exited before the suite reported a result.', *tail]}
             time.sleep(0.25)
-        return {'passed': 0, 'failed': 1, 'failures': [f'Timed out after {TIMEOUT} seconds without a result.']}
+        tail = log.read_text(errors='replace').strip().splitlines()[-15:] if log.exists() else []
+        return {'passed': 0, 'failed': 1, 'failures': [f'Timed out after {TIMEOUT} seconds without a result.', *tail]}
     finally:
         try:
             os.killpg(chrome.pid, 9)
