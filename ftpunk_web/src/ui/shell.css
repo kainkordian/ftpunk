@@ -19,7 +19,10 @@ body[data-route="ride"] .tabbar, body[data-route="preflight"] .tabbar, body[data
 body[data-route="preflight"] .live-bar, body[data-route="result"] .live-bar, body[data-route="activity"] .live-bar { bottom: 0; }
 .live-summary { flex: 1 1 160px; font-weight: 700; font-variant-numeric: tabular-nums; }
 #notice { margin: var(--space-s) var(--space-l) 0; }
-.screen-header { display: flex; align-items: center; gap: var(--space-s); margin-bottom: var(--space-l); min-height: 44px; }
+.screen-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-s); margin-bottom: var(--space-l); min-height: 44px; }
+/* Rider, title and the Devices pill wrap onto a second line when the window or the system font is too narrow for one row (seen on Linux and a 360 px phone). */
+.screen-header h1 { min-width: 0; }
+.screen-header .devices-pill { margin-left: auto; }
 .screen-header h1 { font-size: 1.5rem; }
 .back { font-size: 2rem; text-decoration: none; margin-left: -8px; }
 .rider-chip, .devices-pill { display: inline-flex; align-items: center; gap: var(--space-s); min-height: 44px; padding: 0 var(--space-s); border: 0; background: none; cursor: pointer; font-weight: 600; }

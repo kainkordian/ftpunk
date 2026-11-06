@@ -111,8 +111,8 @@ test('The rider sheet switches riders and the devices sheet opens from the pill'
   a.q('.devices-pill').click(); await a.wait(() => a.q('#dialog').open && a.q('#dialog').textContent.includes('Smart trainer'), 'devices sheet'); a.q('#dialog [data-dialog="close"]').click();
 }));
 
-test('No scenario overflows the page sideways on a phone (390 px) or a desktop window (1280 px)', async () => {
-  for (const [width, height] of [[390, 844], [1280, 800]]) for (const name of scenarioNames()) await scenario(name, async a => {
+test('No scenario overflows the page sideways on a small phone (360 px), a phone (390 px) or a desktop window (1280 px)', async () => {
+  for (const [width, height] of [[360, 800], [390, 844], [1280, 800]]) for (const name of scenarioNames()) await scenario(name, async a => {
     const root = a.doc.documentElement, wide = [...a.doc.querySelectorAll('main *')].filter(e => e.getBoundingClientRect().right > root.clientWidth + 1 && !e.closest('.chips, .profile, svg, dialog, [hidden]'));
     assert(root.scrollWidth <= root.clientWidth + 1, `${name} at ${width}px scrolls sideways (${root.scrollWidth} > ${root.clientWidth}); first wide element: ${wide[0]?.tagName}.${wide[0]?.className}`);
   }, { width, height });
