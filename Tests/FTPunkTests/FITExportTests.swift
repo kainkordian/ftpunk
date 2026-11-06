@@ -148,7 +148,9 @@ private func pausedWorkout() throws -> TestSession {
     // One lap per step, the later ones shifted by the pause (step 2 ends at 5 + 600 s of riding + 59 s).
     let laps = file.all(19).map { $0.fields[2] ?? 0 }.map { $0 - epoch }
     #expect(laps == [0, 305, 664])
-    #expect(file.all(19).map { $0.fields[8] } == [305_000, 359_000 - 59_000, 300_000])
+    let lapTimes: [UInt64?] = file.all(19).map { $0.fields[8] }
+    let expectedLapTimes: [UInt64?] = [305_000, 300_000, 300_000]   // 359 000 - 59 000 = 300 000
+    #expect(lapTimes == expectedLapTimes)
 }
 
 @Test func fitDescribesAnIndoorCyclingActivityWithTheRidersFTP() throws {

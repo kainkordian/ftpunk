@@ -213,7 +213,9 @@ private func ready(_ kind: RideKindID = .ftpTest, _ change: (inout StartReadines
 @Test func averagePowerIgnoresGapsAndIsTimeWeighted() {
     let samples = [RideSample(time: 0, power: 100), RideSample(time: 1, power: 200), RideSample(time: 3, power: 300), RideSample(time: 20, power: 50)]
     // 0–1 s at 100 W, 1–3 s at 200 W, 3–20 s capped at 2 s of 300 W.
-    #expect(abs((RideStats.averagePower(samples) ?? 0) - (100 * 1 + 200 * 2 + 300 * 2) / 5) < 1e-9)
+    let expectedAverage: Double = (100.0 * 1.0 + 200.0 * 2.0 + 300.0 * 2.0) / 5.0
+    let actualAverage: Double = RideStats.averagePower(samples) ?? 0
+    #expect(abs(actualAverage - expectedAverage) < 1e-9)
     #expect(RideStats.averagePower([]) == nil)
     #expect(RideStats.averagePower([RideSample(time: 0, power: nil), RideSample(time: 1, power: nil)]) == nil)
 }
