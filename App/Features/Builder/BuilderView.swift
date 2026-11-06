@@ -305,7 +305,7 @@ private struct StepEditor: View {
                 Stepper("Duration", value: Binding(get: { step.seconds }, set: { step.seconds = min(14400, max(5, $0)); durationText = CustomWorkout.durationText(step.seconds); durationInvalid = false }),
                         in: 5...14400, step: 15).labelsHidden()
             }
-            Picker("Unit", selection: Binding(get: { isPercent }, set: setUnit)) {
+            Picker("Unit", selection: Binding(get: { isPercent }, set: { setUnit($0) })) {
                 Text("% FTP").tag(true); Text("W").tag(false)
             }.pickerStyle(.segmented).accessibilityLabel("Target unit")
             targetRow(title: isRamp ? "From" : "Target", value: Binding(get: { step.start }, set: { step.start = $0 }))

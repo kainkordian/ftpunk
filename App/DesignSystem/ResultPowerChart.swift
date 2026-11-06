@@ -63,13 +63,13 @@ struct ResultPowerChart: View {
                 ZStack(alignment: .topLeading) {
                     ForEach(Array(bands.enumerated()), id: \.offset) { _, band in
                         if let start = proxy.position(forX: band.start / 60), let end = proxy.position(forX: band.end / 60),
-                           let text = ResultChartLayout.fittingLabel(for: band.title, availableWidth: end - start - 8, characterWidth: phaseCharacterWidth) {
+                           let text = ResultChartLayout.fittingLabel(for: band.title, availableWidth: Double(end - start) - 8, characterWidth: phaseCharacterWidth) {
                             Text(text).font(.caption2).foregroundStyle(Theme.secondary).lineLimit(1).fixedSize()
                                 .offset(x: plot.minX + start + 4, y: plot.minY + 2)
                         }
                     }
                     if let best, let start = proxy.position(forX: best.start / 60), let end = proxy.position(forX: best.end / 60),
-                       let text = ResultChartLayout.fittingLabel(for: best.title, availableWidth: plot.width - 8, characterWidth: bestCharacterWidth) {
+                       let text = ResultChartLayout.fittingLabel(for: best.title, availableWidth: Double(plot.width) - 8, characterWidth: bestCharacterWidth) {
                         let width = ResultChartLayout.estimatedWidth(of: text, characterWidth: bestCharacterWidth) + 8
                         Text(text).font(.caption.weight(.bold)).foregroundStyle(Theme.accent).lineLimit(1).fixedSize()
                             .padding(.horizontal, 4).padding(.vertical, 1)
