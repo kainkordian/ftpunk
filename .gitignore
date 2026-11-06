@@ -16,3 +16,4 @@ xcuserdata/
 *.mobileprovision
 *.log
 .vscode/
+.claude/worktrees/

@@ -1,0 +1,4901 @@
+{
+  "configuration" : {
+    "cadenceSource" : "trainer",
+    "cooldownSeconds" : 180,
+    "ftpFactor" : 0.72,
+    "maximumPower" : 600,
+    "maximumRampSeconds" : 1800,
+    "powerMatchingEnabled" : false,
+    "powerSource" : "trainer",
+    "preset" : "standard",
+    "priorFTP" : {
+      "date" : "2026-11-03T10:00:00Z",
+      "id" : "F7000000-0000-4000-8000-000000000230",
+      "source" : "Manual",
+      "watts" : 230
+    },
+    "protocolVersion" : 3,
+    "riderID" : "A1E00000-0000-4000-8000-000000000001",
+    "riderName" : "Alex",
+    "usesAutomaticWarmup" : true,
+    "warmupPower" : 115,
+    "warmupSeconds" : 600,
+    "weightKG" : 71
+  },
+  "devices" : [
+
+  ],
+  "endedAtOffset" : 964,
+  "events" : [
+    {
+      "message" : "Training",
+      "time" : 5
+    },
+    {
+      "message" : "Training paused; trainer release requested",
+      "time" : 400
+    },
+    {
+      "message" : "Trainer release confirmed for pause",
+      "time" : 401
+    },
+    {
+      "message" : "Training resumed",
+      "time" : 460
+    }
+  ],
+  "id" : "5EED0002-0000-4000-8000-00000000F002",
+  "isDemo" : false,
+  "outcome" : "completed",
+  "samples" : [
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 0
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 1
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 2
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 3
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 4
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 5
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 6
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 7
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 8
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 9
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 10
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 11
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 12
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 13
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 14
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 15
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 16
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 17
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 18
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 19
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 20
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 21
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 22
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 23
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 24
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 25
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 26
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 27
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 28
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 29
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 30
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 31
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 32
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 33
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 34
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 35
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 36
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 37
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 38
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 39
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 40
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 41
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 42
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 43
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 44
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 45
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 46
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 47
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 48
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 49
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 50
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 51
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 52
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 53
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 54
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 55
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 56
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 57
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 58
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 59
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 60
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 61
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 62
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 63
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 64
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 65
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 66
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 67
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 68
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 69
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 70
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 71
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 72
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 73
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 74
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 75
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 76
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 77
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 78
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 79
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 80
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 81
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 82
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 83
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 84
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 85
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 86
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 87
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 88
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 89
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 90
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 91
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 92
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 93
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 94
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 95
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 96
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 97
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 98
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 99
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 100
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 101
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 102
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 103
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 104
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 105
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 106
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 107
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 108
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 109
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 110
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 111
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 112
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 113
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 114
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 115
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 116
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 117
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 118
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 119
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 120
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 121
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 122
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 123
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 124
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 125
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 126
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 127
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 128
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 129
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 130
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 131
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 132
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 133
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 134
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 135
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 136
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 137
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 138
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 139
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 140
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 141
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 142
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 143
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 144
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 145
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 146
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 147
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 148
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 149
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 150
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 151
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 152
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 153
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 154
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 155
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 156
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 157
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 158
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 159
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 160
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 161
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 162
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 163
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 164
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 165
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 166
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 167
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 168
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 169
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 170
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 171
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 172
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 173
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 174
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 175
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 176
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 177
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 178
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 179
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 180
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 181
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 182
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 183
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 184
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 185
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 186
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 187
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 188
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 189
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 190
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 191
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 192
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 193
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 194
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 195
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 196
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 197
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 198
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 199
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 200
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 201
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 202
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 203
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 204
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 205
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 206
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 207
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 208
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 209
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 210
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 211
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 212
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 213
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 214
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 215
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 216
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 217
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 218
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 219
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 220
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 221
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 222
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 223
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 224
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 225
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 226
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 227
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 228
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 229
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 230
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 231
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 232
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 233
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 234
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 235
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 236
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 237
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 238
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 239
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 240
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 241
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 242
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 243
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 244
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 245
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 246
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 247
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 248
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 249
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 250
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 251
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 252
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 253
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 254
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 255
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 256
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 257
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 258
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 259
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 260
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 261
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 262
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 263
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 264
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 265
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 266
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 267
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 268
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 269
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 270
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 271
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 272
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 273
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 274
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 275
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 276
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 277
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 278
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 279
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 280
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 281
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 282
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 283
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 284
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 285
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 286
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 287
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 288
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 289
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 290
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 291
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 292
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 293
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 294
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 295
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 296
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 297
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 298
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 299
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 300
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 301
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 302
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 303
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 304
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 305
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 306
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 307
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 308
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 309
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 310
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 311
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 312
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 313
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 314
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 315
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 316
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 317
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 318
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 319
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 320
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 321
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 322
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 323
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 324
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 325
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 326
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 327
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 328
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 329
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 330
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 331
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 332
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 333
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 334
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 335
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 336
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 337
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 338
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 339
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 340
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 341
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 342
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 343
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 344
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 345
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 346
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 347
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 348
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 349
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 350
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 351
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 352
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 353
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 354
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 355
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 356
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 357
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 358
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 359
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 360
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 361
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 362
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 363
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 364
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 365
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 366
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 367
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 368
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 369
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 370
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 371
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 372
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 373
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 374
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 375
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 376
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 377
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 378
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 379
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 380
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 381
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 382
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 383
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 384
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 385
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 386
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 387
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 388
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 389
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 390
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 391
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 392
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 393
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 394
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 395
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 396
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 397
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 398
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 399
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 400
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 401
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 402
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 403
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 404
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 405
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 406
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 407
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 408
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 409
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 410
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 411
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 412
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 413
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 414
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 415
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 416
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 417
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 418
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 419
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 420
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 421
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 422
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 423
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 424
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 425
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 426
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 427
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 428
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 429
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 430
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 431
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 432
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 433
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 434
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 435
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 436
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 437
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 438
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 439
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 440
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 441
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 442
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 443
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 444
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 445
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 446
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 447
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 448
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 449
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 450
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 451
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 452
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 453
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 454
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 455
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 456
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 457
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 458
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 459
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 460
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 461
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 462
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 463
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 464
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 465
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 466
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 467
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 468
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 469
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 470
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 471
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 472
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 473
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 474
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 475
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 476
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 477
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 478
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 479
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 480
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 481
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 482
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 483
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 484
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 485
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 486
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 487
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 488
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 489
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 490
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 491
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 492
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 493
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 494
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 495
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 496
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 497
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 498
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 499
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 500
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 501
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 502
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 503
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 504
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 505
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 506
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 507
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 508
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 509
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 510
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 511
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 512
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 513
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 514
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 515
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 516
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 517
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 518
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 519
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 520
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 521
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 522
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 523
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 524
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 525
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 526
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 527
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 528
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 529
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 530
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 531
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 532
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 533
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 534
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 535
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 536
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 537
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 538
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 539
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 540
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 541
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 542
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 543
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 544
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 545
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 546
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 547
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 548
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 549
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 550
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 551
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 552
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 553
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 554
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 555
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 556
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 557
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 558
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 559
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 560
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 561
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 562
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 563
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 564
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 565
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 566
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 567
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 568
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 569
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 570
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 571
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 572
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 573
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 574
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 575
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 576
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 577
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 578
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 579
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 580
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 581
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 582
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 583
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 584
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 585
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 586
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 587
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 588
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 589
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 590
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 591
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 592
+    },
+    {
+      "cadence" : 86,
+      "power" : 209,
+      "time" : 593
+    },
+    {
+      "cadence" : 87,
+      "power" : 207,
+      "time" : 594
+    },
+    {
+      "cadence" : 88,
+      "power" : 208,
+      "time" : 595
+    },
+    {
+      "cadence" : 85,
+      "power" : 209,
+      "time" : 596
+    },
+    {
+      "cadence" : 86,
+      "power" : 207,
+      "time" : 597
+    },
+    {
+      "cadence" : 87,
+      "power" : 208,
+      "time" : 598
+    },
+    {
+      "cadence" : 88,
+      "power" : 209,
+      "time" : 599
+    },
+    {
+      "cadence" : 85,
+      "power" : 207,
+      "time" : 600
+    },
+    {
+      "cadence" : 86,
+      "power" : 208,
+      "time" : 601
+    },
+    {
+      "cadence" : 87,
+      "power" : 209,
+      "time" : 602
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 603
+    },
+    {
+      "cadence" : 85,
+      "power" : 208,
+      "time" : 604
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 605
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 606
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 607
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 608
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 609
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 610
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 611
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 612
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 613
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 614
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 615
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 616
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 617
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 618
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 619
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 620
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 621
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 622
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 623
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 624
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 625
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 626
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 627
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 628
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 629
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 630
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 631
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 632
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 633
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 634
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 635
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 636
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 637
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 638
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 639
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 640
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 641
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 642
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 643
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 644
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 645
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 646
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 647
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 648
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 649
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 650
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 651
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 652
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 653
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 654
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 655
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 656
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 657
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 658
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 659
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 660
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 661
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 662
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 663
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 664
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 665
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 666
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 667
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 668
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 669
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 670
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 671
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 672
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 673
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 674
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 675
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 676
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 677
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 678
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 679
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 680
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 681
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 682
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 683
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 684
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 685
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 686
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 687
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 688
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 689
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 690
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 691
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 692
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 693
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 694
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 695
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 696
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 697
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 698
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 699
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 700
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 701
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 702
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 703
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 704
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 705
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 706
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 707
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 708
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 709
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 710
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 711
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 712
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 713
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 714
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 715
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 716
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 717
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 718
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 719
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 720
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 721
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 722
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 723
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 724
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 725
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 726
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 727
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 728
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 729
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 730
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 731
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 732
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 733
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 734
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 735
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 736
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 737
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 738
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 739
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 740
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 741
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 742
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 743
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 744
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 745
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 746
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 747
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 748
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 749
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 750
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 751
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 752
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 753
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 754
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 755
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 756
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 757
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 758
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 759
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 760
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 761
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 762
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 763
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 764
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 765
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 766
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 767
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 768
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 769
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 770
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 771
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 772
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 773
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 774
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 775
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 776
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 777
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 778
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 779
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 780
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 781
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 782
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 783
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 784
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 785
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 786
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 787
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 788
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 789
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 790
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 791
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 792
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 793
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 794
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 795
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 796
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 797
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 798
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 799
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 800
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 801
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 802
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 803
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 804
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 805
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 806
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 807
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 808
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 809
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 810
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 811
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 812
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 813
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 814
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 815
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 816
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 817
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 818
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 819
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 820
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 821
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 822
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 823
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 824
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 825
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 826
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 827
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 828
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 829
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 830
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 831
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 832
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 833
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 834
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 835
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 836
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 837
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 838
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 839
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 840
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 841
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 842
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 843
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 844
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 845
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 846
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 847
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 848
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 849
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 850
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 851
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 852
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 853
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 854
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 855
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 856
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 857
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 858
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 859
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 860
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 861
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 862
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 863
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 864
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 865
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 866
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 867
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 868
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 869
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 870
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 871
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 872
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 873
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 874
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 875
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 876
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 877
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 878
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 879
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 880
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 881
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 882
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 883
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 884
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 885
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 886
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 887
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 888
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 889
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 890
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 891
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 892
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 893
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 894
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 895
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 896
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 897
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 898
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 899
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 900
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 901
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 902
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 903
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 904
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 905
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 906
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 907
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 908
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 909
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 910
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 911
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 912
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 913
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 914
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 915
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 916
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 917
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 918
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 919
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 920
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 921
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 922
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 923
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 924
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 925
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 926
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 927
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 928
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 929
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 930
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 931
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 932
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 933
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 934
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 935
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 936
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 937
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 938
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 939
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 940
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 941
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 942
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 943
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 944
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 945
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 946
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 947
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 948
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 949
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 950
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 951
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 952
+    },
+    {
+      "cadence" : 86,
+      "power" : 117,
+      "time" : 953
+    },
+    {
+      "cadence" : 87,
+      "power" : 115,
+      "time" : 954
+    },
+    {
+      "cadence" : 88,
+      "power" : 116,
+      "time" : 955
+    },
+    {
+      "cadence" : 85,
+      "power" : 117,
+      "time" : 956
+    },
+    {
+      "cadence" : 86,
+      "power" : 115,
+      "time" : 957
+    },
+    {
+      "cadence" : 87,
+      "power" : 116,
+      "time" : 958
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 959
+    },
+    {
+      "cadence" : 85,
+      "power" : 115,
+      "time" : 960
+    },
+    {
+      "cadence" : 86,
+      "power" : 116,
+      "time" : 961
+    },
+    {
+      "cadence" : 87,
+      "power" : 117,
+      "time" : 962
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 963
+    },
+    {
+      "cadence" : 85,
+      "power" : 116,
+      "time" : 964
+    }
+  ],
+  "startedAt" : "2026-11-03T10:00:00Z",
+  "training" : {
+    "ftpWatts" : 230,
+    "kind" : "workout",
+    "name" : "Sweet spot",
+    "steps" : [
+      {
+        "name" : "Warm-up",
+        "seconds" : 300,
+        "watts" : 115
+      },
+      {
+        "name" : "Work",
+        "seconds" : 300,
+        "watts" : 207
+      },
+      {
+        "name" : "Cool-down",
+        "seconds" : 300,
+        "watts" : 115
+      }
+    ],
+    "version" : 1
+  }
+}

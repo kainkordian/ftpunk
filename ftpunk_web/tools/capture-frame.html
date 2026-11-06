@@ -1,0 +1,8 @@
+<!doctype html>
+<!-- Used by tools/capture.py for phone sizes: desktop Chrome will not make a window narrower than about 500 px, so the app is centred
+     in an iframe of the exact size and the screenshot is cropped to it (sips crops around the centre). -->
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}iframe{border:0;display:block;margin:0 auto}</style></head>
+<body><script>
+const p = new URLSearchParams(location.search), f = document.createElement('iframe');
+f.width = p.get('w'); f.height = p.get('h'); f.src = p.get('src'); document.body.append(f);
+</script></body></html>

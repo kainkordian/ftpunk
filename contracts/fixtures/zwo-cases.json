@@ -1,0 +1,726 @@
+{
+  "exports" : [
+    {
+      "fileName" : "FTPunk-Over-under-x.zwo",
+      "name" : "escapes text and uses the plan's FTP",
+      "plan" : {
+        "ftpWatts" : 200,
+        "kind" : "workout",
+        "name" : "Over & <under> \"x\"",
+        "steps" : [
+          {
+            "name" : "a",
+            "seconds" : 60,
+            "watts" : 150
+          },
+          {
+            "endWatts" : 250,
+            "name" : "b",
+            "seconds" : 90.400000000000006,
+            "watts" : 100
+          }
+        ],
+        "version" : 2
+      },
+      "riderFTP" : 999,
+      "xml" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workout_file>\n    <author>FTPunk<\/author>\n    <name>Over &amp; &lt;under&gt; &quot;x&quot;<\/name>\n    <description><\/description>\n    <sportType>bike<\/sportType>\n    <tags\/>\n    <workout>\n        <SteadyState Duration=\"60\" Power=\"0.750\"\/>\n        <Ramp Duration=\"90\" PowerLow=\"0.500\" PowerHigh=\"1.250\"\/>\n    <\/workout>\n<\/workout_file>\n"
+    },
+    {
+      "fileName" : "FTPunk-Plain.zwo",
+      "name" : "watt plan uses the rider's FTP",
+      "plan" : {
+        "ftpWatts" : null,
+        "kind" : "workout",
+        "name" : "Plain",
+        "steps" : [
+          {
+            "name" : "a",
+            "seconds" : 60,
+            "watts" : 150
+          }
+        ],
+        "version" : 1
+      },
+      "riderFTP" : 300,
+      "xml" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workout_file>\n    <author>FTPunk<\/author>\n    <name>Plain<\/name>\n    <description><\/description>\n    <sportType>bike<\/sportType>\n    <tags\/>\n    <workout>\n        <SteadyState Duration=\"60\" Power=\"0.500\"\/>\n    <\/workout>\n<\/workout_file>\n"
+    },
+    {
+      "error" : "Set an FTP first: ZWO powers are fractions of FTP.",
+      "fileName" : "FTPunk-Plain.zwo",
+      "name" : "watt plan without an FTP",
+      "plan" : {
+        "ftpWatts" : null,
+        "kind" : "workout",
+        "name" : "Plain",
+        "steps" : [
+          {
+            "name" : "a",
+            "seconds" : 60,
+            "watts" : 150
+          }
+        ],
+        "version" : 1
+      },
+      "riderFTP" : null
+    },
+    {
+      "error" : "Only timed power workouts can be exported as ZWO.",
+      "fileName" : "FTPunk-Resistance-ride.zwo",
+      "name" : "resistance ride",
+      "plan" : {
+        "ftpWatts" : null,
+        "kind" : "freeRide",
+        "name" : "Resistance ride",
+        "steps" : [
+          {
+            "name" : "Ride at your own pace",
+            "seconds" : 86400,
+            "watts" : 1
+          }
+        ],
+        "version" : 2
+      },
+      "riderFTP" : 250
+    },
+    {
+      "fileName" : "FTPunk-Sweet-spot-3-10.zwo",
+      "name" : "a library workout",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Sweet spot 3×10",
+        "steps" : [
+          {
+            "name" : "Warm-up",
+            "seconds" : 600,
+            "watts" : 125
+          },
+          {
+            "name" : "Sweet spot 1 of 3",
+            "seconds" : 600,
+            "watts" : 225
+          },
+          {
+            "name" : "Recovery",
+            "seconds" : 300,
+            "watts" : 125
+          },
+          {
+            "name" : "Sweet spot 2 of 3",
+            "seconds" : 600,
+            "watts" : 225
+          },
+          {
+            "name" : "Recovery",
+            "seconds" : 300,
+            "watts" : 125
+          },
+          {
+            "name" : "Sweet spot 3 of 3",
+            "seconds" : 600,
+            "watts" : 225
+          },
+          {
+            "name" : "Cool-down",
+            "seconds" : 300,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "riderFTP" : null,
+      "xml" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workout_file>\n    <author>FTPunk<\/author>\n    <name>Sweet spot 3×10<\/name>\n    <description><\/description>\n    <sportType>bike<\/sportType>\n    <tags\/>\n    <workout>\n        <SteadyState Duration=\"600\" Power=\"0.500\"\/>\n        <SteadyState Duration=\"600\" Power=\"0.900\"\/>\n        <SteadyState Duration=\"300\" Power=\"0.500\"\/>\n        <SteadyState Duration=\"600\" Power=\"0.900\"\/>\n        <SteadyState Duration=\"300\" Power=\"0.500\"\/>\n        <SteadyState Duration=\"600\" Power=\"0.900\"\/>\n        <SteadyState Duration=\"300\" Power=\"0.500\"\/>\n    <\/workout>\n<\/workout_file>\n"
+    },
+    {
+      "fileName" : "FTPunk-Ramps-n-code-100-done.zwo",
+      "name" : "a plan with ramps and half seconds",
+      "plan" : {
+        "ftpWatts" : 233,
+        "kind" : "workout",
+        "name" : "Ramps ünïcode 100% – done",
+        "steps" : [
+          {
+            "endWatts" : 351,
+            "name" : "a",
+            "seconds" : 0.40000000000000002,
+            "watts" : 117
+          },
+          {
+            "name" : "b",
+            "seconds" : 30.5,
+            "watts" : 1
+          }
+        ],
+        "version" : 2
+      },
+      "riderFTP" : null,
+      "xml" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workout_file>\n    <author>FTPunk<\/author>\n    <name>Ramps ünïcode 100% – done<\/name>\n    <description><\/description>\n    <sportType>bike<\/sportType>\n    <tags\/>\n    <workout>\n        <Ramp Duration=\"1\" PowerLow=\"0.502\" PowerHigh=\"1.506\"\/>\n        <SteadyState Duration=\"31\" Power=\"0.004\"\/>\n    <\/workout>\n<\/workout_file>\n"
+    },
+    {
+      "fileName" : "FTPunk-Workout.zwo",
+      "name" : "a name with no letters",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "--- ###",
+        "steps" : [
+          {
+            "name" : "a",
+            "seconds" : 60,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "riderFTP" : null,
+      "xml" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workout_file>\n    <author>FTPunk<\/author>\n    <name>--- ###<\/name>\n    <description><\/description>\n    <sportType>bike<\/sportType>\n    <tags\/>\n    <workout>\n        <SteadyState Duration=\"60\" Power=\"0.500\"\/>\n    <\/workout>\n<\/workout_file>\n"
+    }
+  ],
+  "format" : "ftpunk-zwo-cases",
+  "imports" : [
+    {
+      "file" : "workout-example.zwo",
+      "ftp" : 250,
+      "name" : "the example at 250 W",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "ZWO example",
+        "steps" : [
+          {
+            "endWatts" : 188,
+            "name" : "Warm-up",
+            "seconds" : 300,
+            "watts" : 125
+          },
+          {
+            "name" : "Steady",
+            "seconds" : 120,
+            "watts" : 163
+          },
+          {
+            "endWatts" : 238,
+            "name" : "Ramp",
+            "seconds" : 120,
+            "watts" : 175
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 263
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 138
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 263
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 138
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 263
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 138
+          },
+          {
+            "endWatts" : 300,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 225
+          },
+          {
+            "endWatts" : 125,
+            "name" : "Off",
+            "seconds" : 60,
+            "watts" : 150
+          },
+          {
+            "endWatts" : 300,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 225
+          },
+          {
+            "endWatts" : 125,
+            "name" : "Off",
+            "seconds" : 60,
+            "watts" : 150
+          },
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 200
+          },
+          {
+            "endWatts" : 100,
+            "name" : "Cool-down",
+            "seconds" : 300,
+            "watts" : 188
+          }
+        ],
+        "version" : 2
+      }
+    },
+    {
+      "file" : "workout-example.zwo",
+      "ftp" : 180,
+      "name" : "the example at 180 W",
+      "plan" : {
+        "ftpWatts" : 180,
+        "kind" : "workout",
+        "name" : "ZWO example",
+        "steps" : [
+          {
+            "endWatts" : 135,
+            "name" : "Warm-up",
+            "seconds" : 300,
+            "watts" : 90
+          },
+          {
+            "name" : "Steady",
+            "seconds" : 120,
+            "watts" : 117
+          },
+          {
+            "endWatts" : 171,
+            "name" : "Ramp",
+            "seconds" : 120,
+            "watts" : 126
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 189
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 99
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 189
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 99
+          },
+          {
+            "name" : "On",
+            "seconds" : 180,
+            "watts" : 189
+          },
+          {
+            "name" : "Off",
+            "seconds" : 120,
+            "watts" : 99
+          },
+          {
+            "endWatts" : 216,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 162
+          },
+          {
+            "endWatts" : 90,
+            "name" : "Off",
+            "seconds" : 60,
+            "watts" : 108
+          },
+          {
+            "endWatts" : 216,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 162
+          },
+          {
+            "endWatts" : 90,
+            "name" : "Off",
+            "seconds" : 60,
+            "watts" : 108
+          },
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 144
+          },
+          {
+            "endWatts" : 72,
+            "name" : "Cool-down",
+            "seconds" : 300,
+            "watts" : 135
+          }
+        ],
+        "version" : 2
+      }
+    },
+    {
+      "error" : "Set an FTP first: ZWO powers are fractions of FTP.",
+      "ftp" : null,
+      "name" : "no FTP",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Set an FTP first: ZWO powers are fractions of FTP.",
+      "ftp" : 0,
+      "name" : "zero FTP",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "This workout has a free-ride or maximal-effort step, which has no power target. Those are unsupported.",
+      "ftp" : 250,
+      "name" : "free ride",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><FreeRide Duration=\"600\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "This workout has a free-ride or maximal-effort step, which has no power target. Those are unsupported.",
+      "ftp" : 250,
+      "name" : "max effort",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><MaxEffort Duration=\"30\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "This workout has a free-ride or maximal-effort step, which has no power target. Those are unsupported.",
+      "ftp" : 250,
+      "name" : "solid state without power",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SolidState Duration=\"30\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "solid state steady",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 30,
+            "watts" : 225
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SolidState Duration=\"30\" Power=\"0.9\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "solid state ramp",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "endWatts" : 250,
+            "name" : "Ramp",
+            "seconds" : 30,
+            "watts" : 125
+          }
+        ],
+        "version" : 2
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SolidState Duration=\"30\" PowerLow=\"0.5\" PowerHigh=\"1.0\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Only cycling (bike) workouts are supported.",
+      "ftp" : 250,
+      "name" : "sport is run",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>run<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "sport is absent",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "sport is BIKE in capitals",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType> BIKE <\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "empty file",
+      "xml" : ""
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "not xml",
+      "xml" : "not xml"
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "unclosed",
+      "xml" : "<workout_file><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout>"
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "other root",
+      "xml" : "<other\/>"
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "doctype with entity",
+      "xml" : "<!DOCTYPE workout_file [<!ENTITY a \"b\">]><workout_file><workout\/><\/workout_file>"
+    },
+    {
+      "error" : "This is not a valid ZWO workout file.",
+      "ftp" : 250,
+      "name" : "doctype alone",
+      "xml" : "<!DOCTYPE workout_file><workout_file><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "The workout contains no steps.",
+      "ftp" : 250,
+      "name" : "no steps",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "ZWO powers are fractions of FTP (for example 0.75), and every step needs one.",
+      "ftp" : 250,
+      "name" : "watts instead of a fraction",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"200\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "ZWO powers are fractions of FTP (for example 0.75), and every step needs one.",
+      "ftp" : 250,
+      "name" : "missing power",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "ZWO powers are fractions of FTP (for example 0.75), and every step needs one.",
+      "ftp" : 250,
+      "name" : "ramp with one end",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><Ramp Duration=\"60\" PowerLow=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Every step must have a timed power target; free, distance and lap steps are unsupported.",
+      "ftp" : 250,
+      "name" : "missing duration",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Every step must have a timed power target; free, distance and lap steps are unsupported.",
+      "ftp" : 250,
+      "name" : "negative duration",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"-5\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Invalid repeat count.",
+      "ftp" : 250,
+      "name" : "repeat 101",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"101\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Invalid repeat count.",
+      "ftp" : 250,
+      "name" : "repeat 0",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"0\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Invalid repeat count.",
+      "ftp" : 250,
+      "name" : "repeat 2.5",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"2.5\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "intervals with ramps",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "endWatts" : 275,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 200
+          },
+          {
+            "name" : "Off",
+            "seconds" : 30,
+            "watts" : 125
+          },
+          {
+            "endWatts" : 275,
+            "name" : "On",
+            "seconds" : 60,
+            "watts" : 200
+          },
+          {
+            "name" : "Off",
+            "seconds" : 30,
+            "watts" : 125
+          }
+        ],
+        "version" : 2
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"2\" OnDuration=\"60\" OffDuration=\"30\" PowerOnLow=\"0.8\" PowerOnHigh=\"1.1\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "ZWO powers are fractions of FTP (for example 0.75), and every step needs one.",
+      "ftp" : 250,
+      "name" : "intervals with half a ramp",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"2\" OnDuration=\"60\" OffDuration=\"30\" PowerOnLow=\"0.8\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Workout repeats are too deeply nested or too large.",
+      "ftp" : 250,
+      "name" : "too many steps",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><IntervalsT Repeat=\"100\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><IntervalsT Repeat=\"100\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><IntervalsT Repeat=\"100\" OnDuration=\"10\" OffDuration=\"10\" OnPower=\"1\" OffPower=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Workout repeats are too deeply nested or too large.",
+      "ftp" : 250,
+      "name" : "longer than a day",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"86000\" Power=\"0.5\"\/><SteadyState Duration=\"86000\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Every step must have a timed power target; free, distance and lap steps are unsupported.",
+      "ftp" : 250,
+      "name" : "one step over a day",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"86401\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "textevent and cadence are ignored",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 125
+          },
+          {
+            "endWatts" : 75,
+            "name" : "Cool-down",
+            "seconds" : 120,
+            "watts" : 150
+          }
+        ],
+        "version" : 2
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\" Cadence=\"90\"><textevent timeoffset=\"0\" message=\"Go\"\/><\/SteadyState><Cooldown Duration=\"120\" PowerLow=\"0.6\" PowerHigh=\"0.3\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "a long name is cut to 100 characters",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 250,
+      "name" : "a blank name",
+      "plan" : {
+        "ftpWatts" : 250,
+        "kind" : "workout",
+        "name" : "Imported workout",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 125
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>   <\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.5\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "ftp" : 233,
+      "name" : "rounding to whole watts",
+      "plan" : {
+        "ftpWatts" : 233,
+        "kind" : "workout",
+        "name" : "Test",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 132
+          },
+          {
+            "name" : "Steady",
+            "seconds" : 60,
+            "watts" : 234
+          }
+        ],
+        "version" : 1
+      },
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.567\"\/><SteadyState Duration=\"60\" Power=\"1.005\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "Power targets must be positive watts within the supported file range.",
+      "ftp" : 100,
+      "name" : "power that rounds to zero watts",
+      "xml" : "<?xml version=\"1.0\"?><workout_file><name>Test<\/name><sportType>bike<\/sportType><workout><SteadyState Duration=\"60\" Power=\"0.001\"\/><\/workout><\/workout_file>"
+    },
+    {
+      "error" : "This workout has a free-ride or maximal-effort step, which has no power target. Those are unsupported.",
+      "ftp" : 250,
+      "name" : "sport after the workout, with a bad step first",
+      "xml" : "<workout_file><workout><FreeRide Duration=\"60\"\/><\/workout><sportType>run<\/sportType><\/workout_file>"
+    }
+  ],
+  "version" : 1
+}

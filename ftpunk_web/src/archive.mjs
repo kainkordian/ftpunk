@@ -1,5 +1,6 @@
 import { validateCachedWorkout } from './workouts.mjs';
 import { validatePlan, validateProgress } from './training.mjs';
+import { validateCustomWorkout, LIMITS as CUSTOM_LIMITS } from './custom-workouts.mjs';
 // Portable v1 uses the native ramp payload with ISO-8601 dates. Internal browser
 // configuration remains unchanged; adapters preserve its numeric prior FTP.
 import { PRESETS } from './domain.mjs';
@@ -33,6 +34,14 @@ export function validateArchive(input) {
   const workouts = (input.workouts ?? []).map(validateCachedWorkout);
   require(workouts.length <= 2000 && (input.version >= 3 || !workouts.length) && new Set(workouts.map(w => w.id)).size === workouts.length && workouts.every(w => riders.has(w.riderID)), 'Invalid workout library identities or version.');
   require(riders.size === profiles.length, 'Duplicate rider identities in archive.');
+  // The riders' own workouts (portable v3, optional key): validated like the native decoder, kept in full, never sent anywhere.
+  require(input.customWorkouts == null || Array.isArray(input.customWorkouts), 'Invalid custom workout list.');
+  const custom = (input.customWorkouts ?? []).map(validateCustomWorkout);
+  require(input.version >= 3 || !custom.length, 'Custom workouts require archive version 3.');
+  require(custom.length <= 2000 && new Set(custom.map(w => w.id)).size === custom.length, 'Invalid custom workout identities.');
+  require(custom.every(w => riders.has(w.riderID)), 'A custom workout references a missing rider.');
+  const perRider = new Map(); for (const w of custom) perRider.set(w.riderID, (perRider.get(w.riderID) ?? 0) + 1);
+  require([...perRider.values()].every(n => n <= CUSTOM_LIMITS.maximumPerRider), 'Too many custom workouts for one rider.');
   for (const record of input.activities) {
     require(record?.schemaVersion === 1 && ['rampTest', 'workout', 'freeRide'].includes(record.kind), 'This activity kind or version is not supported.');
     const s = structuredClone(record.session), c = s?.configuration;
@@ -72,9 +81,9 @@ export function validateArchive(input) {
     activities.push({ schemaVersion: 1, kind: record.kind, session: clean });
   }
   require(new Set(activities.map(a => a.session.id)).size === activities.length, 'Duplicate activity identities in archive.');
-  return { format: 'ftpunk-portable', version: input.version, exportedAt: input.exportedAt, profiles, activities, ...(workouts.length ? { workouts } : {}) };
+  return { format: 'ftpunk-portable', version: input.version, exportedAt: input.exportedAt, profiles, activities, ...(workouts.length ? { workouts } : {}), ...(custom.length ? { customWorkouts: custom } : {}) };
 }
-export function makeArchive(profiles, sessions, exportedAt = new Date().toISOString(), workouts = []) {
+export function makeArchive(profiles, sessions, exportedAt = new Date().toISOString(), workouts = [], customWorkouts = []) {
   const riders = structuredClone(profiles);
   const activities = sessions.map(source => {
     const s = structuredClone(source), c = s.configuration;
@@ -90,7 +99,7 @@ export function makeArchive(profiles, sessions, exportedAt = new Date().toISOStr
     return { schemaVersion: 1, kind: s.training?.kind ?? 'rampTest', session: s };
   });
   if (!riders.length) riders.push({ id: LEGACY_RIDER, name: 'You', weightKG: null, ftpHistory: [], currentFTPID: null });
-  return validateArchive({ format: 'ftpunk-portable', version: workouts.length || sessions.some(s => s.training?.version >= 2 || s.adventureStartMilliseconds != null) ? 3 : sessions.some(s => s.training || s.adventureEnabled) || riders.some(p => p.cycleProgress) ? 2 : 1, exportedAt, profiles: riders, activities, workouts });
+  return validateArchive({ format: 'ftpunk-portable', version: workouts.length || customWorkouts.length || sessions.some(s => s.training?.version >= 2 || s.adventureStartMilliseconds != null) ? 3 : sessions.some(s => s.training || s.adventureEnabled) || riders.some(p => p.cycleProgress) ? 2 : 1, exportedAt, profiles: riders, activities, workouts, ...(customWorkouts.length ? { customWorkouts } : {}) });
 }
 export function archiveText(archive) {
   const text = JSON.stringify(validateArchive(archive), null, 2);

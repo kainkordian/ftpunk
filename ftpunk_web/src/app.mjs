@@ -1,6 +1,7 @@
 import { AppModel } from './app-model.mjs';
 import { LocalStore, DB_NAME, loadPreferences } from './storage.mjs';
 import { MemoryStore } from './memory-store.mjs';
+import { installCustomWorkouts } from './my-workouts.mjs';
 // Boot only: open storage, build the app model, register the screens, start the shell. Each screen module registers its own route when imported.
 import { startShell, navigate, fail } from './ui/shell.mjs';
 import { installSheets } from './ui/sheets.mjs';
@@ -23,6 +24,7 @@ async function boot() {
     // A preview scenario uses an in-memory store and default preferences: it never reads or writes the real database or settings.
     const store = preview ? new MemoryStore() : await LocalStore.open(params.get('db') ?? DB_NAME);
     model = new AppModel({ store, preview, prefs: preview ? loadPreferences({ getItem: () => null }) : loadPreferences(), ...(preview ? { lease: async () => () => {} } : {}) });
+    installCustomWorkouts(model); // My workouts: loads the riders' own workouts with every reload, adds the custom: workout reference
     await model.boot();
     installSheets(model);
     let hash = null;

@@ -17,12 +17,14 @@ import subprocess
 import sys
 import tempfile
 import threading
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import serve  # noqa: E402
 import test as runner  # noqa: E402  (shares the Chrome lookup)
 
+# Virtual time, not wall time: 4 s ended before the ES module graph had loaded (blank "Loading…" captures, 2026-11-06).
 SIZES = [(390, 844), (1280, 800)]
 
 
@@ -59,12 +61,17 @@ def main():
         for name in names:
             for width, height in SIZES:
                 out = args.output / f'{name}-{width}x{height}.png'
+                app = f'/index.html?scenario={name}&nosw'
+                narrow = width < 600  # desktop Chrome lays out at >= ~500 px; show the app in an exact-size iframe and crop
+                url = f'http://localhost:{port}/tools/capture-frame.html?w={width}&h={height}&src={quote(app, safe="")}' if narrow else f'http://localhost:{port}{app}'
                 command = [chrome, '--headless=new', f'--user-data-dir={profile}', '--no-first-run', '--disable-gpu', '--hide-scrollbars',
-                           '--virtual-time-budget=4000', f'--screenshot={out}', f'--window-size={width},{height}', f'http://localhost:{port}/index.html?scenario={name}&nosw']
+                           '--virtual-time-budget=60000', f'--screenshot={out}', f'--window-size={max(width, 800)},{height}', url]
                 if args.dry_run:
                     print(' '.join(shlex.quote(part) for part in command))
                 else:
                     subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=60)
+                    if narrow:  # macOS `sips` crops around the centre, where capture-frame.html puts the app
+                        subprocess.run(['sips', '-c', str(height), str(width), str(out)], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                     print(out)
     finally:
         if server:

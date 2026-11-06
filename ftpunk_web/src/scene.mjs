@@ -1,4 +1,4 @@
-// The live power chart. (The ride visual, Chaindance, is added by the ride plan.)
+// The live power chart. (The ride visual, Chaindance, lives in src/chaindance/.)
 export function drawChart(canvas, samples, { target = null } = {}) {
   if (!canvas) return;
   const box = canvas.getBoundingClientRect(), ratio = devicePixelRatio || 1;

@@ -99,7 +99,7 @@
         "null"
       ],
       "maxItems": 2000,
-      "description": "The riders' own workouts (native only for now; the web app ignores this key). Blocks of steps with % FTP or watt targets; resolved to a plan when shown or started.",
+      "description": "The riders' own workouts (native and web: both validate, keep, export and import it). Blocks of steps with % FTP or watt targets; resolved to a plan when shown or started.",
       "items": {
         "type": "object",
         "properties": {

@@ -6,7 +6,9 @@
 .power-chart .band-0 { fill: color-mix(in srgb, var(--secondary) 10%, transparent); } .power-chart .band-1 { fill: color-mix(in srgb, var(--secondary) 18%, transparent); }
 .power-chart .best-window { fill: color-mix(in srgb, var(--accent) 24%, transparent); }
 .power-chart .grid, .trend-chart .grid { stroke: var(--grid); stroke-width: 1; }
-.power-chart .axis, .trend-chart .axis, .axis-title { fill: var(--secondary); font: 11px var(--font); }
+.power-chart .axis, .trend-chart .axis, .axis-title { fill: var(--secondary); font: 12px var(--font); }
+/* The charts are drawn in a 600-unit box; on a phone that scales to about 0.6, so the text is larger in box units there. */
+@media (max-width: 600px) { .power-chart .axis, .trend-chart .axis, .axis-title { font-size: 17px; } }
 .power-chart .power-line { fill: none; stroke: var(--accent); stroke-width: 2.25; stroke-linejoin: round; }
 .power-chart .band-label { fill: var(--secondary); font: 11px var(--font); }
 .power-chart .best-label { fill: var(--accent); font: 700 12px var(--font); } .power-chart .best-label-bg { fill: var(--surface); opacity: .85; }

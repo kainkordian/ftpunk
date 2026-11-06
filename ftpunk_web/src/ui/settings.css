@@ -1,3 +1,3 @@
 .settings-group h2 { font-size: 1.15rem; }
 .about-button { display: flex; flex-direction: column; gap: 4px; text-align: left; cursor: pointer; color: inherit; width: 100%; }
-details summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.settings-group details summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }

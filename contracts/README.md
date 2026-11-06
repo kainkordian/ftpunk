@@ -93,7 +93,7 @@ precedence; unresolved `%ftp` uses the document FTP or selected rider FTP once.
 Unsupported distance, lap-triggered, free/maximal effort and non-power steps reject
 the workout. FIT, MRC and ERG files are not supported in this increment.
 
-Zwift `.zwo` files are supported natively (4 November 2026); the web port should follow.
+Zwift `.zwo` files are supported natively (4 November 2026) and in the web app (`ftpunk_web/src/zwo.mjs`, parsed with `DOMParser`; `fixtures/zwo-cases.json` is the shared test).
 `workout-example.zwo` shows every supported element. Powers are fractions of FTP and need the
 selected rider's FTP (an import without one fails with "Set an FTP first"); watts are rounded
 once and stored with that FTP as the plan's `ftpWatts`. `SteadyState` is one step.
@@ -108,12 +108,18 @@ On and Off. Limits are the same as for JSON (2 MiB, 500 expanded steps, 100 repe
 Export writes `SteadyState` and `Ramp` only (never `IntervalsT`), with powers rounded to three
 decimals of the plan's FTP snapshot, or of the rider's FTP when the plan has none.
 
-## Custom workouts (native only for now)
+## Custom workouts (native and web)
 
-Riders can build their own workouts in the native apps (4 November 2026). Archives carry them in an optional
-`customWorkouts` array next to `workouts`, in the same version 3 (a decoder that does not know the key ignores it; the
-web app's validator keeps only the fields it knows, so a backup that passes through the web app drops them). Archives
-with custom workouts export as version 3.
+Riders can build their own workouts in the native apps (4 November 2026) and in the web app (5 November 2026). Archives
+carry them in an optional `customWorkouts` array next to `workouts`, in the same version 3 (a decoder that does not know
+the key ignores it). The web app validates the array exactly as native does, keeps every field, stores it in its
+`customWorkouts` store, exports it, includes it in the rollback backup and replaces the incoming riders' workouts by
+identity on import (unrelated riders keep theirs), so a backup passes native -> web -> native unchanged (the web writes
+`null` for an absent rider weight or current-FTP reference where native omits the key; both mean the same). Archives with
+custom workouts export as version 3. The shared fixtures are `fixtures/portable-v3-custom.json` (an archive),
+`fixtures/custom-workouts-250w.json` (workouts, their validation messages and resolved plans at 250 W, with and without
+an FTP) and `fixtures/workout-text-cases.json` (text to blocks or errors, blocks to text); each is written by
+`Tests/FTPunkTests/WebWorkoutFixturesTests.swift` and read by the web suite (`ftpunk_web/tests/my-workouts.test.mjs`).
 
 A custom workout has `id`, `riderID`, `name` (1-100 characters), optional `category`, `updatedAt` and `blocks`. A block is
 `{"kind":"step","step":{...}}` or `{"kind":"repeats","count":1-100,"steps":[...]}` (one level only). A step has `name`

@@ -1,0 +1,4767 @@
+{
+  "cases" : [
+    {
+      "fingerprint" : "c00e4f1c787da47e",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 92,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 92,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 92
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-recovery-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 0,
+        "rainSlant" : 0.38728000000000001,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 19.152000000000001,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "11f0c31dcebdb23b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 149.5,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 149.5,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 149.5
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-endurance-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 1
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 1,
+        "rainSlant" : 0.43558000000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.372,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "727c38ac9623a797",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 184,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 184,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 184
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-tempo-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.46455999999999997,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 24.303999999999998,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "fe65a6fb812f7022",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 209.30000000000001,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 209.30000000000001,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 209.30000000000001
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-sweetSpot-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: sweet spot effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 3
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.48581200000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 24,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.720800000000001,
+        "zone" : 3
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "af13d60282c8c3d",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 230,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 230,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 230
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-threshold-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 4
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "f85da81ca406df31",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 276,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 276,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 276
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-vo2max-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.54183999999999999,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 29.456,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "397de39c4424009",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 92,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-recovery-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.38728000000000001,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 19.152000000000001,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "1f958d412f79f2fa",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 149.5,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-endurance-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 1,
+        "rainSlant" : 0.43558000000000002,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 22.372,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "d266313caaed269c",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 184,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-tempo-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 2,
+        "rainSlant" : 0.46455999999999997,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 24.303999999999998,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "a5d6d2092247fed4",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 209.30000000000001,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-sweetSpot-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: sweet spot effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 2,
+        "rainSlant" : 0.48581200000000002,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 24,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 25.720800000000001,
+        "zone" : 3
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "a92d28b01c6fef2",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 230,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-threshold-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "306ac4f0fe8fa60b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 276,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "zone-vo2max-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.54183999999999999,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 29.456,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "2f6a83cda0a1807b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : null,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 0,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 0
+          },
+          "weightKG" : 71
+        },
+        "name" : "no-power",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: steady effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 1,
+        "rainSlant" : 0.4108,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : null
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "71033aa772e1e020",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 88,
+          "mode" : "freeERG",
+          "phase" : "riding",
+          "power" : 180,
+          "target" : 150
+        },
+        "name" : "no-ftp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: steady effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.68181818199999999,
+        "posture" : 1,
+        "rainSlant" : 0.4612,
+        "sign" : {
+          "kind" : "gate",
+          "text" : "150 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 24.079999999999998,
+        "zone" : null
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ea25e2520be9cf53",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "waiting",
+          "power" : 90,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 0,
+            "rampSeconds" : 0,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-waiting",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.3856,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0.20000000000000001,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 19.039999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "12afa05c32385545",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "warmup",
+          "power" : 115,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 30,
+            "rampSeconds" : 0,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-warmup",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: warming up, recovery effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.40660000000000002,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0.59999999999999998,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 20.440000000000001,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "78b0c284ef8d7ed8",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 4.75,
+        "distance" : 184.31999999999999,
+        "markers" : [
+          {
+            "kind" : "level",
+            "text" : "LVL 1",
+            "worldX" : 186.364
+          }
+        ],
+        "segments" : [
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : null
+            },
+            "startX" : -1000000000000
+          }
+        ],
+        "time" : 3.7000000000000002
+      },
+      "spec" : {
+        "advance" : {
+          "dt" : 0.10000000000000001,
+          "steps" : 30
+        },
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "warmup",
+          "power" : 115,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 57,
+            "rampSeconds" : 0,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-warmup-ending",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: warming up, recovery effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.40660000000000002,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0.95999999999999996,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : {
+          "district" : null,
+          "key" : 1,
+          "kind" : "level",
+          "secondsUntil" : 3,
+          "text" : "LVL 1"
+        },
+        "world" : "boulevard",
+        "worldSpeed" : 20.440000000000001,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "d3dcc1f7d84f4ad4",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 9.25,
+        "distance" : 274.19999999999999,
+        "markers" : [
+          {
+            "kind" : "level",
+            "text" : "LVL 8",
+            "worldX" : 251.52000000000001
+          }
+        ],
+        "segments" : [
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : null
+            },
+            "startX" : -1000000000000
+          }
+        ],
+        "time" : 6.7000000000000002
+      },
+      "spec" : {
+        "advance" : {
+          "dt" : 0.10000000000000001,
+          "steps" : 60
+        },
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 200,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 79,
+            "rampSeconds" : 79,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-level-ending",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, level 7",
+        "animationRate" : 1,
+        "climbSeconds" : 79,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 7,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 7"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : {
+          "district" : null,
+          "key" : 8,
+          "kind" : "level",
+          "secondsUntil" : 5,
+          "text" : "LVL 8"
+        },
+        "world" : "skyway",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "f34ef547a21ddfde",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 330,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 700,
+            "rampSeconds" : 700,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-long",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 59",
+        "animationRate" : 1,
+        "climbSeconds" : 700,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 59,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.58720000000000006,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 59"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 32.479999999999997,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "3eb575d9992c64a6",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : true,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 330,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 700,
+            "rampSeconds" : 700,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-high-contrast",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 59",
+        "animationRate" : 1,
+        "climbSeconds" : 700,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 59,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.58720000000000006,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 59"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 32.479999999999997,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "519b10a35e1d7eae",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 330,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 300,
+            "rampSeconds" : 300,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "sprintPeak" : 640,
+          "sprintPower" : 620,
+          "weightKG" : 71
+        },
+        "name" : "ramp-sprint-power-never-stands",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 26",
+        "animationRate" : 1,
+        "climbSeconds" : 300,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 26,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.58720000000000006,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 26"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 32.479999999999997,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "41d8416dc95c6842",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "cooldown",
+          "power" : 120,
+          "ramp" : {
+            "bestMinuteWatts" : 290,
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 1,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "rooftop",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: ramp finished at level 47",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : {
+          "kind" : "finish",
+          "text" : "LVL 47 · 290 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "rooftop",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "e0a59c7ecaa33781",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "cooldown",
+          "power" : 120,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 2,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "rooftop-no-best",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: ramp finished at level 47",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : {
+          "kind" : "finish",
+          "text" : "LVL 47"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "rooftop",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "250e2f92a2df71f6",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "cooldown",
+          "power" : 120,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 90,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "descent",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: cooling down",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0.482758621,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "descent",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "652f616aa5538bd6",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "completed",
+          "power" : 90,
+          "ramp" : {
+            "bestMinuteWatts" : 305,
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 180,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "completed-summit",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: ramp finished at level 47",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.3856,
+        "sign" : {
+          "kind" : "finish",
+          "text" : "LVL 47 · 305 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "rooftop",
+        "worldSpeed" : 19.039999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ea25e2520be9cf53",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "interrupted",
+          "power" : 90,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 4,
+            "rampSeconds" : 0,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "interrupted-without-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.3856,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0.20000000000000001,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 19.039999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "285f518416f949d9",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "paused",
+          "power" : 90,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 4,
+            "rampSeconds" : 0,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "ramp-paused-sign",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: paused",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "footDown",
+        "pedalPeriod" : null,
+        "posture" : 0,
+        "rainSlant" : 0.10000000000000001,
+        "sign" : {
+          "kind" : "paused",
+          "text" : "PAUSED"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0.20000000000000001,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 0,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "35722bb4e6048c3b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "freeERG",
+          "phase" : "riding",
+          "power" : 150,
+          "target" : 150,
+          "weightKG" : 71
+        },
+        "name" : "free-erg",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "gate",
+          "text" : "150 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "11cf95e2f778a294",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 12.25,
+        "distance" : 302.19999999999999,
+        "markers" : [
+          {
+            "kind" : "gate",
+            "text" : "175 W",
+            "worldX" : 352.83999999999997
+          }
+        ],
+        "segments" : [
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : null
+            },
+            "startX" : -1000000000000
+          }
+        ],
+        "time" : 8.6999999999999993
+      },
+      "spec" : {
+        "advance" : {
+          "dt" : 0.10000000000000001,
+          "steps" : 40
+        },
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "freeERG",
+          "phase" : "riding",
+          "power" : 150,
+          "target" : 150,
+          "weightKG" : 71
+        },
+        "name" : "free-erg-gate",
+        "skyRows" : 0,
+        "thenInput" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "freeERG",
+          "phase" : "riding",
+          "power" : 150,
+          "target" : 175,
+          "weightKG" : 71
+        },
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "gate",
+          "text" : "175 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ef9a6fa075b77757",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "resistance",
+          "phase" : "riding",
+          "power" : 120,
+          "target" : 100,
+          "weightKG" : 71
+        },
+        "name" : "resistance",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : {
+          "kind" : "gate",
+          "text" : "RES 10.0"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "d9eaff7787b48aed",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : null,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "paused",
+          "power" : null,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 0,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 0
+          },
+          "weightKG" : 71
+        },
+        "name" : "workout-paused",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: paused",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "footDown",
+        "pedalPeriod" : null,
+        "posture" : 1,
+        "rainSlant" : 0.10000000000000001,
+        "sign" : {
+          "kind" : "paused",
+          "text" : "PAUSED"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 0,
+        "zone" : null
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "66852a4b4a2b09a0",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 7.9166666670000003,
+        "distance" : 257.39999999999998,
+        "markers" : [
+          {
+            "kind" : "billboard",
+            "text" : "NEXT 3:00 · 120 W",
+            "worldX" : 310.72800000000001
+          },
+          {
+            "kind" : "gantry",
+            "text" : "",
+            "worldX" : 340.72800000000001
+          }
+        ],
+        "segments" : [
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : 4
+            },
+            "startX" : -1000000000000
+          },
+          {
+            "district" : {
+              "kind" : "residential",
+              "zone" : 0
+            },
+            "startX" : 340.72800000000001
+          }
+        ],
+        "time" : 5.7000000000000002
+      },
+      "spec" : {
+        "advance" : {
+          "dt" : 0.10000000000000001,
+          "steps" : 50
+        },
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 230,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 230,
+            "index" : 2,
+            "next" : {
+              "endWatts" : 120,
+              "seconds" : 180,
+              "startWatts" : 120
+            },
+            "remaining" : 8,
+            "seconds" : 300,
+            "startWatts" : 230
+          },
+          "weightKG" : 71
+        },
+        "name" : "workout-next-step",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 4
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : {
+          "district" : {
+            "kind" : "residential",
+            "zone" : 0
+          },
+          "key" : 3,
+          "kind" : "step",
+          "secondsUntil" : 8,
+          "text" : "NEXT 3:00 · 120 W"
+        },
+        "world" : "boulevard",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "7e9e17aa339da590",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 7.9166666670000003,
+        "distance" : 232.19999999999999,
+        "markers" : [
+          {
+            "kind" : "billboard",
+            "text" : "NEXT 5:00 · 276 W",
+            "worldX" : 182.54400000000001
+          },
+          {
+            "kind" : "gantry",
+            "text" : "",
+            "worldX" : 212.54400000000001
+          }
+        ],
+        "segments" : [
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : 1
+            },
+            "startX" : -1000000000000
+          },
+          {
+            "district" : {
+              "kind" : "market",
+              "zone" : 5
+            },
+            "startX" : 212.54400000000001
+          }
+        ],
+        "time" : 5.7000000000000002
+      },
+      "spec" : {
+        "advance" : {
+          "dt" : 0.10000000000000001,
+          "steps" : 50
+        },
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 140,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 140,
+            "index" : 2,
+            "next" : {
+              "endWatts" : 276,
+              "seconds" : 300,
+              "startWatts" : 276
+            },
+            "remaining" : 4,
+            "seconds" : 300,
+            "startWatts" : 140
+          },
+          "weightKG" : 71
+        },
+        "name" : "workout-next-step-hard",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 1
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 1,
+        "rainSlant" : 0.42759999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : {
+          "district" : {
+            "kind" : "market",
+            "zone" : 5
+          },
+          "key" : 3,
+          "kind" : "step",
+          "secondsUntil" : 4,
+          "text" : "NEXT 5:00 · 276 W"
+        },
+        "world" : "boulevard",
+        "worldSpeed" : 21.84,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "543e8810b5e2ff83",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 150,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 240,
+            "index" : 2,
+            "remaining" : 100,
+            "seconds" : 300,
+            "startWatts" : 120
+          },
+          "weightKG" : 71
+        },
+        "name" : "workout-ramped-step",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 0.80000000000000004,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "d536cb31793cdc95",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 100,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 100,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 100
+          },
+          "weightKG" : 71
+        },
+        "name" : "workout-recovery-district",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 0,
+        "rainSlant" : 0.39400000000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 19.600000000000001,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "143d72c7d9180a8d",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 480,
+          "sprintPeak" : 580,
+          "sprintPower" : 560,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 480,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 480
+          },
+          "weightKG" : 71
+        },
+        "name" : "standing-sprint",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: sprinting out of the saddle, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 4,
+        "rainSlant" : 0.71319999999999995,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 40.880000000000003,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "d1c702e8092102cc",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 440,
+          "sprintPeak" : 520,
+          "sprintPower" : 480,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 440,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 440
+          },
+          "weightKG" : 71
+        },
+        "name" : "standing-held",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: sprinting out of the saddle, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 4,
+        "rainSlant" : 0.67959999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 38.640000000000001,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "b91564fed6224501",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 0,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 480,
+          "sprintPeak" : 580,
+          "sprintPower" : 560,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 480,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 480
+          },
+          "weightKG" : 71
+        },
+        "name" : "standing-needs-pedalling",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "coasting",
+        "pedalPeriod" : null,
+        "posture" : 3,
+        "rainSlant" : 0.19,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 6,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "238ecc66fc5f2708",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 400,
+          "sprintPeak" : 380,
+          "sprintPower" : 380,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 400,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 400
+          },
+          "weightKG" : null
+        },
+        "name" : "standing-ftp-threshold-without-weight",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: sprinting out of the saddle, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 4,
+        "rainSlant" : 0.64600000000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 36.399999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "2d59c2113453d8d7",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 0,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 0,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 0,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 0
+          },
+          "weightKG" : 71
+        },
+        "name" : "coasting",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: recovery effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "coasting",
+        "pedalPeriod" : null,
+        "posture" : 0,
+        "rainSlant" : 0.19,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 6,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "11f0c31dcebdb23b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : null,
+          "cadenceAvailable" : false,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 150,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 150,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 150
+          },
+          "weightKG" : 71
+        },
+        "name" : "no-cadence-source",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 1
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.70588235300000002,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "3b278b91fee67708",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "playbackSpeed" : 60,
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "playback-speed-4",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 4,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.40000000000000002,
+        "posture" : 2,
+        "rainSlant" : 1,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 90,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "60c363ac82c887a5",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : false,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 230,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 230,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 230
+          },
+          "weightKG" : 71
+        },
+        "name" : "reduce-motion-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 4
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "a5cdbe04a420686",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : false,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 230,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 100,
+            "rampSeconds" : 100,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "reduce-motion-ramp",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, level 9",
+        "animationRate" : 1,
+        "climbSeconds" : 100,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 9,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 9"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "8debfbe99c3c6f3c",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : false,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "freeERG",
+          "phase" : "riding",
+          "power" : 150,
+          "target" : 150,
+          "weightKG" : 71
+        },
+        "name" : "reduce-motion-gate",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : null,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "gate",
+          "text" : "150 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "6c1e3382f8702bd3",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : true,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 230,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 230,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 230
+          },
+          "weightKG" : 71
+        },
+        "name" : "contrast-workout",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: threshold effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 4
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.50319999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 30,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 26.879999999999999,
+        "zone" : 4
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "675591186814b63f",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : false,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : true,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 280,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 280,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 280
+          },
+          "weightKG" : 71
+        },
+        "name" : "contrast-vo2",
+        "skyRows" : 0,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.54520000000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 29.68,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "92409aff5211d601",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-workout",
+        "skyRows" : 36,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "480361827e681ee3",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 1.2
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 250,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 360,
+            "rampSeconds" : 360,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-ramp",
+        "skyRows" : 36,
+        "time" : 1.2
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 31",
+        "animationRate" : 1,
+        "climbSeconds" : 360,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 31,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52000000000000002,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 31"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "8a47ed5099f9203f",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "cooldown",
+          "power" : 120,
+          "ramp" : {
+            "bestMinuteWatts" : 290,
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 1,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-rooftop",
+        "skyRows" : 36,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: ramp finished at level 47",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : {
+          "kind" : "finish",
+          "text" : "LVL 47 · 290 W"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "rooftop",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "dac5083898f66568",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : false,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 150,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 150,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 150
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-reduce-motion",
+        "skyRows" : 36,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: endurance effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 1
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 1,
+        "rainSlant" : 0.436,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 22.399999999999999,
+        "zone" : 1
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "631ef6f6a5e56467",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "paused",
+          "power" : null,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 0,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 0
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-paused",
+        "skyRows" : 36,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: paused",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "residential",
+          "zone" : 0
+        },
+        "glow" : 0.59999999999999998,
+        "level" : 3,
+        "motion" : "footDown",
+        "pedalPeriod" : null,
+        "posture" : 1,
+        "rainSlant" : 0.10000000000000001,
+        "sign" : {
+          "kind" : "paused",
+          "text" : "PAUSED"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 9,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 0,
+        "zone" : null
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "e942578e82a91d8e",
+      "height" : 96,
+      "motion" : {
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.69999999999999996
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.25,
+        "distance" : 123,
+        "highContrast" : true,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 250,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 250,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 250
+          },
+          "weightKG" : 71
+        },
+        "name" : "hero-contrast",
+        "skyRows" : 36,
+        "time" : 0.69999999999999996
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 5
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 3,
+        "rainSlant" : 0.52000000000000002,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 0,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 28,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ab54577530525d09",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0,
+        "distance" : 0,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0,
+        "distance" : 0,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-0-0",
+        "skyRows" : 0,
+        "time" : 0
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "8ca0a31a73b58be7",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0,
+        "distance" : 0,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0,
+        "distance" : 0,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-0-0",
+        "skyRows" : 0,
+        "time" : 0
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "daf2be011e85374b",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.29999999999999999,
+        "distance" : 97,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.25
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.29999999999999999,
+        "distance" : 97,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-97-25",
+        "skyRows" : 0,
+        "time" : 0.25
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "a930c7b0f3189a1",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.29999999999999999,
+        "distance" : 97,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.25
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.29999999999999999,
+        "distance" : 97,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-97-25",
+        "skyRows" : 0,
+        "time" : 0.25
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "478f388866a943c2",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.55000000000000004,
+        "distance" : 400,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 1.5
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.55000000000000004,
+        "distance" : 400,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-400-150",
+        "skyRows" : 0,
+        "time" : 1.5
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "767f5efac1b55564",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.55000000000000004,
+        "distance" : 400,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 1.5
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.55000000000000004,
+        "distance" : 400,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-400-150",
+        "skyRows" : 0,
+        "time" : 1.5
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "75c1d1fc08121b8a",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.80000000000000004,
+        "distance" : 1535,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 2.8999999999999999
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.80000000000000004,
+        "distance" : 1535,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-1535-290",
+        "skyRows" : 0,
+        "time" : 2.8999999999999999
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "aa08bdced0f12ef3",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 0.80000000000000004,
+        "distance" : 1535,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 2.8999999999999999
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 0.80000000000000004,
+        "distance" : 1535,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-1535-290",
+        "skyRows" : 0,
+        "time" : 2.8999999999999999
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ab54577530525d09",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 1,
+        "distance" : 1536,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 3
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 1,
+        "distance" : 1536,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-1536-300",
+        "skyRows" : 0,
+        "time" : 3
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "8ca0a31a73b58be7",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 1,
+        "distance" : 1536,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 3
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 1,
+        "distance" : 1536,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-1536-300",
+        "skyRows" : 0,
+        "time" : 3
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "1cd55ff239d17142",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 7.7000000000000002,
+        "distance" : 3000,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.10000000000000001
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 7.7000000000000002,
+        "distance" : 3000,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 92,
+          "ftp" : 230,
+          "mode" : "workout",
+          "phase" : "riding",
+          "power" : 200,
+          "step" : {
+            "count" : 9,
+            "endWatts" : 200,
+            "index" : 2,
+            "remaining" : 150,
+            "seconds" : 300,
+            "startWatts" : 200
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-boulevard-3000-10",
+        "skyRows" : 0,
+        "time" : 0.10000000000000001
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: tempo effort, step 3 of 9",
+        "animationRate" : 1,
+        "climbSeconds" : 0,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : 2
+        },
+        "glow" : 1,
+        "level" : 3,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.65217391300000005,
+        "posture" : 2,
+        "rainSlant" : 0.47799999999999998,
+        "sign" : {
+          "kind" : "step",
+          "text" : "STEP 3\/9"
+        },
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 0,
+        "sweat" : false,
+        "trailDim" : false,
+        "trailLength" : 15,
+        "upcoming" : null,
+        "world" : "boulevard",
+        "worldSpeed" : 25.199999999999999,
+        "zone" : 2
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "1c8b81f016214e90",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 7.7000000000000002,
+        "distance" : 3000,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 0.10000000000000001
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 7.7000000000000002,
+        "distance" : 3000,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "ramp",
+          "power" : 260,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 400,
+            "rampSeconds" : 400,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-skyway-3000-10",
+        "skyRows" : 0,
+        "time" : 0.10000000000000001
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: vo2max effort, level 34",
+        "animationRate" : 1,
+        "climbSeconds" : 400,
+        "descent" : 0,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 34,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 3,
+        "rainSlant" : 0.52839999999999998,
+        "sign" : {
+          "kind" : "level",
+          "text" : "LVL 34"
+        },
+        "sparks" : true,
+        "speedLines" : true,
+        "spire" : 1,
+        "sweat" : true,
+        "trailDim" : false,
+        "trailLength" : 36,
+        "upcoming" : null,
+        "world" : "skyway",
+        "worldSpeed" : 28.559999999999999,
+        "zone" : 5
+      },
+      "width" : 192
+    },
+    {
+      "fingerprint" : "ddb8d703fcb17477",
+      "height" : 60,
+      "motion" : {
+        "crankTurns" : 3.2999999999999998,
+        "distance" : 777,
+        "markers" : [
+
+        ],
+        "segments" : [
+
+        ],
+        "time" : 2.1000000000000001
+      },
+      "spec" : {
+        "animated" : true,
+        "crankTurns" : 3.2999999999999998,
+        "distance" : 777,
+        "highContrast" : false,
+        "input" : {
+          "cadence" : 90,
+          "ftp" : 230,
+          "mode" : "ftpTest",
+          "phase" : "cooldown",
+          "power" : 120,
+          "ramp" : {
+            "cooldownSeconds" : 180,
+            "phaseSeconds" : 60,
+            "rampSeconds" : 560,
+            "stepSeconds" : 12,
+            "warmupSeconds" : 60
+          },
+          "weightKG" : 71
+        },
+        "name" : "motion-descent-777",
+        "skyRows" : 0,
+        "time" : 2.1000000000000001
+      },
+      "state" : {
+        "accessibilitySummary" : "Chaindance: cooling down",
+        "animationRate" : 1,
+        "climbSeconds" : 560,
+        "descent" : 0.31034482800000002,
+        "district" : {
+          "kind" : "market",
+          "zone" : null
+        },
+        "glow" : 0.84999999999999998,
+        "level" : 47,
+        "motion" : "pedalling",
+        "pedalPeriod" : 0.66666666699999999,
+        "posture" : 0,
+        "rainSlant" : 0.4108,
+        "sign" : null,
+        "sparks" : false,
+        "speedLines" : false,
+        "spire" : 1,
+        "sweat" : false,
+        "trailDim" : true,
+        "trailLength" : 6,
+        "upcoming" : null,
+        "world" : "descent",
+        "worldSpeed" : 20.719999999999999,
+        "zone" : 0
+      },
+      "width" : 192
+    }
+  ],
+  "format" : "ftpunk-chaindance-fingerprints",
+  "hash" : "FNV-1a 64 over the RGBA bytes, lowercase hex without leading zeros",
+  "version" : 1
+}

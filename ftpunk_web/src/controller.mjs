@@ -1,13 +1,25 @@
 import { validatePlan, supportsIntensity } from './training.mjs';
-import { RampEngine, PowerMatcher, configuration, PRESETS, mockSample } from './domain.mjs';
+import { RampEngine, configuration, PRESETS, mockSample } from './domain.mjs';
+import { PowerMatcher, TrainerWarmth } from './matching.mjs';
 import { route } from './protocol.mjs';
 import { acquireRideLease } from './storage.mjs';
+/** Work the trainer has done since the app connected to it. It lives with the Bluetooth trainer connection (one record per connected trainer, so a reconnect starts cold
+ *  and a second ride on the same connection starts warm); rides without a trainer connection (mock sensors) get a fresh one per ride. */
+const warmthByConnection = new WeakMap();
+export function warmthFor(entry) {
+  if (!entry) return new TrainerWarmth();
+  let warmth = warmthByConnection.get(entry); if (!warmth) warmthByConnection.set(entry, warmth = new TrainerWarmth());
+  return warmth;
+}
 export class RideController {
   constructor(devices, store, { now = () => performance.now() / 1000, lease = acquireRideLease } = {}) {
     Object.assign(this, { devices, store, now, lease });
-    this.engine = null; this.elapsed = 0; this.starting = false; this.finishing = false; this.pending = null; this.trainingTransition = null; this.trainingCommand = null; this.saveQueue = Promise.resolve(); this.onChange = () => {}; this.onError = () => {}; this.onSaved = () => {}; this.speed = 12; this.scenario = 'exhaustion';
+    this.engine = null; this.matcher = null; this.warmth = null; this.warmthConnection = null; this.lastTrainerPower = null; this.matchLogPhase = null; this.matchLogTime = 0; this.elapsed = 0; this.starting = false; this.finishing = false; this.pending = null; this.trainingTransition = null; this.trainingCommand = null; this.saveQueue = Promise.resolve(); this.onChange = () => {}; this.onError = () => {}; this.onSaved = () => {}; this.speed = 12; this.scenario = 'exhaustion';
     devices.onReading = reading => {
-      if (this.active && !this.demo) { const sample = route(reading, this.engine.session.configuration, this.origin); if (sample) this.engine.receive(sample); }
+      if (this.active && !this.demo) {
+        const sample = route(reading, this.engine.session.configuration, this.origin);
+        if (sample) { this.engine.receive(sample); if (Number.isFinite(sample.trainerPower) && !(sample.time <= (this.lastTrainerPower?.time ?? -Infinity))) this.lastTrainerPower = { time: sample.time, watts: sample.trainerPower }; }
+      }
     };
     devices.onFailure = (role, reason) => {
       const c = this.preparingConfiguration ?? this.engine?.session.configuration;
@@ -44,7 +56,7 @@ export class RideController {
       }
       if (this.cancelStart) throw Error(this.cancelStart);
       this.demo = demo; this.speed = speed; this.scenario = scenario; this.mockPaused = false; this.elapsed = 0; this.origin = this.now(); this.lastWall = this.origin;
-      this.lastCheckpoint = -Infinity; this.lastAcknowledged = demo ? null : this.devices.range?.quantized(Math.round((training?.steps[0].watts ?? config.warmupPower) * (training ? intensity / 100 : 1))); this.lastResistance = training?.resistance ?? null; this.matcher = new PowerMatcher(); this.released = false; this.finalized = null;
+      this.lastCheckpoint = -Infinity; this.lastAcknowledged = demo ? null : this.devices.range?.quantized(Math.round((training?.steps[0].watts ?? config.warmupPower) * (training ? intensity / 100 : 1))); this.lastResistance = training?.resistance ?? null; this.matcher = new PowerMatcher(); this.lastTrainerPower = null; this.matchLogPhase = null; this.matchLogTime = 0; this.warmthConnection = demo ? null : this.devices.devices?.trainer ?? null; this.warmth = warmthFor(this.warmthConnection); this.warmth.beginSession(); this.released = false; this.finalized = null;
       this.engine = new RampEngine(config, { demo, devices: demo ? [] : this.devices.snapshots, training });
       if (training?.kind === 'workout' && intensity !== 100) { if (!this.engine.setIntensity(intensity, 0)) throw Error('Choose 50–150% intensity within the trainer’s supported power range.'); }
       await this.checkpoint(true);
@@ -68,6 +80,7 @@ export class RideController {
     if (this.demo) { if (!this.mockPaused) this.advanceMock(Math.min(delta, 0.5) * this.speed); }
     else {
       this.elapsed = now - this.origin; this.engine.tick(this.elapsed);
+      if (this.lastTrainerPower) this.warmth.add(this.lastTrainerPower);
       if (this.active && !this.pending) {
         if (this.engine.freewheel && !this.released) this.send(() => this.devices.stop(), () => { this.released = true; this.engine.event(this.elapsed, 'Trainer released for free-spin cooldown'); });
         else if (this.engine.targetResistance != null) {
@@ -77,14 +90,30 @@ export class RideController {
         else if (this.engine.target != null) {
           const c = this.engine.session.configuration;
           const cadence = this.engine.lastCadence && this.elapsed - this.engine.lastCadence.time <= 2 ? this.engine.lastCadence.rpm : null;
-          const watts = c.powerMatchingEnabled ? this.matcher.command(this.engine.target, this.engine.lastPower, cadence, this.elapsed, this.devices.range) : this.devices.range.quantized(this.engine.target);
+          const watts = c.powerMatchingEnabled ? this.matcher.command(this.engine.target, this.engine.lastPower, this.lastTrainerPower, cadence, this.elapsed, this.devices.range, this.warmth) : this.devices.range.quantized(this.engine.target);
           if (watts !== this.lastAcknowledged) this.send(() => this.devices.setTarget(watts), () => { this.lastAcknowledged = watts; this.engine.event(this.elapsed, `Trainer confirmed ${watts} W (workout target ${this.engine.target} W)`); });
         }
       }
     }
+    this.logPowerMatching();
     this.checkpoint().catch(error => this.storageFailed(error));
     if (!this.active) void this.finalize();
     this.onChange();
+  }
+  /** Pause, resume, an intensity or ERG change: forget the smoothed readings and wait for the trainer to settle. The gain and offset estimate and the trainer's warmth are kept
+   *  (as native); the last command's correction is cleared because the next command is a fresh feed-forward. */
+  restartMatching() { if (!this.matcher) return; this.matcher.restartSettle(this.elapsed); this.matcher.correction = 0; }
+  /** What the matcher is doing, for the cockpit: `{ kind: 'off' | 'warming' | 'matching' | 'fadeHold', ... }`. Off unless this ride uses power matching. */
+  get matchingStatus() { return this.active && this.engine.session.configuration.powerMatchingEnabled && this.matcher ? this.matcher.status : { kind: 'off' }; }
+  /** What the matcher did, for the owner to read in the ride's events: at ramp start, every 2 minutes of ramp and at ramp end. */
+  logPowerMatching() {
+    const engine = this.engine; if (!engine || !engine.session.configuration.powerMatchingEnabled) return;
+    const phase = engine.phase, previous = this.matchLogPhase; this.matchLogPhase = phase;
+    const rampStarted = phase === 'ramp' && previous !== 'ramp', periodic = phase === 'ramp' && this.elapsed - this.matchLogTime >= 120, rampEnded = previous === 'ramp' && phase !== 'ramp';
+    if (!(rampStarted || periodic || rampEnded)) return;
+    this.matchLogTime = this.elapsed;
+    const m = this.matcher, signed = `${m.offset >= 0 ? '+' : '-'}${Math.abs(m.offset).toFixed(1)}`;
+    engine.event(this.elapsed, `Power matching (${rampStarted ? 'ramp start' : rampEnded ? 'ramp end' : 'ramp'}): gain ${m.gain.toFixed(3)}, offset ${signed} W, trainer warmth ${this.warmth.kilojoules.toFixed(0)} kJ, fade guard ${m.fadeSeconds.toFixed(0)} s, ${m.measurementCount} measurements`);
   }
   /** Mock rides only: run the simulated sensors forward by `seconds` of ride time (also used by preview scenarios and the debug controls). */
   advanceMock(seconds) {
@@ -120,7 +149,7 @@ export class RideController {
     if (!this.active || this.trainingTransition || this.engine.resistanceLevel != null || this.engine.session.training?.kind !== 'freeRide') return;
     const requested = (this.engine.target ?? this.engine.freeRideTarget) + delta;
     const target = this.demo ? Math.min(1000, Math.max(1, requested)) : this.devices.range.quantized(requested);
-    this.engine.adjustERG(target, this.elapsed); this.matcher = new PowerMatcher(); this.onChange();
+    this.engine.adjustERG(target, this.elapsed); this.restartMatching(); this.onChange();
   }
   adjustIntensity(delta) {
     if (!this.active || this.trainingTransition || this.engine.session.training?.kind !== 'workout') return;
@@ -128,7 +157,7 @@ export class RideController {
     const percent = this.engine.intensity + delta;
     if (!this.demo && range && !this.engine.session.training.steps.every(s => [s.watts, s.endWatts ?? s.watts].every(w => range.quantized(Math.round(w * percent / 100)) > 0))) { this.onError(Error('The adjusted target rounds to zero on this trainer.')); return; }
     if (!range || !this.engine.setIntensity(this.engine.intensity + delta, this.elapsed, range.minimum, range.maximum)) { this.onError(Error('Choose 50–150% intensity within the trainer’s supported power range.')); return; }
-    this.matcher = new PowerMatcher(); this.checkpoint(true).catch(e => this.storageFailed(e)); this.onChange();
+    this.restartMatching(); this.checkpoint(true).catch(e => this.storageFailed(e)); this.onChange();
   }
   adjustResistance(steps) {
     if (!this.active || this.trainingTransition || this.engine.resistanceLevel == null) return;
@@ -140,7 +169,7 @@ export class RideController {
     if (!this.active || this.trainingTransition || !this.engine.session.training) return;
     if (!this.demo) this.elapsed = Math.max(this.elapsed, this.now() - this.origin);
     if (!this.engine.pause(this.elapsed)) { if (!this.active) void this.finalize(); this.onChange(); return; }
-    this.matcher = new PowerMatcher();
+    this.restartMatching();
     if (this.demo) this.released = true;
     else {
       const pending = this.pending;
@@ -157,7 +186,7 @@ export class RideController {
     if (!this.demo) this.elapsed = Math.max(this.elapsed, this.now() - this.origin);
     if (!this.engine.canResume(this.elapsed)) { this.onError(Error('Pedal until fresh power and cadence arrive, then resume.')); return; }
     const target = this.engine.resistanceLevel ?? this.engine.resumeTarget;
-    if (this.demo) { this.engine.resume(this.elapsed); this.released = false; this.matcher = new PowerMatcher(); this.onChange(); return; }
+    if (this.demo) { this.engine.resume(this.elapsed); this.released = false; this.restartMatching(); this.onChange(); return; }
     this.released = false; // Any attempted restart must be followed by Stop if cancelled.
     this.changeTrainingState('resuming', async current => {
       if (!current()) return;
@@ -166,7 +195,7 @@ export class RideController {
       if (!current()) return;
       this.elapsed = Math.max(this.elapsed, this.now() - this.origin);
       if (!this.engine.resume(this.elapsed)) throw Error('Fresh movement was lost while resuming. The ride has been interrupted.');
-      this.matcher = new PowerMatcher(); this.lastAcknowledged = this.devices.range?.quantized(target); this.lastResistance = this.engine.resistanceLevel;
+      this.restartMatching(); this.lastAcknowledged = this.devices.range?.quantized(target); this.lastResistance = this.engine.resistanceLevel;
       this.checkpoint(true).catch(error => this.storageFailed(error));
     });
   }

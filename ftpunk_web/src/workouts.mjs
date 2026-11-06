@@ -1,4 +1,5 @@
 import { validatePlan } from './training.mjs';
+import { parseZWO, looksLikeZWO } from './zwo.mjs';
 export const MAX_WORKOUT_BYTES = 2 * 1024 * 1024;
 const number = n => typeof n === 'number' && Number.isFinite(n) ? n : null;
 export function importWorkout(text, ftp = null) {
@@ -41,6 +42,10 @@ export function importWorkout(text, ftp = null) {
   }
   expand(doc.steps, 0);
   return validatePlan({ version: steps.some(s => s.endWatts != null) ? 2 : 1, kind: 'workout', name: object.name ?? 'Imported workout', ftpWatts: ftp, steps });
+}
+/** A picked file's text: a Zwift .zwo (it starts with "<"; powers need `ftp`) or FTPunk / Intervals.icu JSON. Returns { plan, source } with the library's source label. */
+export function importWorkoutText(text, ftp = null) {
+  return looksLikeZWO(text) ? { plan: parseZWO(text, ftp), source: 'Imported ZWO' } : { plan: importWorkout(text, ftp), source: 'Imported JSON' };
 }
 /** `scheduledDate` is a local calendar day, `yyyy-MM-dd`, text rather than an instant (a workout planned for Tuesday stays on Tuesday). */
 export const ScheduledDate = Object.freeze({

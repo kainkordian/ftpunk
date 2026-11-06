@@ -4,8 +4,9 @@ import { registerRoute, navigate, openSheet, sheetIsOpen, notify, rerender } fro
 import { openInfoSheet } from './sheets.mjs';
 import { resultSections, resultDelta, interruptionSummary, isAdopted, averagePower, DurationFormat } from '../rules/presentation.mjs';
 import { retargetExample } from '../catalog.mjs';
-import { activityTitle } from '../rules/progress.mjs';
-import { csv, tcx, download } from '../export.mjs';
+import { activityTitle, riderIDOf } from '../rules/progress.mjs';
+import { download, exportFile, FORMATS, COROS_MINIMUM_BYTES } from '../export.mjs';
+import { shouldPromptForUpload } from '../intervals.mjs';
 import { OUTCOMES } from '../domain.mjs';
 // The result screen: the training result first, then what it means for training, then sharing. Debug and interrupted rides use the same layout.
 // Two marked slots are used by the Intervals.icu / export plan: `exportControls` and `uploadControls` (also used by the activity detail).
@@ -43,35 +44,56 @@ function handoff(model, session) {
   return `<section class="card stack" id="training-handoff"><p class="label accent-text">WHAT THIS CHANGES</p><h2>Library workouts now use ${Math.round(r.estimatedFTP)} W</h2>${example && example.oldWatts !== example.newWatts ? `<p class="num">${esc(example.text)}</p>` : ''}<p class="footnote">Warm-ups use 50 % of this FTP. Earlier rides keep the FTP they were made with.</p></section>`;
 }
 
-// ---- SLOT (export/upload plan): export controls and upload controls. Used by the result screen and the activity detail. ----
+// ---- Export and upload controls (plan 9b). Used by the result screen and the activity detail. ----
+const FORMAT_ORDER = ['fit', 'tcx', 'csv', 'json'];
+/** True where the browser can hand files to the system share sheet (Web Share API level 2). */
+export function canShareFiles() {
+  try { return typeof navigator.canShare === 'function' && typeof navigator.share === 'function' && navigator.canShare({ files: [new File(['x'], 'a.fit', { type: 'application/octet-stream' })] }); } catch { return false; }
+}
 export function exportControls(model, session) {
   if (session.endedAtOffset == null || !session.samples.length) return '';
-  return `<section class="stack" data-slot="export"><h3>Export</h3><div class="row">${['json', 'csv', 'tcx'].map(f => button(`${f.toUpperCase()} ↗`, { kind: 'secondary', small: true, action: `export-${f}`, extra: { 'data-session': session.id } })).join('')}</div></section>`;
+  const share = canShareFiles(), data = { 'data-session': session.id };
+  return `<section class="stack export-controls" data-slot="export"><h3>Export</h3>
+    <div class="stack">${button('Export FIT file ↗', { kind: 'secondary', action: 'export-fit', extra: { ...data, 'data-testid': 'export-fit' } })}<p class="footnote">For COROS, Garmin, Strava and TrainingPeaks. Upload this file in their web app.</p></div>
+    <div class="row">${['tcx', 'csv', 'json'].map(f => button(`${FORMATS[f].title} ↗`, { kind: 'secondary', small: true, action: `export-${f}`, extra: { ...data, 'data-testid': `export-${f}` } })).join('')}</div>
+    ${share ? `<div class="row">${button('Share…', { kind: 'link', small: true, action: 'share-fit', extra: { ...data, 'aria-label': 'Share the FIT file' } })}</div>` : ''}</section>`;
 }
+/** Saves one format through a download link. A FIT file under 20 KB gets a note, because COROS may reject it. */
 export function exportSession(session, format) {
-  const content = format === 'csv' ? csv(session) : format === 'tcx' ? tcx(session) : JSON.stringify(session, null, 2);
-  download(content, `ftpunk-${session.isDemo ? 'debug-' : ''}${session.id}.${format}`, format === 'csv' ? 'text/csv' : format === 'tcx' ? 'application/vnd.garmin.tcx+xml' : 'application/json');
+  const { name, type, bytes } = exportFile(session, format);
+  download(bytes, name, type);
+  if (format === 'fit' && bytes.length < COROS_MINIMUM_BYTES) notify('COROS may reject files under 20 KB. If it does, export TCX instead.');
+}
+/** Hands one format to the system share sheet where the browser supports sharing files. */
+export async function shareSession(session, format) {
+  const { name, type, bytes } = exportFile(session, format), file = new File([bytes], name, { type });
+  if (!canShareFiles() || !navigator.canShare({ files: [file] })) throw Error('This browser cannot share this file. Use the export button instead.');
+  try { await navigator.share({ files: [file], title: name }); } catch (error) { if (error?.name !== 'AbortError') throw error; }
 }
 export function uploadControls(model, session) {
-  const job = model.jobs.find(j => j.sessionID === session.id && j.accountID === model.connection?.id);
+  const connection = model.connectionFor(riderIDOf(session));
+  if (!connection) return `<section class="stack" data-slot="upload"><a class="btn link" href="#/settings" data-testid="connect-to-upload">Connect Intervals.icu to upload</a></section>`;
+  const job = model.jobs.find(j => j.sessionID === session.id && j.accountID === connection.id);
   return `<section class="stack" data-slot="upload"><button type="button" class="btn link" data-action="request-upload" data-session="${esc(session.id)}" ${job || model.busy ? 'disabled' : ''}>↑ ${job ? `Upload ${esc(job.status)}` : 'Upload to Intervals.icu…'}</button><p class="footnote">You will be asked to confirm the rider and account before anything is sent.</p></section>`;
 }
+/** The consent dialog: names the rider and the destination account, offers Upload or Keep local, and never uploads by itself. */
 export function requestUpload(model, session) {
-  if (!model.connection) { navigate('#/settings'); notify('Connect Intervals.icu, then open the recording in Progress to approve its upload.'); return; }
-  const connection = { ...model.connection };
-  openSheet({ title: 'Upload this activity?', content: `<p>Your activity is already saved in this browser.</p><dl class="kv"><dt>Rider</dt><dd>${esc(session.configuration.riderName)}</dd><dt>Destination</dt><dd>${esc(connection.name)} · ${esc(connection.id)}</dd><dt>Recording</dt><dd>${esc(fmtDate(session.startedAt))}</dd></dl><p class="muted">This sends the activity, including the rider’s name, to this account. If the connection fails, the approved upload will queue for retry.</p>`,
-    actions: '<button type="button" class="btn primary" data-dialog="upload">Approve &amp; upload ↗</button><button type="button" class="btn secondary" data-dialog="local">Keep local</button>',
+  const riderName = session.configuration.riderName ?? 'You', connection = model.connectionFor(riderIDOf(session));
+  if (!connection) { navigate('#/settings'); notify(`Connect Intervals.icu for ${riderName} (select the rider in Settings), then approve the upload.`); return; }
+  openSheet({ title: 'Upload this activity?', content: `<p class="accent-text">✓ Activity saved in this browser</p><dl class="kv"><dt>Rider</dt><dd data-testid="upload-rider">${esc(riderName)}</dd><dt>Activity</dt><dd>${esc(fmtDate(session.startedAt))}</dd><dt>Intervals.icu account</dt><dd data-testid="upload-account">${esc(connection.name)}</dd></dl><p class="footnote">Account ID: ${esc(connection.id)}</p><p class="muted">This sends the activity, including the rider’s name, to this account. Check the destination when sharing FTPunk with another rider. If the connection fails, the approved upload will queue for retry.</p>`,
+    actions: '<button type="button" class="btn primary" data-dialog="upload">Upload activity ↗</button><button type="button" class="btn secondary" data-dialog="local">Keep local · not now</button>',
     handler: async (action, dialog) => {
       if (action === 'local') return dialog.close();
+      if (model.preview) { dialog.close(); notify('Preview mode: nothing is uploaded.'); return; }
       const approve = dialog.querySelector('[data-dialog="upload"]'); approve.disabled = true;
-      try { await model.intervals.approve(session, connection.id); dialog.close(); await model.reload(); model.onChange(); const job = model.jobs.find(j => j.sessionID === session.id && j.accountID === connection.id); notify(job?.status === 'uploaded' ? 'Activity uploaded to Intervals.icu.' : `Upload saved for retry. ${job?.error ?? ''}`); }
+      try { await model.intervals.approve(session, connection.id); dialog.close(); await model.reload(); model.onChange(); const job = model.jobs.find(j => j.sessionID === session.id && j.accountID === connection.id); notify(job?.status === 'uploaded' ? 'Activity uploaded to Intervals.icu.' : `Upload saved for retry. ${job?.error ?? ''}`); model.onInvalidate(); }
       catch (error) { approve.disabled = false; throw error; }
     } });
 }
+const sessionFor = (model, el) => model.history.find(s => s.id === el.dataset.session) ?? model.ride.engine?.session;
 export const exportActions = model => ({
-  'export-json': el => exportSession(model.history.find(s => s.id === el.dataset.session) ?? model.ride.engine?.session, 'json'),
-  'export-csv': el => exportSession(model.history.find(s => s.id === el.dataset.session) ?? model.ride.engine?.session, 'csv'),
-  'export-tcx': el => exportSession(model.history.find(s => s.id === el.dataset.session) ?? model.ride.engine?.session, 'tcx'),
+  ...Object.fromEntries(FORMAT_ORDER.map(f => [`export-${f}`, el => exportSession(sessionFor(model, el), f)])),
+  ...Object.fromEntries(FORMAT_ORDER.map(f => [`share-${f}`, el => shareSession(sessionFor(model, el), f)])),
   'request-upload': el => requestUpload(model, model.history.find(s => s.id === el.dataset.session)),
   'info-estimate': () => openInfoSheet('estimate'),
 });
@@ -81,12 +103,12 @@ registerRoute('result', {
   render(model) {
     const session = model.resultSession; if (!session) return `${screenHeader('Result', { back: '#/home' })}<p class="muted">Nothing to show.</p>`;
     const rider = riderOf(model, session), result = session.result, isFTP = !!result && session.training == null;
-    const adopted = result ? isAdopted(rider, result, session.startedAt) : false, canUpload = !!model.connection && !session.isDemo && session.endedAtOffset != null;
+    const adopted = result ? isAdopted(rider, result, session.startedAt) : false, connection = model.connectionFor(riderIDOf(session)), finished = !session.isDemo && session.endedAtOffset != null, canUpload = !!connection && finished;
     const sections = resultSections({ isFTPResult: isFTP, adopted: adopted && !session.isDemo, canUpload });
     const parts = { headline: () => headline(model, session), chart: () => chartSection(session), decision: () => `<p class="accent-text decision" id="ftp-adopted"><strong>✓ ${esc(session.configuration.riderName)}’s FTP is now ${Math.round(result.estimatedFTP)} W</strong></p>`, trainingHandoff: () => handoff(model, session), upload: () => uploadControls(model, session) };
     const canAdopt = isFTP && !session.isDemo && !adopted, current = rider?.ftpHistory.find(e => e.id === rider.currentFTPID)?.watts;
     const finishing = model.ride.finishing;
-    return `<div class="stack-l result">${session.isDemo ? `<p>${pill('Debug · mock sensor data · never uploads', 'warning', '▶')}</p>` : ''}<p class="warn" id="result-finishing" ${finishing ? '' : 'hidden'}>⏳ Confirming trainer stop…</p>${sections.map(k => parts[k]()).join('')}${exportControls(model, session)}</div>
+    return `<div class="stack-l result">${session.isDemo ? `<p>${pill('Debug · mock sensor data · never uploads', 'warning', '▶')}</p>` : ''}<p class="warn" id="result-finishing" ${finishing ? '' : 'hidden'}>⏳ Confirming trainer stop…</p>${sections.map(k => parts[k]()).join('')}${!connection && finished ? uploadControls(model, session) : ''}${exportControls(model, session)}</div>
       <div class="action-bar result-actions">${canAdopt ? `${button(`Use ${Math.round(result.estimatedFTP)} W as ${esc(session.configuration.riderName)}’s FTP`, { kind: 'primary', block: true, action: 'adopt', disabled: model.busy || finishing, extra: { 'data-testid': 'adopt' } })}${button(current ? `Keep ${Math.round(current)} W` : 'Not now', { kind: 'secondary', block: true, action: 'done', disabled: finishing, extra: { 'data-testid': 'keep-ftp' } })}`
         : button(adopted && !session.isDemo ? 'Back to Home' : 'Done', { kind: 'primary', block: true, action: 'done', disabled: finishing, extra: { 'data-testid': 'done' } })}</div>`;
   },
@@ -97,5 +119,7 @@ registerRoute('result', {
     done: () => { model.closeResult(); navigate('#/home'); },
   }),
   /** After every finished ride that has a result or a workout: ask whether to upload it (never silent). */
-  onRideSaved(model, session) { if (!session.isDemo && (session.result || session.training) && model.connection && !sheetIsOpen()) requestUpload(model, session); },
+  async onRideSaved(model, session) {
+    try { if (!sheetIsOpen() && await shouldPromptForUpload(model, session) && !sheetIsOpen()) requestUpload(model, session); } catch (error) { notify(error?.message ?? String(error), true); }
+  },
 });

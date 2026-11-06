@@ -76,9 +76,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .chips { display: flex; gap: var(--space-s); overflow-x: auto; padding: var(--space-xs) 0; scrollbar-width: none; }
 .chip { flex: none; min-height: 44px; padding: 0 var(--space-m); border-radius: 999px; border: 2px solid transparent; background: color-mix(in srgb, var(--secondary) 14%, transparent); cursor: pointer; font-size: .9375rem; }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
-.segmented { display: inline-flex; border: 1.5px solid var(--control); border-radius: 10px; overflow: hidden; }
+.segmented { display: inline-flex; align-self: flex-start; border: 1.5px solid var(--accent); border-radius: 10px; overflow: hidden; }
 .segmented button { min-height: 40px; padding: 0 var(--space-m); border: 0; background: none; cursor: pointer; }
-.segmented button[aria-pressed="true"] { background: var(--control); color: #fff; font-weight: 700; }
+.segmented button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
 
 /* Forms */
 .field { display: flex; flex-direction: column; gap: 4px; }
@@ -111,6 +111,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* Dialogs (sheets) and notices */
 dialog { width: min(560px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--card-line); border-radius: var(--radius-card); background: var(--surface); color: var(--ink); overflow: auto; }
+dialog:focus { outline: none; }
 dialog::backdrop { background: rgba(0, 0, 0, .5); }
 .dialog-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-m); padding: var(--space-m) var(--space-l); position: sticky; top: 0; background: var(--surface); border-bottom: 1px solid var(--card-line); z-index: 1; }
 .dialog-content { padding: var(--space-l); display: flex; flex-direction: column; gap: var(--space-m); }

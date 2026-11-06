@@ -1,7 +1,7 @@
 import { uuid, PRESETS } from './domain.mjs';
 import { BluetoothDevices } from './bluetooth.mjs';
 import { RideController } from './controller.mjs';
-import { IntervalsClient } from './intervals.mjs';
+import { IntervalsClient, startIntervals, syncAthleteIfNeeded } from './intervals.mjs';
 import { LocalStore, acquireRideLease, loadPreferences, savePreferences } from './storage.mjs';
 import { freeRide, resistanceRide } from './training.mjs';
 import { importWorkout, MAX_WORKOUT_BYTES, ScheduledDate } from './workouts.mjs';
@@ -16,6 +16,7 @@ import { buildConfiguration, defaultDraft, durationsValid, targetsInRange, power
     Later features add their own state in their own modules and reach the app through `model` (see `workoutResolvers`, `hooks`). */
 export class AppModel {
   constructor({ store, devices = new BluetoothDevices(), prefs = loadPreferences(), preview = false, now = () => performance.now() / 1000, lease = acquireRideLease, rideOptions = {} } = {}) {
+    this.lease = lease;
     Object.assign(this, { store, devices, prefs, preview, now });
     this.profiles = []; this.history = []; this.workouts = []; this.jobs = [];
     this.draft = defaultDraft(); this.powerSource = 'trainer'; this.demoMode = false; this.onboardingPending = false;
@@ -23,7 +24,7 @@ export class AppModel {
     this.hooks = { saved: [] };        // saved: [(session) => void] run after a recording is saved and history is reloaded
     this.libraryCategory = null; this.downloading = false; this.importReport = null; this.resultSessionID = null; this.lastPhase = null;
     this.onChange = () => {}; this.onInvalidate = () => {}; this.onNotice = () => {}; this.onPreferences = () => {};
-    this.intervals = new IntervalsClient(store);
+    this.intervals = new IntervalsClient(store, { selectedRider: () => this.profile?.id ?? null });
     this.ride = new RideController(devices, store, { now, lease, ...rideOptions });
     this.ride.onError = error => this.fail(error);
     this.ride.onChange = () => this.onChange();
@@ -153,9 +154,9 @@ export class AppModel {
     this.importReport = `Saved ${plan.name} for offline riding.`; await this.reload(); this.invalidate();
   }
   async deleteCachedWorkout(id) { if (this.busy) return; await this.store.delete('workouts', id); await this.reload(); this.invalidate(); }
-  // ----- Intervals.icu calendar (one connection today; per rider arrives with the Intervals plan) -----------------------------------------
-  /** The Intervals.icu account usable for a rider: { id, name } or null. */
-  connectionFor(riderID) { return this.intervals.connection && this.profile?.id === riderID ? { id: this.intervals.connection.id, name: this.intervals.connection.name } : null; }
+  // ----- Intervals.icu calendar (one connection per rider) -----------------------------------------------------------------------------
+  /** The Intervals.icu account usable for a rider: { id, name, remembered } or null. Never exposes the credential. */
+  connectionFor(riderID) { return this.intervals.connectionFor(riderID); }
   get connection() { return this.profile ? this.connectionFor(this.profile.id) : null; }
   lastDownload(accountID) { const v = this.prefs[`downloadedAt.${accountID}`]; return typeof v === 'number' ? v : null; }
   shouldRefreshCalendar() { const c = this.connection; return !this.preview && Date.now() - (this.lastCalendarAttempt ?? 0) > 60000 && shouldRefresh({ lastDownload: c ? this.lastDownload(c.id) : null, connected: !!c, rideActive: this.busy, alreadyRunning: this.downloading }); }
@@ -175,7 +176,7 @@ export class AppModel {
       this.importReport = quiet ? null : `Saved ${result.workouts.length} workouts for offline use.` + (result.skipped.length ? '\nSkipped:\n' + result.skipped.slice(0, 20).join('\n') + (result.skipped.length > 20 ? `\n…and ${result.skipped.length - 20} more.` : '') : '');
     } finally { this.downloading = false; this.invalidate(); }
   }
-  async refreshCalendarIfNeeded() { if (this.shouldRefreshCalendar()) { this.lastCalendarAttempt = Date.now(); await this.downloadCalendar({ quiet: true }).catch(error => { this.calendarMessage = `Calendar not refreshed: ${error.message}`; this.invalidate(); }); } }
+  async refreshCalendarIfNeeded() { await syncAthleteIfNeeded(this).catch(() => {}); if (this.shouldRefreshCalendar()) { this.lastCalendarAttempt = Date.now(); await this.downloadCalendar({ quiet: true }).catch(error => { this.calendarMessage = `Calendar not refreshed: ${error.message}`; this.invalidate(); }); } }
   // ----- recordings -------------------------------------------------------------------------------------------------------------------
   get resultSession() { const engine = this.ride.engine; if (engine && this.resultSessionID == null) return engine.session; return this.history.find(s => s.id === this.resultSessionID) ?? engine?.session ?? null; }
   /** Use a ramp result as the rider's current FTP. The result's own rider is updated, whoever is selected. */
@@ -195,15 +196,15 @@ export class AppModel {
     await this.reload(); this.invalidate();
   }
   closeResult() { if (!this.ride.busy) this.ride.engine = null; this.resultSessionID = null; this.onChange(); }
-  async exportBackup() { if (this.busy) throw Error('Finish the ride before exporting a backup.'); const release = await acquireRideLease(); try { download(archiveText(await this.store.backup()), `ftpunk-backup-${new Date().toISOString().slice(0, 10)}.json`); } finally { release(); } }
+  async exportBackup() { if (this.busy) throw Error('Finish the ride before exporting a backup.'); const release = await this.lease(); try { download(archiveText(await this.store.backup()), `ftpunk-backup-${new Date().toISOString().slice(0, 10)}.json`); } finally { release(); } }
   /** Run on every state change: returns 'present' once when a ride has just ended, so the shell can show its result. */
   phaseChange() {
     const phase = this.ride.engine?.phase ?? null, previous = this.lastPhase; this.lastPhase = phase;
     return { previous, phase, present: shouldPresentResult(previous, phase, false) };
   }
   async boot() {
-    try { const release = await acquireRideLease(); try { await this.store.recover(); } finally { release(); } } catch (error) { this.notify(error.message); }
-    await this.reload();
+    try { const release = await this.lease(); try { await this.store.recover(); } finally { release(); } } catch (error) { this.notify(error.message); }
+    await this.reload(); await startIntervals(this);
     this.onboardingPending = !this.profiles.length;
     this.applyRecommendation();
   }

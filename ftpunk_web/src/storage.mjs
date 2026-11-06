@@ -1,10 +1,11 @@
 import { validateCachedWorkout } from './workouts.mjs';
 import { creditSession } from './training.mjs';
+import { validateCustomWorkout, checkSave } from './custom-workouts.mjs';
 import { makeArchive, validateArchive, archiveSessions, archiveText } from './archive.mjs';
 export const DB_NAME = 'ftpunk-web-v1';
 export const DB_VERSION = 4;
 // Archive replacement and rollback backups cover these stores (portable archive v1-v3).
-const STORES = ['sessions', 'profiles', 'jobs', 'backups', 'workouts'];
+const STORES = ['sessions', 'profiles', 'jobs', 'backups', 'workouts', 'customWorkouts'];
 // Created once here (version 4) so later features never change the schema: the riders' own workouts (`customWorkouts`, indexed by rider),
 // remembered Intervals.icu keys (`credentials`, one encrypted record per rider) and per-rider settings (`riderSettings`).
 export const DB_SCHEMA = Object.freeze({
@@ -12,6 +13,7 @@ export const DB_SCHEMA = Object.freeze({
   customWorkouts: { keyPath: 'id', indexes: ['riderID'] }, credentials: { keyPath: 'riderID' }, riderSettings: { keyPath: 'riderID' },
 });
 export const defaultRiderSettings = riderID => ({ riderID, askToUpload: true, sync: { enabled: false, linkedAccountID: null, lastSynced: null, state: { lastSeenFTP: null, lastSeenWeight: null } } });
+const validOrNothing = record => { try { return [validateCustomWorkout(record)]; } catch { return []; } };
 export class LocalStore {
   static async open(name = DB_NAME) {
     if (!globalThis.indexedDB) throw Error('Local storage is unavailable. Enable browser storage before starting a test.');
@@ -71,6 +73,20 @@ export class LocalStore {
       };
     });
   }
+  /** The riders' own workouts (every rider), newest first. Records that fail validation are skipped rather than blocking the app. */
+  async customWorkouts() {
+    return (await this.all('customWorkouts')).flatMap(record => { try { return [validateCustomWorkout(record)]; } catch { return []; } }).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  }
+  /** Validates and saves one custom workout in a single transaction: a workout cannot move to another rider, and a rider keeps at most 200. */
+  saveCustomWorkout(workout) {
+    const clean = validateCustomWorkout(workout);
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction('customWorkouts', 'readwrite'), table = tx.objectStore('customWorkouts'), existing = table.getAll();
+      let failure; tx.oncomplete = () => resolve(clean); tx.onerror = tx.onabort = () => reject(failure ?? tx.error ?? Error('The workout could not be saved.'));
+      existing.onsuccess = () => { try { checkSave(existing.result, clean); table.put(clean); } catch (e) { failure = e; tx.abort(); } };
+    });
+  }
+  deleteCustomWorkout(id) { return this.delete('customWorkouts', id); }
   saveSession(session) {
     return new Promise((resolve, reject) => {
       const tx = this.db.transaction(['sessions', 'profiles'], 'readwrite');
@@ -99,9 +115,9 @@ export class LocalStore {
   }
   async backup() {
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(['profiles', 'sessions', 'workouts'], 'readonly');
-      const profiles = tx.objectStore('profiles').getAll(), sessions = tx.objectStore('sessions').getAll(), workouts = tx.objectStore('workouts').getAll();
-      tx.oncomplete = () => { try { resolve(makeArchive(profiles.result, sessions.result, undefined, workouts.result)); } catch (e) { reject(e); } };
+      const tx = this.db.transaction(['profiles', 'sessions', 'workouts', 'customWorkouts'], 'readonly');
+      const profiles = tx.objectStore('profiles').getAll(), sessions = tx.objectStore('sessions').getAll(), workouts = tx.objectStore('workouts').getAll(), custom = tx.objectStore('customWorkouts').getAll();
+      tx.oncomplete = () => { try { resolve(makeArchive(profiles.result, sessions.result, undefined, workouts.result, custom.result.flatMap(validOrNothing))); } catch (e) { reject(e); } };
       tx.onerror = tx.onabort = () => reject(tx.error ?? Error('Backup could not be read.'));
     });
   }
@@ -123,7 +139,9 @@ export class LocalStore {
             if (oldSessions.some(s => ids.has(s.id.toLowerCase()) && !riders.has(owner(s)))) throw Error('An imported activity belongs to a different local rider. Nothing was changed.');
             const workoutIDs = new Set((archive.workouts ?? []).map(w => w.id));
             if (requests.workouts.result.some(w => workoutIDs.has(w.id) && !riders.has(w.riderID.toLowerCase()))) throw Error('An imported workout belongs to a different local rider. Nothing was changed.');
-            const before = makeArchive(oldProfiles, oldSessions, undefined, requests.workouts.result); archiveText(before);
+            const customIDs = new Set((archive.customWorkouts ?? []).map(w => w.id)), oldCustom = requests.customWorkouts.result.flatMap(validOrNothing);
+            if (oldCustom.some(w => customIDs.has(w.id) && !riders.has(w.riderID))) throw Error('An imported workout belongs to a different local rider. Nothing was changed.');
+            const before = makeArchive(oldProfiles, oldSessions, undefined, requests.workouts.result, oldCustom); archiveText(before);
             backupID = crypto.randomUUID();
             tx.objectStore('backups').put({ id: backupID, createdAt: new Date().toISOString(), archive: before });
             // Retain the latest three rollback snapshots without growing the database forever.
@@ -134,6 +152,8 @@ export class LocalStore {
             for (const j of requests.jobs.result) if (removed.has(j.sessionID)) tx.objectStore('jobs').delete(j.id);
             for (const w of requests.workouts.result) if (riders.has(w.riderID.toLowerCase())) tx.objectStore('workouts').delete(w.id);
             for (const w of archive.workouts ?? []) tx.objectStore('workouts').put(w);
+            for (const w of requests.customWorkouts.result) if (riders.has(String(w.riderID).toLowerCase())) tx.objectStore('customWorkouts').delete(w.id);
+            for (const w of archive.customWorkouts ?? []) tx.objectStore('customWorkouts').put(w);
             for (const p of archive.profiles) tx.objectStore('profiles').put(p);
             for (const s of incoming) tx.objectStore('sessions').put(s);
           } catch (e) { failure = e; tx.abort(); }
@@ -143,13 +163,20 @@ export class LocalStore {
   }
 }
 // Only one tab may recover sessions or own a live/mock workout at a time.
-export async function acquireRideLease(locks = globalThis.navigator?.locks) {
+// `ifAvailable` should answer at once, but headless Chrome on a fresh profile was seen never calling back at all (2026-11-06), which
+// left the app on "Loading…". After `timeoutMs` the request counts as failed; if the lock arrives later anyway it is released at once.
+export async function acquireRideLease(locks = globalThis.navigator?.locks, { timeoutMs = 5000 } = {}) {
   if (!locks) throw Error('This browser cannot reserve trainer control. Use a current version of Chrome.');
   return new Promise((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => { settled = true; reject(Error('Chrome did not answer the trainer-control reservation. Reload the page and try again.')); }, timeoutMs);
     locks.request('ftpunk-web-ride', { ifAvailable: true }, lock => {
+      clearTimeout(timer);
+      if (settled) return; // timed out: let the late lock go immediately
+      settled = true;
       if (!lock) { reject(Error('Another FTPunk tab is running a test. End that test first.')); return; }
       return new Promise(release => resolve(release));
-    }).catch(reject);
+    }).catch(error => { clearTimeout(timer); if (!settled) { settled = true; reject(error); } });
   });
 }
 // Preferences live in localStorage (never in backups). Known keys are validated; any other plain key is passed through so a

@@ -1,14 +1,16 @@
 import { esc, button, chips, workoutCard, profileChart, bindProfileHover, $ } from './components.mjs';
-import { openSheet, navigate, hashFor, notify, rerender } from './shell.mjs';
+import { openSheet, confirmSheet, navigate, hashFor, notify, rerender } from './shell.mjs';
 import { CATEGORIES, definitionsIn, mainSetWatts, intensityLabel } from '../catalog.mjs';
 import { previewSteps, mainSetText, zoneTitle } from '../rules/preview.mjs';
 import { DurationFormat, BLOCKER_TEXT } from '../rules/presentation.mjs';
 import { selectToday, upcoming, mine, dateText } from '../rules/home.mjs';
 import { exampleWorkout } from '../workouts.mjs';
+import { needsFTP as customNeedsFTP } from '../custom-workouts.mjs';
+import './builder.mjs';
 import { download } from '../export.mjs';
 import { ScheduledDate } from '../workouts.mjs';
 // The workout library on Home: Today, the classics by category, Upcoming (Intervals.icu cache), My workouts, and the workout detail sheet.
-// Called from home.mjs. The "My workouts" section is a marked slot: the workout builder and ZWO import plan replaces `myWorkoutsSection`.
+// Called from home.mjs. "My workouts" holds the rider's own workouts (built in the builder, ui/builder.mjs) and imported files (JSON or Zwift .zwo).
 
 const caption = detail => [DurationFormat.workout(detail.duration), detail.plan && mainSetWatts(detail.plan) != null ? `main ${mainSetWatts(detail.plan)} W` : null].filter(Boolean).join(' · ');
 const today = () => ScheduledDate.stringFor(new Date());
@@ -41,15 +43,23 @@ export function upcomingSection(model) {
     ${model.importReport && model.connection ? `<p class="footnote report">${esc(model.importReport)}</p>` : ''}${model.calendarMessage ? `<p class="footnote">${esc(model.calendarMessage)}</p>` : ''}</section>`;
 }
 
-// ---- My workouts: marked slot. Today it lists imported JSON files; the builder plan replaces this function and its actions. ----
+// ---- My workouts: the three actions, the rider's own workouts (a card opens the detail sheet with edit, duplicate, export ZWO and delete; Edit is also on the card) and imported files. ----
+const customCard = (model, workout) => {
+  const detail = model.customDetail(workout.id); if (!detail) return '';
+  const busy = model.busy, ref = detail.ref;
+  const act = (text, action, disabled = false) => button(text, { kind: 'link', small: true, action, disabled: busy || disabled, extra: { 'data-ref': ref, 'aria-label': `${text}, ${workout.name}` } });
+  return `<div class="custom-card">${workoutCard({ title: workout.name, detail: `${DurationFormat.workout(detail.duration)} · ${customNeedsFTP(workout) ? '% FTP' : 'watts'}`, plan: detail.previewPlan, badge: detail.needsFTP && customNeedsFTP(workout) ? 'Needs FTP' : '', action: 'open-workout', ref })}
+    <div class="row card-actions">${act('Edit', 'edit-workout')}</div></div>`;
+};
 export function myWorkoutsSection(model) {
-  const own = mine(model.workouts, model.profile.id);
+  const own = mine(model.workouts, model.profile.id), built = model.myCustomWorkouts, busy = model.busy;
   return `<section class="stack" id="my-workouts" data-slot="my-workouts"><h2>My workouts</h2>
-    <div class="row">${button('Import file…', { kind: 'tertiary', action: 'import-workout', disabled: model.busy })}<input type="file" id="workout-file" aria-label="Workout file" accept=".json,application/json" hidden></div>
-    ${own.length ? `<div class="grid-cards">${own.map(w => workoutCard({ title: w.plan.name, detail: `${DurationFormat.workout(w.plan.steps.reduce((n, s) => n + s.seconds, 0))} · imported`, plan: w.plan, action: 'open-workout', ref: `cached:${w.id}` })).join('')}</div>`
-      : `<p class="footnote">Import an FTPunk JSON workout or an Intervals.icu workout event.</p>${button('Get an example JSON file', { kind: 'link', action: 'example-workout' })}`}
+    <div class="row my-actions">${button('New workout', { kind: 'tertiary', action: 'new-workout', disabled: busy })}${button('Paste as text', { kind: 'tertiary', action: 'paste-workout', disabled: busy })}${button('Import file…', { kind: 'tertiary', action: 'import-workout', disabled: busy })}<input type="file" id="workout-file" aria-label="Workout file" accept=".json,.zwo,.xml,application/json,application/xml,text/xml" hidden></div>
+    ${built.length || own.length ? `<div class="grid-cards">${built.map(w => customCard(model, w)).join('')}${own.map(w => workoutCard({ title: w.plan.name, detail: `${DurationFormat.workout(w.plan.steps.reduce((n, s) => n + s.seconds, 0))} · imported`, plan: w.plan, action: 'open-workout', ref: `cached:${w.id}` })).join('')}</div>`
+      : `<p class="footnote">Build a workout with blocks or as text, paste one from Intervals.icu, or import a Zwift .zwo, an Intervals.icu workout event or an FTPunk JSON file. ZWO powers need your FTP. Your workouts stay on this device.</p>${button('Get an example JSON file', { kind: 'link', action: 'example-workout' })}`}
     ${model.importReport && !model.connection ? `<p class="footnote report">${esc(model.importReport)}</p>` : ''}</section>`;
 }
+const confirmDelete = (model, workout) => confirmSheet({ title: 'Delete this workout?', text: `“${workout.name}” will be removed from this device. Recordings of it are kept.`, confirm: 'Delete workout', onConfirm: () => model.deleteCustomWorkout(workout.id) });
 
 /** Click, chip and change handlers for everything above; merged into the Home route's own. */
 export const libraryActions = model => ({
@@ -59,6 +69,16 @@ export const libraryActions = model => ({
   'refresh-calendar': () => model.downloadCalendar(),
   'import-workout': () => { if (!model.busy) $('#workout-file').click(); },
   'example-workout': () => download(JSON.stringify(exampleWorkout, null, 2), 'ftpunk-workout-example.json'),
+  'new-workout': () => { if (!model.busy) navigate(model.newWorkout()); },
+  'paste-workout': async () => {
+    if (model.busy) return;
+    let text = ''; try { text = await navigator.clipboard.readText(); } catch { notify('The browser did not allow reading the clipboard. Paste the workout text into the editor with Ctrl+V or Cmd+V.'); }
+    navigate(model.newWorkout(text));
+  },
+  'edit-workout': el => { const hash = model.editWorkout(model.workoutDetail(el.dataset.ref)?.custom?.id); if (hash) navigate(hash); },
+  'duplicate-workout': el => { const hash = model.duplicateAndEdit(el.dataset.ref); if (hash) navigate(hash); },
+  'export-workout': el => { const plan = model.workoutDetail(el.dataset.ref)?.plan; if (!plan) throw Error(BLOCKER_TEXT.needsFTP); model.exportWorkoutZWO(plan); },
+  'delete-workout': el => { const workout = model.workoutDetail(el.dataset.ref)?.custom; if (workout) confirmDelete(model, workout); },
 });
 export const libraryChips = model => ({ category: value => { model.libraryCategory = value === 'all' ? null : value; rerender(); } });
 export const libraryEvents = model => ({ change: { 'workout-file': async input => { const file = input.files[0]; input.value = ''; if (file) await model.importWorkoutFile(file); } } });
@@ -72,16 +92,24 @@ export function openWorkoutDetail(model, ref) {
     const plan = d.plan ?? d.previewPlan, showValues = !d.needsFTP, steps = previewSteps(plan, 100, showValues), main = d.plan ? mainSetText(d.plan) : null;
     const used = d.plan?.ftpWatts, differs = d.cached && used != null && model.ftp != null && Math.abs(used - model.ftp) > 0.5;
     const ftpNote = d.needsFTP ? '<p class="warn">ⓘ Needs FTP. Take an FTP test or set your FTP to see targets in watts.</p>'
+      : d.custom ? `<p>${customNeedsFTP(d.custom) ? `Targets are a share of your FTP (${Math.round(model.ftp)} W) and follow it when it changes.` : 'Targets are fixed in watts.'}</p>`
       : used != null ? `<p>${d.cached ? `Targets are fixed in watts (saved at ${Math.round(used)} W FTP).` : `Targets use your FTP of ${Math.round(used)} W.`}</p>${differs ? `<p class="footnote warn">Your current FTP is ${Math.round(model.ftp)} W. This workout does not rescale.</p>` : ''}` : '<p>Targets are fixed in watts.</p>';
     return `<div class="stack"><div><h2>${esc(d.title)}</h2><p class="muted">${esc([d.categoryTitle, d.source, DurationFormat.workout(d.duration)].filter(Boolean).join(' · '))}</p>${d.plan ? `<p><strong>${esc(intensityLabel(d.plan))}</strong></p>` : ''}${main ? `<p class="num">Main set: ${esc(main)}</p>` : ''}</div>
       ${profileChart(d.previewPlan, { height: 'large', interactive: true })}<p class="footnote">The dashed line is 100 % of FTP. Hover or touch the chart to see a step.</p>${ftpNote}
       <ol class="steps" aria-label="Steps">${steps.map(s => `<li data-step-row="${s.index}" tabindex="0"><span class="swatch ${s.zone == null ? 'zone-none' : `zone-${s.zone}`}" aria-hidden="true"></span><span class="grow">${esc(s.name)}${s.zone != null ? `<span class="sr-only"> ${esc(zoneTitle(s.zone))}</span>` : ''}</span><span class="num">${esc(s.durationText)}</span>${showValues ? `<span class="num">${esc(s.percentText ?? '')}</span><span class="num">${esc(s.wattsText)}</span>` : ''}</li>`).join('')}</ol></div>`;
   };
-  const actions = () => { const d = detail(); return `${button('▶ Start', { kind: 'primary', extra: { 'data-dialog': 'start' }, disabled: !d || d.needsFTP || model.busy })}${d?.cached ? button('Remove from library', { kind: 'danger', extra: { 'data-dialog': 'remove' }, disabled: model.busy }) : ''}<button type="button" class="btn secondary" data-dialog="close">Close</button>`; };
+  const actions = () => {
+    const d = detail(), more = (label, action, kind = 'secondary') => button(label, { kind, extra: { 'data-dialog': action }, disabled: model.busy });
+    return `${button('▶ Start', { kind: 'primary', extra: { 'data-dialog': 'start' }, disabled: !d || d.needsFTP || model.busy })}${d?.custom ? more('Edit', 'edit') : ''}${d && model.duplicateWorkout(ref) ? more('Duplicate & edit', 'duplicate') : ''}${d?.plan ? more('Export as ZWO', 'zwo') : ''}${d?.cached ? more('Remove from library', 'remove', 'danger') : ''}${d?.custom ? more('Delete workout', 'delete', 'danger') : ''}<button type="button" class="btn secondary" data-dialog="close">Close</button>`;
+  };
   const d = detail();
   openSheet({ title: 'Workout', content, actions, onOpen: dialog => bindProfileHover(dialog, d.previewPlan, { showValues: !d.needsFTP }), handler: async (action, dialog) => {
     if (action === 'close') return dialog.close();
     if (action === 'start') { if (d.needsFTP) throw Error(BLOCKER_TEXT.needsFTP); dialog.close(); navigate(hashFor('preflight', 'workout', ref)); return; }
     if (action === 'remove') { await model.deleteCachedWorkout(d.cached.id); dialog.close(); }
+    if (action === 'edit') { dialog.close(); navigate(model.editWorkout(d.custom.id)); }
+    if (action === 'duplicate') { dialog.close(); navigate(model.duplicateAndEdit(ref)); }
+    if (action === 'zwo') model.exportWorkoutZWO(d.plan);
+    if (action === 'delete') { dialog.close(); confirmDelete(model, d.custom); }
   } });
 }

@@ -19,9 +19,9 @@ Fixed principles:
 - The trainer is only ever controlled by the ride engine. Visuals, imports and integrations
   never send trainer commands.
 
-## Where it stands (2026-11-05)
+## Where it stands (2026-11-06)
 
-Built and covered by tests (306 Swift tests, iOS + Mac builds pass):
+Built and covered by tests (314 Swift tests, iOS + Mac builds pass):
 
 - FTP test (three ramp presets, warm-up/cool-down, scoring, adopt result), workouts (classic
   library with flat warm-ups, Intervals.icu calendar, JSON and ZWO import, ZWO export, % FTP / W preview), free ERG,
@@ -39,7 +39,7 @@ Built and covered by tests (306 Swift tests, iOS + Mac builds pass):
 - Activity export: FIT (own encoder, field numbers checked against FIT profile 21.221; decoded with fitdecode/fitparse),
   TCX, CSV, JSON from the activity detail and the result screen; save panel / Files plus Share on iOS.
 - **Workout builder:** the riders' own workouts as blocks or text (a documented subset of the Intervals.icu syntax), % FTP and
-  watts, ramps, one level of repeats; local per rider, in backups as an optional `customWorkouts` key (web app ignores it).
+  watts, ramps, one level of repeats; local per rider, in backups as an optional `customWorkouts` key (the web app keeps it too).
 - Portable archives v1–v3, shared with the web app.
 
 - **Web app foundation (plan 8, 2026-11-05):** `ftpunk_web/` now has the native structure: Home, pre-flight, cockpit, result, Progress and
@@ -47,8 +47,18 @@ Built and covered by tests (306 Swift tests, iOS + Mac builds pass):
   Swift-written fixtures in `contracts/fixtures/`), retest advice and start blockers ported from `Sources/FTPunkDomain`, IndexedDB version 4
   (`customWorkouts`, `credentials`, `riderSettings` for the next plans), preview scenarios (`?scenario=`) and a capture tool (built, never run). The story is
   gone from the UI; its fields are preserved in archives. New FTP tests always use 72 %. Tests run in real headless Chrome with
-  `python3 ftpunk_web/tools/test.py` (158 tests, no Node; CI runs it before the Pages deploy). Still old on the web: the power matcher, the ride visual,
-  Intervals.icu per rider, FIT export, ZWO and the workout builder (plans 9a-9c).
+  `python3 ftpunk_web/tools/test.py` (no Node; CI runs it before the Pages deploy).
+- **Web app parity (plans 9a–9c, 2026-11-06):** the native power matcher (3,300 per-second commands equal to native) and Chaindance (60+ frames
+  pixel-identical) with the cockpit's placement menu, matching status and two-column Large view; Intervals.icu per rider with an opt-in encrypted key
+  (AES-GCM, non-extractable WebCrypto key), the upload prompt, FTP/weight sync, a strict CSP; FIT export byte-identical to native plus TCX/CSV/JSON
+  and Share; ZWO import/export, the workout text syntax, custom workouts and the builder, `customWorkouts` in archives. 255 web tests.
+  Not exercised: a real trainer, a real key from Chrome, a FIT file in COROS, clipboard/file pickers/downloads/Share in a real browser.
+- **Web visual review (2026-11-06, headless Chrome, all 34 scenarios at 390 and 1280 px):** layouts hold at both sizes. Fixed: the app could hang on
+  "Loading…" when Chrome never answered the Web Locks request (now a 5 s timeout, and previews use their own lease; this was also the flaky test);
+  the CSP blocked Chaindance's inline readout height; a global `details` rule hid the "How this is calculated" arrow; the theme switch stretched
+  full width; the ride header's minimise glyph; the remember-key note's wording for other users.
+  Polish done the same day: tab-style switches use the lime accent, one "Share…" button (FIT) instead of four, custom-workout cards show only Edit (the detail
+  sheet has Duplicate, Export ZWO and Delete), dialogs no longer open with a focus ring on ✕, the sidebar logo is a rounded tile, chart axis text is larger on phones.
 
 **Not verified yet:** none of the seven roadmap plans has been looked at on a screen (Chaindance Large, the builder, the
 Settings changes, the export controls), and the save panel / Files behaviour of `fileExporter` is untested. A FIT file has been decoded
@@ -63,7 +73,7 @@ the latest screens. The web app (`ftpunk_web/`) has the same caveat: its new scr
 
 ## Next steps
 
-The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) is ready in `next/`.
+The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). `next/` is empty.
 
 ### Step 0: baseline commit (done 2026-11-04)
 
@@ -103,16 +113,16 @@ contract, so update `contracts/README.md` and note the web-port impact.
 
 ### Milestone D: the web app catches up (local only)
 
-Bring `ftpunk_web/` to the native app. Plan 8 is done; 9a, 9b and 9c run in parallel (separate
+Bring `ftpunk_web/` to the native app. All four plans are done (2026-11-06); 9a, 9b and 9c ran in parallel (separate
 worktrees, each owns its files, merged in the order 9a, 9b, 9c). Parity is checked with golden fixtures written by
 Swift tests in `contracts/fixtures/`.
 
 | # | Plan | Size | Runs |
 |---|------|------|------|
 | 8 | [Web foundation](archive/2026-11-05-web/8-web-foundation.md) (done 2026-11-05): story out, native screens, library + preview, storage, scenarios | L | first, alone |
-| 9a | [Ride](next/9a-web-ride.md): live power matching, Chaindance, cockpit | M–L | parallel |
-| 9b | [Intervals.icu per rider + upload prompt + sync, FIT export](next/9b-web-intervals-and-files.md) | M | parallel |
-| 9c | [My workouts](next/9c-web-your-workouts.md): ZWO, builder, `customWorkouts` in archives | L | parallel |
+| 9a | [Ride](archive/2026-11-05-web/9a-web-ride.md) (done): live power matching, Chaindance, cockpit | M–L | parallel |
+| 9b | [Intervals.icu per rider + upload prompt + sync, FIT export](archive/2026-11-05-web/9b-web-intervals-and-files.md) (done) | M | parallel |
+| 9c | [My workouts](archive/2026-11-05-web/9c-web-your-workouts.md) (done): ZWO, builder, `customWorkouts` in archives | L | parallel |
 
 Checkpoint D: `python3 ftpunk_web/tools/test.py`, native tests and builds, then a visual review of the web scenarios (headless Chrome
 capture, with the owner's permission), then the owner's checks in Chrome with a real trainer and a real key.
@@ -123,6 +133,9 @@ Each item needs a decision from the owner before a plan is written.
 
 - Web: Intervals.icu OAuth in the browser (needs a client secret, so a server; conflicts with local only). An own
   domain for the web app, so its storage isn't shared with the owner's other `github.io` sites.
+- Web: Chaindance hashes scenery with 64-bit BigInt per pixel; measure on a slow device and switch to 32-bit arithmetic if needed (the fingerprint
+  fixture guards the pixels). The backup import sheet lists cached workouts but not custom workouts that it will replace. Leaving a changed builder
+  through the tab bar doesn't ask to discard (Cancel and closing the tab do).
 - Send *planned* workouts or custom workouts to the Intervals.icu calendar or library. Switch the
   activity upload from TCX to FIT.
 - FIT *workout* files, cadence targets, free-ride segments in workouts.

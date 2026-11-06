@@ -1,0 +1,6 @@
+{
+  "utcOffsetSeconds" : {
+    "ftp-test" : 3600,
+    "workout" : 3600
+  }
+}

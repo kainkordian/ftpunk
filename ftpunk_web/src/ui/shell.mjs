@@ -42,7 +42,10 @@ export function openSheet({ title, content, actions = '', handler = null, live =
   const dialog = $('#dialog'); if (dialog.open) dialog.close();
   sheet = { title, content, actions, handler, live, onChange, html: null };
   dialog.innerHTML = `<div class="dialog-head"><h2 id="dialog-title">${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="Close dialog">×</button></div><div class="dialog-content"></div><div class="dialog-actions"></div>`;
-  paintSheet(dialog); dialog.showModal(); onOpen?.(dialog); return dialog;
+  paintSheet(dialog); dialog.showModal();
+  // showModal() focuses the first control, the ✕ in the header, which then shows a focus ring. The dialog itself takes focus instead (named by its title).
+  dialog.tabIndex = -1; dialog.focus({ preventScroll: true });
+  onOpen?.(dialog); return dialog;
 }
 const valueOf = part => typeof part === 'function' ? part() : part;
 function paintSheet(dialog = $('#dialog')) {

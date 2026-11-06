@@ -1,4 +1,5 @@
 import { validateCachedWorkout } from './workouts.mjs';
+import { validateCustomWorkout, checkSave } from './custom-workouts.mjs';
 import { DB_SCHEMA, defaultRiderSettings } from './storage.mjs';
 // An in-memory stand-in for LocalStore with the same calls the app makes. Preview scenarios (`?scenario=`) use it so they never touch
 // the real database. Backups and restores are refused: a preview has nothing worth exporting.
@@ -11,6 +12,9 @@ export class MemoryStore {
   async delete(store, key) { this.tables[store].delete(key); }
   async saveSession(session) { await this.put('sessions', session); }
   async saveWorkouts(workouts) { for (const workout of workouts.map(validateCachedWorkout)) await this.put('workouts', workout); }
+  async customWorkouts() { return (await this.all('customWorkouts')).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)); }
+  async saveCustomWorkout(workout) { const clean = validateCustomWorkout(workout); checkSave(await this.all('customWorkouts'), clean); await this.put('customWorkouts', clean); return clean; }
+  async deleteCustomWorkout(id) { await this.delete('customWorkouts', id); }
   async riderSettings(riderID) { return (await this.get('riderSettings', riderID)) ?? defaultRiderSettings(riderID); }
   async recover() {}
   async backup() { throw Error('Backups are not available in a preview scenario.'); }

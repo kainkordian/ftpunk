@@ -3,7 +3,7 @@ import { resistanceRide, trainingTarget } from '../src/training.mjs';
 import { ResistanceRange, supportsResistance } from '../src/protocol.mjs';
 import { freeRide, validatePlan, creditSession, progressMilliseconds } from '../src/training.mjs';
 import { makeArchive, archiveText, parseArchive, archiveSessions, validateArchive } from '../src/archive.mjs';
-import { configuration, PRESETS, rampPower, analyze, RampEngine, PowerMatcher, mockSample } from '../src/domain.mjs';
+import { configuration, PRESETS, rampPower, analyze, RampEngine, mockSample } from '../src/domain.mjs';
 import { indoorBike, cyclingPower, heartRate, PowerRange, supportsTargetPower, command, controlResponse, BikeAssembler, CadenceTracker, Measurements, route } from '../src/protocol.mjs';
 import { ControlPoint, BluetoothDevices } from '../src/bluetooth.mjs';
 import { LocalStore, acquireRideLease, loadPreferences, savePreferences } from '../src/storage.mjs';
@@ -367,24 +367,7 @@ test('Power range and FTMS commands match wire fixtures', () => {
   equal(controlResponse([0x80, 5, 1]), { opcode: 5, result: 1 }); throws(() => controlResponse([0x80, 5]));
   assert(supportsTargetPower([0, 0, 0, 0, 8, 0, 0, 0]));
 });
-test('Power matching converges with positive and negative meter offsets', () => {
-  for (const bias of [-20, 20]) { const m = new PowerMatcher(); let target = 250; for (let t = 0; t <= 100; t++) { const previous = target; target = m.command(250, { time: t, watts: target + bias }, 90, t, range()); assert(Math.abs(target - previous) <= 3); if (t < 5) equal(target, 250); } near(target + bias, 250, 3); }
-});
-test('Matching tracks ramp steps with a delayed trainer response', () => {
-  const m = new PowerMatcher(); let command = 200, measured = 180;
-  for (let t = 0; t <= 300; t += 0.5) { const target = 200 + Math.floor(t / 60) * 20; measured += (command - 20 - measured) * (1 - Math.exp(-0.5 / 4)); command = m.command(target, { time: t, watts: measured }, 90, t, range()); if (Math.floor(t) % 60 >= 45) near(measured, target, 5); }
-});
-test('Matching respects freshness, settling time, zero watts, and low cadence', () => {
-  const m = new PowerMatcher(); for (let t = 0; t <= 10; t++) m.command(250, { time: t, watts: 220 }, 90, t, range()); const correction = m.correction;
-  for (let t = 11; t <= 20; t++) m.command(250, { time: 10, watts: 220 }, 90, t, range()); equal(m.correction, correction);
-  for (let t = 21; t <= 40; t++) m.command(250, { time: t, watts: t < 30 ? 0 : 50 }, t < 30 ? 90 : 30, t, range()); equal(m.correction, correction);
-  for (let t = 41; t <= 45; t++) { m.command(275, { time: t, watts: 220 }, 90, t, range()); equal(m.correction, correction); }
-});
-test('Matching clamps achievable power without integrator windup', () => {
-  const r = new PowerRange(50, 260, 5), m = new PowerMatcher(); for (let t = 0; t <= 120; t++) { const command = m.command(250, { time: t, watts: 100 }, 90, t, r); assert(command <= 260 && command % 5 === 0); } equal(m.correction, 10);
-  for (let t = 121; t <= 145; t++) m.command(250, { time: t, watts: 300 }, 90, t, r); assert(m.correction < 0);
-  const bounded = new PowerMatcher(); for (let t = 0; t <= 300; t++) bounded.command(200, { time: t, watts: 1 }, null, t, r); equal(bounded.correction, 40);
-});
+// Power matching tests live in tests/matching.test.mjs (the native estimator, ported).
 class FakeCharacteristic extends EventTarget {
   constructor() { super(); this.writes = []; }
   async writeValueWithResponse(data) { this.writes.push([...data]); }

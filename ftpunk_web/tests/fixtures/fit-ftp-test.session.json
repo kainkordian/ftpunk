@@ -1,0 +1,5439 @@
+{
+  "configuration" : {
+    "cadenceSource" : "externalPowerMeter",
+    "cooldownSeconds" : 180,
+    "ftpFactor" : 0.72,
+    "maximumPower" : 600,
+    "maximumRampSeconds" : 1800,
+    "powerMatchingEnabled" : false,
+    "powerSource" : "externalPowerMeter",
+    "preset" : "standard",
+    "priorFTP" : {
+      "date" : "2026-11-03T10:00:00Z",
+      "id" : "F7000000-0000-4000-8000-000000000230",
+      "source" : "Manual",
+      "watts" : 230
+    },
+    "protocolVersion" : 3,
+    "riderID" : "A1E00000-0000-4000-8000-000000000001",
+    "riderName" : "Alex",
+    "usesAutomaticWarmup" : true,
+    "warmupPower" : 115,
+    "warmupSeconds" : 600,
+    "weightKG" : 71
+  },
+  "devices" : [
+
+  ],
+  "endedAtOffset" : 420,
+  "events" : [
+    {
+      "message" : "Start pedaling",
+      "time" : 0
+    },
+    {
+      "message" : "Ramp test",
+      "time" : 60
+    },
+    {
+      "message" : "Cooldown",
+      "time" : 360
+    }
+  ],
+  "id" : "5EED0001-0000-4000-8000-00000000F001",
+  "isDemo" : false,
+  "outcome" : "exhaustion",
+  "rampEnd" : 360,
+  "rampStart" : 60,
+  "result" : {
+    "algorithmVersion" : 1,
+    "bestMinutePower" : 300,
+    "factor" : 0.72,
+    "windowEnd" : 359,
+    "windowStart" : 299
+  },
+  "samples" : [
+    {
+      "cadence" : 88,
+      "power" : 100,
+      "time" : 0
+    },
+    {
+      "time" : 0.4,
+      "trainerPower" : 104.4
+    },
+    {
+      "cadence" : 89,
+      "power" : 100,
+      "time" : 1
+    },
+    {
+      "time" : 1.4,
+      "trainerPower" : 104.4
+    },
+    {
+      "cadence" : 90,
+      "power" : 101,
+      "time" : 2
+    },
+    {
+      "time" : 2.4,
+      "trainerPower" : 105.4
+    },
+    {
+      "cadence" : 91,
+      "power" : 101,
+      "time" : 3
+    },
+    {
+      "time" : 3.4,
+      "trainerPower" : 105.4
+    },
+    {
+      "cadence" : 92,
+      "power" : 102,
+      "time" : 4
+    },
+    {
+      "time" : 4.4,
+      "trainerPower" : 106.4
+    },
+    {
+      "cadence" : 88,
+      "power" : 102,
+      "time" : 5
+    },
+    {
+      "time" : 5.4,
+      "trainerPower" : 106.4
+    },
+    {
+      "cadence" : 89,
+      "power" : 103,
+      "time" : 6
+    },
+    {
+      "time" : 6.4,
+      "trainerPower" : 107.4
+    },
+    {
+      "cadence" : 90,
+      "power" : 103,
+      "time" : 7
+    },
+    {
+      "time" : 7.4,
+      "trainerPower" : 107.4
+    },
+    {
+      "cadence" : 91,
+      "power" : 104,
+      "time" : 8
+    },
+    {
+      "time" : 8.4,
+      "trainerPower" : 108.4
+    },
+    {
+      "cadence" : 92,
+      "power" : 104,
+      "time" : 9
+    },
+    {
+      "time" : 9.4,
+      "trainerPower" : 108.4
+    },
+    {
+      "cadence" : 88,
+      "power" : 105,
+      "time" : 10
+    },
+    {
+      "time" : 10.4,
+      "trainerPower" : 109.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 10.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 105,
+      "time" : 11
+    },
+    {
+      "time" : 11.4,
+      "trainerPower" : 109.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 11.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 106,
+      "time" : 12
+    },
+    {
+      "time" : 12.4,
+      "trainerPower" : 110.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 12.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 106,
+      "time" : 13
+    },
+    {
+      "time" : 13.4,
+      "trainerPower" : 110.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 13.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 107,
+      "time" : 14
+    },
+    {
+      "time" : 14.4,
+      "trainerPower" : 111.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 14.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 107,
+      "time" : 15
+    },
+    {
+      "time" : 15.4,
+      "trainerPower" : 111.4
+    },
+    {
+      "heartRate" : 119,
+      "time" : 15.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 108,
+      "time" : 16
+    },
+    {
+      "time" : 16.4,
+      "trainerPower" : 112.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 16.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 108,
+      "time" : 17
+    },
+    {
+      "time" : 17.4,
+      "trainerPower" : 112.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 17.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 109,
+      "time" : 18
+    },
+    {
+      "time" : 18.4,
+      "trainerPower" : 113.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 18.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 109,
+      "time" : 19
+    },
+    {
+      "time" : 19.4,
+      "trainerPower" : 113.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 19.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 110,
+      "time" : 20
+    },
+    {
+      "time" : 20.4,
+      "trainerPower" : 114.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 20.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 110,
+      "time" : 21
+    },
+    {
+      "time" : 21.4,
+      "trainerPower" : 114.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 21.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 111,
+      "time" : 22
+    },
+    {
+      "time" : 22.4,
+      "trainerPower" : 115.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 22.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 111,
+      "time" : 23
+    },
+    {
+      "time" : 23.4,
+      "trainerPower" : 115.4
+    },
+    {
+      "heartRate" : 120,
+      "time" : 23.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 112,
+      "time" : 24
+    },
+    {
+      "time" : 24.4,
+      "trainerPower" : 116.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 24.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 112,
+      "time" : 25
+    },
+    {
+      "time" : 25.4,
+      "trainerPower" : 116.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 25.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 113,
+      "time" : 26
+    },
+    {
+      "time" : 26.4,
+      "trainerPower" : 117.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 26.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 113,
+      "time" : 27
+    },
+    {
+      "time" : 27.4,
+      "trainerPower" : 117.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 27.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 114,
+      "time" : 28
+    },
+    {
+      "time" : 28.4,
+      "trainerPower" : 118.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 28.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 114,
+      "time" : 29
+    },
+    {
+      "time" : 29.4,
+      "trainerPower" : 118.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 29.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 115,
+      "time" : 30
+    },
+    {
+      "time" : 30.4,
+      "trainerPower" : 119.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 30.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 115,
+      "time" : 31
+    },
+    {
+      "time" : 31.4,
+      "trainerPower" : 119.4
+    },
+    {
+      "heartRate" : 121,
+      "time" : 31.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 116,
+      "time" : 32
+    },
+    {
+      "time" : 32.4,
+      "trainerPower" : 120.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 32.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 116,
+      "time" : 33
+    },
+    {
+      "time" : 33.4,
+      "trainerPower" : 120.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 33.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 117,
+      "time" : 34
+    },
+    {
+      "time" : 34.4,
+      "trainerPower" : 121.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 34.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 117,
+      "time" : 35
+    },
+    {
+      "time" : 35.4,
+      "trainerPower" : 121.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 35.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 118,
+      "time" : 36
+    },
+    {
+      "time" : 36.4,
+      "trainerPower" : 122.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 36.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 118,
+      "time" : 37
+    },
+    {
+      "time" : 37.4,
+      "trainerPower" : 122.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 37.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 119,
+      "time" : 38
+    },
+    {
+      "time" : 38.4,
+      "trainerPower" : 123.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 38.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 119,
+      "time" : 39
+    },
+    {
+      "time" : 39.4,
+      "trainerPower" : 123.4
+    },
+    {
+      "heartRate" : 122,
+      "time" : 39.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 120,
+      "time" : 40
+    },
+    {
+      "time" : 40.4,
+      "trainerPower" : 124.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 40.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 120,
+      "time" : 41
+    },
+    {
+      "time" : 41.4,
+      "trainerPower" : 124.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 41.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 121,
+      "time" : 42
+    },
+    {
+      "time" : 42.4,
+      "trainerPower" : 125.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 42.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 121,
+      "time" : 43
+    },
+    {
+      "time" : 43.4,
+      "trainerPower" : 125.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 43.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 122,
+      "time" : 44
+    },
+    {
+      "time" : 44.4,
+      "trainerPower" : 126.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 44.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 122,
+      "time" : 45
+    },
+    {
+      "time" : 45.4,
+      "trainerPower" : 126.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 45.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 123,
+      "time" : 46
+    },
+    {
+      "time" : 46.4,
+      "trainerPower" : 127.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 46.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 123,
+      "time" : 47
+    },
+    {
+      "time" : 47.4,
+      "trainerPower" : 127.4
+    },
+    {
+      "heartRate" : 123,
+      "time" : 47.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 124,
+      "time" : 48
+    },
+    {
+      "time" : 48.4,
+      "trainerPower" : 128.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 48.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 124,
+      "time" : 49
+    },
+    {
+      "time" : 49.4,
+      "trainerPower" : 128.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 49.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 125,
+      "time" : 51
+    },
+    {
+      "time" : 51.4,
+      "trainerPower" : 129.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 51.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 126,
+      "time" : 52
+    },
+    {
+      "time" : 52.4,
+      "trainerPower" : 130.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 52.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 126,
+      "time" : 53
+    },
+    {
+      "time" : 53.4,
+      "trainerPower" : 130.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 53.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 127,
+      "time" : 54
+    },
+    {
+      "time" : 54.4,
+      "trainerPower" : 131.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 54.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 127,
+      "time" : 55
+    },
+    {
+      "time" : 55.4,
+      "trainerPower" : 131.4
+    },
+    {
+      "heartRate" : 124,
+      "time" : 55.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 128,
+      "time" : 56
+    },
+    {
+      "time" : 56.4,
+      "trainerPower" : 132.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 56.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 128,
+      "time" : 57
+    },
+    {
+      "time" : 57.4,
+      "trainerPower" : 132.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 57.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 129,
+      "time" : 58
+    },
+    {
+      "time" : 58.4,
+      "trainerPower" : 133.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 58.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 129,
+      "time" : 59
+    },
+    {
+      "time" : 59.4,
+      "trainerPower" : 133.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 59.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 130,
+      "time" : 60
+    },
+    {
+      "time" : 60.4,
+      "trainerPower" : 134.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 60.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 130,
+      "time" : 61
+    },
+    {
+      "time" : 61.4,
+      "trainerPower" : 134.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 61.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 131,
+      "time" : 62
+    },
+    {
+      "time" : 62.4,
+      "trainerPower" : 135.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 62.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 131,
+      "time" : 63
+    },
+    {
+      "time" : 63.4,
+      "trainerPower" : 135.4
+    },
+    {
+      "heartRate" : 125,
+      "time" : 63.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 132,
+      "time" : 64
+    },
+    {
+      "time" : 64.4,
+      "trainerPower" : 136.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 64.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 132,
+      "time" : 65
+    },
+    {
+      "time" : 65.4,
+      "trainerPower" : 136.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 65.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 133,
+      "time" : 66
+    },
+    {
+      "time" : 66.4,
+      "trainerPower" : 137.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 66.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 133,
+      "time" : 67
+    },
+    {
+      "time" : 67.4,
+      "trainerPower" : 137.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 67.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 134,
+      "time" : 68
+    },
+    {
+      "time" : 68.4,
+      "trainerPower" : 138.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 68.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 134,
+      "time" : 69
+    },
+    {
+      "time" : 69.4,
+      "trainerPower" : 138.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 69.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 135,
+      "time" : 70
+    },
+    {
+      "time" : 70.4,
+      "trainerPower" : 139.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 70.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 135,
+      "time" : 71
+    },
+    {
+      "time" : 71.4,
+      "trainerPower" : 139.4
+    },
+    {
+      "heartRate" : 126,
+      "time" : 71.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 136,
+      "time" : 72
+    },
+    {
+      "time" : 72.4,
+      "trainerPower" : 140.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 72.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 136,
+      "time" : 73
+    },
+    {
+      "time" : 73.4,
+      "trainerPower" : 140.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 73.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 137,
+      "time" : 74
+    },
+    {
+      "time" : 74.4,
+      "trainerPower" : 141.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 74.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 137,
+      "time" : 75
+    },
+    {
+      "time" : 75.4,
+      "trainerPower" : 141.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 75.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 138,
+      "time" : 76
+    },
+    {
+      "time" : 76.4,
+      "trainerPower" : 142.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 76.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 138,
+      "time" : 77
+    },
+    {
+      "time" : 77.4,
+      "trainerPower" : 142.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 77.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 139,
+      "time" : 78
+    },
+    {
+      "time" : 78.4,
+      "trainerPower" : 143.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 78.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 139,
+      "time" : 79
+    },
+    {
+      "time" : 79.4,
+      "trainerPower" : 143.4
+    },
+    {
+      "heartRate" : 127,
+      "time" : 79.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 140,
+      "time" : 80
+    },
+    {
+      "time" : 80.4,
+      "trainerPower" : 144.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 80.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 140,
+      "time" : 81
+    },
+    {
+      "time" : 81.4,
+      "trainerPower" : 144.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 81.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 141,
+      "time" : 82
+    },
+    {
+      "time" : 82.4,
+      "trainerPower" : 145.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 82.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 141,
+      "time" : 83
+    },
+    {
+      "time" : 83.4,
+      "trainerPower" : 145.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 83.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 142,
+      "time" : 84
+    },
+    {
+      "time" : 84.4,
+      "trainerPower" : 146.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 84.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 142,
+      "time" : 85
+    },
+    {
+      "time" : 85.4,
+      "trainerPower" : 146.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 85.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 143,
+      "time" : 86
+    },
+    {
+      "time" : 86.4,
+      "trainerPower" : 147.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 86.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 143,
+      "time" : 87
+    },
+    {
+      "time" : 87.4,
+      "trainerPower" : 147.4
+    },
+    {
+      "heartRate" : 128,
+      "time" : 87.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 144,
+      "time" : 88
+    },
+    {
+      "time" : 88.4,
+      "trainerPower" : 148.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 88.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 144,
+      "time" : 89
+    },
+    {
+      "time" : 89.4,
+      "trainerPower" : 148.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 89.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 145,
+      "time" : 90
+    },
+    {
+      "time" : 90.4,
+      "trainerPower" : 149.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 90.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 145,
+      "time" : 91
+    },
+    {
+      "time" : 91.4,
+      "trainerPower" : 149.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 91.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 146,
+      "time" : 92
+    },
+    {
+      "time" : 92.4,
+      "trainerPower" : 150.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 92.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 146,
+      "time" : 93
+    },
+    {
+      "time" : 93.4,
+      "trainerPower" : 150.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 93.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 147,
+      "time" : 94
+    },
+    {
+      "time" : 94.4,
+      "trainerPower" : 151.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 94.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 147,
+      "time" : 95
+    },
+    {
+      "time" : 95.4,
+      "trainerPower" : 151.4
+    },
+    {
+      "heartRate" : 129,
+      "time" : 95.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 148,
+      "time" : 96
+    },
+    {
+      "time" : 96.4,
+      "trainerPower" : 152.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 96.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 148,
+      "time" : 97
+    },
+    {
+      "time" : 97.4,
+      "trainerPower" : 152.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 97.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 149,
+      "time" : 98
+    },
+    {
+      "time" : 98.4,
+      "trainerPower" : 153.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 98.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 149,
+      "time" : 99
+    },
+    {
+      "time" : 99.4,
+      "trainerPower" : 153.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 99.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 150,
+      "time" : 100
+    },
+    {
+      "time" : 100.4,
+      "trainerPower" : 154.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 100.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 150,
+      "time" : 101
+    },
+    {
+      "time" : 101.4,
+      "trainerPower" : 154.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 101.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 151,
+      "time" : 102
+    },
+    {
+      "time" : 102.4,
+      "trainerPower" : 155.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 102.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 151,
+      "time" : 103
+    },
+    {
+      "time" : 103.4,
+      "trainerPower" : 155.4
+    },
+    {
+      "heartRate" : 130,
+      "time" : 103.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 152,
+      "time" : 104
+    },
+    {
+      "time" : 104.4,
+      "trainerPower" : 156.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 104.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 152,
+      "time" : 105
+    },
+    {
+      "time" : 105.4,
+      "trainerPower" : 156.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 105.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 153,
+      "time" : 106
+    },
+    {
+      "time" : 106.4,
+      "trainerPower" : 157.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 106.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 153,
+      "time" : 107
+    },
+    {
+      "time" : 107.4,
+      "trainerPower" : 157.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 107.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 154,
+      "time" : 108
+    },
+    {
+      "time" : 108.4,
+      "trainerPower" : 158.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 108.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 154,
+      "time" : 109
+    },
+    {
+      "time" : 109.4,
+      "trainerPower" : 158.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 109.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 155,
+      "time" : 110
+    },
+    {
+      "time" : 110.4,
+      "trainerPower" : 159.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 110.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 155,
+      "time" : 111
+    },
+    {
+      "time" : 111.4,
+      "trainerPower" : 159.4
+    },
+    {
+      "heartRate" : 131,
+      "time" : 111.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 156,
+      "time" : 112
+    },
+    {
+      "time" : 112.4,
+      "trainerPower" : 160.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 112.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 156,
+      "time" : 113
+    },
+    {
+      "time" : 113.4,
+      "trainerPower" : 160.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 113.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 157,
+      "time" : 114
+    },
+    {
+      "time" : 114.4,
+      "trainerPower" : 161.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 114.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 157,
+      "time" : 115
+    },
+    {
+      "time" : 115.4,
+      "trainerPower" : 161.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 115.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 158,
+      "time" : 116
+    },
+    {
+      "time" : 116.4,
+      "trainerPower" : 162.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 116.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 158,
+      "time" : 117
+    },
+    {
+      "time" : 117.4,
+      "trainerPower" : 162.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 117.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 159,
+      "time" : 118
+    },
+    {
+      "time" : 118.4,
+      "trainerPower" : 163.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 118.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 159,
+      "time" : 119
+    },
+    {
+      "time" : 119.4,
+      "trainerPower" : 163.4
+    },
+    {
+      "heartRate" : 132,
+      "time" : 119.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 160,
+      "time" : 120
+    },
+    {
+      "time" : 120.4,
+      "trainerPower" : 164.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 120.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 160,
+      "time" : 121
+    },
+    {
+      "time" : 121.4,
+      "trainerPower" : 164.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 121.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 161,
+      "time" : 122
+    },
+    {
+      "time" : 122.4,
+      "trainerPower" : 165.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 122.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 161,
+      "time" : 123
+    },
+    {
+      "time" : 123.4,
+      "trainerPower" : 165.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 123.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 162,
+      "time" : 124
+    },
+    {
+      "time" : 124.4,
+      "trainerPower" : 166.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 124.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 162,
+      "time" : 125
+    },
+    {
+      "time" : 125.4,
+      "trainerPower" : 166.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 125.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 163,
+      "time" : 126
+    },
+    {
+      "time" : 126.4,
+      "trainerPower" : 167.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 126.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 163,
+      "time" : 127
+    },
+    {
+      "time" : 127.4,
+      "trainerPower" : 167.4
+    },
+    {
+      "heartRate" : 133,
+      "time" : 127.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 164,
+      "time" : 128
+    },
+    {
+      "time" : 128.4,
+      "trainerPower" : 168.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 128.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 164,
+      "time" : 129
+    },
+    {
+      "time" : 129.4,
+      "trainerPower" : 168.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 129.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 165,
+      "time" : 130
+    },
+    {
+      "time" : 130.4,
+      "trainerPower" : 169.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 130.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 165,
+      "time" : 131
+    },
+    {
+      "time" : 131.4,
+      "trainerPower" : 169.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 131.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 166,
+      "time" : 132
+    },
+    {
+      "time" : 132.4,
+      "trainerPower" : 170.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 132.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 166,
+      "time" : 133
+    },
+    {
+      "time" : 133.4,
+      "trainerPower" : 170.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 133.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 167,
+      "time" : 134
+    },
+    {
+      "time" : 134.4,
+      "trainerPower" : 171.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 134.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 167,
+      "time" : 135
+    },
+    {
+      "time" : 135.4,
+      "trainerPower" : 171.4
+    },
+    {
+      "heartRate" : 134,
+      "time" : 135.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 168,
+      "time" : 136
+    },
+    {
+      "time" : 136.4,
+      "trainerPower" : 172.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 136.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 168,
+      "time" : 137
+    },
+    {
+      "time" : 137.4,
+      "trainerPower" : 172.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 137.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 169,
+      "time" : 138
+    },
+    {
+      "time" : 138.4,
+      "trainerPower" : 173.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 138.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 169,
+      "time" : 139
+    },
+    {
+      "time" : 139.4,
+      "trainerPower" : 173.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 139.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 170,
+      "time" : 140
+    },
+    {
+      "time" : 140.4,
+      "trainerPower" : 174.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 140.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 170,
+      "time" : 141
+    },
+    {
+      "time" : 141.4,
+      "trainerPower" : 174.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 141.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 171,
+      "time" : 142
+    },
+    {
+      "time" : 142.4,
+      "trainerPower" : 175.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 142.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 171,
+      "time" : 143
+    },
+    {
+      "time" : 143.4,
+      "trainerPower" : 175.4
+    },
+    {
+      "heartRate" : 135,
+      "time" : 143.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 172,
+      "time" : 144
+    },
+    {
+      "time" : 144.4,
+      "trainerPower" : 176.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 144.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 172,
+      "time" : 145
+    },
+    {
+      "time" : 145.4,
+      "trainerPower" : 176.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 145.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 173,
+      "time" : 146
+    },
+    {
+      "time" : 146.4,
+      "trainerPower" : 177.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 146.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 174,
+      "time" : 148
+    },
+    {
+      "time" : 148.4,
+      "trainerPower" : 178.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 148.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 174,
+      "time" : 149
+    },
+    {
+      "time" : 149.4,
+      "trainerPower" : 178.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 149.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 175,
+      "time" : 150
+    },
+    {
+      "time" : 150.4,
+      "trainerPower" : 179.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 150.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 175,
+      "time" : 151
+    },
+    {
+      "time" : 151.4,
+      "trainerPower" : 179.4
+    },
+    {
+      "heartRate" : 136,
+      "time" : 151.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 176,
+      "time" : 152
+    },
+    {
+      "time" : 152.4,
+      "trainerPower" : 180.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 152.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 176,
+      "time" : 153
+    },
+    {
+      "time" : 153.4,
+      "trainerPower" : 180.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 153.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 177,
+      "time" : 154
+    },
+    {
+      "time" : 154.4,
+      "trainerPower" : 181.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 154.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 177,
+      "time" : 155
+    },
+    {
+      "time" : 155.4,
+      "trainerPower" : 181.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 155.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 178,
+      "time" : 156
+    },
+    {
+      "time" : 156.4,
+      "trainerPower" : 182.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 156.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 178,
+      "time" : 157
+    },
+    {
+      "time" : 157.4,
+      "trainerPower" : 182.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 157.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 179,
+      "time" : 158
+    },
+    {
+      "time" : 158.4,
+      "trainerPower" : 183.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 158.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 179,
+      "time" : 159
+    },
+    {
+      "time" : 159.4,
+      "trainerPower" : 183.4
+    },
+    {
+      "heartRate" : 137,
+      "time" : 159.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 180,
+      "time" : 160
+    },
+    {
+      "time" : 160.4,
+      "trainerPower" : 184.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 160.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 180,
+      "time" : 161
+    },
+    {
+      "time" : 161.4,
+      "trainerPower" : 184.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 161.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 181,
+      "time" : 162
+    },
+    {
+      "time" : 162.4,
+      "trainerPower" : 185.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 162.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 181,
+      "time" : 163
+    },
+    {
+      "time" : 163.4,
+      "trainerPower" : 185.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 163.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 182,
+      "time" : 164
+    },
+    {
+      "time" : 164.4,
+      "trainerPower" : 186.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 164.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 182,
+      "time" : 165
+    },
+    {
+      "time" : 165.4,
+      "trainerPower" : 186.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 165.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 183,
+      "time" : 166
+    },
+    {
+      "time" : 166.4,
+      "trainerPower" : 187.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 166.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 183,
+      "time" : 167
+    },
+    {
+      "time" : 167.4,
+      "trainerPower" : 187.4
+    },
+    {
+      "heartRate" : 138,
+      "time" : 167.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 184,
+      "time" : 168
+    },
+    {
+      "time" : 168.4,
+      "trainerPower" : 188.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 168.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 184,
+      "time" : 169
+    },
+    {
+      "time" : 169.4,
+      "trainerPower" : 188.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 169.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 185,
+      "time" : 170
+    },
+    {
+      "time" : 170.4,
+      "trainerPower" : 189.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 170.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 185,
+      "time" : 171
+    },
+    {
+      "time" : 171.4,
+      "trainerPower" : 189.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 171.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 186,
+      "time" : 172
+    },
+    {
+      "time" : 172.4,
+      "trainerPower" : 190.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 172.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 186,
+      "time" : 173
+    },
+    {
+      "time" : 173.4,
+      "trainerPower" : 190.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 173.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 187,
+      "time" : 174
+    },
+    {
+      "time" : 174.4,
+      "trainerPower" : 191.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 174.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 187,
+      "time" : 175
+    },
+    {
+      "time" : 175.4,
+      "trainerPower" : 191.4
+    },
+    {
+      "heartRate" : 139,
+      "time" : 175.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 188,
+      "time" : 176
+    },
+    {
+      "time" : 176.4,
+      "trainerPower" : 192.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 176.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 188,
+      "time" : 177
+    },
+    {
+      "time" : 177.4,
+      "trainerPower" : 192.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 177.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 189,
+      "time" : 178
+    },
+    {
+      "time" : 178.4,
+      "trainerPower" : 193.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 178.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 189,
+      "time" : 179
+    },
+    {
+      "time" : 179.4,
+      "trainerPower" : 193.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 179.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 190,
+      "time" : 180
+    },
+    {
+      "time" : 180.4,
+      "trainerPower" : 194.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 180.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 190,
+      "time" : 181
+    },
+    {
+      "time" : 181.4,
+      "trainerPower" : 194.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 181.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 191,
+      "time" : 182
+    },
+    {
+      "time" : 182.4,
+      "trainerPower" : 195.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 182.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 191,
+      "time" : 183
+    },
+    {
+      "time" : 183.4,
+      "trainerPower" : 195.4
+    },
+    {
+      "heartRate" : 140,
+      "time" : 183.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 192,
+      "time" : 184
+    },
+    {
+      "time" : 184.4,
+      "trainerPower" : 196.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 184.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 192,
+      "time" : 185
+    },
+    {
+      "time" : 185.4,
+      "trainerPower" : 196.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 185.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 193,
+      "time" : 186
+    },
+    {
+      "time" : 186.4,
+      "trainerPower" : 197.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 186.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 193,
+      "time" : 187
+    },
+    {
+      "time" : 187.4,
+      "trainerPower" : 197.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 187.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 194,
+      "time" : 188
+    },
+    {
+      "time" : 188.4,
+      "trainerPower" : 198.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 188.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 194,
+      "time" : 189
+    },
+    {
+      "time" : 189.4,
+      "trainerPower" : 198.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 189.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 195,
+      "time" : 190
+    },
+    {
+      "time" : 190.4,
+      "trainerPower" : 199.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 190.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 195,
+      "time" : 191
+    },
+    {
+      "time" : 191.4,
+      "trainerPower" : 199.4
+    },
+    {
+      "heartRate" : 141,
+      "time" : 191.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 196,
+      "time" : 192
+    },
+    {
+      "time" : 192.4,
+      "trainerPower" : 200.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 192.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 196,
+      "time" : 193
+    },
+    {
+      "time" : 193.4,
+      "trainerPower" : 200.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 193.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 197,
+      "time" : 194
+    },
+    {
+      "time" : 194.4,
+      "trainerPower" : 201.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 194.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 197,
+      "time" : 195
+    },
+    {
+      "time" : 195.4,
+      "trainerPower" : 201.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 195.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 198,
+      "time" : 196
+    },
+    {
+      "time" : 196.4,
+      "trainerPower" : 202.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 196.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 198,
+      "time" : 197
+    },
+    {
+      "time" : 197.4,
+      "trainerPower" : 202.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 197.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 199,
+      "time" : 198
+    },
+    {
+      "time" : 198.4,
+      "trainerPower" : 203.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 198.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 199,
+      "time" : 199
+    },
+    {
+      "time" : 199.4,
+      "trainerPower" : 203.4
+    },
+    {
+      "heartRate" : 142,
+      "time" : 199.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 200,
+      "time" : 200
+    },
+    {
+      "time" : 200.4,
+      "trainerPower" : 204.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 200.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 200,
+      "time" : 201
+    },
+    {
+      "time" : 201.4,
+      "trainerPower" : 204.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 201.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 201,
+      "time" : 202
+    },
+    {
+      "time" : 202.4,
+      "trainerPower" : 205.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 202.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 201,
+      "time" : 203
+    },
+    {
+      "time" : 203.4,
+      "trainerPower" : 205.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 203.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 202,
+      "time" : 204
+    },
+    {
+      "time" : 204.4,
+      "trainerPower" : 206.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 204.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 202,
+      "time" : 205
+    },
+    {
+      "time" : 205.4,
+      "trainerPower" : 206.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 205.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 203,
+      "time" : 206
+    },
+    {
+      "time" : 206.4,
+      "trainerPower" : 207.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 206.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 203,
+      "time" : 207
+    },
+    {
+      "time" : 207.4,
+      "trainerPower" : 207.4
+    },
+    {
+      "heartRate" : 143,
+      "time" : 207.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 204,
+      "time" : 208
+    },
+    {
+      "time" : 208.4,
+      "trainerPower" : 208.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 208.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 204,
+      "time" : 209
+    },
+    {
+      "time" : 209.4,
+      "trainerPower" : 208.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 209.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 205,
+      "time" : 210
+    },
+    {
+      "time" : 210.4,
+      "trainerPower" : 209.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 210.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 205,
+      "time" : 211
+    },
+    {
+      "time" : 211.4,
+      "trainerPower" : 209.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 211.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 206,
+      "time" : 212
+    },
+    {
+      "time" : 212.4,
+      "trainerPower" : 210.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 212.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 206,
+      "time" : 213
+    },
+    {
+      "time" : 213.4,
+      "trainerPower" : 210.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 213.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 207,
+      "time" : 214
+    },
+    {
+      "time" : 214.4,
+      "trainerPower" : 211.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 214.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 207,
+      "time" : 215
+    },
+    {
+      "time" : 215.4,
+      "trainerPower" : 211.4
+    },
+    {
+      "heartRate" : 144,
+      "time" : 215.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 208,
+      "time" : 216
+    },
+    {
+      "time" : 216.4,
+      "trainerPower" : 212.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 216.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 208,
+      "time" : 217
+    },
+    {
+      "time" : 217.4,
+      "trainerPower" : 212.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 217.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 209,
+      "time" : 218
+    },
+    {
+      "time" : 218.4,
+      "trainerPower" : 213.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 218.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 209,
+      "time" : 219
+    },
+    {
+      "time" : 219.4,
+      "trainerPower" : 213.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 219.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 210,
+      "time" : 220
+    },
+    {
+      "time" : 220.4,
+      "trainerPower" : 214.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 220.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 210,
+      "time" : 221
+    },
+    {
+      "time" : 221.4,
+      "trainerPower" : 214.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 221.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 211,
+      "time" : 222
+    },
+    {
+      "time" : 222.4,
+      "trainerPower" : 215.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 222.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 211,
+      "time" : 223
+    },
+    {
+      "time" : 223.4,
+      "trainerPower" : 215.4
+    },
+    {
+      "heartRate" : 145,
+      "time" : 223.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 212,
+      "time" : 224
+    },
+    {
+      "time" : 224.4,
+      "trainerPower" : 216.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 224.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 212,
+      "time" : 225
+    },
+    {
+      "time" : 225.4,
+      "trainerPower" : 216.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 225.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 213,
+      "time" : 226
+    },
+    {
+      "time" : 226.4,
+      "trainerPower" : 217.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 226.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 213,
+      "time" : 227
+    },
+    {
+      "time" : 227.4,
+      "trainerPower" : 217.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 227.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 214,
+      "time" : 228
+    },
+    {
+      "time" : 228.4,
+      "trainerPower" : 218.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 228.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 214,
+      "time" : 229
+    },
+    {
+      "time" : 229.4,
+      "trainerPower" : 218.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 229.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 215,
+      "time" : 230
+    },
+    {
+      "time" : 230.4,
+      "trainerPower" : 219.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 230.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 215,
+      "time" : 231
+    },
+    {
+      "time" : 231.4,
+      "trainerPower" : 219.4
+    },
+    {
+      "heartRate" : 146,
+      "time" : 231.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 216,
+      "time" : 232
+    },
+    {
+      "time" : 232.4,
+      "trainerPower" : 220.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 232.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 216,
+      "time" : 233
+    },
+    {
+      "time" : 233.4,
+      "trainerPower" : 220.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 233.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 217,
+      "time" : 234
+    },
+    {
+      "time" : 234.4,
+      "trainerPower" : 221.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 234.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 217,
+      "time" : 235
+    },
+    {
+      "time" : 235.4,
+      "trainerPower" : 221.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 235.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 218,
+      "time" : 236
+    },
+    {
+      "time" : 236.4,
+      "trainerPower" : 222.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 236.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 218,
+      "time" : 237
+    },
+    {
+      "time" : 237.4,
+      "trainerPower" : 222.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 237.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 219,
+      "time" : 238
+    },
+    {
+      "time" : 238.4,
+      "trainerPower" : 223.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 238.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 219,
+      "time" : 239
+    },
+    {
+      "time" : 239.4,
+      "trainerPower" : 223.4
+    },
+    {
+      "heartRate" : 147,
+      "time" : 239.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 220,
+      "time" : 240
+    },
+    {
+      "time" : 240.4,
+      "trainerPower" : 224.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 240.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 220,
+      "time" : 241
+    },
+    {
+      "time" : 241.4,
+      "trainerPower" : 224.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 241.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 221,
+      "time" : 242
+    },
+    {
+      "time" : 242.4,
+      "trainerPower" : 225.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 242.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 221,
+      "time" : 243
+    },
+    {
+      "time" : 243.4,
+      "trainerPower" : 225.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 243.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 222,
+      "time" : 245
+    },
+    {
+      "time" : 245.4,
+      "trainerPower" : 226.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 245.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 223,
+      "time" : 246
+    },
+    {
+      "time" : 246.4,
+      "trainerPower" : 227.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 246.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 223,
+      "time" : 247
+    },
+    {
+      "time" : 247.4,
+      "trainerPower" : 227.4
+    },
+    {
+      "heartRate" : 148,
+      "time" : 247.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 224,
+      "time" : 248
+    },
+    {
+      "time" : 248.4,
+      "trainerPower" : 228.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 248.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 224,
+      "time" : 249
+    },
+    {
+      "time" : 249.4,
+      "trainerPower" : 228.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 249.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 225,
+      "time" : 250
+    },
+    {
+      "time" : 250.4,
+      "trainerPower" : 229.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 250.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 225,
+      "time" : 251
+    },
+    {
+      "time" : 251.4,
+      "trainerPower" : 229.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 251.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 226,
+      "time" : 252
+    },
+    {
+      "time" : 252.4,
+      "trainerPower" : 230.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 252.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 226,
+      "time" : 253
+    },
+    {
+      "time" : 253.4,
+      "trainerPower" : 230.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 253.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 227,
+      "time" : 254
+    },
+    {
+      "time" : 254.4,
+      "trainerPower" : 231.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 254.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 227,
+      "time" : 255
+    },
+    {
+      "time" : 255.4,
+      "trainerPower" : 231.4
+    },
+    {
+      "heartRate" : 149,
+      "time" : 255.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 228,
+      "time" : 256
+    },
+    {
+      "time" : 256.4,
+      "trainerPower" : 232.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 256.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 228,
+      "time" : 257
+    },
+    {
+      "time" : 257.4,
+      "trainerPower" : 232.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 257.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 229,
+      "time" : 258
+    },
+    {
+      "time" : 258.4,
+      "trainerPower" : 233.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 258.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 229,
+      "time" : 259
+    },
+    {
+      "time" : 259.4,
+      "trainerPower" : 233.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 259.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 230,
+      "time" : 260
+    },
+    {
+      "time" : 260.4,
+      "trainerPower" : 234.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 260.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 230,
+      "time" : 261
+    },
+    {
+      "time" : 261.4,
+      "trainerPower" : 234.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 261.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 231,
+      "time" : 262
+    },
+    {
+      "time" : 262.4,
+      "trainerPower" : 235.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 262.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 231,
+      "time" : 263
+    },
+    {
+      "time" : 263.4,
+      "trainerPower" : 235.4
+    },
+    {
+      "heartRate" : 150,
+      "time" : 263.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 232,
+      "time" : 264
+    },
+    {
+      "time" : 264.4,
+      "trainerPower" : 236.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 264.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 232,
+      "time" : 265
+    },
+    {
+      "time" : 265.4,
+      "trainerPower" : 236.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 265.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 233,
+      "time" : 266
+    },
+    {
+      "time" : 266.4,
+      "trainerPower" : 237.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 266.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 233,
+      "time" : 267
+    },
+    {
+      "time" : 267.4,
+      "trainerPower" : 237.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 267.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 234,
+      "time" : 268
+    },
+    {
+      "time" : 268.4,
+      "trainerPower" : 238.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 268.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 234,
+      "time" : 269
+    },
+    {
+      "time" : 269.4,
+      "trainerPower" : 238.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 269.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 235,
+      "time" : 270
+    },
+    {
+      "time" : 270.4,
+      "trainerPower" : 239.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 270.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 235,
+      "time" : 271
+    },
+    {
+      "time" : 271.4,
+      "trainerPower" : 239.4
+    },
+    {
+      "heartRate" : 151,
+      "time" : 271.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 236,
+      "time" : 272
+    },
+    {
+      "time" : 272.4,
+      "trainerPower" : 240.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 272.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 236,
+      "time" : 273
+    },
+    {
+      "time" : 273.4,
+      "trainerPower" : 240.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 273.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 237,
+      "time" : 274
+    },
+    {
+      "time" : 274.4,
+      "trainerPower" : 241.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 274.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 237,
+      "time" : 275
+    },
+    {
+      "time" : 275.4,
+      "trainerPower" : 241.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 275.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 238,
+      "time" : 276
+    },
+    {
+      "time" : 276.4,
+      "trainerPower" : 242.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 276.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 238,
+      "time" : 277
+    },
+    {
+      "time" : 277.4,
+      "trainerPower" : 242.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 277.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 239,
+      "time" : 278
+    },
+    {
+      "time" : 278.4,
+      "trainerPower" : 243.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 278.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 239,
+      "time" : 279
+    },
+    {
+      "time" : 279.4,
+      "trainerPower" : 243.4
+    },
+    {
+      "heartRate" : 152,
+      "time" : 279.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 240,
+      "time" : 280
+    },
+    {
+      "time" : 280.4,
+      "trainerPower" : 244.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 280.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 240,
+      "time" : 281
+    },
+    {
+      "time" : 281.4,
+      "trainerPower" : 244.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 281.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 241,
+      "time" : 282
+    },
+    {
+      "time" : 282.4,
+      "trainerPower" : 245.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 282.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 241,
+      "time" : 283
+    },
+    {
+      "time" : 283.4,
+      "trainerPower" : 245.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 283.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 242,
+      "time" : 284
+    },
+    {
+      "time" : 284.4,
+      "trainerPower" : 246.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 284.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 242,
+      "time" : 285
+    },
+    {
+      "time" : 285.4,
+      "trainerPower" : 246.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 285.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 243,
+      "time" : 286
+    },
+    {
+      "time" : 286.4,
+      "trainerPower" : 247.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 286.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 243,
+      "time" : 287
+    },
+    {
+      "time" : 287.4,
+      "trainerPower" : 247.4
+    },
+    {
+      "heartRate" : 153,
+      "time" : 287.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 244,
+      "time" : 288
+    },
+    {
+      "time" : 288.4,
+      "trainerPower" : 248.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 288.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 244,
+      "time" : 289
+    },
+    {
+      "time" : 289.4,
+      "trainerPower" : 248.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 289.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 245,
+      "time" : 290
+    },
+    {
+      "time" : 290.4,
+      "trainerPower" : 249.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 290.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 245,
+      "time" : 291
+    },
+    {
+      "time" : 291.4,
+      "trainerPower" : 249.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 291.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 246,
+      "time" : 292
+    },
+    {
+      "time" : 292.4,
+      "trainerPower" : 250.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 292.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 246,
+      "time" : 293
+    },
+    {
+      "time" : 293.4,
+      "trainerPower" : 250.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 293.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 247,
+      "time" : 294
+    },
+    {
+      "time" : 294.4,
+      "trainerPower" : 251.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 294.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 247,
+      "time" : 295
+    },
+    {
+      "time" : 295.4,
+      "trainerPower" : 251.4
+    },
+    {
+      "heartRate" : 154,
+      "time" : 295.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 248,
+      "time" : 296
+    },
+    {
+      "time" : 296.4,
+      "trainerPower" : 252.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 296.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 248,
+      "time" : 297
+    },
+    {
+      "time" : 297.4,
+      "trainerPower" : 252.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 297.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 249,
+      "time" : 298
+    },
+    {
+      "time" : 298.4,
+      "trainerPower" : 253.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 298.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 249,
+      "time" : 299
+    },
+    {
+      "time" : 299.4,
+      "trainerPower" : 253.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 299.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 250,
+      "time" : 300
+    },
+    {
+      "time" : 300.4,
+      "trainerPower" : 254.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 300.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 250,
+      "time" : 301
+    },
+    {
+      "time" : 301.4,
+      "trainerPower" : 254.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 301.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 251,
+      "time" : 302
+    },
+    {
+      "time" : 302.4,
+      "trainerPower" : 255.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 302.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 251,
+      "time" : 303
+    },
+    {
+      "time" : 303.4,
+      "trainerPower" : 255.4
+    },
+    {
+      "heartRate" : 155,
+      "time" : 303.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 252,
+      "time" : 304
+    },
+    {
+      "time" : 304.4,
+      "trainerPower" : 256.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 304.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 252,
+      "time" : 305
+    },
+    {
+      "time" : 305.4,
+      "trainerPower" : 256.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 305.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 253,
+      "time" : 306
+    },
+    {
+      "time" : 306.4,
+      "trainerPower" : 257.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 306.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 253,
+      "time" : 307
+    },
+    {
+      "time" : 307.4,
+      "trainerPower" : 257.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 307.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 254,
+      "time" : 308
+    },
+    {
+      "time" : 308.4,
+      "trainerPower" : 258.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 308.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 254,
+      "time" : 309
+    },
+    {
+      "time" : 309.4,
+      "trainerPower" : 258.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 309.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 255,
+      "time" : 310
+    },
+    {
+      "time" : 310.4,
+      "trainerPower" : 259.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 310.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 255,
+      "time" : 311
+    },
+    {
+      "time" : 311.4,
+      "trainerPower" : 259.4
+    },
+    {
+      "heartRate" : 156,
+      "time" : 311.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 256,
+      "time" : 312
+    },
+    {
+      "time" : 312.4,
+      "trainerPower" : 260.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 312.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 256,
+      "time" : 313
+    },
+    {
+      "time" : 313.4,
+      "trainerPower" : 260.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 313.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 257,
+      "time" : 314
+    },
+    {
+      "time" : 314.4,
+      "trainerPower" : 261.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 314.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 257,
+      "time" : 315
+    },
+    {
+      "time" : 315.4,
+      "trainerPower" : 261.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 315.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 258,
+      "time" : 316
+    },
+    {
+      "time" : 316.4,
+      "trainerPower" : 262.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 316.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 258,
+      "time" : 317
+    },
+    {
+      "time" : 317.4,
+      "trainerPower" : 262.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 317.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 259,
+      "time" : 318
+    },
+    {
+      "time" : 318.4,
+      "trainerPower" : 263.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 318.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 259,
+      "time" : 319
+    },
+    {
+      "time" : 319.4,
+      "trainerPower" : 263.4
+    },
+    {
+      "heartRate" : 157,
+      "time" : 319.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 260,
+      "time" : 320
+    },
+    {
+      "time" : 320.4,
+      "trainerPower" : 264.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 320.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 260,
+      "time" : 321
+    },
+    {
+      "time" : 321.4,
+      "trainerPower" : 264.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 321.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 261,
+      "time" : 322
+    },
+    {
+      "time" : 322.4,
+      "trainerPower" : 265.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 322.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 261,
+      "time" : 323
+    },
+    {
+      "time" : 323.4,
+      "trainerPower" : 265.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 323.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 262,
+      "time" : 324
+    },
+    {
+      "time" : 324.4,
+      "trainerPower" : 266.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 324.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 262,
+      "time" : 325
+    },
+    {
+      "time" : 325.4,
+      "trainerPower" : 266.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 325.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 263,
+      "time" : 326
+    },
+    {
+      "time" : 326.4,
+      "trainerPower" : 267.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 326.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 263,
+      "time" : 327
+    },
+    {
+      "time" : 327.4,
+      "trainerPower" : 267.4
+    },
+    {
+      "heartRate" : 158,
+      "time" : 327.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 264,
+      "time" : 328
+    },
+    {
+      "time" : 328.4,
+      "trainerPower" : 268.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 328.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 264,
+      "time" : 329
+    },
+    {
+      "time" : 329.4,
+      "trainerPower" : 268.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 329.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 265,
+      "time" : 330
+    },
+    {
+      "time" : 330.4,
+      "trainerPower" : 269.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 330.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 265,
+      "time" : 331
+    },
+    {
+      "time" : 331.4,
+      "trainerPower" : 269.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 331.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 266,
+      "time" : 332
+    },
+    {
+      "time" : 332.4,
+      "trainerPower" : 270.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 332.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 266,
+      "time" : 333
+    },
+    {
+      "time" : 333.4,
+      "trainerPower" : 270.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 333.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 267,
+      "time" : 334
+    },
+    {
+      "time" : 334.4,
+      "trainerPower" : 271.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 334.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 267,
+      "time" : 335
+    },
+    {
+      "time" : 335.4,
+      "trainerPower" : 271.4
+    },
+    {
+      "heartRate" : 159,
+      "time" : 335.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 268,
+      "time" : 336
+    },
+    {
+      "time" : 336.4,
+      "trainerPower" : 272.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 336.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 268,
+      "time" : 337
+    },
+    {
+      "time" : 337.4,
+      "trainerPower" : 272.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 337.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 269,
+      "time" : 338
+    },
+    {
+      "time" : 338.4,
+      "trainerPower" : 273.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 338.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 269,
+      "time" : 339
+    },
+    {
+      "time" : 339.4,
+      "trainerPower" : 273.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 339.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 270,
+      "time" : 340
+    },
+    {
+      "time" : 340.4,
+      "trainerPower" : 274.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 340.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 271,
+      "time" : 342
+    },
+    {
+      "time" : 342.4,
+      "trainerPower" : 275.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 342.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 271,
+      "time" : 343
+    },
+    {
+      "time" : 343.4,
+      "trainerPower" : 275.4
+    },
+    {
+      "heartRate" : 160,
+      "time" : 343.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 272,
+      "time" : 344
+    },
+    {
+      "time" : 344.4,
+      "trainerPower" : 276.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 344.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 272,
+      "time" : 345
+    },
+    {
+      "time" : 345.4,
+      "trainerPower" : 276.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 345.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 273,
+      "time" : 346
+    },
+    {
+      "time" : 346.4,
+      "trainerPower" : 277.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 346.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 273,
+      "time" : 347
+    },
+    {
+      "time" : 347.4,
+      "trainerPower" : 277.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 347.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 274,
+      "time" : 348
+    },
+    {
+      "time" : 348.4,
+      "trainerPower" : 278.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 348.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 274,
+      "time" : 349
+    },
+    {
+      "time" : 349.4,
+      "trainerPower" : 278.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 349.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 275,
+      "time" : 350
+    },
+    {
+      "time" : 350.4,
+      "trainerPower" : 279.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 350.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 275,
+      "time" : 351
+    },
+    {
+      "time" : 351.4,
+      "trainerPower" : 279.4
+    },
+    {
+      "heartRate" : 161,
+      "time" : 351.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 276,
+      "time" : 352
+    },
+    {
+      "time" : 352.4,
+      "trainerPower" : 280.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 352.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 276,
+      "time" : 353
+    },
+    {
+      "time" : 353.4,
+      "trainerPower" : 280.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 353.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 277,
+      "time" : 354
+    },
+    {
+      "time" : 354.4,
+      "trainerPower" : 281.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 354.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 277,
+      "time" : 355
+    },
+    {
+      "time" : 355.4,
+      "trainerPower" : 281.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 355.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 278,
+      "time" : 356
+    },
+    {
+      "time" : 356.4,
+      "trainerPower" : 282.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 356.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 278,
+      "time" : 357
+    },
+    {
+      "time" : 357.4,
+      "trainerPower" : 282.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 357.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 279,
+      "time" : 358
+    },
+    {
+      "time" : 358.4,
+      "trainerPower" : 283.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 358.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 279,
+      "time" : 359
+    },
+    {
+      "time" : 359.4,
+      "trainerPower" : 283.4
+    },
+    {
+      "heartRate" : 162,
+      "time" : 359.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 280,
+      "time" : 360
+    },
+    {
+      "time" : 360.4,
+      "trainerPower" : 284.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 360.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 280,
+      "time" : 361
+    },
+    {
+      "time" : 361.4,
+      "trainerPower" : 284.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 361.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 281,
+      "time" : 362
+    },
+    {
+      "time" : 362.4,
+      "trainerPower" : 285.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 362.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 281,
+      "time" : 363
+    },
+    {
+      "time" : 363.4,
+      "trainerPower" : 285.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 363.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 282,
+      "time" : 364
+    },
+    {
+      "time" : 364.4,
+      "trainerPower" : 286.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 364.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 282,
+      "time" : 365
+    },
+    {
+      "time" : 365.4,
+      "trainerPower" : 286.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 365.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 283,
+      "time" : 366
+    },
+    {
+      "time" : 366.4,
+      "trainerPower" : 287.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 366.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 283,
+      "time" : 367
+    },
+    {
+      "time" : 367.4,
+      "trainerPower" : 287.4
+    },
+    {
+      "heartRate" : 163,
+      "time" : 367.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 284,
+      "time" : 368
+    },
+    {
+      "time" : 368.4,
+      "trainerPower" : 288.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 368.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 284,
+      "time" : 369
+    },
+    {
+      "time" : 369.4,
+      "trainerPower" : 288.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 369.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 285,
+      "time" : 370
+    },
+    {
+      "time" : 370.4,
+      "trainerPower" : 289.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 370.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 285,
+      "time" : 371
+    },
+    {
+      "time" : 371.4,
+      "trainerPower" : 289.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 371.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 286,
+      "time" : 372
+    },
+    {
+      "time" : 372.4,
+      "trainerPower" : 290.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 372.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 286,
+      "time" : 373
+    },
+    {
+      "time" : 373.4,
+      "trainerPower" : 290.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 373.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 287,
+      "time" : 374
+    },
+    {
+      "time" : 374.4,
+      "trainerPower" : 291.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 374.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 287,
+      "time" : 375
+    },
+    {
+      "time" : 375.4,
+      "trainerPower" : 291.4
+    },
+    {
+      "heartRate" : 164,
+      "time" : 375.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 288,
+      "time" : 376
+    },
+    {
+      "time" : 376.4,
+      "trainerPower" : 292.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 376.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 288,
+      "time" : 377
+    },
+    {
+      "time" : 377.4,
+      "trainerPower" : 292.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 377.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 289,
+      "time" : 378
+    },
+    {
+      "time" : 378.4,
+      "trainerPower" : 293.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 378.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 289,
+      "time" : 379
+    },
+    {
+      "time" : 379.4,
+      "trainerPower" : 293.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 379.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 290,
+      "time" : 380
+    },
+    {
+      "time" : 380.4,
+      "trainerPower" : 294.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 380.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 290,
+      "time" : 381
+    },
+    {
+      "time" : 381.4,
+      "trainerPower" : 294.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 381.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 291,
+      "time" : 382
+    },
+    {
+      "time" : 382.4,
+      "trainerPower" : 295.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 382.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 291,
+      "time" : 383
+    },
+    {
+      "time" : 383.4,
+      "trainerPower" : 295.4
+    },
+    {
+      "heartRate" : 165,
+      "time" : 383.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 292,
+      "time" : 384
+    },
+    {
+      "time" : 384.4,
+      "trainerPower" : 296.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 384.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 292,
+      "time" : 385
+    },
+    {
+      "time" : 385.4,
+      "trainerPower" : 296.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 385.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 293,
+      "time" : 386
+    },
+    {
+      "time" : 386.4,
+      "trainerPower" : 297.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 386.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 293,
+      "time" : 387
+    },
+    {
+      "time" : 387.4,
+      "trainerPower" : 297.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 387.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 294,
+      "time" : 388
+    },
+    {
+      "time" : 388.4,
+      "trainerPower" : 298.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 388.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 294,
+      "time" : 389
+    },
+    {
+      "time" : 389.4,
+      "trainerPower" : 298.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 389.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 295,
+      "time" : 390
+    },
+    {
+      "time" : 390.4,
+      "trainerPower" : 299.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 390.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 295,
+      "time" : 391
+    },
+    {
+      "time" : 391.4,
+      "trainerPower" : 299.4
+    },
+    {
+      "heartRate" : 166,
+      "time" : 391.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 296,
+      "time" : 392
+    },
+    {
+      "time" : 392.4,
+      "trainerPower" : 300.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 392.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 296,
+      "time" : 393
+    },
+    {
+      "time" : 393.4,
+      "trainerPower" : 300.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 393.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 297,
+      "time" : 394
+    },
+    {
+      "time" : 394.4,
+      "trainerPower" : 301.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 394.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 297,
+      "time" : 395
+    },
+    {
+      "time" : 395.4,
+      "trainerPower" : 301.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 395.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 298,
+      "time" : 396
+    },
+    {
+      "time" : 396.4,
+      "trainerPower" : 302.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 396.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 298,
+      "time" : 397
+    },
+    {
+      "time" : 397.4,
+      "trainerPower" : 302.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 397.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 299,
+      "time" : 398
+    },
+    {
+      "time" : 398.4,
+      "trainerPower" : 303.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 398.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 299,
+      "time" : 399
+    },
+    {
+      "time" : 399.4,
+      "trainerPower" : 303.4
+    },
+    {
+      "heartRate" : 167,
+      "time" : 399.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 300,
+      "time" : 400
+    },
+    {
+      "time" : 400.4,
+      "trainerPower" : 304.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 400.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 300,
+      "time" : 401
+    },
+    {
+      "time" : 401.4,
+      "trainerPower" : 304.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 401.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 301,
+      "time" : 402
+    },
+    {
+      "time" : 402.4,
+      "trainerPower" : 305.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 402.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 301,
+      "time" : 403
+    },
+    {
+      "time" : 403.4,
+      "trainerPower" : 305.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 403.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 302,
+      "time" : 404
+    },
+    {
+      "time" : 404.4,
+      "trainerPower" : 306.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 404.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 302,
+      "time" : 405
+    },
+    {
+      "time" : 405.4,
+      "trainerPower" : 306.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 405.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 303,
+      "time" : 406
+    },
+    {
+      "time" : 406.4,
+      "trainerPower" : 307.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 406.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 303,
+      "time" : 407
+    },
+    {
+      "time" : 407.4,
+      "trainerPower" : 307.4
+    },
+    {
+      "heartRate" : 168,
+      "time" : 407.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 304,
+      "time" : 408
+    },
+    {
+      "time" : 408.4,
+      "trainerPower" : 308.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 408.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 304,
+      "time" : 409
+    },
+    {
+      "time" : 409.4,
+      "trainerPower" : 308.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 409.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 305,
+      "time" : 410
+    },
+    {
+      "time" : 410.4,
+      "trainerPower" : 309.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 410.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 305,
+      "time" : 411
+    },
+    {
+      "time" : 411.4,
+      "trainerPower" : 309.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 411.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 306,
+      "time" : 412
+    },
+    {
+      "time" : 412.4,
+      "trainerPower" : 310.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 412.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 306,
+      "time" : 413
+    },
+    {
+      "time" : 413.4,
+      "trainerPower" : 310.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 413.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 307,
+      "time" : 414
+    },
+    {
+      "time" : 414.4,
+      "trainerPower" : 311.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 414.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 307,
+      "time" : 415
+    },
+    {
+      "time" : 415.4,
+      "trainerPower" : 311.4
+    },
+    {
+      "heartRate" : 169,
+      "time" : 415.7
+    },
+    {
+      "cadence" : 89,
+      "power" : 308,
+      "time" : 416
+    },
+    {
+      "time" : 416.4,
+      "trainerPower" : 312.4
+    },
+    {
+      "heartRate" : 170,
+      "time" : 416.7
+    },
+    {
+      "cadence" : 90,
+      "power" : 308,
+      "time" : 417
+    },
+    {
+      "time" : 417.4,
+      "trainerPower" : 312.4
+    },
+    {
+      "heartRate" : 170,
+      "time" : 417.7
+    },
+    {
+      "cadence" : 91,
+      "power" : 309,
+      "time" : 418
+    },
+    {
+      "time" : 418.4,
+      "trainerPower" : 313.4
+    },
+    {
+      "heartRate" : 170,
+      "time" : 418.7
+    },
+    {
+      "cadence" : 92,
+      "power" : 309,
+      "time" : 419
+    },
+    {
+      "time" : 419.4,
+      "trainerPower" : 313.4
+    },
+    {
+      "heartRate" : 170,
+      "time" : 419.7
+    },
+    {
+      "cadence" : 88,
+      "power" : 310,
+      "time" : 420
+    },
+    {
+      "time" : 420.4,
+      "trainerPower" : 314.4
+    },
+    {
+      "heartRate" : 170,
+      "time" : 420.7
+    }
+  ],
+  "startedAt" : "2026-11-03T10:00:00Z"
+}

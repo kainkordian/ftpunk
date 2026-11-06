@@ -173,29 +173,6 @@ export class RampEngine {
     this.session.endReason = reason; this.session.endedAtOffset = time; this.transition('interrupted', time); this.target = null;
   }
 }
-export class PowerMatcher {
-  constructor() { this.correction = 0; this.target = null; this.settledAt = 0; this.lastAdjustment = -Infinity; this.lastSampleTime = -Infinity; this.smoothed = null; }
-  command(watts, sample, cadence, time, range) {
-    if (!Number.isFinite(time)) return range.quantized(watts);
-    const limit = Math.min(60, watts * 0.2);
-    if (this.target !== watts) { this.target = watts; this.settledAt = time + 5; this.smoothed = null; }
-    const lower = Math.max(-limit, range.minimum - watts), upper = Math.min(limit, range.maximum - watts);
-    this.correction = clamp(this.correction, lower, upper);
-    if (sample && Number.isFinite(sample.time) && Number.isFinite(sample.watts) && time >= sample.time && time - sample.time <= 2 && sample.time > this.lastSampleTime) {
-      this.lastSampleTime = sample.time;
-      if (sample.watts <= 0 || (cadence != null && (!Number.isFinite(cadence) || cadence < 45))) { this.smoothed = null; this.settledAt = time + 5; }
-      else if (time >= this.settledAt) {
-        this.smoothed = this.smoothed == null ? sample.watts : this.smoothed * 0.7 + sample.watts * 0.3;
-        if (time - this.lastAdjustment >= 3) {
-          const error = watts - this.smoothed;
-          if (Math.abs(error) > 2) this.correction = clamp(this.correction + clamp(error * 0.25, -3, 3), lower, upper);
-          this.lastAdjustment = time;
-        }
-      }
-    }
-    return range.quantized(Math.round(watts + this.correction));
-  }
-}
 export function mockSample(time, target, phase, scenario = 'exhaustion') {
   const exhausted = scenario === 'exhaustion' && phase === 'ramp' && target > 300;
   return { time, power: scenario === 'powerDropout' && time > 75 ? null : Math.max(0, target * (exhausted ? 0.4 : 1) + 2 * Math.sin(time / 3)), cadence: scenario === 'cadenceDropout' && time > 75 ? null : exhausted ? 28 : 88 + 3 * Math.sin(time / 7), heartRate: Math.round(Math.min(190, 100 + target * 0.2)), trainerPower: target };

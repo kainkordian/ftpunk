@@ -1,0 +1,153 @@
+{
+  "activities" : [
+
+  ],
+  "customWorkouts" : [
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        },
+        {
+          "count" : 3,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.1
+              },
+              "name" : "Hard",
+              "seconds" : 180,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.05
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 120,
+              "start" : {
+                "unit" : "watts",
+                "value" : 100
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 250
+            },
+            "name" : "",
+            "seconds" : 120,
+            "start" : {
+              "unit" : "watts",
+              "value" : 100
+            }
+          }
+        }
+      ],
+      "category" : "sweetSpot",
+      "id" : "C0570000-0000-4000-8000-000000000001",
+      "name" : "Mixed",
+      "riderID" : "A1E00000-0000-4000-8000-000000000001",
+      "updatedAt" : "2026-11-03T10:00:00.000Z"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 600,
+            "start" : {
+              "unit" : "watts",
+              "value" : 180
+            }
+          }
+        }
+      ],
+      "id" : "C0570000-0000-4000-8000-000000000002",
+      "name" : "Watts only",
+      "riderID" : "A1E00000-0000-4000-8000-000000000001",
+      "updatedAt" : "2026-11-03T10:00:00.000Z"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "x",
+            "seconds" : 60,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1
+            }
+          }
+        }
+      ],
+      "id" : "C0570000-0000-4000-8000-000000000003",
+      "name" : "Sam's",
+      "riderID" : "5A400000-0000-4000-8000-000000000002",
+      "updatedAt" : "2026-11-03T10:00:00.000Z"
+    }
+  ],
+  "exportedAt" : "2026-11-03T10:00:00.000Z",
+  "format" : "ftpunk-portable",
+  "profiles" : [
+    {
+      "currentFTPID" : "F7000000-0000-4000-8000-000000000230",
+      "ftpHistory" : [
+        {
+          "date" : "2026-11-03T10:00:00.000Z",
+          "id" : "F7000000-0000-4000-8000-000000000230",
+          "source" : "Ramp test",
+          "watts" : 230
+        }
+      ],
+      "id" : "A1E00000-0000-4000-8000-000000000001",
+      "name" : "Alex",
+      "weightKG" : 71
+    },
+    {
+      "ftpHistory" : [
+
+      ],
+      "id" : "5A400000-0000-4000-8000-000000000002",
+      "name" : "Sam"
+    }
+  ],
+  "version" : 3,
+  "workouts" : [
+    {
+      "id" : "5a400000-0000-4000-8000-000000000099",
+      "plan" : {
+        "ftpWatts" : 230,
+        "kind" : "workout",
+        "name" : "Imported",
+        "steps" : [
+          {
+            "name" : "Steady",
+            "seconds" : 600,
+            "watts" : 200
+          }
+        ],
+        "version" : 1
+      },
+      "riderID" : "A1E00000-0000-4000-8000-000000000001",
+      "savedAt" : "2026-11-03T10:00:00.000Z",
+      "source" : "Imported ZWO"
+    }
+  ]
+}

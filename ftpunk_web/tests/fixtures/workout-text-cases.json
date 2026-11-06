@@ -1,0 +1,6649 @@
+{
+  "durations" : [
+    {
+      "seconds" : 210,
+      "text" : "3:30"
+    },
+    {
+      "seconds" : 3600,
+      "text" : "1:00:00"
+    },
+    {
+      "seconds" : 300,
+      "text" : "5"
+    },
+    {
+      "seconds" : 90,
+      "text" : "90s"
+    },
+    {
+      "seconds" : 90,
+      "text" : "1m30"
+    },
+    {
+      "seconds" : 3600,
+      "text" : "1h"
+    },
+    {
+      "seconds" : null,
+      "text" : "1:75"
+    },
+    {
+      "seconds" : null,
+      "text" : "abc"
+    },
+    {
+      "seconds" : null,
+      "text" : "-3"
+    },
+    {
+      "seconds" : null,
+      "text" : "0"
+    },
+    {
+      "seconds" : null,
+      "text" : ""
+    },
+    {
+      "seconds" : 330,
+      "text" : "5.5"
+    },
+    {
+      "seconds" : null,
+      "text" : "1:2:3:4"
+    },
+    {
+      "seconds" : 30,
+      "text" : "0:30"
+    },
+    {
+      "seconds" : null,
+      "text" : "2:30:75"
+    },
+    {
+      "seconds" : 600,
+      "text" : "10m"
+    },
+    {
+      "seconds" : 5400,
+      "text" : "1h30m"
+    },
+    {
+      "seconds" : 420,
+      "text" : " 7 "
+    },
+    {
+      "seconds" : 3605,
+      "text" : "1h5s"
+    },
+    {
+      "seconds" : 125,
+      "text" : "2m5"
+    },
+    {
+      "seconds" : null,
+      "text" : "5m 3s"
+    }
+  ],
+  "durationTexts" : [
+    {
+      "seconds" : 0,
+      "text" : "0:00"
+    },
+    {
+      "seconds" : 5,
+      "text" : "0:05"
+    },
+    {
+      "seconds" : 59,
+      "text" : "0:59"
+    },
+    {
+      "seconds" : 60,
+      "text" : "1:00"
+    },
+    {
+      "seconds" : 210,
+      "text" : "3:30"
+    },
+    {
+      "seconds" : 3599,
+      "text" : "59:59"
+    },
+    {
+      "seconds" : 3600,
+      "text" : "1:00:00"
+    },
+    {
+      "seconds" : 3725,
+      "text" : "1:02:05"
+    },
+    {
+      "seconds" : 86399,
+      "text" : "23:59:59"
+    },
+    {
+      "seconds" : 90.400000000000006,
+      "text" : "1:30"
+    },
+    {
+      "seconds" : 90.599999999999994,
+      "text" : "1:31"
+    }
+  ],
+  "format" : "ftpunk-workout-text-cases",
+  "names" : [
+    {
+      "name" : "Plain",
+      "normalized" : "Plain",
+      "plain" : true
+    },
+    {
+      "name" : "Time at threshold",
+      "normalized" : "Time at threshold",
+      "plain" : true
+    },
+    {
+      "name" : "5m rest",
+      "normalized" : "5m rest",
+      "plain" : false
+    },
+    {
+      "name" : "Set 5x",
+      "normalized" : "Set 5x",
+      "plain" : false
+    },
+    {
+      "name" : "two  spaces",
+      "normalized" : "two spaces",
+      "plain" : false
+    },
+    {
+      "name" : "with\nline",
+      "normalized" : "with line",
+      "plain" : false
+    },
+    {
+      "name" : " lead",
+      "normalized" : "lead",
+      "plain" : false
+    },
+    {
+      "name" : "x",
+      "normalized" : "x",
+      "plain" : true
+    },
+    {
+      "name" : "-dash",
+      "normalized" : "-dash",
+      "plain" : false
+    },
+    {
+      "name" : "80%",
+      "normalized" : "80%",
+      "plain" : false
+    },
+    {
+      "name" : "ramp up",
+      "normalized" : "ramp up",
+      "plain" : false
+    },
+    {
+      "name" : "Zone",
+      "normalized" : "Zone",
+      "plain" : true
+    },
+    {
+      "name" : "Z2",
+      "normalized" : "Z2",
+      "plain" : false
+    },
+    {
+      "name" : "at",
+      "normalized" : "at",
+      "plain" : true
+    },
+    {
+      "name" : "@",
+      "normalized" : "@",
+      "plain" : false
+    },
+    {
+      "name" : "Spin-up",
+      "normalized" : "Spin-up",
+      "plain" : true
+    },
+    {
+      "name" : "10w",
+      "normalized" : "10w",
+      "plain" : false
+    },
+    {
+      "name" : "5X",
+      "normalized" : "5X",
+      "plain" : false
+    },
+    {
+      "name" : "5x5",
+      "normalized" : "5x5",
+      "plain" : true
+    },
+    {
+      "name" : "Press",
+      "normalized" : "Press",
+      "plain" : false
+    },
+    {
+      "name" : "ftp",
+      "normalized" : "ftp",
+      "plain" : false
+    },
+    {
+      "name" : "hr",
+      "normalized" : "hr",
+      "plain" : false
+    }
+  ],
+  "parse" : [
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 600,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        },
+        {
+          "count" : 5,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 180,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1499999999999999
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 90,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.55000000000000004
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.40000000000000002
+            },
+            "name" : "Ramp down",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sprint",
+            "seconds" : 20,
+            "start" : {
+              "unit" : "watts",
+              "value" : 650
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 3600,
+            "start" : {
+              "unit" : "watts",
+              "value" : 200
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 200
+            },
+            "name" : "",
+            "seconds" : 150,
+            "start" : {
+              "unit" : "watts",
+              "value" : 100
+            }
+          }
+        }
+      ],
+      "text" : "Warm-up\n- 10m 50%\nMain set 5x\n- 3m 115%\n- Recovery 1m30 55%\nRamp down\n- 5m ramp 60-40%\nSprint\n- 20s 650w\n- 1h 200W\n- 2m30s ramp 100-200w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warmup",
+            "seconds" : 1200,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        },
+        {
+          "count" : 6,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 240,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1
+              }
+            },
+            {
+              "name" : "recovery",
+              "seconds" : 300,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.40000000000000002
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Cooldown",
+            "seconds" : 1200,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        }
+      ],
+      "text" : "Warmup\n- 20m 60%\n\nMain set 6x\n- 4m 100%\n- 5m recovery at 40%\n\nCooldown\n- 20m 60%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 3,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Main set 3x\n- 1m 100%\n"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.80000000000000004
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 600,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.94999999999999996
+            }
+          }
+        }
+      ],
+      "text" : "- 5m @ 80%\r\n- Time at threshold 10m 95%\r\n"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.80000000000000004
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 60,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 5m @ 80%\r- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 30,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.2
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 5400,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.45000000000000001
+            }
+          }
+        }
+      ],
+      "text" : "  - 30s 120%  \n\t- 1h30m 45%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"90rpm\" is not supported (cadence targets)."
+        }
+      ],
+      "text" : "- 10m 50% 90rpm"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"90-100rpm\" is not supported (cadence targets)."
+        }
+      ],
+      "text" : "- 20m 60% 90-100rpm"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"HR\" is not supported (heart rate targets)."
+        }
+      ],
+      "text" : "- 5m 55% HR"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"LTHR\" is not supported (heart rate targets)."
+        }
+      ],
+      "text" : "- 5m 100% LTHR"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"Z2\" is not supported (training zones)."
+        }
+      ],
+      "text" : "- 60m Z2"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"Z2-Z3\" is not supported (training zones)."
+        }
+      ],
+      "text" : "- 10m Z2-Z3"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"pace\" is not supported (pace targets)."
+        }
+      ],
+      "text" : "- 5m 70% pace"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"1km\" is not supported (distance steps)."
+        }
+      ],
+      "text" : "- 1km 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"800mtr\" is not supported (distance steps)."
+        }
+      ],
+      "text" : "- 800mtr 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"freeride\" is not supported (free-ride steps)."
+        }
+      ],
+      "text" : "- 20m freeride"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"Press\" is not supported (lap-button steps)."
+        }
+      ],
+      "text" : "- Press lap 10m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"ftp\" is not supported (the ftp keyword)."
+        }
+      ],
+      "text" : "- 10m 50% ftp"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"1mi\" is not supported (distance steps)."
+        }
+      ],
+      "text" : "- 5m 50% 1mi"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"%hr\" is not supported (heart rate targets)."
+        }
+      ],
+      "text" : "- 5m 50% %hr"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"noshowavg\" is not supported (Zwift display flags)."
+        }
+      ],
+      "text" : "- 5m 50% noshowavg"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Ranges are not supported. Write ramp followed by the two values to ramp gradually, or use one value."
+        }
+      ],
+      "text" : "- 10m 80-90%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"ramp\" needs two values, like ramp 60-80% or ramp 100-200w."
+        }
+      ],
+      "text" : "- 10m ramp 60%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"ramp\" needs two values, like ramp 60-80% or ramp 100-200w."
+        }
+      ],
+      "text" : "- 10m ramp"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a target such as 80%, 200w or ramp 60-80%."
+        }
+      ],
+      "text" : "- 10m"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one duration."
+        }
+      ],
+      "text" : "- 5m 10m 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one target."
+        }
+      ],
+      "text" : "- 5m 80% 90%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "The duration must be between 5 seconds and 4 hours."
+        }
+      ],
+      "text" : "- 3s 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "The duration must be between 5 seconds and 4 hours."
+        }
+      ],
+      "text" : "- 4h1s 80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "% FTP must be between 30 and 250."
+        }
+      ],
+      "text" : "- 5m 20%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Watts must be between 20 and 1500."
+        }
+      ],
+      "text" : "- 5m 10w"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "% FTP must be between 30 and 250."
+        }
+      ],
+      "text" : "- 5m 251%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one target."
+        }
+      ],
+      "text" : "- 5m ramp 60-80% 70%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one target."
+        }
+      ],
+      "text" : "- 5m 70% ramp 60-80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one target."
+        }
+      ],
+      "text" : "- 5m ramp ramp 60-80%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A step has one target."
+        }
+      ],
+      "text" : "- 5m ramp 60-80w 70%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.80000000000000004
+            },
+            "name" : "foo",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        }
+      ],
+      "text" : "- 5m ramp 60-80% foo"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A repeat needs 1 to 100 repeats."
+        }
+      ],
+      "text" : "Main set 101x\n- 1m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A repeat needs 1 to 100 repeats."
+        }
+      ],
+      "text" : "Main set 0x\n- 1m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This repeat has no steps under it."
+        }
+      ],
+      "text" : "Main set 3x\n\n- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 5,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 120,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.59999999999999998
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "5x\n- 1m 50%\n- 2m 60%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "A repeat needs 1 to 100 repeats."
+        }
+      ],
+      "text" : "Set -5x\n- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 5,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Set +5x\n- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 5,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Set 05X\n- 1m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Add a step such as \"- 10m 50%\"."
+        }
+      ],
+      "text" : ""
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Add a step such as \"- 10m 50%\"."
+        }
+      ],
+      "text" : "   \n\n"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Add a step such as \"- 10m 50%\"."
+        }
+      ],
+      "text" : "just a header"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "Add a step such as \"- 10m 50%\"."
+        }
+      ],
+      "text" : "Header only\n\n"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "\"90rpm\" is not supported (cadence targets)."
+        },
+        {
+          "line" : 2,
+          "message" : "This step needs a target such as 80%, 200w or ramp 60-80%."
+        }
+      ],
+      "text" : "- 10m 50% 90rpm\n- 5m\n- 1m 60%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 4,
+          "message" : "\"90rpm\" is not supported (cadence targets)."
+        }
+      ],
+      "text" : "Warm-up\n- 10m 50%\n\n- 10m 50% 90rpm"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 90,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 1m30 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 90,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 1m30s 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 90,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 90s 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 3600,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 1h 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 1h30 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 30s1m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 1.5m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 10 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- 7:30 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "for",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.80500000000000005
+            }
+          }
+        }
+      ],
+      "text" : "- 80.5% for 5m"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.80549999999999999
+            }
+          }
+        }
+      ],
+      "text" : "- 5m 80.55%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.99998999999999993
+            }
+          }
+        }
+      ],
+      "text" : "- 5m 99.999%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "% FTP must be between 30 and 250."
+        }
+      ],
+      "text" : "- 5m 0.8%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "watts",
+              "value" : 200.5
+            }
+          }
+        }
+      ],
+      "text" : "- 5m 200.5w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.80249999999999999
+            },
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.60499999999999998
+            }
+          }
+        }
+      ],
+      "text" : "- 5m ramp 60.5-80.25%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.80000000000000004
+            }
+          }
+        }
+      ],
+      "text" : "- 5m 080%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Name 1",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Own",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        }
+      ],
+      "text" : "Name 1\n- 5m 50%\nName 2\n- Own 5m 60%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Name",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        }
+      ],
+      "text" : "Name\n- 5m 50%\n- 5m 60%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 3,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 300,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Set\nMain 3x\n- 5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "Warm-up\n\n- 5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Zone training",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- Zone training 5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 600,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1
+            }
+          }
+        }
+      ],
+      "text" : "- Hard 10m at 100%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet at spot",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.90000000000000002
+            }
+          }
+        }
+      ],
+      "text" : "- Sweet at spot 5m 90%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "at",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.90000000000000002
+            }
+          }
+        }
+      ],
+      "text" : "- at 5m 90%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.90000000000000002
+            },
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- 5m at ramp 50-90%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Tempo ünïcode",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.75
+            }
+          }
+        }
+      ],
+      "text" : "- Tempo ünïcode 5m 75%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "The step name can have at most 100 characters."
+        }
+      ],
+      "text" : "- NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN 5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN 5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "-5m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "-",
+            "seconds" : 300,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "- - 5m 50%"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "-"
+    },
+    {
+      "errors" : [
+        {
+          "line" : 1,
+          "message" : "This step needs a duration such as 10m, 30s or 1m30."
+        }
+      ],
+      "text" : "- "
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "x",
+            "seconds" : 60,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.5
+            }
+          }
+        }
+      ],
+      "text" : "x\n- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 1,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "1x\n- 1m 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 100,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 60,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        },
+        {
+          "count" : 2,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 30,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.2
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 30,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "100x\n- 1m 50%\n\n2x\n- 30s 120%\n- 30s 50%"
+    }
+  ],
+  "print" : [
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 1601,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1193
+            }
+          }
+        },
+        {
+          "count" : 43,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 5224,
+              "start" : {
+                "unit" : "watts",
+                "value" : 201
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 5555,
+              "start" : {
+                "unit" : "watts",
+                "value" : 508
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 443
+              },
+              "name" : "Under",
+              "seconds" : 6937,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1272
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.5
+              },
+              "name" : "Time at threshold",
+              "seconds" : 13783,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3999999999999999
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "- 26m41s 1193w\n\n43x\n- Warm-up 1h27m4s 201w\n- Sweet spot 1h32m35s 508w\n- Under 1h55m37s ramp 1272-443w\n- Time at threshold 3h49m43s ramp 140-250%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 334
+            },
+            "name" : "Sweet spot",
+            "seconds" : 7128,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1335
+            }
+          }
+        },
+        {
+          "count" : 73,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Under",
+              "seconds" : 12955,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.8200000000000001
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Sweet spot\n- 1h58m48s ramp 1335-334w\n\n73x\n- Under 3h35m55s 182%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 13149,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.2400000000000002
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 6944,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.67000000000000004
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 450
+            },
+            "name" : "Easy",
+            "seconds" : 13124,
+            "start" : {
+              "unit" : "watts",
+              "value" : 255
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 11505,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.48999999999999999
+            }
+          }
+        }
+      ],
+      "text" : "Spin-up\n- 3h39m9s 224%\n\nEasy\n- 1h55m44s 67%\n\nEasy\n- 3h38m44s ramp 255-450w\n\n- 3h11m45s 49%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.40999999999999998
+            },
+            "name" : "Hard",
+            "seconds" : 2303,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.2000000000000002
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 4486,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1164
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 727
+            },
+            "name" : "Under",
+            "seconds" : 4191,
+            "start" : {
+              "unit" : "watts",
+              "value" : 554
+            }
+          }
+        },
+        {
+          "count" : 32,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Hard",
+              "seconds" : 9730,
+              "start" : {
+                "unit" : "watts",
+                "value" : 789
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 5002,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1185
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 8337,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.87
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Hard\n- 38m23s ramp 220-41%\n\n- 1h14m46s 1164w\n\nUnder\n- 1h9m51s ramp 554-727w\n\n32x\n- Hard 2h42m10s 789w\n- Spin-up 1h23m22s 1185w\n- Sweet spot 2h18m57s 87%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 60,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1354
+            }
+          }
+        },
+        {
+          "count" : 84,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 11189,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1486
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "- 1m 1354w\n\n84x\n- Time at threshold 3h6m29s 1486w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 9805,
+            "start" : {
+              "unit" : "watts",
+              "value" : 920
+            }
+          }
+        },
+        {
+          "count" : 37,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 4310,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.40999999999999998
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 14056,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0699999999999998
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1120
+              },
+              "name" : "Over",
+              "seconds" : 1741,
+              "start" : {
+                "unit" : "watts",
+                "value" : 660
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 5137,
+            "start" : {
+              "unit" : "watts",
+              "value" : 303
+            }
+          }
+        }
+      ],
+      "text" : "Warm-up\n- 2h43m25s 920w\n\n37x\n- Sweet spot 1h11m50s 41%\n- 3h54m16s 207%\n- Over 29m1s ramp 660-1120w\n\n- 1h25m37s 303w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 70,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 2635,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1392
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 7584,
+            "start" : {
+              "unit" : "watts",
+              "value" : 110
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 13133,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1033
+            }
+          }
+        }
+      ],
+      "text" : "70x\n- Time at threshold 43m55s 1392w\n\nSweet spot\n- 2h6m24s 110w\n\nUnder\n- 3h38m53s 1033w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 9796,
+            "start" : {
+              "unit" : "watts",
+              "value" : 105
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 12360,
+            "start" : {
+              "unit" : "watts",
+              "value" : 435
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 1598,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1699999999999999
+            }
+          }
+        }
+      ],
+      "text" : "Spin-up\n- 2h43m16s 105w\n\nRecovery\n- 3h26m 435w\n\nHard\n- 26m38s 217%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 8769,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.32000000000000001
+            }
+          }
+        }
+      ],
+      "text" : "Easy\n- 2h26m9s 32%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 8440,
+            "start" : {
+              "unit" : "watts",
+              "value" : 874
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 7376,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.51000000000000001
+            }
+          }
+        }
+      ],
+      "text" : "Spin-up\n- 2h20m40s 874w\n\nHard\n- 2h2m56s 51%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 1279,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2
+            }
+          }
+        },
+        {
+          "count" : 24,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 421
+              },
+              "name" : "Over",
+              "seconds" : 10202,
+              "start" : {
+                "unit" : "watts",
+                "value" : 123
+              }
+            }
+          ]
+        },
+        {
+          "count" : 50,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 4203,
+              "start" : {
+                "unit" : "watts",
+                "value" : 206
+              }
+            },
+            {
+              "name" : "Warm-up",
+              "seconds" : 4738,
+              "start" : {
+                "unit" : "watts",
+                "value" : 446
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 10461,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.59999999999999998
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 818
+            },
+            "name" : "Easy",
+            "seconds" : 8739,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1159
+            }
+          }
+        }
+      ],
+      "text" : "- 21m19s 200%\n\n24x\n- Over 2h50m2s ramp 123-421w\n\n50x\n- Over 1h10m3s 206w\n- Warm-up 1h18m58s 446w\n- 2h54m21s 60%\n\nEasy\n- 2h25m39s ramp 1159-818w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 65,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 2238,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.93000000000000005
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.02
+              },
+              "name" : "Sweet spot",
+              "seconds" : 6557,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.2599999999999998
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 209,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.73999999999999999
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.8100000000000001
+              },
+              "name" : "Easy",
+              "seconds" : 1700,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1200000000000001
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 417,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1382
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 14209,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.02
+            }
+          }
+        },
+        {
+          "count" : 7,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.93000000000000005
+              },
+              "name" : "Recovery",
+              "seconds" : 6461,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.72
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.48999999999999999
+              },
+              "name" : "Easy",
+              "seconds" : 4932,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1299999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 9148,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1475
+            }
+          }
+        }
+      ],
+      "text" : "65x\n- Warm-up 37m18s 93%\n- Sweet spot 1h49m17s ramp 226-202%\n- Sweet spot 3m29s 74%\n- Easy 28m20s ramp 212-181%\n\n- 6m57s 1382w\n\nTime at threshold\n- 3h56m49s 202%\n\n7x\n- Recovery 1h47m41s ramp 172-93%\n- Easy 1h22m12s ramp 113-49%\n\nEasy\n- 2h32m28s 1475w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 7711,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.40999999999999998
+            }
+          }
+        }
+      ],
+      "text" : "Over\n- 2h8m31s 41%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 65,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 11424,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.76000000000000001
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 7148,
+              "start" : {
+                "unit" : "watts",
+                "value" : 585
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 395
+              },
+              "name" : "Warm-up",
+              "seconds" : 8196,
+              "start" : {
+                "unit" : "watts",
+                "value" : 224
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "65x\n- Spin-up 3h10m24s 76%\n- 1h59m8s 585w\n- Warm-up 2h16m36s ramp 224-395w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 41,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 720,
+              "start" : {
+                "unit" : "watts",
+                "value" : 254
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 904,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1000000000000001
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 13379,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.95
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 497
+              },
+              "name" : "Easy",
+              "seconds" : 2492,
+              "start" : {
+                "unit" : "watts",
+                "value" : 784
+              }
+            }
+          ]
+        },
+        {
+          "count" : 27,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 14249,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.48
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 2236,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1013
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 6923,
+            "start" : {
+              "unit" : "watts",
+              "value" : 29
+            }
+          }
+        }
+      ],
+      "text" : "41x\n- Time at threshold 12m 254w\n- Hard 15m4s 210%\n- Sweet spot 3h42m59s 195%\n- Easy 41m32s ramp 784-497w\n\n27x\n- 3h57m29s 148%\n- Spin-up 37m16s 1013w\n\nWarm-up\n- 1h55m23s 29w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 76,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 2690,
+              "start" : {
+                "unit" : "watts",
+                "value" : 152
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 10602,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1459
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 4295,
+              "start" : {
+                "unit" : "watts",
+                "value" : 469
+              }
+            },
+            {
+              "name" : "Time at threshold",
+              "seconds" : 1786,
+              "start" : {
+                "unit" : "watts",
+                "value" : 981
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 8431,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1463
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1136
+            },
+            "name" : "Spin-up",
+            "seconds" : 1999,
+            "start" : {
+              "unit" : "watts",
+              "value" : 262
+            }
+          }
+        }
+      ],
+      "text" : "76x\n- Easy 44m50s 152w\n- 2h56m42s 1459w\n- Hard 1h11m35s 469w\n- Time at threshold 29m46s 981w\n\nTime at threshold\n- 2h20m31s 1463w\n\nSpin-up\n- 33m19s ramp 262-1136w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 6484,
+            "start" : {
+              "unit" : "watts",
+              "value" : 463
+            }
+          }
+        }
+      ],
+      "text" : "Spin-up\n- 1h48m4s 463w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 16,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 6491,
+              "start" : {
+                "unit" : "watts",
+                "value" : 426
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 9943,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.66000000000000003
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1379
+              },
+              "name" : "Spin-up",
+              "seconds" : 13969,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1253
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 2127,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.72
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "16x\n- Over 1h48m11s 426w\n- Recovery 2h45m43s 66%\n- Spin-up 3h52m49s ramp 1253-1379w\n- Easy 35m27s 172%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 7588,
+            "start" : {
+              "unit" : "watts",
+              "value" : 975
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.3200000000000001
+            },
+            "name" : "",
+            "seconds" : 6359,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.5900000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 129
+            },
+            "name" : "Spin-up",
+            "seconds" : 2253,
+            "start" : {
+              "unit" : "watts",
+              "value" : 537
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 767,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1278
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 4970,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.5
+            }
+          }
+        },
+        {
+          "count" : 8,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 9806,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.65000000000000002
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 11683,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.95999999999999996
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 4380,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.40000000000000002
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Over\n- 2h6m28s 975w\n\n- 1h45m59s ramp 159-132%\n\nSpin-up\n- 37m33s ramp 537-129w\n\nEasy\n- 12m47s 1278w\n\nOver\n- 1h22m50s 250%\n\n8x\n- Warm-up 2h43m26s 65%\n- Easy 3h14m43s 96%\n- Sweet spot 1h13m 40%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 39,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 10718,
+              "start" : {
+                "unit" : "watts",
+                "value" : 940
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 13907,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1406
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "39x\n- Sweet spot 2h58m38s 940w\n- Recovery 3h51m47s 1406w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 2254,
+            "start" : {
+              "unit" : "watts",
+              "value" : 557
+            }
+          }
+        }
+      ],
+      "text" : "Easy\n- 37m34s 557w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 946
+            },
+            "name" : "Sweet spot",
+            "seconds" : 3736,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1404
+            }
+          }
+        },
+        {
+          "count" : 18,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 2200,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1485
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 11677,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.3500000000000001
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 829,
+              "start" : {
+                "unit" : "watts",
+                "value" : 140
+              }
+            },
+            {
+              "name" : "Under",
+              "seconds" : 3143,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.0800000000000001
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 2716,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.02
+            }
+          }
+        },
+        {
+          "count" : 39,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 2981,
+              "start" : {
+                "unit" : "watts",
+                "value" : 703
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Sweet spot\n- 1h2m16s ramp 1404-946w\n\n18x\n- Easy 36m40s 1485w\n- Spin-up 3h14m37s 235%\n- Sweet spot 13m49s 140w\n- Under 52m23s 108%\n\n- 45m16s 102%\n\n39x\n- Spin-up 49m41s 703w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 9219,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1000000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 11904,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.3900000000000001
+            }
+          }
+        }
+      ],
+      "text" : "Hard\n- 2h33m39s 210%\n\nEasy\n- 3h18m24s 239%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.72999999999999998
+            },
+            "name" : "Sweet spot",
+            "seconds" : 3567,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.73
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 14240,
+            "start" : {
+              "unit" : "watts",
+              "value" : 989
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 6817,
+            "start" : {
+              "unit" : "watts",
+              "value" : 489
+            }
+          }
+        }
+      ],
+      "text" : "Sweet spot\n- 59m27s ramp 173-73%\n\nRecovery\n- 3h57m20s 989w\n\nHard\n- 1h53m37s 489w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 7093,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1
+            }
+          }
+        },
+        {
+          "count" : 8,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 7658,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1491
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.67000000000000004
+              },
+              "name" : "Time at threshold",
+              "seconds" : 6425,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.81999999999999995
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Hard\n- 1h58m13s 100%\n\n8x\n- Sweet spot 2h7m38s 1491w\n- Time at threshold 1h47m5s ramp 82-67%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 5660,
+            "start" : {
+              "unit" : "watts",
+              "value" : 843
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 10135,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.68000000000000005
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 8777,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.88
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 1575,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.3999999999999999
+            }
+          }
+        }
+      ],
+      "text" : "- 1h34m20s 843w\n\nRecovery\n- 2h48m55s 68%\n\nEasy\n- 2h26m17s 88%\n\nEasy\n- 26m15s 240%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 14220,
+            "start" : {
+              "unit" : "watts",
+              "value" : 565
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 3856,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.6899999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 2635,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3700000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 4173,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.2999999999999998
+            }
+          }
+        },
+        {
+          "count" : 21,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 414
+              },
+              "name" : "Time at threshold",
+              "seconds" : 11293,
+              "start" : {
+                "unit" : "watts",
+                "value" : 941
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 4717,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.97999999999999998
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 1685,
+              "start" : {
+                "unit" : "watts",
+                "value" : 950
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 9431,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.76000000000000001
+            }
+          }
+        }
+      ],
+      "text" : "Sweet spot\n- 3h57m 565w\n\nHard\n- 1h4m16s 169%\n\nUnder\n- 43m55s 137%\n\nTime at threshold\n- 1h9m33s 230%\n\n21x\n- Time at threshold 3h8m13s ramp 941-414w\n- 1h18m37s 98%\n- Spin-up 28m5s 950w\n\nOver\n- 2h37m11s 76%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 98,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 14149,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.48
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.3300000000000001
+              },
+              "name" : "Easy",
+              "seconds" : 2535,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.52
+              }
+            },
+            {
+              "name" : "Warm-up",
+              "seconds" : 3624,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1434
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 9273,
+              "start" : {
+                "unit" : "watts",
+                "value" : 763
+              }
+            }
+          ]
+        },
+        {
+          "count" : 29,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 1120,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0299999999999998
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 4322,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0899999999999999
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 10384,
+              "start" : {
+                "unit" : "watts",
+                "value" : 884
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 11051,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.96999999999999997
+            }
+          }
+        },
+        {
+          "count" : 77,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 1258,
+              "start" : {
+                "unit" : "watts",
+                "value" : 373
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 8714,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.97
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 6275,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.77
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1166
+            },
+            "name" : "Recovery",
+            "seconds" : 5964,
+            "start" : {
+              "unit" : "watts",
+              "value" : 514
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 7682,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.66000000000000003
+            }
+          }
+        }
+      ],
+      "text" : "98x\n- Warm-up 3h55m49s 248%\n- Easy 42m15s ramp 152-133%\n- Warm-up 1h24s 1434w\n- Hard 2h34m33s 763w\n\n29x\n- Recovery 18m40s 203%\n- Spin-up 1h12m2s 209%\n- Easy 2h53m4s 884w\n\n- 3h4m11s 97%\n\n77x\n- 20m58s 373w\n- Over 2h25m14s 197%\n- 1h44m35s 177%\n\nRecovery\n- 1h39m24s ramp 514-1166w\n\n- 2h8m2s 66%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 5606,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1299999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 12250,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.1699999999999999
+            }
+          }
+        },
+        {
+          "count" : 50,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 290,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6899999999999999
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 3104,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1097
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "- 1h33m26s 213%\n\nTime at threshold\n- 3h24m10s 117%\n\n50x\n- 4m50s 169%\n- Spin-up 51m44s 1097w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 94,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1211
+              },
+              "name" : "",
+              "seconds" : 4601,
+              "start" : {
+                "unit" : "watts",
+                "value" : 447
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 3237,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1151
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 13063,
+            "start" : {
+              "unit" : "watts",
+              "value" : 741
+            }
+          }
+        },
+        {
+          "count" : 26,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 280,
+              "start" : {
+                "unit" : "watts",
+                "value" : 487
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 6634,
+              "start" : {
+                "unit" : "watts",
+                "value" : 899
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1271
+              },
+              "name" : "",
+              "seconds" : 8603,
+              "start" : {
+                "unit" : "watts",
+                "value" : 442
+              }
+            },
+            {
+              "name" : "Under",
+              "seconds" : 11682,
+              "start" : {
+                "unit" : "watts",
+                "value" : 113
+              }
+            }
+          ]
+        },
+        {
+          "count" : 84,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 838
+              },
+              "name" : "Hard",
+              "seconds" : 6629,
+              "start" : {
+                "unit" : "watts",
+                "value" : 259
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 10986,
+              "start" : {
+                "unit" : "watts",
+                "value" : 620
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 3461,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.97
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 991
+            },
+            "name" : "Hard",
+            "seconds" : 4733,
+            "start" : {
+              "unit" : "watts",
+              "value" : 109
+            }
+          }
+        }
+      ],
+      "text" : "94x\n- 1h16m41s ramp 447-1211w\n- 53m57s 1151w\n\nUnder\n- 3h37m43s 741w\n\n26x\n- 4m40s 487w\n- Over 1h50m34s 899w\n- 2h23m23s ramp 442-1271w\n- Under 3h14m42s 113w\n\n84x\n- Hard 1h50m29s ramp 259-838w\n- Easy 3h3m6s 620w\n- Sweet spot 57m41s 197%\n\nHard\n- 1h18m53s ramp 109-991w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.1499999999999999
+            },
+            "name" : "Recovery",
+            "seconds" : 10742,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.5600000000000001
+            }
+          }
+        },
+        {
+          "count" : 66,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 46,
+              "start" : {
+                "unit" : "watts",
+                "value" : 272
+              }
+            },
+            {
+              "name" : "Warm-up",
+              "seconds" : 10014,
+              "start" : {
+                "unit" : "watts",
+                "value" : 959
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 9105,
+              "start" : {
+                "unit" : "watts",
+                "value" : 981
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 4949,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Recovery\n- 2h59m2s ramp 156-215%\n\n66x\n- Over 46s 272w\n- Warm-up 2h46m54s 959w\n- Spin-up 2h31m45s 981w\n- Hard 1h22m29s 50%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 35,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 551,
+              "start" : {
+                "unit" : "watts",
+                "value" : 842
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 14250,
+              "start" : {
+                "unit" : "watts",
+                "value" : 655
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 364,
+              "start" : {
+                "unit" : "watts",
+                "value" : 897
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 6732,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1387
+            }
+          }
+        }
+      ],
+      "text" : "35x\n- Spin-up 9m11s 842w\n- Over 3h57m30s 655w\n- Over 6m4s 897w\n\nOver\n- 1h52m12s 1387w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 54,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 11625,
+              "start" : {
+                "unit" : "watts",
+                "value" : 817
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 12290,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6100000000000001
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 4935,
+            "start" : {
+              "unit" : "watts",
+              "value" : 900
+            }
+          }
+        }
+      ],
+      "text" : "54x\n- Over 3h13m45s 817w\n- 3h24m50s 161%\n\nRecovery\n- 1h22m15s 900w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 5138,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.78
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 11445,
+            "start" : {
+              "unit" : "watts",
+              "value" : 319
+            }
+          }
+        }
+      ],
+      "text" : "Time at threshold\n- 1h25m38s 178%\n\nHard\n- 3h10m45s 319w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.3799999999999999
+            },
+            "name" : "Warm-up",
+            "seconds" : 5279,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3799999999999999
+            }
+          }
+        },
+        {
+          "count" : 73,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1478
+              },
+              "name" : "",
+              "seconds" : 7033,
+              "start" : {
+                "unit" : "watts",
+                "value" : 461
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.2000000000000002
+              },
+              "name" : "Over",
+              "seconds" : 3203,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1699999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.23
+            },
+            "name" : "Hard",
+            "seconds" : 5984,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.31
+            }
+          }
+        },
+        {
+          "count" : 24,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Hard",
+              "seconds" : 7572,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.77000000000000002
+              }
+            },
+            {
+              "name" : "Under",
+              "seconds" : 11031,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1299999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.3600000000000001
+            },
+            "name" : "Warm-up",
+            "seconds" : 8468,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.75
+            }
+          }
+        },
+        {
+          "count" : 58,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 6373,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1365
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1279
+              },
+              "name" : "Sweet spot",
+              "seconds" : 5912,
+              "start" : {
+                "unit" : "watts",
+                "value" : 217
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 14060,
+              "start" : {
+                "unit" : "watts",
+                "value" : 34
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.5800000000000001
+              },
+              "name" : "Sweet spot",
+              "seconds" : 12305,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1699999999999999
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Warm-up\n- 1h27m59s ramp 138-238%\n\n73x\n- 1h57m13s ramp 461-1478w\n- Over 53m23s ramp 117-220%\n\nHard\n- 1h39m44s ramp 31-123%\n\n24x\n- Hard 2h6m12s 77%\n- Under 3h3m51s 213%\n\nWarm-up\n- 2h21m8s ramp 175-136%\n\n58x\n- Sweet spot 1h46m13s 1365w\n- Sweet spot 1h38m32s ramp 217-1279w\n- Recovery 3h54m20s 34w\n- Sweet spot 3h25m5s ramp 117-158%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1236
+            },
+            "name" : "Sweet spot",
+            "seconds" : 12219,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1083
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 6739,
+            "start" : {
+              "unit" : "watts",
+              "value" : 199
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 946
+            },
+            "name" : "Over",
+            "seconds" : 11477,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1029
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 792
+            },
+            "name" : "",
+            "seconds" : 2740,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1495
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 310,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.44
+            }
+          }
+        }
+      ],
+      "text" : "Sweet spot\n- 3h23m39s ramp 1083-1236w\n\nOver\n- 1h52m19s 199w\n\nOver\n- 3h11m17s ramp 1029-946w\n\n- 45m40s ramp 1495-792w\n\nSweet spot\n- 5m10s 44%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 10126,
+            "start" : {
+              "unit" : "watts",
+              "value" : 389
+            }
+          }
+        }
+      ],
+      "text" : "Time at threshold\n- 2h48m46s 389w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 6457,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.69999999999999996
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 11248,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1358
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 843,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.46
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.1899999999999999
+            },
+            "name" : "Sweet spot",
+            "seconds" : 8068,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.3999999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.3200000000000001
+            },
+            "name" : "Spin-up",
+            "seconds" : 12046,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.28
+            }
+          }
+        },
+        {
+          "count" : 8,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 9771,
+              "start" : {
+                "unit" : "watts",
+                "value" : 707
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 2410,
+              "start" : {
+                "unit" : "watts",
+                "value" : 636
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 5986,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1099999999999999
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Easy\n- 1h47m37s 70%\n\nEasy\n- 3h7m28s 1358w\n\nUnder\n- 14m3s 246%\n\nSweet spot\n- 2h14m28s ramp 240-119%\n\nSpin-up\n- 3h20m46s ramp 128-132%\n\n8x\n- Time at threshold 2h42m51s 707w\n- Over 40m10s 636w\n- Sweet spot 1h39m46s 211%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 59,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.1899999999999999
+              },
+              "name" : "Recovery",
+              "seconds" : 13656,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.8899999999999999
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 11528,
+              "start" : {
+                "unit" : "watts",
+                "value" : 251
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.60999999999999999
+            },
+            "name" : "Recovery",
+            "seconds" : 10776,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1299999999999999
+            }
+          }
+        },
+        {
+          "count" : 11,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 11180,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.05
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 13230,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1381
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 877
+              },
+              "name" : "Warm-up",
+              "seconds" : 10179,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1104
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 5920,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.85999999999999999
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "59x\n- Recovery 3h47m36s ramp 189-219%\n- Recovery 3h12m8s 251w\n\nRecovery\n- 2h59m36s ramp 213-61%\n\n11x\n- Easy 3h6m20s 105%\n- Sweet spot 3h40m30s 1381w\n- Warm-up 2h49m39s ramp 1104-877w\n- 1h38m40s 86%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.52
+            },
+            "name" : "Time at threshold",
+            "seconds" : 1598,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.3199999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 931
+            },
+            "name" : "",
+            "seconds" : 3553,
+            "start" : {
+              "unit" : "watts",
+              "value" : 827
+            }
+          }
+        },
+        {
+          "count" : 75,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Hard",
+              "seconds" : 5392,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1155
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 6627,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6200000000000001
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 4436,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.5900000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 90
+            },
+            "name" : "Over",
+            "seconds" : 945,
+            "start" : {
+              "unit" : "watts",
+              "value" : 321
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 9199,
+            "start" : {
+              "unit" : "watts",
+              "value" : 430
+            }
+          }
+        }
+      ],
+      "text" : "Time at threshold\n- 26m38s ramp 232-152%\n\n- 59m13s ramp 827-931w\n\n75x\n- Hard 1h29m52s 1155w\n- 1h50m27s 162%\n\nOver\n- 1h13m56s 159%\n\nOver\n- 15m45s ramp 321-90w\n\nWarm-up\n- 2h33m19s 430w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 2684,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1357
+            }
+          }
+        },
+        {
+          "count" : 76,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 9104,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1127
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 11457,
+              "start" : {
+                "unit" : "watts",
+                "value" : 350
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 12433,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.5800000000000001
+            }
+          }
+        },
+        {
+          "count" : 74,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 33
+              },
+              "name" : "Warm-up",
+              "seconds" : 6353,
+              "start" : {
+                "unit" : "watts",
+                "value" : 945
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 14161,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.3199999999999998
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 5209,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.9199999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 673
+            },
+            "name" : "Sweet spot",
+            "seconds" : 4842,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1383
+            }
+          }
+        }
+      ],
+      "text" : "Over\n- 44m44s 1357w\n\n76x\n- Recovery 2h31m44s 1127w\n- Easy 3h10m57s 350w\n\nOver\n- 3h27m13s 158%\n\n74x\n- Warm-up 1h45m53s ramp 945-33w\n- Over 3h56m1s 232%\n- 1h26m49s 192%\n\nSweet spot\n- 1h20m42s ramp 1383-673w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 67,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Under",
+              "seconds" : 12930,
+              "start" : {
+                "unit" : "watts",
+                "value" : 479
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 6279,
+              "start" : {
+                "unit" : "watts",
+                "value" : 896
+              }
+            }
+          ]
+        },
+        {
+          "count" : 48,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 9414,
+              "start" : {
+                "unit" : "watts",
+                "value" : 176
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 5198,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.98
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 14355,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.3100000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 11644,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.27
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 6316,
+            "start" : {
+              "unit" : "watts",
+              "value" : 602
+            }
+          }
+        }
+      ],
+      "text" : "67x\n- Under 3h35m30s 479w\n- Hard 1h44m39s 896w\n\n48x\n- Spin-up 2h36m54s 176w\n\n- 1h26m38s 198%\n\nHard\n- 3h59m15s 231%\n\nOver\n- 3h14m4s 127%\n\nUnder\n- 1h45m16s 602w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 98,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 1980,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.4300000000000002
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "98x\n- Easy 33m 243%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 1615,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.4900000000000002
+            }
+          }
+        },
+        {
+          "count" : 96,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 7527,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.75
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 494
+              },
+              "name" : "Sweet spot",
+              "seconds" : 4179,
+              "start" : {
+                "unit" : "watts",
+                "value" : 636
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 13805,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.46999999999999997
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.87
+            },
+            "name" : "Sweet spot",
+            "seconds" : 8023,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3799999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 416,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1052
+            }
+          }
+        }
+      ],
+      "text" : "Time at threshold\n- 26m55s 249%\n\n96x\n- Time at threshold 2h5m27s 175%\n- Sweet spot 1h9m39s ramp 636-494w\n\nTime at threshold\n- 3h50m5s 47%\n\nSweet spot\n- 2h13m43s ramp 138-87%\n\n- 6m56s 1052w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1365
+            },
+            "name" : "Recovery",
+            "seconds" : 9225,
+            "start" : {
+              "unit" : "watts",
+              "value" : 71
+            }
+          }
+        }
+      ],
+      "text" : "Recovery\n- 2h33m45s ramp 71-1365w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 60,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.8500000000000001
+              },
+              "name" : "Under",
+              "seconds" : 5466,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.01
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 4402,
+              "start" : {
+                "unit" : "watts",
+                "value" : 849
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 2057,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.05
+              }
+            }
+          ]
+        },
+        {
+          "count" : 69,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 13516,
+              "start" : {
+                "unit" : "watts",
+                "value" : 264
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.04
+              },
+              "name" : "Under",
+              "seconds" : 8490,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6799999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.4300000000000002
+            },
+            "name" : "Spin-up",
+            "seconds" : 8784,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.9199999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 3512,
+            "start" : {
+              "unit" : "watts",
+              "value" : 774
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 10149,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1699999999999999
+            }
+          }
+        }
+      ],
+      "text" : "60x\n- Under 1h31m6s ramp 101-185%\n- Over 1h13m22s 849w\n- 34m17s 105%\n\n69x\n- Spin-up 3h45m16s 264w\n- Under 2h21m30s ramp 168-104%\n\nSpin-up\n- 2h26m24s ramp 192-243%\n\nTime at threshold\n- 58m32s 774w\n\nSweet spot\n- 2h49m9s 217%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 1857,
+            "start" : {
+              "unit" : "watts",
+              "value" : 672
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.88
+            },
+            "name" : "Sweet spot",
+            "seconds" : 9321,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1899999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 5988,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1477
+            }
+          }
+        },
+        {
+          "count" : 78,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 4491,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.79000000000000004
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.53
+              },
+              "name" : "Under",
+              "seconds" : 3673,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.65000000000000002
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 774,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1000000000000001
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1102
+              },
+              "name" : "Sweet spot",
+              "seconds" : 13311,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1167
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Time at threshold\n- 30m57s 672w\n\nSweet spot\n- 2h35m21s ramp 219-88%\n\nWarm-up\n- 1h39m48s 1477w\n\n78x\n- Over 1h14m51s 79%\n- Under 1h1m13s ramp 65-153%\n- Recovery 12m54s 110%\n- Sweet spot 3h41m51s ramp 1167-1102w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 6987,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1223
+            }
+          }
+        }
+      ],
+      "text" : "Warm-up\n- 1h56m27s 1223w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 25,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 4297,
+              "start" : {
+                "unit" : "watts",
+                "value" : 330
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "25x\n- Recovery 1h11m37s 330w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 13621,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.75
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 13639,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.88
+            }
+          }
+        }
+      ],
+      "text" : "Over\n- 3h47m1s 75%\n\n- 3h47m19s 88%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1
+            },
+            "name" : "",
+            "seconds" : 10880,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.2599999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 3360,
+            "start" : {
+              "unit" : "watts",
+              "value" : 659
+            }
+          }
+        },
+        {
+          "count" : 80,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 4854,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.4199999999999999
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 7386,
+              "start" : {
+                "unit" : "watts",
+                "value" : 421
+              }
+            },
+            {
+              "name" : "Under",
+              "seconds" : 918,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.8500000000000001
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1323
+            },
+            "name" : "Over",
+            "seconds" : 4390,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1372
+            }
+          }
+        }
+      ],
+      "text" : "- 3h1m20s ramp 226-100%\n\nTime at threshold\n- 56m 659w\n\n80x\n- 1h20m54s 242%\n- Sweet spot 2h3m6s 421w\n- Under 15m18s 185%\n\nOver\n- 1h13m10s ramp 1372-1323w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 9586,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.27
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 4744,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1051
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1429
+            },
+            "name" : "Time at threshold",
+            "seconds" : 9581,
+            "start" : {
+              "unit" : "watts",
+              "value" : 747
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 4440,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3600000000000001
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 6245,
+            "start" : {
+              "unit" : "watts",
+              "value" : 425
+            }
+          }
+        }
+      ],
+      "text" : "Spin-up\n- 2h39m46s 227%\n\nEasy\n- 1h19m4s 1051w\n\nTime at threshold\n- 2h39m41s ramp 747-1429w\n\nOver\n- 1h14m 136%\n\nWarm-up\n- 1h44m5s 425w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 27,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 11402,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.52
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1493
+              },
+              "name" : "Hard",
+              "seconds" : 4338,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1438
+              }
+            },
+            {
+              "name" : "Time at threshold",
+              "seconds" : 13447,
+              "start" : {
+                "unit" : "watts",
+                "value" : 767
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 4194,
+              "start" : {
+                "unit" : "watts",
+                "value" : 401
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "27x\n- 3h10m2s 152%\n- Hard 1h12m18s ramp 1438-1493w\n- Time at threshold 3h44m7s 767w\n- Spin-up 1h9m54s 401w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.52
+            },
+            "name" : "Easy",
+            "seconds" : 8815,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.1599999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 14192,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.48
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 4225,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.66000000000000003
+            }
+          }
+        },
+        {
+          "count" : 92,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 8375,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1343
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 5784,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.92000000000000004
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 11492,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1174
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 336
+              },
+              "name" : "Sweet spot",
+              "seconds" : 811,
+              "start" : {
+                "unit" : "watts",
+                "value" : 114
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 912,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.49
+            }
+          }
+        }
+      ],
+      "text" : "Easy\n- 2h26m55s ramp 116-152%\n\nSpin-up\n- 3h56m32s 148%\n\nSweet spot\n- 1h10m25s 66%\n\n92x\n- 2h19m35s 1343w\n- Easy 1h36m24s 92%\n- Recovery 3h11m32s 1174w\n- Sweet spot 13m31s ramp 114-336w\n\n- 15m12s 149%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 94,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.05
+              },
+              "name" : "Under",
+              "seconds" : 950,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3799999999999999
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 12011,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 10359,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1100000000000001
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "94x\n- Under 15m50s ramp 138-105%\n- Hard 3h20m11s 130%\n- 2h52m39s 111%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 7752,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1097
+            }
+          }
+        },
+        {
+          "count" : 61,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Spin-up",
+              "seconds" : 13660,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.63
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.4900000000000002
+              },
+              "name" : "Easy",
+              "seconds" : 3208,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1299999999999999
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 5461,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3500000000000001
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.1599999999999999
+              },
+              "name" : "",
+              "seconds" : 4034,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.45
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1459
+            },
+            "name" : "Easy",
+            "seconds" : 1214,
+            "start" : {
+              "unit" : "watts",
+              "value" : 533
+            }
+          }
+        }
+      ],
+      "text" : "- 2h9m12s 1097w\n\n61x\n- Spin-up 3h47m40s 63%\n- Easy 53m28s ramp 113-249%\n- Recovery 1h31m1s 135%\n- 1h7m14s ramp 145-116%\n\nEasy\n- 20m14s ramp 533-1459w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 537,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1099999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 11511,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1291
+            }
+          }
+        }
+      ],
+      "text" : "- 8m57s 211%\n\nHard\n- 3h11m51s 1291w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 2650,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.6899999999999999
+            }
+          }
+        },
+        {
+          "count" : 60,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 9059,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.2000000000000002
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.6000000000000001
+              },
+              "name" : "Spin-up",
+              "seconds" : 9107,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1699999999999999
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 11890,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1292
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 7067,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1323
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 650
+            },
+            "name" : "Hard",
+            "seconds" : 2956,
+            "start" : {
+              "unit" : "watts",
+              "value" : 608
+            }
+          }
+        },
+        {
+          "count" : 40,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Under",
+              "seconds" : 10639,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.67000000000000004
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 59
+              },
+              "name" : "Spin-up",
+              "seconds" : 1315,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1478
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 12455,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1206
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 418
+              },
+              "name" : "Warm-up",
+              "seconds" : 1728,
+              "start" : {
+                "unit" : "watts",
+                "value" : 834
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Under\n- 44m10s 169%\n\n60x\n- Time at threshold 2h30m59s 220%\n- Spin-up 2h31m47s ramp 217-160%\n- Hard 3h18m10s 1292w\n\nOver\n- 1h57m47s 1323w\n\nHard\n- 49m16s ramp 608-650w\n\n40x\n- Under 2h57m19s 67%\n- Spin-up 21m55s ramp 1478-59w\n- Sweet spot 3h27m35s 1206w\n- Warm-up 28m48s ramp 834-418w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 8086,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1238
+            }
+          }
+        },
+        {
+          "count" : 94,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 454
+              },
+              "name" : "Hard",
+              "seconds" : 7695,
+              "start" : {
+                "unit" : "watts",
+                "value" : 204
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 13264,
+              "start" : {
+                "unit" : "watts",
+                "value" : 537
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.46
+            },
+            "name" : "Warm-up",
+            "seconds" : 5950,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.03
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.4399999999999999
+            },
+            "name" : "Easy",
+            "seconds" : 13231,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.1299999999999999
+            }
+          }
+        }
+      ],
+      "text" : "Time at threshold\n- 2h14m46s 1238w\n\n94x\n- Hard 2h8m15s ramp 204-454w\n- 3h41m4s 537w\n\nWarm-up\n- 1h39m10s ramp 103-246%\n\nEasy\n- 3h40m31s ramp 113-244%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 9,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 7575,
+              "start" : {
+                "unit" : "watts",
+                "value" : 533
+              }
+            }
+          ]
+        },
+        {
+          "count" : 66,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.63
+              },
+              "name" : "Easy",
+              "seconds" : 1968,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.9399999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.93000000000000005
+            },
+            "name" : "Hard",
+            "seconds" : 11861,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.2599999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1438
+            },
+            "name" : "",
+            "seconds" : 1213,
+            "start" : {
+              "unit" : "watts",
+              "value" : 620
+            }
+          }
+        },
+        {
+          "count" : 97,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 582
+              },
+              "name" : "Recovery",
+              "seconds" : 4436,
+              "start" : {
+                "unit" : "watts",
+                "value" : 273
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1240
+              },
+              "name" : "Easy",
+              "seconds" : 3057,
+              "start" : {
+                "unit" : "watts",
+                "value" : 720
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "9x\n- Sweet spot 2h6m15s 533w\n\n66x\n- Easy 32m48s ramp 194-63%\n\nHard\n- 3h17m41s ramp 226-93%\n\n- 20m13s ramp 620-1438w\n\n97x\n- Recovery 1h13m56s ramp 273-582w\n- Easy 50m57s ramp 720-1240w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 312
+            },
+            "name" : "Under",
+            "seconds" : 1209,
+            "start" : {
+              "unit" : "watts",
+              "value" : 804
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 13760,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.81000000000000005
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Spin-up",
+            "seconds" : 9171,
+            "start" : {
+              "unit" : "watts",
+              "value" : 581
+            }
+          }
+        },
+        {
+          "count" : 92,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 2659,
+              "start" : {
+                "unit" : "watts",
+                "value" : 670
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 4396,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.3599999999999999
+              }
+            }
+          ]
+        },
+        {
+          "count" : 13,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Hard",
+              "seconds" : 12179,
+              "start" : {
+                "unit" : "watts",
+                "value" : 911
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 256
+              },
+              "name" : "Sweet spot",
+              "seconds" : 6728,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1244
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.83999999999999997
+              },
+              "name" : "Sweet spot",
+              "seconds" : 7070,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1699999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 10080,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.0700000000000001
+            }
+          }
+        }
+      ],
+      "text" : "Under\n- 20m9s ramp 804-312w\n\nHard\n- 3h49m20s 81%\n\nSpin-up\n- 2h32m51s 581w\n\n92x\n- Over 44m19s 670w\n- Sweet spot 1h13m16s 236%\n\n13x\n- Hard 3h22m59s 911w\n- Sweet spot 1h52m8s ramp 1244-256w\n- Sweet spot 1h57m50s ramp 117-84%\n\nUnder\n- 2h48m 107%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 2734,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.8500000000000001
+            }
+          }
+        },
+        {
+          "count" : 22,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Over",
+              "seconds" : 9762,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.46000000000000002
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 11229,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1318
+              }
+            },
+            {
+              "name" : "Time at threshold",
+              "seconds" : 9929,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1899999999999999
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 2901,
+              "start" : {
+                "unit" : "watts",
+                "value" : 796
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 1821,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1071
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 12788,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1477
+            }
+          }
+        },
+        {
+          "count" : 26,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Time at threshold",
+              "seconds" : 11296,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1190
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.40999999999999998
+            },
+            "name" : "Under",
+            "seconds" : 8677,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.6399999999999999
+            }
+          }
+        }
+      ],
+      "text" : "Recovery\n- 45m34s 185%\n\n22x\n- Over 2h42m42s 46%\n- Sweet spot 3h7m9s 1318w\n- Time at threshold 2h45m29s 119%\n- Over 48m21s 796w\n\nHard\n- 30m21s 1071w\n\nOver\n- 3h33m8s 1477w\n\n26x\n- Time at threshold 3h8m16s 1190w\n\nUnder\n- 2h24m37s ramp 164-41%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 9055,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.4500000000000002
+            }
+          }
+        }
+      ],
+      "text" : "Hard\n- 2h30m55s 245%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 993
+            },
+            "name" : "Over",
+            "seconds" : 3538,
+            "start" : {
+              "unit" : "watts",
+              "value" : 650
+            }
+          }
+        },
+        {
+          "count" : 99,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 5026,
+              "start" : {
+                "unit" : "watts",
+                "value" : 714
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Over\n- 58m58s ramp 650-993w\n\n99x\n- Warm-up 1h23m46s 714w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 26,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 6038,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.41999999999999998
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 4188,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0299999999999998
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 10951,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.95
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 8885,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.60999999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Hard",
+            "seconds" : 13091,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1145
+            }
+          }
+        },
+        {
+          "count" : 67,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Under",
+              "seconds" : 5911,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.4300000000000002
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 11752,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.1600000000000001
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 6888,
+              "start" : {
+                "unit" : "watts",
+                "value" : 226
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 11489,
+              "start" : {
+                "unit" : "watts",
+                "value" : 720
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 1090,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1450
+            }
+          }
+        }
+      ],
+      "text" : "26x\n- Easy 1h40m38s 42%\n- Over 1h9m48s 203%\n- Spin-up 3h2m31s 195%\n\nUnder\n- 2h28m5s 61%\n\nHard\n- 3h38m11s 1145w\n\n67x\n- Under 1h38m31s 243%\n- 3h15m52s 216%\n- Easy 1h54m48s 226w\n- Over 3h11m29s 720w\n\nOver\n- 18m10s 1450w"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 93,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Hard",
+              "seconds" : 5200,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.58999999999999997
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1395
+              },
+              "name" : "Easy",
+              "seconds" : 5002,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1426
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 12090,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.78
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 8105,
+              "start" : {
+                "unit" : "watts",
+                "value" : 504
+              }
+            }
+          ]
+        },
+        {
+          "count" : 14,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Under",
+              "seconds" : 3485,
+              "start" : {
+                "unit" : "watts",
+                "value" : 870
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "93x\n- Hard 1h26m40s 59%\n- Easy 1h23m22s ramp 1426-1395w\n- Easy 3h21m30s 178%\n- 2h15m5s 504w\n\n14x\n- Under 58m5s 870w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 9518,
+            "start" : {
+              "unit" : "watts",
+              "value" : 559
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 10231,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.96999999999999997
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 1.95
+            },
+            "name" : "Easy",
+            "seconds" : 5257,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.67000000000000004
+            }
+          }
+        },
+        {
+          "count" : 39,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Warm-up",
+              "seconds" : 4665,
+              "start" : {
+                "unit" : "watts",
+                "value" : 21
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 7196,
+              "start" : {
+                "unit" : "watts",
+                "value" : 768
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 254,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1309
+            }
+          }
+        },
+        {
+          "count" : 12,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 14141,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6100000000000001
+              }
+            },
+            {
+              "name" : "Time at threshold",
+              "seconds" : 13087,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0299999999999998
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Sweet spot\n- 2h38m38s 559w\n\n- 2h50m31s 97%\n\nEasy\n- 1h27m37s ramp 67-195%\n\n39x\n- Warm-up 1h17m45s 21w\n- Recovery 1h59m56s 768w\n\nUnder\n- 4m14s 1309w\n\n12x\n- 3h55m41s 161%\n- Time at threshold 3h38m7s 203%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 89,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.48
+              },
+              "name" : "Sweet spot",
+              "seconds" : 301,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.84999999999999998
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.38
+              },
+              "name" : "Under",
+              "seconds" : 13042,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.6100000000000001
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.21
+              },
+              "name" : "Warm-up",
+              "seconds" : 10970,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.02
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1238
+              },
+              "name" : "Spin-up",
+              "seconds" : 10724,
+              "start" : {
+                "unit" : "watts",
+                "value" : 362
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1072
+            },
+            "name" : "Under",
+            "seconds" : 5509,
+            "start" : {
+              "unit" : "watts",
+              "value" : 648
+            }
+          }
+        },
+        {
+          "count" : 86,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Sweet spot",
+              "seconds" : 5967,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1418
+              }
+            },
+            {
+              "name" : "Warm-up",
+              "seconds" : 5600,
+              "start" : {
+                "unit" : "watts",
+                "value" : 267
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 13166,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1799999999999999
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1174
+            },
+            "name" : "Time at threshold",
+            "seconds" : 1546,
+            "start" : {
+              "unit" : "watts",
+              "value" : 257
+            }
+          }
+        }
+      ],
+      "text" : "89x\n- Sweet spot 5m1s ramp 85-248%\n- Under 3h37m22s ramp 161-38%\n- Warm-up 3h2m50s ramp 202-121%\n- Spin-up 2h58m44s ramp 362-1238w\n\nUnder\n- 1h31m49s ramp 648-1072w\n\n86x\n- Sweet spot 1h39m27s 1418w\n- Warm-up 1h33m20s 267w\n- Recovery 3h39m26s 118%\n\nTime at threshold\n- 25m46s ramp 257-1174w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 11171,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1464
+            }
+          }
+        }
+      ],
+      "text" : "Sweet spot\n- 3h6m11s 1464w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2
+            },
+            "name" : "",
+            "seconds" : 3560,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.29
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1321
+            },
+            "name" : "Sweet spot",
+            "seconds" : 2814,
+            "start" : {
+              "unit" : "watts",
+              "value" : 84
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 2.0899999999999999
+            },
+            "name" : "Easy",
+            "seconds" : 5496,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.88
+            }
+          }
+        },
+        {
+          "count" : 37,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 9003,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1399999999999999
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 5719,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.37
+              }
+            },
+            {
+              "name" : "Recovery",
+              "seconds" : 12299,
+              "start" : {
+                "unit" : "watts",
+                "value" : 147
+              }
+            }
+          ]
+        },
+        {
+          "count" : 78,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.81000000000000005
+              },
+              "name" : "Sweet spot",
+              "seconds" : 5495,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.02
+              }
+            },
+            {
+              "name" : "Hard",
+              "seconds" : 907,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.90000000000000002
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.68000000000000005
+              },
+              "name" : "Recovery",
+              "seconds" : 1788,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.49
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 9539,
+              "start" : {
+                "unit" : "watts",
+                "value" : 958
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 13678,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3600000000000001
+            }
+          }
+        }
+      ],
+      "text" : "- 59m20s ramp 129-200%\n\nSweet spot\n- 46m54s ramp 84-1321w\n\nEasy\n- 1h31m36s ramp 88-209%\n\n37x\n- 2h30m3s 114%\n- 1h35m19s 37%\n- Recovery 3h24m59s 147w\n\n78x\n- Sweet spot 1h31m35s ramp 102-81%\n- Hard 15m7s 90%\n- Recovery 29m48s ramp 149-68%\n- Easy 2h38m59s 958w\n\n- 3h47m58s 136%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 12717,
+            "start" : {
+              "unit" : "watts",
+              "value" : 416
+            }
+          }
+        }
+      ],
+      "text" : "Warm-up\n- 3h31m57s 416w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 2789,
+            "start" : {
+              "unit" : "watts",
+              "value" : 618
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 619,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.4399999999999999
+            }
+          }
+        },
+        {
+          "count" : 18,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 14135,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 4241,
+              "start" : {
+                "unit" : "watts",
+                "value" : 318
+              }
+            }
+          ]
+        },
+        {
+          "count" : 8,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 13332,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.21
+              }
+            },
+            {
+              "name" : "Under",
+              "seconds" : 7994,
+              "start" : {
+                "unit" : "watts",
+                "value" : 950
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 4425,
+              "start" : {
+                "unit" : "watts",
+                "value" : 677
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Under\n- 46m29s 618w\n\nTime at threshold\n- 10m19s 244%\n\n18x\n- 3h55m35s 130%\n- Easy 1h10m41s 318w\n\n8x\n- 3h42m12s 221%\n- Under 2h13m14s 950w\n- 1h13m45s 677w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 1373
+            },
+            "name" : "Sweet spot",
+            "seconds" : 818,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1406
+            }
+          }
+        },
+        {
+          "count" : 28,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 0.5
+              },
+              "name" : "",
+              "seconds" : 5380,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.69999999999999996
+              }
+            },
+            {
+              "name" : "Sweet spot",
+              "seconds" : 2069,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1102
+              }
+            },
+            {
+              "name" : "Spin-up",
+              "seconds" : 5273,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.93999999999999995
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.5700000000000001
+              },
+              "name" : "Over",
+              "seconds" : 6617,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.2599999999999998
+              }
+            }
+          ]
+        },
+        {
+          "count" : 45,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 7197,
+              "start" : {
+                "unit" : "watts",
+                "value" : 845
+              }
+            },
+            {
+              "name" : "Warm-up",
+              "seconds" : 12626,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.71999999999999997
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Easy",
+            "seconds" : 9140,
+            "start" : {
+              "unit" : "watts",
+              "value" : 859
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 3536,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.02
+            }
+          }
+        }
+      ],
+      "text" : "Sweet spot\n- 13m38s ramp 1406-1373w\n\n28x\n- 1h29m40s ramp 70-50%\n- Sweet spot 34m29s 1102w\n- Spin-up 1h27m53s 94%\n- Over 1h50m17s ramp 226-157%\n\n45x\n- Recovery 1h59m57s 845w\n- Warm-up 3h30m26s 72%\n\nEasy\n- 2h32m20s 859w\n\nUnder\n- 58m56s 202%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 10507,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.25
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 8995,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.0699999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 2024,
+            "start" : {
+              "unit" : "watts",
+              "value" : 573
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Recovery",
+            "seconds" : 3972,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.59999999999999998
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Warm-up",
+            "seconds" : 8812,
+            "start" : {
+              "unit" : "watts",
+              "value" : 143
+            }
+          }
+        },
+        {
+          "count" : 97,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Easy",
+              "seconds" : 11369,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.55000000000000004
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Recovery\n- 2h55m7s 125%\n\nSweet spot\n- 2h29m55s 207%\n\nSweet spot\n- 33m44s 573w\n\nRecovery\n- 1h6m12s 60%\n\nWarm-up\n- 2h26m52s 143w\n\n97x\n- Easy 3h9m29s 55%"
+    },
+    {
+      "blocks" : [
+        {
+          "count" : 90,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 71
+              },
+              "name" : "Over",
+              "seconds" : 5112,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1352
+              }
+            }
+          ]
+        },
+        {
+          "count" : 31,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 12388,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1285
+              }
+            },
+            {
+              "name" : "Easy",
+              "seconds" : 14162,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.72
+              }
+            },
+            {
+              "name" : "Time at threshold",
+              "seconds" : 10386,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.5
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "90x\n- Over 1h25m12s ramp 1352-71w\n\n31x\n- Recovery 3h26m28s 1285w\n- Easy 3h56m2s 172%\n- Time at threshold 2h53m6s 250%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.88
+            },
+            "name" : "Recovery",
+            "seconds" : 12100,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.63
+            }
+          }
+        },
+        {
+          "count" : 17,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 1.8700000000000001
+              },
+              "name" : "Under",
+              "seconds" : 8613,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.3300000000000001
+              }
+            }
+          ]
+        },
+        {
+          "count" : 63,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 396
+              },
+              "name" : "",
+              "seconds" : 2827,
+              "start" : {
+                "unit" : "watts",
+                "value" : 521
+              }
+            },
+            {
+              "name" : "",
+              "seconds" : 3757,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 1.1299999999999999
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 1161
+              },
+              "name" : "Time at threshold",
+              "seconds" : 3116,
+              "start" : {
+                "unit" : "watts",
+                "value" : 479
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Recovery\n- 3h21m40s ramp 63-88%\n\n17x\n- Under 2h23m33s ramp 133-187%\n\n63x\n- 47m7s ramp 521-396w\n- 1h2m37s 113%\n- Time at threshold 51m56s ramp 479-1161w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 13974,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.3799999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "watts",
+              "value" : 779
+            },
+            "name" : "Hard",
+            "seconds" : 5863,
+            "start" : {
+              "unit" : "watts",
+              "value" : 434
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 3878,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 1.45
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 11016,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.60999999999999999
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.93999999999999995
+            },
+            "name" : "Under",
+            "seconds" : 5584,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.23
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Over",
+            "seconds" : 4667,
+            "start" : {
+              "unit" : "watts",
+              "value" : 881
+            }
+          }
+        }
+      ],
+      "text" : "Under\n- 3h52m54s 138%\n\nHard\n- 1h37m43s ramp 434-779w\n\nTime at threshold\n- 1h4m38s 145%\n\nOver\n- 3h3m36s 61%\n\nUnder\n- 1h33m4s ramp 223-94%\n\nOver\n- 1h17m47s 881w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Under",
+            "seconds" : 4012,
+            "start" : {
+              "unit" : "watts",
+              "value" : 144
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 3670,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.46999999999999997
+            }
+          }
+        },
+        {
+          "count" : 75,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "",
+              "seconds" : 9280,
+              "start" : {
+                "unit" : "watts",
+                "value" : 689
+              }
+            },
+            {
+              "name" : "Over",
+              "seconds" : 1376,
+              "start" : {
+                "unit" : "watts",
+                "value" : 101
+              }
+            }
+          ]
+        }
+      ],
+      "text" : "Under\n- 1h6m52s 144w\n\nSweet spot\n- 1h1m10s 47%\n\n75x\n- 2h34m40s 689w\n- Over 22m56s 101w"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "",
+            "seconds" : 14247,
+            "start" : {
+              "unit" : "watts",
+              "value" : 1030
+            }
+          }
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Sweet spot",
+            "seconds" : 12280,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.41999999999999998
+            }
+          }
+        },
+        {
+          "count" : 45,
+          "kind" : "repeats",
+          "steps" : [
+            {
+              "name" : "Recovery",
+              "seconds" : 10553,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 0.62
+              }
+            },
+            {
+              "end" : {
+                "unit" : "percentFTP",
+                "value" : 2.4500000000000002
+              },
+              "name" : "Under",
+              "seconds" : 3453,
+              "start" : {
+                "unit" : "percentFTP",
+                "value" : 2.0299999999999998
+              }
+            },
+            {
+              "end" : {
+                "unit" : "watts",
+                "value" : 864
+              },
+              "name" : "Time at threshold",
+              "seconds" : 5779,
+              "start" : {
+                "unit" : "watts",
+                "value" : 1162
+              }
+            }
+          ]
+        },
+        {
+          "kind" : "step",
+          "step" : {
+            "name" : "Time at threshold",
+            "seconds" : 7721,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 0.83999999999999997
+            }
+          }
+        }
+      ],
+      "text" : "- 3h57m27s 1030w\n\nSweet spot\n- 3h24m40s 42%\n\n45x\n- Recovery 2h55m53s 62%\n- Under 57m33s ramp 203-245%\n- Time at threshold 1h36m19s ramp 1162-864w\n\nTime at threshold\n- 2h8m41s 84%"
+    },
+    {
+      "blocks" : [
+        {
+          "kind" : "step",
+          "step" : {
+            "end" : {
+              "unit" : "percentFTP",
+              "value" : 0.62
+            },
+            "name" : "",
+            "seconds" : 511,
+            "start" : {
+              "unit" : "percentFTP",
+              "value" : 2.1499999999999999
+            }
+          }
+        }
+      ],
+      "text" : "- 8m31s ramp 215-62%"
+    }
+  ],
+  "printedDurations" : [
+    {
+      "seconds" : 0,
+      "text" : "0s"
+    },
+    {
+      "seconds" : 5,
+      "text" : "5s"
+    },
+    {
+      "seconds" : 30,
+      "text" : "30s"
+    },
+    {
+      "seconds" : 59,
+      "text" : "59s"
+    },
+    {
+      "seconds" : 60,
+      "text" : "1m"
+    },
+    {
+      "seconds" : 90,
+      "text" : "1m30s"
+    },
+    {
+      "seconds" : 600,
+      "text" : "10m"
+    },
+    {
+      "seconds" : 3600,
+      "text" : "1h"
+    },
+    {
+      "seconds" : 3661,
+      "text" : "1h1m1s"
+    },
+    {
+      "seconds" : 14400,
+      "text" : "4h"
+    },
+    {
+      "seconds" : 12.4,
+      "text" : "12s"
+    },
+    {
+      "seconds" : 12.6,
+      "text" : "13s"
+    }
+  ],
+  "version" : 1
+}

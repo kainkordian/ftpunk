@@ -1,0 +1,43 @@
+/* The workout builder and the My workouts cards. Phone first: the chart stacks over the editor; from 960 px the chart sits beside it. */
+.my-actions { gap: var(--space-s); }
+.custom-card { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
+.card-actions { gap: var(--space-xs); }
+.card-actions .btn { padding: 4px 6px; min-height: 32px; }
+
+.builder-layout { display: flex; flex-direction: column; gap: var(--space-l); }
+.builder-preview-col, .builder-editor-col { min-width: 0; }
+.builder-preview-col { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: var(--space-s) 0; }
+#builder-preview .profile.large svg { height: 110px; }
+.profile-empty { display: grid; place-items: center; height: 110px; border-radius: 8px; background: color-mix(in srgb, var(--secondary) 9%, transparent); text-align: center; padding: var(--space-s); }
+.stale { opacity: .35; }
+.small { font-size: .875rem; }
+.builder-head { gap: var(--space-s); }
+.block { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-s); }
+.repeat-step { padding-left: var(--space-m); border-left: 3px solid var(--grid); display: flex; flex-direction: column; gap: var(--space-xs); }
+.repeat-count { max-width: 160px; }
+.step { display: flex; flex-direction: column; gap: var(--space-s); }
+.step-top { display: flex; align-items: flex-end; gap: var(--space-s); }
+.step-top .swatch { width: 12px; height: 44px; margin-bottom: 0; }
+.step-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-m); }
+.step-row .field { min-width: 0; }
+.step-row .field.duration input { width: 7.5em; }
+.step-row .field.target input { width: 6.5em; }
+.field .unit { font-weight: 400; }
+.check { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; }
+.check input { width: 22px; height: 22px; }
+.block-tools { gap: var(--space-xs); }
+.block-tools .btn { padding: 4px 6px; min-height: 32px; }
+.add-row { gap: var(--space-s); }
+textarea.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; line-height: 1.5; resize: vertical; width: 100%; }
+.field textarea { padding: 8px 12px; border-radius: 12px; border: 1.5px solid var(--secondary); background: var(--surface); }
+textarea[aria-invalid="true"], input[aria-invalid="true"] { border-color: var(--warning); outline-color: var(--warning); }
+.blockers { margin: 0; padding-left: var(--space-l); color: var(--warning); font-size: .875rem; }
+.ok { color: var(--accent); font-weight: 600; }
+.summary { font-size: 1.25rem; }
+@media (min-width: 960px) {
+  .builder-layout { flex-direction: row-reverse; align-items: flex-start; }
+  .builder-preview-col { flex: 0 0 380px; top: var(--space-l); }
+  .builder-editor-col { flex: 1 1 auto; }
+  #builder-preview .profile.large svg { height: 170px; }
+  .profile-empty { height: 170px; }
+}

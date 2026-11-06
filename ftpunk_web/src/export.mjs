@@ -1,4 +1,6 @@
 import { PRESETS, OUTCOMES } from './domain.mjs';
+import { fitFile } from './fit.mjs';
+import { activityTitle } from './rules/progress.mjs';
 const xml = text => String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]);
 export function description(s) { const c = s.configuration; return `${s.isDemo ? 'DEMO — synthetic activity. ' : ''}FTPunk ${s.training?.name ?? PRESETS[c.preset].title}. ${OUTCOMES[s.outcome] ?? 'Recording'}. Rider: ${c.riderName}. Power source: ${c.powerSource}. Cadence source: ${c.cadenceSource}. Power matching: ${c.powerMatchingEnabled ? 'on' : 'off'}.${s.result ? ` Estimated FTP: ${Math.round(s.result.estimatedFTP)} W.` : ''}`; }
 export function csv(s) {
@@ -18,4 +20,24 @@ export function tcx(s) {
 export function download(text, filename, type = 'application/json') {
   const url = URL.createObjectURL(new Blob([text], { type })), link = document.createElement('a');
   link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// ----- files for the result screen and the activity detail ------------------------------------------------------------------------------
+export const FORMATS = Object.freeze({
+  fit: { title: 'FIT', type: 'application/octet-stream' }, tcx: { title: 'TCX', type: 'application/vnd.garmin.tcx+xml' },
+  csv: { title: 'CSV', type: 'text/csv' }, json: { title: 'JSON', type: 'application/json' },
+});
+/** COROS Training Hub accepts files from 20 KB (per COROS support). */
+export const COROS_MINIMUM_BYTES = 20000;
+/** `FTPunk-yyyy-MM-dd-<activity title>.<ext>` with the title reduced to letters, digits and hyphens; debug rides start with `DEMO-` (as native). */
+export function fileName(session, format) {
+  const d = new Date(session.startedAt), pad = n => String(n).padStart(2, '0'), day = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  let title = ''; for (const { segment: c } of new Intl.Segmenter().segment(activityTitle(session))) { if (/^[A-Za-z0-9]$/.test(c)) title += c; else if (!title.endsWith('-')) title += '-'; }
+  title = title.replace(/^-+|-+$/g, '');
+  return `${session.isDemo ? 'DEMO-' : ''}FTPunk-${day}-${title || 'Activity'}.${format}`;
+}
+/** The bytes of one export: { name, type, bytes } (bytes is a string for the text formats, a Uint8Array for FIT). */
+export function exportFile(session, format) {
+  const bytes = format === 'fit' ? fitFile(session) : format === 'csv' ? csv(session) : format === 'tcx' ? tcx(session) : JSON.stringify(session, null, 2);
+  return { name: fileName(session, format), type: FORMATS[format].type, bytes };
 }

@@ -12,3 +12,30 @@
 .chart-panel canvas { width: 100%; height: 160px; display: block; }
 body[data-route="ride"] .tabbar { display: none; }
 @media (max-width: 420px) { .tiles.two.hero-tiles { gap: var(--space-s); } .support-tiles { grid-template-columns: repeat(3, 1fr); } .tile { padding: var(--space-s); } }
+
+/* Layout: one column; the Large scene on a wide window goes beside the readings (CockpitLayout, arranged by ride.mjs). */
+.cockpit[data-visual="hero"] { max-width: 1400px; }
+.cockpit-cols { display: block; }
+.cockpit-cols .col { display: flex; flex-direction: column; gap: var(--space-m); min-width: 0; }
+.cockpit-cols .col:empty { display: none; }
+.blk { display: flex; flex-direction: column; gap: var(--space-m); } .blk:empty { display: none; }
+.cockpit-cols.side-by-side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: var(--space-l); align-items: start; }
+.support-tiles.rows { grid-template-columns: 1fr; } .support-tiles.rows .tile { flex-direction: row; justify-content: space-between; min-height: 0; }
+.cockpit-header.compact .caption, .cockpit-header.compact #cockpit-subtitle { display: none; }
+@media (max-width: 420px) { .cockpit-header #cockpit-subtitle, .cockpit-header #cockpit-clock-label { display: none; } }
+.placement-menu select { min-height: 44px; min-width: 44px; padding: 0 var(--space-s); border-radius: var(--radius-control); border: 1px solid var(--card-line); background: var(--surface); color: var(--ink); font: inherit; }
+
+/* Chaindance: the raster is enlarged with nearest-neighbour sampling in a rounded frame; the Large view's readout sits in the sky rows, never over the rider. */
+.chaindance { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid var(--card-line-strong); background: #0a0a20; line-height: 0; }
+.chaindance canvas { display: block; width: 100%; height: auto; aspect-ratio: 192 / 60; image-rendering: pixelated; }
+.chaindance.hero canvas { aspect-ratio: 192 / 96; }
+/* The sky band: HeroLayout.readoutFraction = 36 / 96 rows. A CSS rule, because the CSP blocks inline style attributes. */
+.chaindance-readout { height: 37.5%; position: absolute; inset: 0 0 auto 0; display: flex; align-items: flex-end; gap: var(--space-l); padding: var(--space-xs) var(--space-m) 0; overflow: hidden; color: #fff; line-height: 1.1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .5), rgba(0, 0, 0, 0)); }
+.chaindance-readout .readout-title { font-size: .6875rem; font-weight: 700; color: rgba(255, 255, 255, .8); }
+.chaindance-readout .readout-value { font: 700 clamp(22px, 5.6cqw, 34px)/1 var(--font); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chaindance-readout .accent-text { color: #c4f74c; }
+.chaindance-readout .readout-unit { font-size: .8125rem; font-weight: 600; margin-left: 3px; color: rgba(255, 255, 255, .8); }
+.chaindance-readout .readout-detail { margin-left: auto; align-self: flex-start; padding-top: var(--space-xs); font: 600 1rem/1.2 var(--font); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chaindance { container-type: inline-size; }
+@media (prefers-contrast: more) { .chaindance { border-width: 2px; border-color: var(--ink); } }
