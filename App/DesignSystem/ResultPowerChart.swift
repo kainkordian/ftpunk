@@ -71,11 +71,14 @@ struct ResultPowerChart: View {
                     if let best, let start = proxy.position(forX: best.start / 60), let end = proxy.position(forX: best.end / 60),
                        let text = ResultChartLayout.fittingLabel(for: best.title, availableWidth: Double(plot.width) - 8, characterWidth: bestCharacterWidth) {
                         let width = ResultChartLayout.estimatedWidth(of: text, characterWidth: bestCharacterWidth) + 8
+                        // Explicit CGFloat/Double conversions: Swift 6.1 (Xcode 16.4) cannot choose between the two operator overloads.
+                        let centre: Double = Double(start + end) / 2
+                        let leading: CGFloat = CGFloat(ResultChartLayout.clampedLeading(centre: centre, width: width, plotWidth: Double(plot.width)))
+                        let top: CGFloat = plot.minY + CGFloat(rowHeight) + 2
                         Text(text).font(.caption.weight(.bold)).foregroundStyle(Theme.accent).lineLimit(1).fixedSize()
                             .padding(.horizontal, 4).padding(.vertical, 1)
                             .background(Theme.surface.opacity(0.85), in: RoundedRectangle(cornerRadius: 4))
-                            .offset(x: plot.minX + ResultChartLayout.clampedLeading(centre: (start + end) / 2, width: width, plotWidth: plot.width),
-                                    y: plot.minY + rowHeight + 2)
+                            .offset(x: plot.minX + leading, y: top)
                     }
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)

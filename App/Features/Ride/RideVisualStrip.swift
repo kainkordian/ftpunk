@@ -129,7 +129,7 @@ struct RideVisualMenuView: View, Equatable {
         Menu {
             // Inline: the three choices appear directly in the menu with a checkmark. A plain Picker in a Menu becomes a
             // nested submenu on macOS.
-            Picker(RideVisualBranding.name, selection: Binding(get: { placement }, set: select)) {
+            Picker(RideVisualBranding.name, selection: Binding(get: { placement }, set: { select($0) })) {
                 ForEach(RideVisualPlacement.allCases) { Text($0.title).tag($0) }
             }
             .pickerStyle(.inline)

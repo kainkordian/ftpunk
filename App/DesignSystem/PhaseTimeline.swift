@@ -13,14 +13,17 @@ struct PhaseTimelineView: View {
         VStack(spacing: Space.xs) {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
+                    // Explicit CGFloat conversions: Swift 6.1 (Xcode 16.4) cannot choose between CGFloat * Double overloads.
+                    let full: CGFloat = geometry.size.width
                     ForEach(Array(timeline.segments.enumerated()), id: \.offset) { _, segment in
+                        let segmentWidth: CGFloat = full * CGFloat(segment.end - segment.start) - 2
                         RoundedRectangle(cornerRadius: 4)
                             .fill(segment.phase == current ? Theme.accent.opacity(0.28) : Theme.secondary.opacity(0.16))
-                            .frame(width: max(2, geometry.size.width * (segment.end - segment.start) - 2))
-                            .offset(x: geometry.size.width * segment.start)
+                            .frame(width: max(2, segmentWidth))
+                            .offset(x: full * CGFloat(segment.start))
                     }
                     RoundedRectangle(cornerRadius: 4).fill(Theme.accent)
-                        .frame(width: max(0, geometry.size.width * timeline.progress), height: 6)
+                        .frame(width: max(0, full * CGFloat(timeline.progress)), height: 6)
                 }
             }.frame(height: 10)
             if showsLabels {
