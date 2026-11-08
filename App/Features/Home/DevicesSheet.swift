@@ -122,5 +122,8 @@ struct DevicePicker: View {
                 .navigationTitle(role.title).toolbar { Button("Done") { dismiss() } }
                 .onAppear { model.bluetooth.scan() }.onDisappear { model.bluetooth.stopScanning() }
         }
+        #if os(macOS)
+        .frame(minWidth: 380, idealWidth: 460, minHeight: 420)
+        #endif
     }
 }

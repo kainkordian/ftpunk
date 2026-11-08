@@ -1,5 +1,6 @@
 import { test, assert, equal, near, fixture } from './harness.mjs';
 import { rideVisualState, RideVisualMotion, smoothedPower, sprintPower, sprintPeak, zoneForFraction, standingThreshold, trailOf, showsSweat, showsSparks, showsSpeedLines, resolvePlacement, nextPlacement, placementTitle, HeroLayout, LOOP_DISTANCE, LOOP_TIME, Posture, rideVisualInput } from '../src/chaindance/state.mjs';
+import { drawRiderSprite } from '../src/chaindance/rider-sprite.mjs';
 import { renderRideVisual, riderRows, fingerprint, pixelHash, ink, mixed, Pixels, textWidth, WIDTH, HEIGHT, HERO_HEIGHT } from '../src/chaindance/raster.mjs';
 import { cockpitLayout, coachingText, compactClock } from '../src/chaindance/layout.mjs';
 import { RampEngine, configuration } from '../src/domain.mjs';
@@ -167,4 +168,16 @@ test('Reading a live ride: smoothed power, scaled workout targets, and the ramp 
   equal([input.mode, input.phase, input.ftp, input.weightKG, input.cadenceAvailable, input.cadence, input.power], ['ftpTest', 'ramp', 250, 71, true, 90, 200]);
   equal([input.ramp.warmupSeconds, input.ramp.stepSeconds, input.ramp.rampSeconds], [60, 12, 20]);
   assert(rideVisualState(input).world === 'skyway');
+});
+
+test('Sprite rider (RG SP design): rider A in rider D colours, drawn only when the scene asks for it', () => {
+  const state = working(200, 'freeERG'), motion = () => new RideVisualMotion(40, 0.5, 0.3);
+  const plain = renderRideVisual({ state, motion: motion(), animated: true, skyRows: 0 });
+  const sprite = renderRideVisual({ state, motion: motion(), animated: true, skyRows: 0, sprite: drawRiderSprite });
+  assert(differing(plain, sprite) > 0, 'the sprite changes the frame');
+  assert(countInk(sprite, 0xf5d020) > 20, 'yellow helmet and shorts');
+  assert(countInk(sprite, 0x7a4ae0) > 20, 'violet jersey');
+  equal(countInk(sprite, 0x00b8a8), 0, 'no rider A teal');
+  const again = renderRideVisual({ state, motion: motion(), animated: true, skyRows: 0, sprite: drawRiderSprite });
+  equal(differing(again, sprite), 0);
 });

@@ -20,6 +20,9 @@ struct FTPCockpitView: View {
     private var stepSeconds: Double { config.preset.stepSeconds }
     private var stepNumber: Int { Int(phaseTime / stepSeconds) + 1 }
     private var livePower: Int? { engine.lastPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
+    private var trainerPower: Int? { engine.lastTrainerPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
+    private var showsTrainer: Bool { config.resolvedPowerSource == .externalPowerMeter }
+    private var trainerCorner: CornerReading? { showsTrainer ? CornerReading(title: "TRAINER", value: trainerPower.map(String.init)) : nil }
     private var liveCadence: Double? { engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? $0.rpm : nil } }
     private var cadenceAvailable: Bool { config.resolvedCadenceSource != .unavailable }
 
@@ -39,6 +42,7 @@ struct FTPCockpitView: View {
                     if layout.visual == .strip { RideVisualStrip(model: model, engine: engine) }
                     lowerContent
                 }
+                LivePowerChart(session: engine.session)
             }
             .padding(Space.l).frame(maxWidth: layout.maximumContentWidth).frame(maxWidth: .infinity)
         }
@@ -66,9 +70,9 @@ struct FTPCockpitView: View {
         case .cooldown: "COOL-DOWN · \(clockText(max(0, config.cooldownSeconds - phaseTime)))"
         default: nil
         }
-        if engine.isFreewheelCooldown { return HeroReadout(target: "EASY", unit: "", actual: livePower.map(String.init), detail: detail) }
+        if engine.isFreewheelCooldown { return HeroReadout(target: "EASY", unit: "", actual: livePower.map(String.init), trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer) }
         return HeroReadout(targetTitle: engine.phase == .cooldown ? "COOL-DOWN" : "TARGET", target: engine.targetPower.map(String.init),
-                           actual: livePower.map(String.init), detail: detail)
+                           actual: livePower.map(String.init), trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer)
     }
 
     /// Everything below the readings in the single column: what is coming, then the tiles and notes.
@@ -207,7 +211,7 @@ struct FTPCockpitView: View {
                     MetricRow(title: engine.phase == .cooldown ? "COOL-DOWN TARGET" : "TARGET", value: engine.targetPower.map(String.init), unit: "W",
                               tone: .accent, caption: engine.targetPower == nil ? nil : "ERG target", showsCaption: false)
                 }
-                MetricRow(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(config.resolvedPowerSource.title) power", showsCaption: false)
+                MetricRow(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(config.resolvedPowerSource.title) power", showsCaption: false, corner: trainerCorner)
             }
         } else {
             HStack(spacing: Space.m) {
@@ -217,7 +221,7 @@ struct FTPCockpitView: View {
                     MetricTile(title: engine.phase == .cooldown ? "COOL-DOWN TARGET" : "TARGET", value: engine.targetPower.map(String.init), unit: "W",
                                tone: .accent, caption: engine.targetPower == nil ? nil : "ERG target", role: .hero)
                 }
-                MetricTile(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(config.resolvedPowerSource.title) power", role: .hero)
+                MetricTile(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(config.resolvedPowerSource.title) power", role: .hero, corner: trainerCorner)
             }
         }
     }

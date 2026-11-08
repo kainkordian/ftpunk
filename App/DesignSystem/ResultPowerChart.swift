@@ -24,7 +24,8 @@ struct ResultPowerChart: View {
         }
         return result
     }
-    private var ceiling: Double { ResultChartLayout.ceiling(forPeak: points.map(\.power).max() ?? 0) }
+    private var targets: [TargetPoint] { TargetSeries.make(session) }
+    private var ceiling: Double { ResultChartLayout.ceiling(forPeak: max(points.map(\.power).max() ?? 0, targets.map(\.watts).max() ?? 0)) }
 
     var body: some View {
         let bands = ResultChartModel.bands(for: session)
@@ -40,9 +41,14 @@ struct ResultPowerChart: View {
             }
             ForEach(points) { point in
                 // The accent has 3:1 or more against the plot in both themes (tested); the default series colour did not.
-                LineMark(x: .value("Minutes", point.time / 60), y: .value("Measured power", point.power), series: .value("Continuous signal", point.segment))
+                LineMark(x: .value("Minutes", point.time / 60), y: .value("Measured power", point.power), series: .value("Continuous signal", "p\(point.segment)"))
                     .foregroundStyle(Theme.accent)
                     .lineStyle(StrokeStyle(lineWidth: 2.25, lineJoin: .round))
+            }
+            ForEach(Array(targets.enumerated()), id: \.offset) { _, point in
+                LineMark(x: .value("Minutes", point.time / 60), y: .value("Target power", point.watts), series: .value("Continuous signal", "t\(point.segment)"))
+                    .foregroundStyle(.primary.opacity(0.75))
+                    .lineStyle(StrokeStyle(lineWidth: 1.75, lineJoin: .round, dash: [5, 3]))
             }
         }
         .chartYScale(domain: 0...ceiling)
@@ -52,7 +58,7 @@ struct ResultPowerChart: View {
         .chartYAxisLabel { Text("W").foregroundStyle(Theme.secondary) }
         .chartOverlay { proxy in labels(proxy: proxy, bands: bands, best: best) }
         .frame(height: 210)
-        .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time")
+        .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time" + (targets.isEmpty ? "" : ", with the target power"))
         .accessibilityValue(accessibilityValue(bands: bands, best: best))
     }
 

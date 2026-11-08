@@ -89,6 +89,11 @@ struct UploadConsent: Identifiable {
         }
     }
     var powerMatchingPrompt: String?
+    /// Workouts and free rides pause when the rider stops pedalling and resume when they start again. Not used by the FTP test.
+    var autoPauseEnabled = true {
+        didSet { if !preview { UserDefaults.standard.set(autoPauseEnabled, forKey: "autoPauseEnabled") } }
+    }
+    @ObservationIgnored private var autoPause = AutoPause()
     /// This ride's estimate of the trainer's error. A new ride starts a new one; only `trainerWarmth` outlives it.
     private(set) var powerMatcher = PowerMatcher()
     /// Work the trainer has done since the app connected to it (reset by a new trainer connection).
@@ -180,6 +185,7 @@ struct UploadConsent: Identifiable {
         rideVisualPlacement = preview ? .strip : RideVisualPreference.loadPlacement()
         if !preview { UserDefaults.standard.removeObject(forKey: "cyclepunkEnabled") } // the removed story's switch
         demoMode = preview
+        autoPauseEnabled = preview ? true : (UserDefaults.standard.object(forKey: "autoPauseEnabled") as? Bool ?? true)
         powerMatchingEnabled = preview ? true : (UserDefaults.standard.object(forKey: "powerMatchingEnabled") as? Bool ?? true)
         try store.recoverInterruptedSessions()
         let savedRiders = try store.profiles()
@@ -384,6 +390,7 @@ struct UploadConsent: Identifiable {
             powerMatcher = PowerMatcher(); trainerWarmth.beginSession(); matchLogPhase = nil; trainerPaused = false; trainingTransition = nil
             lastAcknowledgedTarget = demoMode ? nil : bluetooth.powerRange?.quantized(initialTarget)
             lastAcknowledgedResistance = demoMode ? nil : initialResistance
+            autoPause = AutoPause()
             engine = RampEngine(configuration: config, isDemo: demoMode, devices: demoMode ? [] : bluetooth.deviceSnapshots, training: training)
             try store.save(engine!.session)
             guard ownership.started(generation) else { throw SessionStartCancelled(reason: "Starting was cancelled.") }
@@ -430,6 +437,14 @@ struct UploadConsent: Identifiable {
         }
         elapsed = now - origin
         engine?.tick(at: elapsed)
+        if autoPauseEnabled, let engine, engine.session.training != nil {
+            let power = engine.lastPower.flatMap { elapsed - $0.time <= 2 ? $0.watts : nil }
+            switch autoPause.update(time: elapsed, phase: engine.phase, power: power, canResume: engine.canResume(at: elapsed)) {
+            case .pause: pauseTraining()
+            case .resume: resumeTraining()
+            case nil: break
+            }
+        }
         if warmthConnection != bluetooth.trainerConnections { warmthConnection = bluetooth.trainerConnections; trainerWarmth = TrainerWarmth(); trainerWarmth.beginSession() }
         if let reported = engine?.lastTrainerPower { trainerWarmth.add(reported) }
         if !demoMode, let began = commandStartedAt, elapsed - began > 2 {

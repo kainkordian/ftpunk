@@ -1,5 +1,5 @@
 import { esc, $, button, chips, segmented, selectField, switchRow, pill, screenHeader, fmtDate, emptyState, linkButton } from './components.mjs';
-import { trendChart, powerChart } from './charts.mjs';
+import { trendChart, rideCharts, summaryCard } from './charts.mjs';
 import { registerRoute, navigate, hashFor, rerender, confirmSheet, notify } from './shell.mjs';
 import { exportControls, uploadControls, exportActions, ftpResultCard, calculationNote, riderOf } from './result.mjs';
 import { ACTIVITY_FILTERS, TREND_METRICS, activities, activityRow, activityTitle, badgeText, riderGroups, trendSeries, trendSessions } from '../rules/progress.mjs';
@@ -54,7 +54,7 @@ registerRoute('progress', {
 function detailHeadline(session) {
   if (session.result && session.training == null) return ftpResultCard(session.result, { showDelta: false });
   if (session.outcome === 'interrupted') { const s = interruptionSummary(session); return `<section class="card warning stack"><h2 class="warn">⚠ ${esc(s.headline)}</h2><p>${esc(s.reason)}</p><p class="muted">${esc(s.saved)}</p></section>`; }
-  if (session.training != null) { const avg = session.training.resistance == null ? averagePower(session.samples) : null; return `<dl class="kv card"><dt>Time</dt><dd class="num">${DurationFormat.clock(session.endedAtOffset ?? 0)}</dd>${avg != null ? `<dt>Average power</dt><dd class="num">${Math.round(avg)} W</dd>` : ''}</dl>`; }
+  if (session.training != null) { return `<dl class="kv card"><dt>Time</dt><dd class="num">${DurationFormat.clock(session.endedAtOffset ?? 0)}</dd></dl>`; }
   return '<p class="muted card">No FTP estimate. A valid, continuous 60-second ramp window is required.</p>';
 }
 function sourcesList(model, session) {
@@ -73,7 +73,7 @@ registerRoute('activity', {
     if (!session) return `${screenHeader('Activity', { back: '#/progress' })}${emptyState('Activity deleted', 'This recording is no longer on this browser.')}`;
     const rider = riderOf(model, session), result = session.result, name = session.configuration.riderName, adopted = result && isAdopted(rider, result, session.startedAt);
     const adoption = result && session.training == null && !session.isDemo ? `<section class="stack">${adopted ? `<p class="accent-text">✓ ${esc(name)}’s FTP was set from this test</p>` : button(`Use ${Math.round(result.estimatedFTP)} W as ${esc(name)}’s FTP`, { kind: 'secondary', action: 'adopt-activity', disabled: model.busy, extra: { 'data-testid': 'detail-adopt', 'data-id': session.id } })}</section>` : '';
-    return `${screenHeader(new Date(session.startedAt).toLocaleDateString(undefined, { dateStyle: 'medium' }), { back: '#/progress', right: button('Delete…', { kind: 'danger', small: true, action: 'delete-this', disabled: isLive(model, session), extra: { 'data-id': session.id } }) })}<div class="stack-l">${session.isDemo ? `<p>${pill('Debug · mock sensor data', 'warning', '▶')}</p>` : ''}${detailHeadline(session)}<section class="stack">${powerChart(session)}${session.training == null ? calculationNote(session.result) : ''}</section>${adoption}${sourcesList(model, session)}${exportControls(model, session)}${!session.isDemo && session.endedAtOffset != null ? `<section class="stack"><h3>Intervals.icu</h3>${model.jobs.find(j => j.sessionID === session.id) ? `<p>Upload: ${esc(model.jobs.find(j => j.sessionID === session.id).status)}</p>` : ''}${uploadControls(model, session)}</section>` : ''}</div>`;
+    return `${screenHeader(new Date(session.startedAt).toLocaleDateString(undefined, { dateStyle: 'medium' }), { back: '#/progress', right: button('Delete…', { kind: 'danger', small: true, action: 'delete-this', disabled: isLive(model, session), extra: { 'data-id': session.id } }) })}<div class="stack-l">${session.isDemo ? `<p>${pill('Debug · mock sensor data', 'warning', '▶')}</p>` : ''}${detailHeadline(session)}<section class="stack">${rideCharts(session)}${summaryCard(session)}${session.training == null ? calculationNote(session.result) : ''}</section>${adoption}${sourcesList(model, session)}${exportControls(model, session)}${!session.isDemo && session.endedAtOffset != null ? `<section class="stack"><h3>Intervals.icu</h3>${model.jobs.find(j => j.sessionID === session.id) ? `<p>Upload: ${esc(model.jobs.find(j => j.sessionID === session.id).status)}</p>` : ''}${uploadControls(model, session)}</section>` : ''}</div>`;
   },
   actions: model => ({
     ...exportActions(model),

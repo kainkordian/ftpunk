@@ -101,6 +101,8 @@ public enum BluetoothError: Error, LocalizedError {
     @ObservationIgnored private var cadenceTracker = CadenceTracker()
     @ObservationIgnored private var pending: (id: UUID, opcode: UInt8, continuation: CheckedContinuation<Void, any Error>)?
     @ObservationIgnored private var timeout: Task<Void, Never>?
+    /// Control is requested once per connection, as soon as the trainer is ready for it; a failure leaves the manual button.
+    @ObservationIgnored private var autoPrepareTried = false
 
     public override init() { super.init() }
 
@@ -201,7 +203,7 @@ public enum BluetoothError: Error, LocalizedError {
     }
     private func clearTrainer() {
         resolve(.failure(BluetoothError.disconnected))
-        trainerReady = false; trainerCanPrepare = false; powerRange = nil; resistanceRange = nil; features = nil; controlHealthy = true
+        trainerReady = false; trainerCanPrepare = false; powerRange = nil; resistanceRange = nil; features = nil; controlHealthy = true; autoPrepareTried = false
         characteristics = [:]
         measurements.reset(.trainer)
     }
@@ -216,6 +218,13 @@ public enum BluetoothError: Error, LocalizedError {
         trainerCanPrepare = controlHealthy && ((features?.supportsTargetPower == true && powerRange != nil) || supportsResistance) &&
             characteristics["2AD9"]?.isNotifying == true && characteristics["2AD2"]?.isNotifying == true &&
             characteristics["2ADA"]?.isNotifying == true
+        if trainerCanPrepare, !trainerReady, !autoPrepareTried, pending == nil {
+            autoPrepareTried = true
+            Task { [weak self] in
+                do { try await self?.prepareTrainer() }
+                catch { self?.status = "Trainer control could not be enabled: \(error.localizedDescription)" }
+            }
+        }
     }
     private func failure(_ error: any Error, role: DeviceRole) {
         status = error.localizedDescription
@@ -230,7 +239,9 @@ extension BluetoothDevices: @preconcurrency CBCentralManagerDelegate {
         if central.state == .poweredOn { scan() }
         else {
             names = [:]; clearTrainer(); clearPedals(); scanning = false
-            status = "Bluetooth is unavailable. Check Bluetooth permission and Settings."
+            status = CBCentralManager.authorization == .denied || CBCentralManager.authorization == .restricted
+                ? "Bluetooth access is denied. Allow FTPunk in System Settings → Privacy & Security → Bluetooth."
+                : "Bluetooth is unavailable. Check that Bluetooth is turned on."
             onDeviceFailure?(.trainer, status)
         }
     }

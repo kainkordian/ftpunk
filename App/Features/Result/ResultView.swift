@@ -32,6 +32,7 @@ struct ResultView: View {
                     case .upload: upload
                     }
                 }
+                if session.endedAtOffset != nil, !session.samples.isEmpty { RideSummaryCard(session: session) }
                 if session.endedAtOffset != nil, !session.samples.isEmpty { ActivityExportControls(model: model, session: session) }
             }
             .padding(Space.l).frame(maxWidth: 760).frame(maxWidth: .infinity)
@@ -67,9 +68,6 @@ struct ResultView: View {
                 Text(session.activityTitle).font(.headline)
                 HStack(spacing: Space.l) {
                     stat("Time", DurationFormat.clock(session.endedAtOffset ?? 0))
-                    if let average = RideStats.averagePower(session.samples), session.training?.resistance == nil {
-                        stat("Average power", "\(Int(average.rounded())) W")
-                    }
                 }
                 Text("Saved on this device.").font(.footnote).foregroundStyle(Theme.secondary)
             }
@@ -99,7 +97,7 @@ struct ResultView: View {
 
     @ViewBuilder private var chart: some View {
         VStack(alignment: .leading, spacing: Space.s) {
-            ResultPowerChart(session: session)
+            RideCharts(session: session)
             if session.training == nil { CalculationNote(result: session.result) { info = .estimate } }
             if let reason = session.endReason, session.outcome != .interrupted { Text(reason).font(.callout).foregroundStyle(Theme.warning) }
         }

@@ -42,11 +42,15 @@ struct HeroReadout {
     var target: String?
     var unit = "W"
     var actual: String?
+    /// Trainer watts, shown small beside the actual power when an external meter is the power source.
+    var trainerActual: String?
     /// Step or countdown, e.g. "STEP 3/9 · 2:34".
     var detail: String?
+    var showsTrainer = false
     var accessibilityText: String {
         var parts = [target.map { "\(targetTitle.lowercased().capitalized) \($0) \(unit == "W" ? "watts" : unit)" } ?? "\(targetTitle.lowercased().capitalized) not set",
                      actual.map { "Actual \($0) watts" } ?? "Actual power not available"]
+        if showsTrainer { parts.append(CornerReading(title: "TRAINER", value: trainerActual).accessibilityText) }
         if let detail { parts.append(detail) }
         return parts.joined(separator: ". ")
     }
@@ -67,6 +71,9 @@ struct RideVisualHero: View {
                     HStack(alignment: .lastTextBaseline, spacing: Space.l) {
                         column(readout.targetTitle, readout.target, tint: Theme.accent)
                         column("ACTUAL", readout.actual, tint: .white)
+                        if readout.showsTrainer {
+                            CornerReadingBox(reading: CornerReading(title: "TRAINER", value: readout.trainerActual)).alignmentGuide(.lastTextBaseline) { $0[.top] + 24 }
+                        }
                         Spacer(minLength: 0)
                         if let detail = readout.detail {
                             Text(detail).font(.headline.monospacedDigit()).foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
@@ -200,7 +207,7 @@ private struct TrackVisibility: ViewModifier {
     private var warmedUp = false
 
     func scene(state: RideVisualState, date: Date, animating: Bool, animated: Bool, highContrast: Bool, skyRows: Int = 0) -> RideVisualScene {
-        guard animated else { return RideVisualScene(state: state, animated: false, highContrast: highContrast, skyRows: skyRows) }
+        guard animated else { return RideVisualScene(state: state, animated: false, highContrast: highContrast, skyRows: skyRows, spriteRider: true) }
         if !warmedUp {
             // Start a few seconds into the ride's scenery, so signs already ahead of the rider are in view.
             warmedUp = true
@@ -208,7 +215,7 @@ private struct TrackVisibility: ViewModifier {
         }
         if animating, let last { motion.advance(by: date.timeIntervalSince(last), state: state) }
         last = date
-        return RideVisualScene(state: state, motion: motion, animated: true, highContrast: highContrast, skyRows: skyRows)
+        return RideVisualScene(state: state, motion: motion, animated: true, highContrast: highContrast, skyRows: skyRows, spriteRider: true)
     }
 }
 

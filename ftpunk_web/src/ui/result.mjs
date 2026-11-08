@@ -1,5 +1,5 @@
 import { esc, $, button, linkButton, pill, screenHeader, fmtDate } from './components.mjs';
-import { powerChart } from './charts.mjs';
+import { rideCharts, summaryCard } from './charts.mjs';
 import { registerRoute, navigate, openSheet, sheetIsOpen, notify, rerender } from './shell.mjs';
 import { openInfoSheet } from './sheets.mjs';
 import { resultSections, resultDelta, interruptionSummary, isAdopted, averagePower, DurationFormat } from '../rules/presentation.mjs';
@@ -31,13 +31,12 @@ export function headline(model, session) {
   }
   if (session.result && session.training == null) return ftpResultCard(session.result, { currentFTP: current, showDelta: !session.isDemo });
   if (session.training != null) {
-    const average = session.training.resistance == null ? averagePower(session.samples) : null;
-    return `<section class="card accent stack"><h2 class="accent-text">✓ ${session.outcome === 'completed' ? 'Ride complete' : 'Ride saved'}</h2><p><strong>${esc(activityTitle(session))}</strong></p><div class="row stats"><div><p class="label">Time</p><p class="num big">${DurationFormat.clock(session.endedAtOffset ?? 0)}</p></div>${average != null ? `<div><p class="label">Average power</p><p class="num big">${Math.round(average)} W</p></div>` : ''}</div><p class="footnote">Saved in this browser.</p></section>`;
+    return `<section class="card accent stack"><h2 class="accent-text">✓ ${session.outcome === 'completed' ? 'Ride complete' : 'Ride saved'}</h2><p><strong>${esc(activityTitle(session))}</strong></p><div class="row stats"><div><p class="label">Time</p><p class="num big">${DurationFormat.clock(session.endedAtOffset ?? 0)}</p></div></div><p class="footnote">Saved in this browser.</p></section>`;
   }
   return `<section class="card stack"><h2>${esc(OUTCOMES[session.outcome] ?? 'Ride saved')}</h2><p class="muted">No FTP estimate. A valid, continuous 60-second ramp window is required, and the scored ramp must end by finishing or exhaustion.</p><p class="footnote">The recording is saved in this browser.</p></section>`;
 }
 export function chartSection(session) {
-  return `<section class="stack">${powerChart(session)}${session.training == null ? calculationNote(session.result) : ''}${session.endReason && session.outcome !== 'interrupted' ? `<p class="warn">${esc(session.endReason)}</p>` : ''}</section>`;
+  return `<section class="stack">${rideCharts(session)}${summaryCard(session)}${session.training == null ? calculationNote(session.result) : ''}${session.endReason && session.outcome !== 'interrupted' ? `<p class="warn">${esc(session.endReason)}</p>` : ''}</section>`;
 }
 function handoff(model, session) {
   const rider = riderOf(model, session), previous = session.configuration.priorFTP ?? rider?.ftpHistory.find(e => e.id === rider.currentFTPID)?.watts ?? null, r = session.result, example = retargetExample(previous, r.estimatedFTP);

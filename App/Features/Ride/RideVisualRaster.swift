@@ -13,6 +13,8 @@ struct RideVisualScene {
     /// Extra sky rows above the strip: 0 for the strip, `HeroLayout.skyRows` for the Large view. Everything else keeps its
     /// row offset from the bottom edge.
     var skyRows = 0
+    /// Draws the pixel sprite rider from the RG SP design instead of the original drawn one. Off for the pixel fixtures.
+    var spriteRider = false
 }
 
 /// The night palette. Zone colours come from the same `ZonePalette` as the workout profile charts (their dark-mode

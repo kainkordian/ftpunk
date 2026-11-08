@@ -182,11 +182,11 @@ export async function acquireRideLease(locks = globalThis.navigator?.locks, { ti
 // Preferences live in localStorage (never in backups). Known keys are validated; any other plain key is passed through so a
 // later feature can add its own preference without touching this file. The retired `adventure` key is dropped.
 export function loadPreferences(storage = globalThis.localStorage) {
-  const defaults = { appearance: 'system', extraLarge: false, powerMatching: true, selectedRider: null, debugUnlocked: false, intervalsHintDismissed: false };
+  const defaults = { appearance: 'system', extraLarge: false, powerMatching: true, autoPause: true, selectedRider: null, debugUnlocked: false, intervalsHintDismissed: false };
   try {
     const p = JSON.parse(storage.getItem('ftpunk.preferences') || '{}'), extra = {};
     for (const [key, value] of Object.entries(p ?? {})) if (!(key in defaults) && key !== 'adventure' && ['string', 'number', 'boolean'].includes(typeof value)) extra[key] = value;
-    return { ...extra, ...defaults, appearance: ['light', 'dark', 'system'].includes(p.appearance) ? p.appearance : 'system', extraLarge: p.extraLarge === true, powerMatching: p.powerMatching !== false, selectedRider: typeof p.selectedRider === 'string' ? p.selectedRider : null, debugUnlocked: p.debugUnlocked === true, intervalsHintDismissed: p.intervalsHintDismissed === true };
+    return { ...extra, ...defaults, appearance: ['light', 'dark', 'system'].includes(p.appearance) ? p.appearance : 'system', extraLarge: p.extraLarge === true, powerMatching: p.powerMatching !== false, autoPause: p.autoPause !== false, selectedRider: typeof p.selectedRider === 'string' ? p.selectedRider : null, debugUnlocked: p.debugUnlocked === true, intervalsHintDismissed: p.intervalsHintDismissed === true };
   } catch { return defaults; }
 }
 export function savePreferences(p, storage = globalThis.localStorage) { storage.setItem('ftpunk.preferences', JSON.stringify(p)); }

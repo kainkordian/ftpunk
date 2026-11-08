@@ -31,7 +31,7 @@ with (contents / "Info.plist").open("wb") as file:
         "CFBundleVersion": "1", "CFBundleShortVersionString": "1.0",
         "CFBundleIconFile": "FTPunk.icns",
         "NSPrincipalClass": "NSApplication", "LSMinimumSystemVersion": "14.0",
-        "NSBluetoothAlwaysUsageDescription": "Connect to cycling devices when real-device mode is explicitly selected.",
+        "NSBluetoothAlwaysUsageDescription": "FTPunk connects to your smart trainer and optional external power meter or heart-rate sensor to perform and record your ramp test.",
         "CFBundleURLTypes": [{"CFBundleURLName": "com.kainkordian.ftpunk.oauth",
                               "CFBundleURLSchemes": ["ftpunk"]}]
     }, file)

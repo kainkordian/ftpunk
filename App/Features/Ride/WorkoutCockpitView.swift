@@ -19,6 +19,9 @@ struct WorkoutCockpitView: View {
     private var stacked: Bool { dynamicTypeSize.isAccessibilitySize }
     private var row: AnyLayout { stacked ? AnyLayout(VStackLayout(spacing: Space.m)) : AnyLayout(HStackLayout(spacing: Space.m)) }
     private var livePower: Int? { engine.lastPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
+    private var trainerPower: Int? { engine.lastTrainerPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
+    private var showsTrainer: Bool { engine.session.configuration.resolvedPowerSource == .externalPowerMeter }
+    private var trainerCorner: CornerReading? { showsTrainer ? CornerReading(title: "TRAINER", value: trainerPower.map(String.init)) : nil }
     private var liveCadence: Double? { engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? $0.rpm : nil } }
     private var layout: CockpitLayout {
         CockpitLayout.make(phase: engine.phase, accessibilitySize: stacked, rideVisual: model.rideVisualPlacement,
@@ -42,6 +45,7 @@ struct WorkoutCockpitView: View {
                     if layout.visual == .strip { RideVisualStrip(model: model, engine: engine) }
                     lowerContent
                 }
+                LivePowerChart(session: engine.session)
             }
             .padding(Space.l).frame(maxWidth: layout.maximumContentWidth).frame(maxWidth: .infinity)
         }
@@ -85,10 +89,10 @@ struct WorkoutCockpitView: View {
         if isWorkout, let current = engine.currentStep { detail = "STEP \(current.index + 1)/\(plan.steps.count) · \(clockText(current.remaining))" }
         let actual = livePower.map(String.init)
         if let level = engine.resumeResistance {
-            return HeroReadout(targetTitle: paused ? "RESUME LEVEL" : "RESISTANCE", target: String(format: "%.1f", Double(level) / 10), unit: "", actual: actual, detail: detail)
+            return HeroReadout(targetTitle: paused ? "RESUME LEVEL" : "RESISTANCE", target: String(format: "%.1f", Double(level) / 10), unit: "", actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer)
         }
-        if paused { return HeroReadout(targetTitle: "PAUSED", target: engine.resumeTarget.map(String.init), actual: actual, detail: detail) }
-        return HeroReadout(target: engine.targetPower.map(String.init), actual: actual, detail: detail)
+        if paused { return HeroReadout(targetTitle: "PAUSED", target: engine.resumeTarget.map(String.init), actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer) }
+        return HeroReadout(target: engine.targetPower.map(String.init), actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer)
     }
 
     // MARK: Header and banners
@@ -194,7 +198,7 @@ struct WorkoutCockpitView: View {
                 MetricTile(title: "TARGET", value: engine.targetPower.map(String.init), unit: "W", tone: .accent,
                            caption: engine.targetPower == nil ? nil : "ERG target", role: .hero)
             }
-            MetricTile(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(engine.session.configuration.resolvedPowerSource.title) power", role: .hero)
+            MetricTile(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(engine.session.configuration.resolvedPowerSource.title) power", role: .hero, corner: trainerCorner)
         }
     }
 
@@ -248,6 +252,11 @@ struct WorkoutCockpitView: View {
             }
             .buttonStyle(FTPunkPrimaryButtonStyle()).controlSize(.large).frame(minHeight: 52)
             .disabled(busy).keyboardShortcut("p", modifiers: [.command, .shift]).accessibilityIdentifier("pause-resume")
+            // The space bar does the same (hardware keyboard on Mac and iPad); a second shortcut needs its own hidden button.
+            .background {
+                Button("") { paused ? model.resumeTraining() : model.pauseTraining() }
+                    .keyboardShortcut(.space, modifiers: []).disabled(busy).opacity(0).frame(width: 0, height: 0).accessibilityHidden(true)
+            }
             Button(role: .destructive) { model.stop() } label: {
                 Label("Stop & save", systemImage: "stop.circle").frame(maxWidth: .infinity)
             }

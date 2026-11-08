@@ -53,6 +53,11 @@ Built and covered by tests (314 Swift tests, iOS + Mac builds pass):
   (AES-GCM, non-extractable WebCrypto key), the upload prompt, FTP/weight sync, a strict CSP; FIT export byte-identical to native plus TCX/CSV/JSON
   and Share; ZWO import/export, the workout text syntax, custom workouts and the builder, `customWorkouts` in archives. 255 web tests.
   Not exercised: a real trainer, a real key from Chrome, a FIT file in COROS, clipboard/file pickers/downloads/Share in a real browser.
+- **Ride summary, auto-pause, space bar (2026-11-08, native + web):** the result and activity detail show average and normalized power, average/max heart rate and
+  average cadence, and a power chart with the target line plus a heart-rate chart (target rebuilt from the session, nothing new stored). Workouts and free rides pause
+  after 3 s without power and resume after 2 s of pedalling (a manual pause is never auto-resumed; a Settings switch turns it off; never in the FTP test); Space
+  pauses and resumes. 8 new Swift tests, 6 new web tests. Not exercised: a real trainer, a screen (the charts and the Space key were not looked at).
+- **Sprite rider + live power chart (2026-11-08, native + web):** the Chaindance scene now draws the RG SP rider (rider A's build in rider D's violet/yellow colours; `RideVisualSprite.swift`, `chaindance/rider-sprite.mjs`), opt-in per scene so the pixel fixtures keep the original rider; the sprite has one fixed pose (no posture or road tilt). Mac/iOS cockpits show the live "Power over time" chart (last 10 min, target dashed) like the web. Checked: swift test, both CI builds, web tests, rendered frames; not checked on a real ride or the sprite on a downhill.
 - **Web visual review (2026-11-06, headless Chrome, all 34 scenarios at 390 and 1280 px):** layouts hold at both sizes. Fixed: the app could hang on
   "Loading…" when Chrome never answered the Web Locks request (now a 5 s timeout, and previews use their own lease; this was also the flaky test);
   the CSP blocked Chaindance's inline readout height; a global `details` rule hid the "How this is calculated" arrow; the theme switch stretched

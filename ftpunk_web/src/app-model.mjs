@@ -26,6 +26,7 @@ export class AppModel {
     this.onChange = () => {}; this.onInvalidate = () => {}; this.onNotice = () => {}; this.onPreferences = () => {};
     this.intervals = new IntervalsClient(store, { selectedRider: () => this.profile?.id ?? null });
     this.ride = new RideController(devices, store, { now, lease, ...rideOptions });
+    this.ride.autoPauseEnabled = this.prefs.autoPause !== false;
     this.ride.onError = error => this.fail(error);
     this.ride.onChange = () => this.onChange();
     this.ride.onSaved = session => { void (async () => { await this.reload(); this.invalidate(); for (const hook of this.hooks.saved) await hook(session); })().catch(error => this.fail(error)); };
@@ -37,7 +38,7 @@ export class AppModel {
   // ----- notices -------------------------------------------------------------------------------------------------------------------
   notify(message, error = false) { this.onNotice(message, error); }
   fail(error) { if (error?.name === 'NotFoundError') return; this.notify(error?.message ?? String(error), true); }
-  savePrefs() { try { if (!this.preview) savePreferences(this.prefs); } catch { this.notify('Preferences could not be saved. Check browser storage permissions.', true); } this.onPreferences(); this.onChange(); }
+  savePrefs() { this.ride.autoPauseEnabled = this.prefs.autoPause !== false; try { if (!this.preview) savePreferences(this.prefs); } catch { this.notify('Preferences could not be saved. Check browser storage permissions.', true); } this.onPreferences(); this.onChange(); }
   // ----- riders --------------------------------------------------------------------------------------------------------------------
   get profile() { return this.profiles.find(p => p.id === this.prefs.selectedRider) ?? this.profiles[0] ?? null; }
   get ftpEntry() { return currentFTP(this.profile); }

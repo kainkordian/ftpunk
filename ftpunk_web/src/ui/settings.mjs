@@ -27,7 +27,7 @@ function devices(model) {
   return group('devices', 'Devices', `${rows}${button('Measurement & trainer control…', { kind: 'secondary', action: 'open-devices' })}${learn('powerMatching')}`, 'A smart trainer with ERG control is required. A power meter and a heart rate monitor are optional.');
 }
 function rideDisplay(model) {
-  return group('ride-display', 'Ride display', `<div class="field"><span>Theme</span>${segmented([['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], model.prefs.appearance, 'Theme')}</div>${switchRow('Extra-large ride numbers', 'st-extra-large', model.prefs.extraLarge)}${slots.rideDisplay.map(fn => fn(model)).join('')}`, 'Numbers follow your browser text size; extra-large is easier to read from the bike. Reduced motion and increased contrast are supported.');
+  return group('ride-display', 'Ride display', `<div class="field"><span>Theme</span>${segmented([['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], model.prefs.appearance, 'Theme')}</div>${switchRow('Extra-large ride numbers', 'st-extra-large', model.prefs.extraLarge)}${switchRow('Pause workouts when I stop pedaling', 'st-auto-pause', model.prefs.autoPause !== false)}${slots.rideDisplay.map(fn => fn(model)).join('')}`, 'Numbers follow your browser text size; extra-large is easier to read from the bike. Reduced motion and increased contrast are supported.');
 }
 // Intervals.icu: the connection of the rider on screen (each rider has their own), the upload prompt toggle and FTP/weight sync. Plan 9b.
 const REMEMBER_NOTE = 'Remembering keeps the key encrypted in this browser, so a reload does not disconnect you. It protects against someone copying the browser’s files, not against a script running on this site. On kainkordian.github.io, other GitHub Pages sites by the same author share this storage.';
@@ -81,6 +81,7 @@ registerRoute('settings', {
       'st-ask-upload': el => setAskToUpload(model, model.profile.id, el.checked),
       'st-sync': el => setSyncEnabled(model, model.profile.id, el.checked),
       'st-extra-large': el => { model.prefs.extraLarge = el.checked; model.savePrefs(); },
+      'st-auto-pause': el => { model.prefs.autoPause = el.checked; model.savePrefs(); },
       'st-mock': el => { if (model.busy) { el.checked = model.demoMode; return; } model.demoMode = el.checked; model.onChange(); },
       'st-capture': el => { model.devices.captureEnabled = el.checked; }, 'st-resistance-layout': el => { model.devices.legacyResistance = el.value === 'legacy'; },
       'archive-file': async input => { const file = input.files[0]; input.value = ''; if (file) await reviewImport(model, file); },

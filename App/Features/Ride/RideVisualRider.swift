@@ -30,6 +30,11 @@ extension RideVisualRenderer {
         trail(zone: zone, from: p(-6, 0), tilt: slope)
         if state.showsSpeedLines && scene.animated { speedLines(zone: zone, y: rearY - 18) }
         let before = scene.highContrast ? canvas : nil
+        if scene.spriteRider {
+            spriteRider(rear: p(0, 0), roadY: roadTop(rearX))
+            if let before { outline(comparedWith: before) }
+            return
+        }
 
         // Posture. Joints are relative to the rear axle.
         // Standing: hip raised and forward over the bottom bracket (12 px up; 13 would overreach the 17 px leg at the bottom of the stroke).

@@ -16,7 +16,8 @@ struct ActivityDetailView: View {
                 List {
                     if session.isDemo { Label("Debug · mock sensor data", systemImage: "ladybug").foregroundStyle(Theme.warning) }
                     headline(session)
-                    Section { ResultPowerChart(session: session) }
+                    Section { RideCharts(session: session) }
+                    if !session.samples.isEmpty { RideSummaryCard(session: session).listRowInsets(EdgeInsets()).listRowBackground(Color.clear) }
                     if session.training == nil { Section { CalculationNote(result: session.result) { info = .estimate } } }
                     adoption(session)
                     sources(session)
@@ -56,9 +57,6 @@ struct ActivityDetailView: View {
         } else if session.training != nil {
             Section {
                 LabeledContent("Time", value: DurationFormat.clock(session.endedAtOffset ?? 0))
-                if session.training?.resistance == nil, let average = RideStats.averagePower(session.samples) {
-                    LabeledContent("Average power", value: "\(Int(average.rounded())) W")
-                }
             }
         } else {
             Section { Text("No FTP estimate. A valid, continuous 60-second ramp window is required.").foregroundStyle(Theme.secondary) }

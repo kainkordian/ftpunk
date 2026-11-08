@@ -2,6 +2,7 @@
 // It animates only while the tab is visible, the visual is on screen, the ride is running, the debug stream is not paused and Reduce Motion is off;
 // otherwise it redraws only when what it shows changes. It reads the ride and never sends a trainer command.
 import { rideVisualState, rideVisualInput, RideVisualMotion, BRAND_NAME, HeroLayout, PLACEMENTS, placementTitle } from './state.mjs';
+import { drawRiderSprite } from './rider-sprite.mjs';
 import { renderRideVisual, WIDTH, HEIGHT, HERO_HEIGHT } from './raster.mjs';
 
 export const FRAME_INTERVAL_MS = 1000 / 12;
@@ -57,7 +58,7 @@ export class ChaindanceView {
     const signature = `${state.world}/${state.zone}/${state.posture}/${state.motion}/${state.sign?.text}/${state.level}/${state.glow}/${Math.round(state.spire * 100)}/${Math.round(state.descent * 20)}/${state.district.kind}${state.district.zone}`;
     if (!animating && signature === this.signature) return;
     this.signature = signature;
-    const frame = renderRideVisual(this.clock.scene(state, this.now(), { animating, animated: !this.reduce.matches, highContrast: this.contrast.matches, skyRows: this.hero ? HeroLayout.skyRows : 0 }));
+    const frame = renderRideVisual({ ...this.clock.scene(state, this.now(), { animating, animated: !this.reduce.matches, highContrast: this.contrast.matches, skyRows: this.hero ? HeroLayout.skyRows : 0 }), sprite: drawRiderSprite });
     this.ctx.putImageData(new ImageData(frame.data, frame.width, frame.height), 0, 0);
   }
   stop() { clearInterval(this.timer); this.timer = null; this.observer?.disconnect(); this.reduce.removeEventListener?.('change', this.onPreference); this.contrast.removeEventListener?.('change', this.onPreference); }

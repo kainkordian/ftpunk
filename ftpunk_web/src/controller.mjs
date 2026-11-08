@@ -3,6 +3,7 @@ import { RampEngine, configuration, PRESETS, mockSample } from './domain.mjs';
 import { PowerMatcher, TrainerWarmth } from './matching.mjs';
 import { route } from './protocol.mjs';
 import { acquireRideLease } from './storage.mjs';
+import { AutoPause } from './rules/ride-summary.mjs';
 /** Work the trainer has done since the app connected to it. It lives with the Bluetooth trainer connection (one record per connected trainer, so a reconnect starts cold
  *  and a second ride on the same connection starts warm); rides without a trainer connection (mock sensors) get a fresh one per ride. */
 const warmthByConnection = new WeakMap();
@@ -14,7 +15,7 @@ export function warmthFor(entry) {
 export class RideController {
   constructor(devices, store, { now = () => performance.now() / 1000, lease = acquireRideLease } = {}) {
     Object.assign(this, { devices, store, now, lease });
-    this.engine = null; this.matcher = null; this.warmth = null; this.warmthConnection = null; this.lastTrainerPower = null; this.matchLogPhase = null; this.matchLogTime = 0; this.elapsed = 0; this.starting = false; this.finishing = false; this.pending = null; this.trainingTransition = null; this.trainingCommand = null; this.saveQueue = Promise.resolve(); this.onChange = () => {}; this.onError = () => {}; this.onSaved = () => {}; this.speed = 12; this.scenario = 'exhaustion';
+    this.engine = null; this.matcher = null; this.warmth = null; this.warmthConnection = null; this.lastTrainerPower = null; this.matchLogPhase = null; this.matchLogTime = 0; this.elapsed = 0; this.starting = false; this.finishing = false; this.pending = null; this.trainingTransition = null; this.trainingCommand = null; this.saveQueue = Promise.resolve(); this.onChange = () => {}; this.onError = () => {}; this.onSaved = () => {}; this.speed = 12; this.scenario = 'exhaustion'; this.autoPause = new AutoPause(); /** Set by the app from the rider's preference. Workouts and free rides only, never the FTP test. */ this.autoPauseEnabled = true;
     devices.onReading = reading => {
       if (this.active && !this.demo) {
         const sample = route(reading, this.engine.session.configuration, this.origin);
@@ -57,6 +58,7 @@ export class RideController {
       if (this.cancelStart) throw Error(this.cancelStart);
       this.demo = demo; this.speed = speed; this.scenario = scenario; this.mockPaused = false; this.elapsed = 0; this.origin = this.now(); this.lastWall = this.origin;
       this.lastCheckpoint = -Infinity; this.lastAcknowledged = demo ? null : this.devices.range?.quantized(Math.round((training?.steps[0].watts ?? config.warmupPower) * (training ? intensity / 100 : 1))); this.lastResistance = training?.resistance ?? null; this.matcher = new PowerMatcher(); this.lastTrainerPower = null; this.matchLogPhase = null; this.matchLogTime = 0; this.warmthConnection = demo ? null : this.devices.devices?.trainer ?? null; this.warmth = warmthFor(this.warmthConnection); this.warmth.beginSession(); this.released = false; this.finalized = null;
+      this.autoPause.reset();
       this.engine = new RampEngine(config, { demo, devices: demo ? [] : this.devices.snapshots, training });
       if (training?.kind === 'workout' && intensity !== 100) { if (!this.engine.setIntensity(intensity, 0)) throw Error('Choose 50–150% intensity within the trainer’s supported power range.'); }
       await this.checkpoint(true);
@@ -80,6 +82,11 @@ export class RideController {
     if (this.demo) { if (!this.mockPaused) this.advanceMock(Math.min(delta, 0.5) * this.speed); }
     else {
       this.elapsed = now - this.origin; this.engine.tick(this.elapsed);
+      if (this.autoPauseEnabled && this.engine.session.training) {
+        const power = this.engine.lastPower && this.elapsed - this.engine.lastPower.time <= 2 ? this.engine.lastPower.watts : null;
+        const action = this.autoPause.update({ time: this.elapsed, phase: this.engine.phase, power, canResume: this.engine.canResume(this.elapsed) });
+        if (action === 'pause') this.pauseTraining(); else if (action === 'resume') this.resumeTraining();
+      }
       if (this.lastTrainerPower) this.warmth.add(this.lastTrainerPower);
       if (this.active && !this.pending) {
         if (this.engine.freewheel && !this.released) this.send(() => this.devices.stop(), () => { this.released = true; this.engine.event(this.elapsed, 'Trainer released for free-spin cooldown'); });

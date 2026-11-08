@@ -172,6 +172,7 @@ struct SettingsView: View {
                     .pickerStyle(.segmented).tint(Theme.controlTint)
             }
             Toggle("Extra-large ride numbers", isOn: $extraLargeRideNumbers)
+            Toggle("Pause workouts when I stop pedaling", isOn: $model.autoPauseEnabled).accessibilityIdentifier("auto-pause-toggle")
             Toggle("Show \(RideVisualBranding.name) during rides", isOn: $model.rideVisualEnabled).accessibilityIdentifier("pixel-ride-toggle")
             if model.rideVisualEnabled {
                 SelectionRow("\(RideVisualBranding.name) layout", selection: $model.rideVisualPlacement) {

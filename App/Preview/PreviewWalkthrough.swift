@@ -86,7 +86,7 @@ import FTPunkDomain
             var motion = RideVisualMotion()
             let state = RideVisualState.make(input)
             for _ in 0..<60 { motion.advance(by: 0.1, state: state) }
-            let view = NSHostingView(rootView: RideVisualImage(scene: RideVisualScene(state: state, motion: motion))
+            let view = NSHostingView(rootView: RideVisualImage(scene: RideVisualScene(state: state, motion: motion, spriteRider: true))
                 .padding().frame(width: 393, height: 160).background(Color.black).preferredColorScheme(.dark))
             view.appearance = NSAppearance(named: .darkAqua)
             view.frame = NSRect(x: 0, y: 0, width: 393, height: 160)

@@ -506,6 +506,12 @@ class Renderer {
     this.trail(zone, p(-6, 0), this.slope);
     if (showsSpeedLines(state) && animated) this.speedLines(zone, rearY - 18);
     const before = this.highContrast ? c.clone() : null;
+    // Optional sprite rider (RG SP design): replaces the drawn rider; glow, lamp beam and trail stay. `scene.sprite(set, rearAxle, roadY, time)`.
+    if (this.scene.sprite) {
+      this.scene.sprite((x, y, hex) => c.set(x, y, parseInt(hex.slice(1), 16)), p(0, 0), this.roadTop(rearX), this.animated && state.motion === 'pedalling' ? motion.crankTurns / 1.4 : 0);
+      if (before) this.outline(before);
+      return;
+    }
 
     // Posture. Joints are relative to the rear axle. Standing: hip raised and forward over the bottom bracket (12 px up; 13 would overreach the 17 px leg).
     const hip = state.posture === Posture.standing ? { x: 9, y: -12 } : { x: 5, y: -9 };

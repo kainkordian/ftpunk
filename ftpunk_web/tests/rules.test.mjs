@@ -3,7 +3,7 @@ import * as P from '../src/rules/presentation.mjs';
 import * as H from '../src/rules/home.mjs';
 import * as G from '../src/rules/progress.mjs';
 import { planFor, definition } from '../src/catalog.mjs';
-import { RampEngine, configuration } from '../src/domain.mjs';
+import { RampEngine, configuration, rampPower, PRESETS } from '../src/domain.mjs';
 
 // Mirrors Tests/FTPunkTests/PresentationRulesTests.swift, HomeAndLibraryTests.swift, HomeWorkflowTests.swift and ProgressTests.swift.
 const ready = (kind = 'ftpTest', change = {}) => ({ kind, trainerConnected: true, trainerControlReady: true, powerRangeKnown: true, freshSelectedPower: true, supportsResistance: true, ...change });
@@ -181,4 +181,41 @@ test('Two riders keep separate groups and trend series', () => {
   const sessions = [mk(alex, 56), mk(alex, 21), mk(sam, 14)], groups = G.riderGroups(sessions, [alex, sam]);
   equal(groups.map(g => g.name), ['Alex', 'Sam']); equal(groups.map(g => g.sessions.length), [2, 1]);
   const series = G.trendSeries(groups, 'watts', false, [sam.id, alex.id]); equal(series.map(s => s.colorIndex), [1, 0]); assert(series[0].points[0].time < series[0].points[1].time);
+});
+
+// Mirrors Tests/FTPunkTests/RideSummaryTests.swift.
+import { rideSummary, normalizedPower, targetSeries, AutoPause } from '../src/rules/ride-summary.mjs';
+const rideSession = (extra = {}) => ({ configuration: configuration({ warmupSeconds: 0 }), training: null, samples: [], events: [], outcome: null, endedAtOffset: null, ...extra });
+test('A steady ride has equal average and normalized power', () => {
+  const s = rideSession({ samples: Array.from({ length: 121 }, (_, t) => ({ time: t, power: 200, cadence: 90, heartRate: 140 })), endedAtOffset: 120 }), r = rideSummary(s);
+  near(r.averagePower, 200, 0.001); near(r.normalizedPower, 200, 0.001); equal(r.averageHeartRate, 140); equal(r.maximumHeartRate, 140); equal(r.averageCadence, 90); equal(r.maximumPower, 200);
+});
+test('Normalized power is higher for variable effort, needs 30 s and skips paused gaps', () => {
+  const samples = Array.from({ length: 240 }, (_, t) => ({ time: t, power: Math.floor(t / 60) % 2 === 0 ? 300 : 100 }));
+  assert(normalizedPower(samples) > P.averagePower(samples) + 10);
+  equal(normalizedPower(Array.from({ length: 20 }, (_, t) => ({ time: t, power: 200 }))), null);
+  near(normalizedPower([...Array.from({ length: 40 }, (_, t) => ({ time: t, power: 200 })), ...Array.from({ length: 40 }, (_, t) => ({ time: 400 + t, power: 200 }))]), 200, 0.001);
+});
+test('Average cadence skips stops', () => {
+  equal(rideSummary(rideSession({ samples: [0, 1, 2, 3, 4].map(t => ({ time: t, cadence: [90, 90, 0, 0, 90][t] })) })).averageCadence, 90);
+  equal(rideSummary(rideSession()).averagePower, null);
+});
+test('A workout target series follows steps, pauses and intensity', () => {
+  const plan = { version: 1, kind: 'workout', name: 'Two', resistance: null, steps: [{ name: 'A', seconds: 10, watts: 100 }, { name: 'B', seconds: 10, watts: 200 }] };
+  const s = rideSession({ training: plan, endedAtOffset: 23, events: [{ time: 0, message: 'Training' }, { time: 5, message: 'Training paused; trainer release requested' }, { time: 8, message: 'Training resumed' }, { time: 14, message: 'Workout intensity changed to 110%' }] });
+  const points = targetSeries(s), at = t => points.filter(p => p.time <= t).at(-1)?.watts;
+  equal(at(2), 100); assert(!points.some(p => p.time > 5 && p.time < 8)); equal(Math.max(...points.map(p => p.segment)), 1); equal(at(13), 200); equal(at(15), 220);
+  equal(targetSeries(rideSession()).length, 0);
+});
+test('A ramp target series covers warm-up, ramp and cool-down', () => {
+  const c = configuration({ warmupSeconds: 60 }), s = rideSession({ configuration: c, events: [{ time: 0, message: 'Warm-up' }], rampStart: 60, rampEnd: 200, cooldownStart: 200, endedAtOffset: 260, outcome: 'finishedEarly' }), points = targetSeries(s);
+  equal(points[0].watts, c.warmupPower); assert(points.some(p => p.time >= 60 && p.time <= 200 && p.watts === rampPower(c, 139))); equal(points.at(-1).watts, PRESETS[c.preset].cooldown);
+});
+test('Auto-pause pauses after 3 stopped seconds and resumes after 2 pedalled ones, never undoing a manual pause', () => {
+  const a = new AutoPause(), u = (time, phase, power, canResume = false) => a.update({ time, phase, power, canResume });
+  equal(u(0, 'riding', 0), null); equal(u(2.9, 'riding', 0), null); equal(u(3, 'riding', 0), 'pause'); equal(u(10, 'paused', 0), null);
+  equal(u(11, 'paused', 150, true), null); equal(u(12.9, 'paused', 150, true), null); equal(u(13, 'paused', 150, true), 'resume');
+  const b = new AutoPause(); b.update({ time: 0, phase: 'riding', power: 0 }); b.update({ time: 2, phase: 'riding', power: 120 });
+  equal(b.update({ time: 4, phase: 'riding', power: 0 }), null); equal(b.update({ time: 6, phase: 'riding', power: null }), null);
+  const m = new AutoPause(); equal(m.update({ time: 0, phase: 'paused', power: 200, canResume: true }), null); equal(m.update({ time: 30, phase: 'paused', power: 200, canResume: true }), null);
 });

@@ -155,6 +155,15 @@ function installGuards() {
     else if (!document.hidden) void wakeScreen();
   });
   document.addEventListener('freeze', () => ride.interrupt('The browser suspended the workout.'));
+  // Space pauses and resumes a workout or free ride, like the Pause button. Not in the FTP test, and not while a control has focus
+  // (a focused button handles Space itself).
+  document.addEventListener('keydown', event => {
+    if (event.key !== ' ' || event.repeat || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.target.closest?.('button, a, input, select, textarea, summary, [contenteditable], dialog[open]')) return;
+    if (current?.name !== 'ride' || !ride.active || !ride.engine?.session.training || ride.trainingTransition) return;
+    event.preventDefault();
+    if (ride.engine.phase === 'paused') ride.resumeTraining(); else ride.pauseTraining();
+  });
   window.addEventListener('pagehide', () => ride.interrupt('The browser page was closed or navigated away.'));
   window.addEventListener('beforeunload', event => { if (ride.busy) { event.preventDefault(); event.returnValue = ''; } });
 }
