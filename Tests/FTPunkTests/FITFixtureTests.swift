@@ -22,16 +22,27 @@ private func configuration(power: PowerSource, cadence: CadenceSource) throws ->
 }
 
 /// An FTP test with an external power meter and a heart-rate strap. Each second has up to three notifications (meter, trainer, strap), a few
-/// seconds have no value at all, and the strap only starts after ten seconds.
+/// seconds have no value at all (one of each such second still has an RR value, which must not be written), and the strap only starts after ten seconds.
+/// Strap packets carry one to three RR intervals, seven every thirteenth second.
 private func rampSession() throws -> TestSession {
     var session = TestSession(id: UUID(uuidString: "5EED0001-0000-4000-8000-00000000F001")!, startedAt: start, configuration: try configuration(power: .externalPowerMeter, cadence: .externalPowerMeter))
     for second in 0...420 {
         let t = Double(second)
-        if second % 97 == 50 { continue } // a dropout: no record for this second
+        if second % 97 == 50 { // a dropout: no record for this second
+            session.samples.append(RideSample(time: t + 0.7, rrIntervals: [Double(800 + second) / 1024]))
+            continue
+        }
         let watts = Double(100 + second / 2)
         session.samples.append(RideSample(time: t, power: watts, cadence: 88 + Double(second % 5), leftBalance: 47.5 + Double(second % 7)))
         session.samples.append(RideSample(time: t + 0.4, trainerPower: watts + 4.4))
-        if second >= 10 { session.samples.append(RideSample(time: t + 0.7, heartRate: 118 + second / 8)) }
+        if second >= 10 {
+            let count = second % 13 == 0 ? 7 : second % 3 + 1
+            let intervals: [Double] = (0..<count).map { index in
+                let ticks: Int = 640 + (second * 37 + index * 53) % 400
+                return Double(ticks) / 1024
+            }
+            session.samples.append(RideSample(time: t + 0.7, heartRate: 118 + second / 8, rrIntervals: intervals))
+        }
     }
     session.events = [SessionEvent(time: 0, message: "Start pedaling"), SessionEvent(time: 60, message: "Ramp test"), SessionEvent(time: 360, message: "Cooldown")]
     session.rampStart = 60; session.rampEnd = 360; session.endedAtOffset = 420; session.outcome = .exhaustion

@@ -1,7 +1,7 @@
 # FTPunk roadmap
 
 The single source of truth for what FTPunk is, where it stands and what comes next.
-Updated 2026-11-05. If this file and an archived plan disagree, this file wins.
+Updated 2026-11-09. If this file and an archived plan disagree, this file wins.
 
 ## What FTPunk is
 
@@ -21,7 +21,9 @@ Fixed principles:
 
 ## Where it stands (2026-11-09)
 
-Built and covered by tests (338 Swift tests, iOS + Mac builds pass):
+Built and covered by tests (356 Swift tests, 280 web tests, iOS + Mac builds pass):
+
+- **FIT uploads and training-load fields (2026-11-09, native + web):** Intervals.icu now receives the FIT file, so simulated distance, speed, calories, work and balance reach it. Jobs queued earlier as TCX still upload as TCX (the file name and type are read from the bytes). The FIT session gains normalized power, TSS and IF, laps gain normalized power (no FTP or under 30 s leaves them invalid), paused samples no longer count towards NP (also on the ride card), and heart-strap RR intervals are recorded and written as `hrv` messages. Both encoders stay byte-identical. Not exercised: a real upload to Intervals.icu, RR from a real strap.
 
 - Simulated gravel-bike speed and distance from power (FIT records, laps, session), work in kJ, estimated kcal, left/right balance from a meter or trainer with an end-of-ride graph, and a main/additional readings switch in the cockpit. Not yet seen in a running app or on a real meter.
 - FTP test (three ramp presets, warm-up/cool-down, scoring, adopt result), workouts (classic
@@ -32,7 +34,7 @@ Built and covered by tests (338 Swift tests, iOS + Mac builds pass):
   (gain + offset against its reported power, warmth in kJ, fade guard); replay test for real CSVs.
 - Intervals.icu: API key and OAuth (asks for `SETTINGS:READ`; confirm on the next real sign-in), one
   connection per rider, a consent sheet after every finished ride (per-rider toggle, never silent),
-  confirmed TCX upload queue, calendar download, FTP and weight sync (field names verified against a
+  confirmed FIT upload queue, calendar download, FTP and weight sync (field names verified against a
   live account), explicit User-Agent on every request.
 - **Chaindance** (the ride visual): standing sprint; strip and Large modes. Large is a taller raster (96 rows: extra
   sky with stars, moon and tower tips, the readout in the sky band, a two-column layout on wide windows). The strip is
@@ -137,14 +139,12 @@ capture, with the owner's permission), then the owner's checks in Chrome with a 
 
 Each item needs a decision from the owner before a plan is written.
 
-- Record heart-strap RR intervals for HRV; write normalized power, TSS and IF to the FIT session.
 - Web: Intervals.icu OAuth in the browser (needs a client secret, so a server; conflicts with local only). An own
   domain for the web app, so its storage isn't shared with the owner's other `github.io` sites.
 - Web: Chaindance hashes scenery with 64-bit BigInt per pixel; measure on a slow device and switch to 32-bit arithmetic if needed (the fingerprint
   fixture guards the pixels). The backup import sheet lists cached workouts but not custom workouts that it will replace. Leaving a changed builder
   through the tab bar doesn't ask to discard (Cancel and closing the tab do).
-- Send *planned* workouts or custom workouts to the Intervals.icu calendar or library. Switch the
-  activity upload from TCX to FIT.
+- Send *planned* workouts or custom workouts to the Intervals.icu calendar or library.
 - FIT *workout* files, cadence targets, free-ride segments in workouts.
 - Release: Developer ID signing, notarization, App Store. Live OAuth approval.
 - Trainer spin-down calibration from the app (FTMS Spin Down Control). Needs hardware testing.
@@ -168,6 +168,7 @@ Each item needs a decision from the owner before a plan is written.
 | 2026-11-04 | Power matching: no learned profile across rides (calibration, temperature and load vary). Per ride it estimates meter vs. the trainer's *reported* power live (gain + offset), adapts faster while the trainer warms (by kJ done), and holds when the trainer can't hold its own target (fade). |
 | 2026-11-04 | Builder: % FTP **and** watts, ramps allowed, local only, iPhone + Mac, block and text editors with a toggle. |
 | 2026-11-05 | The web app follows the native app (milestone D). The story is scratched there too. Local only: no server or accounts. Intervals.icu answers CORS for localhost and github.io, so the browser talks to it directly. Pages serves the new web app (GitHub Actions), not `web-v1`. Web tests run in headless Chrome, no Node. The Intervals.icu key can be remembered per rider, opt-in, encrypted with a non-extractable WebCrypto key. |
+| 2026-11-09 | Intervals.icu uploads are FIT instead of TCX (supersedes 2026-11-04); TCX stays an export. |
 
 ## Where the docs are
 

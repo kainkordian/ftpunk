@@ -85,6 +85,8 @@ public struct PortableArchive: Codable, Sendable {
                 try require(sample.time.isFinite && sample.time >= 0 && sample.time <= end + 2, "Invalid sample timestamp.")
                 try require([sample.power, sample.trainerPower, sample.cadence].allSatisfy { $0.map(\.isFinite) ?? true }, "Invalid measurement.")
                 try require(sample.heartRate.map { $0 >= 0 && $0 <= 65535 } ?? true, "Invalid heart rate.")
+                try require(sample.rrIntervals.map { $0.allSatisfy { $0.isFinite && $0 >= 0 } } ?? true, "Invalid RR interval.")
+                try require(sample.leftBalance.map { $0.isFinite && $0 >= 0 && $0 <= 100 } ?? true, "Invalid pedal balance.")
             }
             try require(session.events.allSatisfy { $0.time.isFinite && $0.time >= 0 && $0.time <= end + 2 }, "Invalid event timestamp.")
         }

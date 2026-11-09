@@ -30,8 +30,9 @@ public struct DeviceReading: Sendable {
     public var cadence: Double?
     public var heartRate: Int?
     public var leftBalance: Double?
-    public init(role: DeviceRole, uptime: Double, power: Double? = nil, cadence: Double? = nil, heartRate: Int? = nil, leftBalance: Double? = nil) {
-        self.role = role; self.uptime = uptime; self.power = power; self.cadence = cadence; self.heartRate = heartRate; self.leftBalance = leftBalance
+    public var rrIntervals: [Double]?
+    public init(role: DeviceRole, uptime: Double, power: Double? = nil, cadence: Double? = nil, heartRate: Int? = nil, leftBalance: Double? = nil, rrIntervals: [Double]? = nil) {
+        self.role = role; self.uptime = uptime; self.power = power; self.cadence = cadence; self.heartRate = heartRate; self.leftBalance = leftBalance; self.rrIntervals = rrIntervals
     }
 }
 
@@ -374,7 +375,8 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
                 let reading = DeviceReading(role: role, uptime: time, power: value.watts, cadence: cadence, leftBalance: value.leftBalancePercent)
                 measurements.receive(reading); onReading?(reading)
             case (.heartRate, "2A37"):
-                onReading?(DeviceReading(role: role, uptime: time, heartRate: try HeartRateMeasurement.decode(data)))
+                let value = try HeartRateMeasurement.reading(data)
+                onReading?(DeviceReading(role: role, uptime: time, heartRate: value.heartRate, rrIntervals: value.rrIntervals))
             default: break
             }
             updateReadiness()

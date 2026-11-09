@@ -4,7 +4,7 @@ import { ResistanceRange, supportsResistance } from '../src/protocol.mjs';
 import { freeRide, validatePlan, creditSession, progressMilliseconds } from '../src/training.mjs';
 import { makeArchive, archiveText, parseArchive, archiveSessions, validateArchive } from '../src/archive.mjs';
 import { configuration, PRESETS, rampPower, analyze, RampEngine, mockSample } from '../src/domain.mjs';
-import { indoorBike, cyclingPower, heartRate, PowerRange, supportsTargetPower, command, controlResponse, BikeAssembler, CadenceTracker, Measurements, route } from '../src/protocol.mjs';
+import { indoorBike, cyclingPower, heartRate, heartRateMeasurement, PowerRange, supportsTargetPower, command, controlResponse, BikeAssembler, CadenceTracker, Measurements, route } from '../src/protocol.mjs';
 import { ControlPoint, BluetoothDevices } from '../src/bluetooth.mjs';
 import { LocalStore, acquireRideLease, loadPreferences, savePreferences } from '../src/storage.mjs';
 import { RideController } from '../src/controller.mjs';
@@ -360,6 +360,15 @@ test('Cycling power optional fields and crank rollover match Swift fixtures', ()
 });
 test('Heart rate supports 8/16-bit values and rejects truncated optional fields', () => {
   equal(heartRate([0, 155]), 155); equal(heartRate([1, 0, 1]), 256); throws(() => heartRate([1, 0])); throws(() => heartRate([16, 150]));
+});
+test('Heart rate packets give RR intervals in seconds, and malformed ones are rejected', () => {
+  equal(heartRateMeasurement([0, 155]), { heartRate: 155 }); equal(heartRateMeasurement([16, 150, 0x00, 0x04]), { heartRate: 150, rrIntervals: [1] });
+  equal(heartRateMeasurement([0x19, 0x90, 0, 0x34, 0x12, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04]), { heartRate: 144, rrIntervals: [0.5, 0.75, 1] }); equal(heartRate([16, 150, 0x00, 0x04]), 150);
+  for (const packet of [[16, 150], [16, 150, 0x00], [16, 150, 0x00, 0x04, 0x01], [0xe0, 150, 0x00, 0x04]]) throws(() => heartRateMeasurement(packet));
+  const config = { powerSource: 'trainer', cadenceSource: 'trainer' };
+  equal(route({ role: 'heartRate', time: 12, heartRate: 150, rrIntervals: [0.4, 0.41] }, config, 2), { time: 10, heartRate: 150, rrIntervals: [0.4, 0.41] });
+  equal(route({ role: 'heartRate', time: 12, heartRate: 150 }, config, 2), { time: 10, heartRate: 150 });
+  const mock = mockSample(1, 200, 'ramp'); equal(mock.rrIntervals, [60 / mock.heartRate]);
 });
 test('Power range and FTMS commands match wire fixtures', () => {
   const r = PowerRange.decode([50, 0, 0xf4, 1, 5, 0]); equal(r.quantized(123), 125); equal(r.quantized(1000), 500);

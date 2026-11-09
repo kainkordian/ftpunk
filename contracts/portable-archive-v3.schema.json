@@ -479,7 +479,23 @@
         "leftBalance": {
           "anyOf": [
             {
-              "type": "number"
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rrIntervals": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
             },
             {
               "type": "null"

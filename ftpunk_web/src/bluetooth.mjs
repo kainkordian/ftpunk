@@ -1,4 +1,4 @@
-import { Measurements, BikeAssembler, CadenceTracker, indoorBike, cyclingPower, heartRate, PowerRange, ResistanceRange, supportsResistance, supportsTargetPower, command, controlResponse } from './protocol.mjs';
+import { Measurements, BikeAssembler, CadenceTracker, indoorBike, cyclingPower, heartRateMeasurement, PowerRange, ResistanceRange, supportsResistance, supportsTargetPower, command, controlResponse } from './protocol.mjs';
 export const SERVICES = { trainer: 0x1826, externalPowerMeter: 0x1818, heartRate: 0x180d };
 export const DEVICE_LABELS = { trainer: 'Smart trainer', externalPowerMeter: 'External power meter', heartRate: 'Heart rate' };
 const clock = () => performance.now() / 1000;
@@ -100,7 +100,7 @@ export class BluetoothDevices {
       } else if (role === 'externalPowerMeter') {
         const tracker = new CadenceTracker();
         await notify(0x2a63, (data, time) => { const r = cyclingPower(data); return { power: r.power, cadence: r.crank ? tracker.receive(r.crank, time) : null, leftBalance: r.leftBalance }; });
-      } else await notify(0x2a37, data => ({ heartRate: heartRate(data) }));
+      } else await notify(0x2a37, data => heartRateMeasurement(data));
       if (!device.gatt.connected || this.devices[role] !== entry) throw Error('The device disconnected while pairing.');
       entry.ready = true; this.onChange();
       if (role === 'externalPowerMeter') this.onMeterReady(entry.name);

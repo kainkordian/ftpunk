@@ -184,7 +184,7 @@ test('Two riders keep separate groups and trend series', () => {
 });
 
 // Mirrors Tests/FTPunkTests/RideSummaryTests.swift.
-import { rideSummary, normalizedPower, targetSeries, AutoPause } from '../src/rules/ride-summary.mjs';
+import { rideSummary, normalizedPower, oneHertzPower, trainingLoad, targetSeries, AutoPause } from '../src/rules/ride-summary.mjs';
 const rideSession = (extra = {}) => ({ configuration: configuration({ warmupSeconds: 0 }), training: null, samples: [], events: [], outcome: null, endedAtOffset: null, ...extra });
 test('A steady ride has equal average and normalized power', () => {
   const s = rideSession({ samples: Array.from({ length: 121 }, (_, t) => ({ time: t, power: 200, cadence: 90, heartRate: 140 })), endedAtOffset: 120 }), r = rideSummary(s);
@@ -195,6 +195,20 @@ test('Normalized power is higher for variable effort, needs 30 s and skips pause
   assert(normalizedPower(samples) > P.averagePower(samples) + 10);
   equal(normalizedPower(Array.from({ length: 20 }, (_, t) => ({ time: t, power: 200 }))), null);
   near(normalizedPower([...Array.from({ length: 40 }, (_, t) => ({ time: t, power: 200 })), ...Array.from({ length: 40 }, (_, t) => ({ time: 400 + t, power: 200 }))]), 200, 0.001);
+});
+const loadSession = (seconds, ftp = 200, watts = 200) => rideSession({ configuration: { ...configuration({ warmupSeconds: 0 }), priorFTP: ftp }, samples: Array.from({ length: seconds }, (_, time) => ({ time, power: watts })), endedAtOffset: seconds });
+test('Training load: an hour at FTP is 100 TSS; no FTP or under 30 s leaves fields invalid', () => {
+  const load = trainingLoad(loadSession(3600)); near(load.normalizedPower, 200, 0.000001); near(load.intensityFactor, 1, 0.000001); near(load.trainingStressScore, 100, 0.0001);
+  const none = trainingLoad(loadSession(600, null)); assert(none.normalizedPower != null); equal([none.intensityFactor, none.trainingStressScore], [null, null]);
+  equal(trainingLoad(loadSession(29)), { normalizedPower: null, intensityFactor: null, trainingStressScore: null }); assert(trainingLoad(loadSession(30)).normalizedPower != null);
+});
+test('Paused samples count neither in the load nor on the card, and a short pause is not filled', () => {
+  const paused = loadSession(300);
+  paused.samples = paused.samples.map(s => s.time >= 100 && s.time < 160 ? { time: s.time, power: 900 } : s);
+  paused.events = [{ time: 100, message: 'Training paused; trainer release requested' }, { time: 160, message: 'Training resumed' }];
+  const load = trainingLoad(paused); near(load.normalizedPower, 200, 0.000001); equal(rideSummary(paused).normalizedPower, load.normalizedPower); near(load.trainingStressScore, 100 * 240 / 3600, 0.000001); // 240 ridden seconds at FTP
+  const holed = Array.from({ length: 80 }, (_, time) => ({ time, power: 200 })).filter(s => s.time !== 40);
+  equal(oneHertzPower(holed, [{ stop: 40, resume: 41 }]).length, 79); equal(oneHertzPower(holed).length, 80);
 });
 test('Average cadence skips stops', () => {
   equal(rideSummary(rideSession({ samples: [0, 1, 2, 3, 4].map(t => ({ time: t, cadence: [90, 90, 0, 0, 90][t] })) })).averageCadence, 90);

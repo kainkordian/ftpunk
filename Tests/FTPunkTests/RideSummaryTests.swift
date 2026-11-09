@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-import FTPunkDomain
+@testable import FTPunkDomain
 
 private func config() throws -> SessionConfiguration {
     try SessionConfiguration(warmupSeconds: 0, riderID: RiderProfile.legacyID, powerSource: .trainer, cadenceSource: .trainer)
@@ -106,4 +106,51 @@ private func config() throws -> SessionConfiguration {
     let tail = TargetSeries.make(session, from: 12)
     #expect(tail.first?.time == 12 && tail.first?.watts == 200 && tail.last?.time == 20)
     #expect(!tail.contains { $0.watts == 100 })
+}
+
+private func loadSession(ftp: Double? = 200, seconds: Int, watts: Double = 200) throws -> TestSession {
+    let configuration = try SessionConfiguration(priorFTP: ftp.map { FTPEntry(watts: $0) }, warmupSeconds: 0, riderID: RiderProfile.legacyID, powerSource: .trainer, cadenceSource: .trainer)
+    var session = TestSession(configuration: configuration)
+    session.samples = (0..<seconds).map { RideSample(time: Double($0), power: watts) }
+    session.endedAtOffset = Double(seconds)
+    return session
+}
+
+@Test func trainingLoadOfAnHourAtFTPIsOneHundred() throws {
+    let load = TrainingLoad.make(try loadSession(seconds: 3600))
+    #expect(abs((load.normalizedPower ?? 0) - 200) < 0.000001)
+    #expect(abs((load.intensityFactor ?? 0) - 1) < 0.000001)
+    #expect(abs((load.trainingStressScore ?? 0) - 100) < 0.0001)
+}
+
+@Test func trainingLoadWithoutFTPHasNoIntensityOrStress() throws {
+    let load = TrainingLoad.make(try loadSession(ftp: nil, seconds: 600))
+    #expect(load.normalizedPower != nil); #expect(load.intensityFactor == nil); #expect(load.trainingStressScore == nil)
+}
+
+@Test func trainingLoadNeedsThirtySeconds() throws {
+    let short = TrainingLoad.make(try loadSession(seconds: 29))
+    #expect(short.normalizedPower == nil); #expect(short.intensityFactor == nil); #expect(short.trainingStressScore == nil)
+    #expect(TrainingLoad.make(try loadSession(seconds: 30)).normalizedPower != nil)
+}
+
+@Test func pausedSamplesCountNeitherInTheLoadNorOnTheCard() throws {
+    var paused = try loadSession(seconds: 300)
+    // A hard minute inside a pause, which keeps delivering samples.
+    paused.samples = paused.samples.map { $0.time >= 100 && $0.time < 160 ? RideSample(time: $0.time, power: 900) : $0 }
+    paused.events = [SessionEvent(time: 100, message: "Training paused; trainer release requested"), SessionEvent(time: 160, message: "Training resumed")]
+    let load = TrainingLoad.make(paused)
+    #expect(abs((load.normalizedPower ?? 0) - 200) < 0.000001)
+    #expect(RideSummary.make(paused).normalizedPower == load.normalizedPower)
+    // 240 ridden seconds at FTP.
+    let expected: Double = 100.0 * 240 / 3600
+    #expect(abs((load.trainingStressScore ?? 0) - expected) < 0.000001)
+}
+
+@Test func aShortPauseIsNotFilledWithTheLastPower() {
+    // Seconds 40 and 41 are paused: a one-second hole would otherwise be held over.
+    let samples = (0..<80).filter { $0 != 40 }.map { RideSample(time: Double($0), power: 200) }
+    let pauses = [RidePause(stop: 40, resume: 41)]
+    #expect(RideSummary.oneHertzPower(samples, pauses: pauses).count == 79)
+    #expect(RideSummary.oneHertzPower(samples, pauses: []).count == 80)
 }

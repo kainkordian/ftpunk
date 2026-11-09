@@ -118,3 +118,57 @@ private actor TimeoutThenSuccess: ActivityUploader {
     try worker.cancelAutomaticUploads(accountID: owner.athleteID)
     #expect(try store.uploadJobs().count == 1)
 }
+
+private func fitBytes() throws -> Data {
+    var session = TestSession(configuration: try SessionConfiguration())
+    session.samples = [RideSample(time: 0, power: 200), RideSample(time: 1, power: 200)]; session.endedAtOffset = 2
+    return try FITEncoder.fileData(session)
+}
+
+@Test func uploadFileIsNamedFromItsContent() throws {
+    let id = UUID()
+    let fit = ActivityUploadFile.make(sessionID: id, bytes: try fitBytes())
+    #expect(fit.name == "\(id.uuidString).fit"); #expect(fit.mediaType == "application/octet-stream")
+    for other in [Data("<?xml version=\"1.0\"?><TrainingCenterDatabase/>".utf8), Data(), Data(".FIT".utf8), Data("12345678.FI".utf8)] {
+        let tcx = ActivityUploadFile.make(sessionID: id, bytes: other)
+        #expect(tcx.name == "\(id.uuidString).tcx"); #expect(tcx.mediaType == "application/vnd.garmin.tcx+xml")
+    }
+    // A slice of a larger buffer doesn't start at index 0.
+    var padded = Data([1, 2, 3])
+    padded.append(try fitBytes())
+    #expect(ActivityUploadFile.make(sessionID: id, bytes: padded.dropFirst(3)).name.hasSuffix(".fit"))
+}
+
+@Test func uploadRequestCarriesAFitPart() throws {
+    let fit = try fitBytes(), job = ActivityUploadJob(sessionID: UUID(), accountID: "i1", file: fit, name: "Ride", description: "A ride")
+    let request = IntervalsClient.uploadRequest(job, credential: "test"), body = try #require(request.httpBody)
+    let text = String(decoding: body, as: UTF8.self)
+    #expect(text.contains("filename=\"\(job.sessionID.uuidString).fit\"")); #expect(text.contains("Content-Type: application/octet-stream"))
+    #expect(body.range(of: fit) != nil)
+    #expect(request.url?.query?.contains("external_id=ftpunk-\(job.sessionID.uuidString)") == true)
+}
+
+@Test func aQueuedTCXJobStillUploadsAsTCX() throws {
+    let tcx = Data("<?xml version=\"1.0\"?><TrainingCenterDatabase/>".utf8)
+    let job = ActivityUploadJob(sessionID: UUID(), accountID: "i1", file: tcx, name: "Ride", description: "A ride")
+    let text = String(decoding: try #require(IntervalsClient.uploadRequest(job, credential: "test").httpBody), as: UTF8.self)
+    #expect(text.contains("filename=\"\(job.sessionID.uuidString).tcx\"")); #expect(text.contains("Content-Type: application/vnd.garmin.tcx+xml")); #expect(text.contains("<TrainingCenterDatabase/>"))
+}
+
+@MainActor @Test func enqueueStoresFITAndRefusesRidesItCannotEncode() throws {
+    let store = try LocalStore(inMemory: true), worker = UploadWorker(repository: store, uploader: RecordingUploader())
+    let connection = IntervalsConnection(athleteID: "i1", athleteName: "Rider", apiKey: "test-secret")
+    var session = TestSession(configuration: try SessionConfiguration())
+    session.samples = [RideSample(time: 0, power: 200)]
+    #expect(throws: ExportError.self) { try worker.enqueue(session, connection: connection) } // not finished
+    session.endedAtOffset = 1; session.samples = []
+    #expect(throws: ExportError.self) { try worker.enqueue(session, connection: connection) } // nothing recorded
+    session.samples = [RideSample(time: 0)]
+    #expect(throws: ExportError.self) { try worker.enqueue(session, connection: connection) } // samples without any value
+    #expect(try store.uploadJobs().isEmpty)
+    session.samples = [RideSample(time: 0, power: 200)]
+    try worker.enqueue(session, connection: connection)
+    let stored = try #require(store.uploadJobs().first)
+    #expect(String(decoding: stored.file.dropFirst(8).prefix(4), as: UTF8.self) == ".FIT")
+    #expect(stored.description == ActivityExport.description(session))
+}

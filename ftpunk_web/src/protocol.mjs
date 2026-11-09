@@ -59,14 +59,17 @@ export class CadenceTracker {
     return rpm <= 250 ? rpm : null;
   }
 }
-export function heartRate(data) {
+/** The heart rate and, when the packet carries any, the beat-to-beat intervals in seconds. */
+export function heartRateMeasurement(data) {
   const c = new Cursor(data), f = c.u8();
   if (f & 0xe0) throw Error('Unsupported heart rate flags.');
   const value = f & 1 ? c.u16() : c.u8();
   if (f & 8) c.skip(2);
-  if (f & 16) { if (c.remaining < 2 || c.remaining % 2) throw Error('Truncated RR interval.'); c.skip(c.remaining); }
-  c.finish(); return value;
+  const result = { heartRate: value };
+  if (f & 16) { if (c.remaining < 2 || c.remaining % 2) throw Error('Truncated RR interval.'); result.rrIntervals = []; while (c.remaining) result.rrIntervals.push(c.u16() / 1024); }
+  c.finish(); return result;
 }
+export const heartRate = data => heartRateMeasurement(data).heartRate;
 export class PowerRange {
   constructor(minimum, maximum, increment) { if (![minimum, maximum, increment].every(Number.isInteger) || minimum < 0 || maximum <= minimum || maximum > 32767 || increment < 1) throw Error('Invalid trainer power range.'); Object.assign(this, { minimum, maximum, increment }); }
   static decode(data) { const c = new Cursor(data), r = new PowerRange(c.i16(), c.i16(), c.u16()); c.finish(); return r; }
@@ -94,7 +97,7 @@ export function route(reading, config, origin) {
   if (!Number.isFinite(s.time) || s.time < 0) return null;
   if (reading.role === config.powerSource) s.power = reading.power;
   if (reading.role === config.cadenceSource) s.cadence = reading.cadence;
-  if (reading.role === 'heartRate') s.heartRate = reading.heartRate;
+  if (reading.role === 'heartRate') { s.heartRate = reading.heartRate; if (reading.rrIntervals?.length) s.rrIntervals = reading.rrIntervals; }
   if (reading.role === 'trainer') s.trainerPower = reading.power;
   if (Number.isFinite(reading.leftBalance)) s.leftBalance = reading.leftBalance;
   return s;

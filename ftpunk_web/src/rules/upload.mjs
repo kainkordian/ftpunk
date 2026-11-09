@@ -3,6 +3,13 @@
 
 /** A workout, free ERG or resistance ride shorter than this is not worth a prompt. The manual button still works. */
 export const MINIMUM_RIDE_SECONDS = 300;
+
+/** The upload's file name and media type, read from its content: jobs queued before uploads moved to FIT still hold a TCX string. */
+export function uploadFileInfo(id, file) {
+  const bytes = ArrayBuffer.isView(file) ? new Uint8Array(file.buffer, file.byteOffset, file.byteLength) : null;
+  if (bytes && bytes.length >= 12 && String.fromCharCode(...bytes.subarray(8, 12)) === '.FIT') return { name: `${id}.fit`, type: 'application/octet-stream' };
+  return { name: `${id}.tcx`, type: 'application/vnd.garmin.tcx+xml' };
+}
 const allowsEstimate = outcome => outcome === 'exhaustion' || outcome === 'finishedEarly';
 
 /** `existingJob`: any upload job already made for this activity and account (queued, failed or uploaded). */

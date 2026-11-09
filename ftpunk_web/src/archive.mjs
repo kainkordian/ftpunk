@@ -66,7 +66,7 @@ export function validateArchive(input) {
     require([s.rampStart, s.rampEnd, s.cooldownStart].every(n => optional(n, n => finite(n) && n >= 0 && n <= s.endedAtOffset)), 'Invalid phase timestamps.');
     require(optional(s.endReason, n => typeof n === 'string'), 'Invalid activity end reason.');
     require(Array.isArray(s.devices) && s.devices.every(d => d && ['role', 'name', 'localIdentifier'].every(k => typeof d[k] === 'string') && d.capabilities && typeof d.capabilities === 'object' && !Array.isArray(d.capabilities) && Object.values(d.capabilities).every(v => typeof v === 'string')), 'Invalid device snapshots.');
-    require(Array.isArray(s.samples) && s.samples.length <= 2000000 && s.samples.every(m => m && finite(m.time) && m.time >= 0 && m.time <= s.endedAtOffset + 2 && ['power', 'trainerPower', 'cadence'].every(k => optional(m[k], finite)) && optional(m.heartRate, n => Number.isInteger(n) && n >= 0 && n <= 65535)), 'Invalid activity samples.');
+    require(Array.isArray(s.samples) && s.samples.length <= 2000000 && s.samples.every(m => m && finite(m.time) && m.time >= 0 && m.time <= s.endedAtOffset + 2 && ['power', 'trainerPower', 'cadence'].every(k => optional(m[k], finite)) && optional(m.heartRate, n => Number.isInteger(n) && n >= 0 && n <= 65535) && optional(m.leftBalance, n => finite(n) && n >= 0 && n <= 100) && optional(m.rrIntervals, list => Array.isArray(list) && list.every(n => finite(n) && n >= 0))), 'Invalid activity samples.');
     require(Array.isArray(s.events) && s.events.every(e => e && finite(e.time) && e.time >= 0 && e.time <= s.endedAtOffset + 2 && typeof e.message === 'string'), 'Invalid activity events.');
     if (s.result != null) {
       const r = s.result;
@@ -75,7 +75,7 @@ export function validateArchive(input) {
     const clean = pick(s, ['id', 'startedAt', 'isDemo', 'outcome', 'endReason', 'rampStart', 'rampEnd', 'cooldownStart', 'endedAtOffset', 'training', 'adventureEnabled', 'eligibleMilliseconds', 'adventureStartMilliseconds']);
     clean.configuration = pick(c, ['protocolVersion', 'preset', 'priorFTP', 'weightKG', 'warmupSeconds', 'warmupPower', 'usesAutomaticWarmup', 'maximumPower', 'maximumRampSeconds', 'cooldownSeconds', 'ftpFactor', 'riderID', 'riderName', 'powerSource', 'cadenceSource', 'powerMatchingEnabled']);
     clean.devices = s.devices.map(d => pick(d, ['role', 'name', 'localIdentifier', 'capabilities']));
-    clean.samples = s.samples.map(m => pick(m, ['time', 'power', 'trainerPower', 'cadence', 'heartRate']));
+    clean.samples = s.samples.map(m => pick(m, ['time', 'power', 'trainerPower', 'cadence', 'heartRate', 'rrIntervals', 'leftBalance']));
     clean.events = s.events.map(e => pick(e, ['time', 'message']));
     clean.result = s.result == null ? null : pick(s.result, ['bestMinutePower', 'windowStart', 'windowEnd', 'factor', 'weightKG', 'algorithmVersion']);
     activities.push({ schemaVersion: 1, kind: record.kind, session: clean });

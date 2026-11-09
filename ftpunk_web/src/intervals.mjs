@@ -1,6 +1,8 @@
 import { importWorkout, ScheduledDate } from './workouts.mjs';
 import { uuid } from './domain.mjs';
-import { description, tcx } from './export.mjs';
+import { description } from './export.mjs';
+import { fitFile } from './fit.mjs';
+import { uploadFileInfo } from './rules/upload.mjs';
 import { defaultRiderSettings } from './storage.mjs';
 import { decodeAthleteSettings, athleteChanges, applyChanges, syncNote, isEmpty, shouldRefreshAthlete, emptyState } from './rules/athlete-sync.mjs';
 import { shouldAskToUpload } from './rules/upload.mjs';
@@ -140,7 +142,7 @@ export class IntervalsClient {
     if (this.suspended || this.lookup(riderID) !== connection) throw Error('The account or import state changed. Review the upload again.');
     if (jobs.some(j => j.sessionID === session.id && j.accountID === accountID && j.status === 'uploaded')) return;
     const existing = jobs.find(j => j.sessionID === session.id && j.accountID === accountID);
-    const job = { id: existing?.id ?? uuid(), sessionID: session.id, riderID, accountID, accountName: connection.name, file: tcx(session), name: `FTPunk · ${session.configuration.riderName}`, description: description(session), status: 'queued', attempts: existing?.attempts ?? 0, retryAt: 0, error: null };
+    const job = { id: existing?.id ?? uuid(), sessionID: session.id, riderID, accountID, accountName: connection.name, file: fitFile(session), name: `FTPunk · ${session.configuration.riderName}`, description: description(session), status: 'queued', attempts: existing?.attempts ?? 0, retryAt: 0, error: null };
     await this.store.put('jobs', job); return this.flush(true);
   }
   /** The rider a queued job belongs to: stored on the job, or (older jobs) read from its recording. */
@@ -161,7 +163,7 @@ export class IntervalsClient {
         if (!(await this.store.all('jobs')).some(j => j.id === job.id)) continue;
         try {
           const params = new URLSearchParams({ external_id: `ftpunk-web-${job.sessionID}`, name: job.name, description: job.description, device_name: 'FTPunk Web' });
-          const form = new FormData(); form.append('file', new Blob([job.file], { type: 'application/vnd.garmin.tcx+xml' }), `${job.sessionID}.tcx`);
+          const upload = uploadFileInfo(job.sessionID, job.file), form = new FormData(); form.append('file', new Blob([job.file], { type: upload.type }), upload.name);
           await this.request(`/athlete/${encodeURIComponent(job.accountID)}/activities?${params}`, { method: 'POST', headers: { Authorization: connection.authorization }, body: form });
           job.status = 'uploaded'; job.error = null;
         } catch (error) {

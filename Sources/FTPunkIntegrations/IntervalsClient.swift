@@ -139,7 +139,8 @@ public actor IntervalsClient: ActivityUploader {
         request.setValue(credential, forHTTPHeaderField: "Authorization")
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        var body = Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"file\"; filename=\"\(job.sessionID.uuidString).tcx\"\r\nContent-Type: application/vnd.garmin.tcx+xml\r\n\r\n".utf8)
+        let file = ActivityUploadFile.make(sessionID: job.sessionID, bytes: job.file)
+        var body = Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"file\"; filename=\"\(file.name)\"\r\nContent-Type: \(file.mediaType)\r\n\r\n".utf8)
         body.append(job.file); body.append(Data("\r\n--\(boundary)--\r\n".utf8))
         request.httpBody = body; return request
     }

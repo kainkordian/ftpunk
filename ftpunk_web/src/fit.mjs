@@ -1,7 +1,8 @@
 // A minimal FIT activity file writer with no dependencies, ported from Sources/FTPunkStorage/FITEncoder.swift. The output is byte-identical to the
 // native encoder for the same session (tests compare against the Swift-written fixtures `fit-*.fit` in contracts/fixtures/).
-// Field numbers and base types follow FIT profile 21.221 (see the Swift file for the table). Messages: file_id, event, record, lap, session, activity.
+// Field numbers and base types follow FIT profile 21.221 (see the Swift file for the table). Messages: file_id, event, record, hrv, lap, session, activity.
 import { ridePauses, rideTrack, rideBalance, trackSpan, kilocaloriesOf } from './rules/virtual-ride.mjs';
+import { normalizedPower, trainingLoad, priorFTPWatts } from './rules/ride-summary.mjs';
 export const PROFILE_VERSION = 21221;
 export const EPOCH_OFFSET = 631065600; // Unix seconds at 1989-12-31 00:00:00 UTC
 
@@ -23,15 +24,15 @@ const little = (value, size) => Array.from({ length: size }, (_, i) => Math.floo
 
 class Writer {
   constructor() { this.data = []; this.defined = new Set(); }
-  /** `fields`: [number, baseType, value|null]. A definition is written the first time a local message type is used. */
+  /** `fields`: [number, baseType, value|null], or an array of values for a fixed-length array field. A definition is written the first time a local message type is used. */
   message(local, global, fields) {
     if (!this.defined.has(local)) {
       this.defined.add(local);
       this.data.push(0x40 | local, 0, 0, ...little(global, 2), fields.length);
-      for (const [number, type] of fields) this.data.push(number, type.size, type.id);
+      for (const [number, type, value] of fields) this.data.push(number, type.size * (Array.isArray(value) ? value.length : 1), type.id);
     }
     this.data.push(local);
-    for (const [, type, value] of fields) this.data.push(...little(value ?? type.invalid, type.size));
+    for (const [, type, value] of fields) for (const item of Array.isArray(value) ? value : [value]) this.data.push(...little(item ?? type.invalid, type.size));
   }
 }
 
@@ -70,8 +71,28 @@ function merge(samples, pauseList, end) {
   return [...records.values()].filter(r => r.heartRate != null || r.cadence != null || r.power != null).sort((a, b) => a.time - b.time);
 }
 const stats = values => values.length ? { average: Math.round(values.reduce((a, b) => a + b, 0) / values.length), maximum: values.reduce((m, v) => Math.max(m, v), 0) } : null;
-const priorFTP = session => { const p = session.configuration?.priorFTP; return typeof p === 'number' ? p : p?.watts ?? null; };
 const serialOf = id => { const hex = String(id ?? '').replace(/[^0-9a-f]/gi, '').slice(0, 8); return Math.max(1, hex.length === 8 ? parseInt(hex, 16) : 0); };
+
+const HRV_ARRAY_LENGTH = 5;
+/** RR intervals in milliseconds per second of the ride, in time order. Paused and out-of-range samples and unusable values are left out. */
+function rrBySecond(samples, pauseList, end) {
+  const result = new Map();
+  const ordered = samples.filter(s => s.rrIntervals != null && finite(s.time) && s.time >= 0 && s.time <= end && !pauseList.some(p => s.time >= p.stop && s.time < (p.resume ?? Infinity))).sort((a, b) => a.time - b.time);
+  for (const sample of ordered) {
+    const second = Math.floor(sample.time);
+    for (const rr of sample.rrIntervals) if (finite(rr) && rr > 0) { if (!result.has(second)) result.set(second, []); result.get(second).push(Math.min(65534, Math.round(rr * 1000))); }
+  }
+  return result;
+}
+/** Splits RR values over `hrv` messages of a fixed length, padding the last one with uint16's invalid value. */
+export function hrvMessages(values) {
+  const messages = [];
+  for (let first = 0; first < values.length; first += HRV_ARRAY_LENGTH) {
+    const part = values.slice(first, first + HRV_ARRAY_LENGTH);
+    messages.push([...part, ...Array(HRV_ARRAY_LENGTH - part.length).fill(UINT16.invalid)]);
+  }
+  return messages;
+}
 
 /** The FIT file for a finished recording as a Uint8Array. `utcOffsetSeconds` is the local time zone's offset from UTC at the end of the ride
     (the activity message's local_timestamp); it defaults to this browser's. Throws when the recording is not finished or holds no data. */
@@ -90,6 +111,7 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
   const track = rideTrack(session, { pauses: pauseList, end }), trackBySecond = new Map(track.points.map(p => [p.second, p]));
   const balance = rideBalance(session, track, { pauses: pauseList, end }), leftBySecond = new Map((balance?.seconds ?? []).map(s => [s.second, s.left]));
   let covered = null;
+  const load = trainingLoad(session, { track, pauses: pauseList, end }), rrIntervals = rrBySecond(session.samples, pauseList, end);
 
   writer.message(0, 0, [[0, ENUM, 4], [1, UINT16, 255], [2, UINT16, 1], [3, UINT32Z, serialOf(session.id)], [4, UINT32, startTime]]);
   const timer = (type, at) => writer.message(1, 21, [[253, UINT32, fit(at)], [0, ENUM, 0], [1, ENUM, type]]);
@@ -106,6 +128,7 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
       const point = trackBySecond.get(item.record.time), left = leftBySecond.get(item.record.time); if (point) covered = point.distance;
       writer.message(2, 20, [[253, UINT32, fit(item.record.time)], [3, UINT8, item.record.heartRate], [4, UINT8, item.record.cadence], [7, UINT16, item.record.power],
         [5, UINT32, covered == null ? null : capped(covered * 100, UINT32_MAX)], [6, UINT16, point ? capped(point.speed * 1000, 65534) : null], [30, UINT8, left == null ? null : 0x80 | capped(100 - left, 100)]]);
+      for (const values of hrvMessages(rrIntervals.get(item.record.time) ?? [])) writer.message(6, 78, [[0, UINT16, values]]);
     }
     else if (item.stop != null) timer(4, item.stop);
     else timer(0, item.start);
@@ -117,20 +140,23 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
     const finish = index + 1 < starts.length ? starts[index + 1] : end;
     const paused = pauseList.reduce((n, p) => n + Math.max(0, Math.min(finish, p.resume ?? end) - Math.max(begin, p.stop)), 0);
     const lap = trackSpan(track, begin, index + 1 < starts.length ? finish : Infinity), on = lap.seconds > 0;
+    const isLast = index + 1 === starts.length, lapPower = normalizedPower(session.samples.filter(s => s.time >= begin && (isLast ? s.time <= end : s.time < finish)), pauseList);
     writer.message(3, 19, [[254, UINT16, index], [253, UINT32, fit(finish)], [0, ENUM, 9], [1, ENUM, 1], [2, UINT32, fit(begin)], [7, UINT32, ms(finish - begin)],
       [8, UINT32, ms(Math.max(0, finish - begin - paused))], [25, ENUM, 2], [39, ENUM, 6],
       [9, UINT32, on ? capped(lap.distance * 100, UINT32_MAX) : null], [11, UINT16, on ? capped(kilocaloriesOf(lap.joules), 65534) : null], [13, UINT16, on ? capped(lap.distance / lap.seconds * 1000, 65534) : null],
-      [14, UINT16, on ? capped(lap.maximumSpeed * 1000, 65534) : null], [41, UINT32, on ? capped(lap.joules, UINT32_MAX) : null]]);
+      [14, UINT16, on ? capped(lap.maximumSpeed * 1000, 65534) : null], [41, UINT32, on ? capped(lap.joules, UINT32_MAX) : null], [33, UINT16, lapPower == null ? null : capped(lapPower, 65534)]]);
   });
   const ridden = track.seconds > 0;
   const power = stats(records.map(r => r.power).filter(v => v != null)), heart = stats(records.map(r => r.heartRate).filter(v => v != null)), cadence = stats(records.map(r => r.cadence).filter(v => v != null));
-  const threshold = priorFTP(session);
+  const threshold = priorFTPWatts(session);
   writer.message(4, 18, [[254, UINT16, 0], [253, UINT32, endTime], [0, ENUM, 8], [1, ENUM, 1], [2, UINT32, startTime], [5, ENUM, 2], [6, ENUM, 6],
     [7, UINT32, ms(end)], [8, UINT32, ms(timerSeconds)], [16, UINT8, heart?.average ?? null], [17, UINT8, heart?.maximum ?? null],
     [18, UINT8, cadence?.average ?? null], [19, UINT8, cadence?.maximum ?? null], [20, UINT16, power?.average ?? null], [21, UINT16, power?.maximum ?? null],
     [25, UINT16, 0], [26, UINT16, starts.length], [45, UINT16, finite(threshold) ? Math.min(65534, Math.max(0, Math.round(threshold))) : null],
     [9, UINT32, ridden ? capped(track.distance * 100, UINT32_MAX) : null], [11, UINT16, ridden ? capped(track.kilocalories, 65534) : null], [14, UINT16, ridden ? capped(track.distance / track.seconds * 1000, 65534) : null],
-    [15, UINT16, ridden ? capped(track.maximumSpeed * 1000, 65534) : null], [37, UINT16, balance ? 0x8000 | capped((100 - balance.left) * 100, 10000) : null], [48, UINT32, ridden ? capped(track.joules, UINT32_MAX) : null]]);
+    [15, UINT16, ridden ? capped(track.maximumSpeed * 1000, 65534) : null], [37, UINT16, balance ? 0x8000 | capped((100 - balance.left) * 100, 10000) : null], [48, UINT32, ridden ? capped(track.joules, UINT32_MAX) : null],
+    [34, UINT16, load.normalizedPower == null ? null : capped(load.normalizedPower, 65534)], [35, UINT16, load.trainingStressScore == null ? null : capped(load.trainingStressScore * 10, 65534)],
+    [36, UINT16, load.intensityFactor == null ? null : capped(load.intensityFactor * 1000, 65534)]]);
   const zone = utcOffsetSeconds ?? -new Date(startMs + end * 1000).getTimezoneOffset() * 60;
   writer.message(5, 34, [[253, UINT32, endTime], [0, UINT32, ms(timerSeconds)], [1, UINT16, 1], [2, ENUM, 0], [3, ENUM, 26], [4, ENUM, 1], [5, UINT32, Math.max(0, endTime + zone)]]);
 

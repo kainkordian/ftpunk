@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import FTPunkDevices
+import FTPunkDomain
 
 @Test func indoorBikeFlagsAndSignedPower() throws {
     let value = try IndoorBikeData.decode(Data([0x44, 0, 0xc4, 9, 0xb4, 0, 0xc8, 0]))
@@ -75,4 +76,39 @@ import Testing
     #expect(try HeartRateMeasurement.decode(Data([0, 155])) == 155)
     #expect(try HeartRateMeasurement.decode(Data([1, 0, 1])) == 256)
     #expect(throws: (any Error).self) { try HeartRateMeasurement.decode(Data([1, 0])) }
+}
+
+@Test func heartRateReadingDecodesRRIntervals() throws {
+    let plain = try HeartRateMeasurement.reading(Data([0, 155]))
+    #expect(plain == HeartRateMeasurement.Reading(heartRate: 155, rrIntervals: nil))
+    let one = try HeartRateMeasurement.reading(Data([16, 150, 0x00, 0x04]))
+    #expect(one == HeartRateMeasurement.Reading(heartRate: 150, rrIntervals: [1]))
+    // 16-bit heart rate, energy expended, then three intervals.
+    let several = try HeartRateMeasurement.reading(Data([0x19, 0x90, 0, 0x34, 0x12, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04]))
+    #expect(several == HeartRateMeasurement.Reading(heartRate: 144, rrIntervals: [0.5, 0.75, 1]))
+    #expect(try HeartRateMeasurement.decode(Data([16, 150, 0x00, 0x04])) == 150)
+}
+
+@Test func heartRateReadingRejectsMalformedRRData() {
+    for packet in [Data([16, 150]), Data([16, 150, 0x00]), Data([16, 150, 0x00, 0x04, 0x01]), Data([0xe0, 150, 0x00, 0x04])] {
+        #expect(throws: (any Error).self) { try HeartRateMeasurement.reading(packet) }
+    }
+}
+
+@Test func routingKeepsRRIntervalsFromTheStrap() throws {
+    let reading = DeviceReading(role: .heartRate, uptime: 12, heartRate: 150, rrIntervals: [0.4, 0.41])
+    let sample = try #require(MeasurementRouting.sample(reading, configuration: try SessionConfiguration(), origin: 2))
+    #expect(sample.rrIntervals == [0.4, 0.41]); #expect(sample.heartRate == 150); #expect(sample.time == 10)
+    let without = try #require(MeasurementRouting.sample(DeviceReading(role: .heartRate, uptime: 12, heartRate: 150), configuration: try SessionConfiguration(), origin: 2))
+    #expect(without.rrIntervals == nil)
+}
+
+@Test func rideSamplesWithoutRRDecodeAndEncodeUnchanged() throws {
+    let old = try JSONDecoder().decode(RideSample.self, from: Data(#"{"time":3,"heartRate":120}"#.utf8))
+    #expect(old.rrIntervals == nil); #expect(old == RideSample(time: 3, heartRate: 120))
+    #expect(!String(decoding: try JSONEncoder().encode(old), as: UTF8.self).contains("rrIntervals"))
+    var mock = MockRideStream()
+    let sample = mock.sample(at: 1, target: 200, phase: .ramp)
+    let heartRate = try #require(sample.heartRate)
+    #expect(sample.rrIntervals == [60.0 / Double(heartRate)])
 }

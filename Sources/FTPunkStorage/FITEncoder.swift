@@ -16,6 +16,8 @@ import FTPunkDomain
 ///                  max_speed 15, left_right_balance 37 uint16 (percent × 100, 0x8000 = right leg), total_work 48 (J)
 ///
 /// Distance and speed are simulated from power (`RideTrack`); checked against profile 21.221 on 2026-11-09.
+///     Added 2026-11-09: session normalized_power 34 uint16, training_stress_score 35 uint16 (× 10), intensity_factor 36 uint16 (× 1000); lap normalized_power 33;
+///     hrv(78): time 0 uint16 array (ms), a fixed five elements per message padded with the invalid value.
 ///     activity(34): timestamp 253, total_timer_time 0 (ms), num_sessions 1, type 2 (manual = 0), event 3 (activity = 26),
 ///                  event_type 4 (stop = 1), local_timestamp 5
 ///
@@ -35,7 +37,9 @@ public enum FITEncoder {
         static let uint32 = BaseType(id: 0x86, size: 4, invalid: 0xFFFF_FFFF)
         static let uint32z = BaseType(id: 0x8C, size: 4, invalid: 0)
     }
-    struct Field { let number: UInt8, type: BaseType, value: UInt64? }
+    /// One value, or with `array` a fixed-length array (the definition's size is the element size × its count).
+    struct Field { let number: UInt8, type: BaseType, value: UInt64?; var array: [UInt64]? = nil }
+    static let hrvArrayLength = 5
 
     /// The FIT SDK's CRC-16 (nibble table).
     public static func crc16(_ bytes: some Sequence<UInt8>, seed: UInt16 = 0) -> UInt16 {
@@ -60,10 +64,16 @@ public enum FITEncoder {
                 defined.insert(local)
                 data.append(0x40 | local); data.append(0); data.append(0) // definition header, reserved, little endian
                 data.append(contentsOf: little(UInt64(global), 2)); data.append(UInt8(fields.count))
-                for field in fields { data.append(field.number); data.append(field.type.size); data.append(field.type.id) }
+                for field in fields { data.append(field.number); data.append(field.type.size * UInt8(field.array?.count ?? 1)); data.append(field.type.id) }
             }
             data.append(local)
-            for field in fields { data.append(contentsOf: little(field.value ?? field.type.invalid, Int(field.type.size))) }
+            for field in fields {
+                if let values = field.array {
+                    for value in values { data.append(contentsOf: little(value, Int(field.type.size))) }
+                } else {
+                    data.append(contentsOf: little(field.value ?? field.type.invalid, Int(field.type.size)))
+                }
+            }
         }
         private func little(_ value: UInt64, _ size: Int) -> [UInt8] { (0..<size).map { UInt8((value >> (8 * UInt64($0))) & 0xFF) } }
     }
@@ -108,6 +118,30 @@ public enum FITEncoder {
         return records.values.filter { $0.heartRate != nil || $0.cadence != nil || $0.power != nil }.sorted { $0.time < $1.time }
     }
 
+    /// RR intervals in milliseconds per second of the ride, in time order. Paused and out-of-range samples and unusable values are left out.
+    private static func rrBySecond(_ samples: [RideSample], pauses: [Pause], end: Double) -> [Int: [UInt64]] {
+        let ordered = samples.enumerated().filter { entry in
+            let time = entry.element.time
+            return entry.element.rrIntervals != nil && time.isFinite && time >= 0 && time <= end && !pauses.contains { $0.contains(time) }
+        }.sorted { ($0.element.time, $0.offset) < ($1.element.time, $1.offset) }
+        var result: [Int: [UInt64]] = [:]
+        for entry in ordered {
+            let second = Int(entry.element.time.rounded(.down))
+            for rr in entry.element.rrIntervals ?? [] where rr.isFinite && rr > 0 {
+                result[second, default: []].append(UInt64(min(65534, (rr * 1000).rounded())))
+            }
+        }
+        return result
+    }
+
+    /// Splits RR values over `hrv` messages of a fixed length, padding the last one with uint16's invalid value.
+    static func hrvMessages(_ values: [UInt64]) -> [[UInt64]] {
+        stride(from: 0, to: values.count, by: hrvArrayLength).map { first in
+            let part = Array(values[first..<min(first + hrvArrayLength, values.count)])
+            return part + Array(repeating: BaseType.uint16.invalid, count: hrvArrayLength - part.count)
+        }
+    }
+
     public static func fileData(_ session: TestSession) throws -> Data {
         guard let end = session.endedAtOffset else { throw ExportError.notFinalized }
         guard !session.samples.isEmpty else { throw ExportError.emptyActivity }
@@ -120,13 +154,15 @@ public enum FITEncoder {
         }
         func ms(_ seconds: Double) -> UInt64 { UInt64(max(0, (seconds * 1000).rounded())) }
         func u(_ value: Int?) -> UInt64? { value.map { UInt64(max(0, $0)) } }
-        func capped(_ value: Double, _ limit: UInt64) -> UInt64 { min(limit, UInt64(max(0, value.rounded()))) }
+        func capped(_ value: Double, _ limit: UInt64) -> UInt64 { UInt64(min(Double(limit), max(0, value.rounded()))) }
 
         let track = RideTrack.make(samples: session.samples, pauses: pauses, end: end, riderKG: session.configuration.weightKG)
         let trackBySecond = Dictionary(uniqueKeysWithValues: track.points.map { ($0.second, $0) })
         let balance = RideBalance.make(samples: session.samples, pauses: pauses, end: end, track: track)
         let leftBySecond = Dictionary(uniqueKeysWithValues: (balance?.seconds ?? []).map { ($0.second, $0.left) })
         var covered: Double?
+        let load = TrainingLoad.make(session, track: track)
+        let rrIntervals = rrBySecond(session.samples, pauses: pauses, end: end)
 
         let pausedSeconds = pauses.reduce(0.0) { $0 + min(end, $1.resume ?? end) - min(end, $1.stop) }
         let timerSeconds = max(0, end - pausedSeconds)
@@ -164,6 +200,9 @@ public enum FITEncoder {
                     Field(number: 5, type: .uint32, value: covered.map { capped($0 * 100, 4_294_967_294) }),
                     Field(number: 6, type: .uint16, value: point.map { capped($0.speed * 1000, 65534) }),
                     Field(number: 30, type: .uint8, value: leftBySecond[record.time].map { 0x80 | capped(100 - $0, 100) })])
+                for values in hrvMessages(rrIntervals[record.time] ?? []) {
+                    writer.message(local: 6, global: 78, [Field(number: 0, type: .uint16, value: nil, array: values)])
+                }
             }
         }
         if !(pauses.last.map { $0.resume == nil } ?? false) { timer(4, at: end) }
@@ -173,6 +212,9 @@ public enum FITEncoder {
             let finish = index + 1 < starts.count ? starts[index + 1] : end
             let paused = pauses.reduce(0.0) { $0 + max(0, min(finish, $1.resume ?? end) - max(begin, $1.stop)) }
             let lap = track.span(from: begin, to: index + 1 < starts.count ? finish : .infinity), lapRidden = lap.seconds > 0
+            let isLast = index + 1 == starts.count
+            let lapSamples = session.samples.filter { $0.time >= begin && (isLast ? $0.time <= end : $0.time < finish) }
+            let lapPower = RideSummary.normalizedPower(lapSamples, pauses: pauses)
             writer.message(local: 3, global: 19, [
                 Field(number: 254, type: .uint16, value: UInt64(index)), Field(number: 253, type: .uint32, value: fit(finish)),
                 Field(number: 0, type: .enumeration, value: 9), Field(number: 1, type: .enumeration, value: 1),
@@ -183,7 +225,8 @@ public enum FITEncoder {
                 Field(number: 11, type: .uint16, value: lapRidden ? capped(lap.kilocalories, 65534) : nil),
                 Field(number: 13, type: .uint16, value: lapRidden ? capped(lap.averageSpeed * 1000, 65534) : nil),
                 Field(number: 14, type: .uint16, value: lapRidden ? capped(lap.maximumSpeed * 1000, 65534) : nil),
-                Field(number: 41, type: .uint32, value: lapRidden ? capped(lap.joules, 4_294_967_294) : nil)])
+                Field(number: 41, type: .uint32, value: lapRidden ? capped(lap.joules, 4_294_967_294) : nil),
+                Field(number: 33, type: .uint16, value: lapPower.map { capped($0, 65534) })])
         }
 
         func stats(_ values: [Int]) -> (average: Int, maximum: Int)? {
@@ -206,7 +249,10 @@ public enum FITEncoder {
             Field(number: 14, type: .uint16, value: ridden ? capped(whole.averageSpeed * 1000, 65534) : nil),
             Field(number: 15, type: .uint16, value: ridden ? capped(whole.maximumSpeed * 1000, 65534) : nil),
             Field(number: 37, type: .uint16, value: balance.map { 0x8000 | capped((100 - $0.left) * 100, 10000) }),
-            Field(number: 48, type: .uint32, value: ridden ? capped(whole.joules, 4_294_967_294) : nil)])
+            Field(number: 48, type: .uint32, value: ridden ? capped(whole.joules, 4_294_967_294) : nil),
+            Field(number: 34, type: .uint16, value: load.normalizedPower.map { capped($0, 65534) }),
+            Field(number: 35, type: .uint16, value: load.trainingStressScore.map { capped($0 * 10, 65534) }),
+            Field(number: 36, type: .uint16, value: load.intensityFactor.map { capped($0 * 1000, 65534) })])
 
         let zone = TimeInterval(TimeZone.current.secondsFromGMT(for: session.startedAt.addingTimeInterval(end)))
         writer.message(local: 5, global: 34, [

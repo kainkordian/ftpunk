@@ -14,6 +14,19 @@ import Foundation
 
 public enum UploadStatus: String, Codable, Sendable { case queued, uploading, uploaded, needsAttention }
 
+/// The file name and media type of an upload, read from the bytes: jobs queued before uploads moved to FIT still hold TCX.
+public struct ActivityUploadFile: Equatable, Sendable {
+    public let name: String
+    public let mediaType: String
+
+    public static func make(sessionID: UUID, bytes: Data) -> ActivityUploadFile {
+        if bytes.count >= 12, bytes.dropFirst(8).prefix(4).elementsEqual(Array(".FIT".utf8)) {
+            return ActivityUploadFile(name: "\(sessionID.uuidString).fit", mediaType: "application/octet-stream")
+        }
+        return ActivityUploadFile(name: "\(sessionID.uuidString).tcx", mediaType: "application/vnd.garmin.tcx+xml")
+    }
+}
+
 public struct ActivityUploadJob: Identifiable, Codable, Sendable {
     public var id: UUID
     public var sessionID: UUID

@@ -1,4 +1,5 @@
-import { test, assert, equal } from './harness.mjs';
+import { test, assert, equal, fixture } from './harness.mjs';
+import { heartRateChart } from '../src/ui/charts.mjs';
 import { ChaindanceView, chaindanceHTML, placementMenuHTML } from '../src/chaindance/view.mjs';
 import { RampEngine, configuration } from '../src/domain.mjs';
 
@@ -16,6 +17,34 @@ async function open(query, { timeout = 20000, width = 1280, height = 900 } = {})
 }
 const scenario = async (name, body, size) => { const a = await open(`scenario=${name}`, size); try { assert(a.app.errors.length === 0, `Script errors in ${name}: ${a.app.errors.join('; ')}`); await body(a); assert(a.app.errors.length === 0, `Script errors in ${name}: ${a.app.errors.join('; ')}`); } finally { a.close(); } };
 const pixels = canvas => { const { width, height } = canvas, data = canvas.getContext('2d').getImageData(0, 0, width, height).data; let lit = 0; for (let i = 0; i < data.length; i += 4) if (data[i] + data[i + 1] + data[i + 2] > 120) lit++; return { width, height, lit }; };
+
+test('The heart-rate chart keeps its title on a row of its own above the plot', async () => {
+  const base = await fixture('fit-ftp-test.session');
+  for (const [lowest, highest] of [[140, 142], [95, 175], [58, 201]]) {
+    const samples = base.samples.map((s, i) => ({ ...s, heartRate: i % 2 ? lowest : highest }));
+    const svg = new DOMParser().parseFromString(heartRateChart({ ...base, samples }), 'image/svg+xml');
+    const title = [...svg.querySelectorAll('.axis-title')].find(t => t.textContent === 'bpm'), ticks = [...svg.querySelectorAll('.axis[text-anchor="end"]')].map(t => Number(t.getAttribute('y')));
+    // Measured at the 17-unit phone-width axis text: a 4-unit descender on the title, 13-unit digits on the tick.
+    assert(Number(title.getAttribute('y')) + 4 <= Math.min(...ticks) - 13, `bpm collides with the top tick for ${lowest} to ${highest}`);
+    equal(svg.documentElement.getAttribute('viewBox'), '0 0 600 172');
+  }
+});
+
+for (const [label, size, across] of [['five across', { width: 1280, height: 900 }, 5], ['three across on a phone', { width: 390, height: 844 }, 3]]) test(`The balance reading stays on one line with its unit, ${label}`, async () => scenario('ride-workout-strip', async a => {
+  a.q('#tiles-main').hidden = true; a.q('#tiles-more').hidden = false;
+  const value = a.q('#live-balance'), tile = value.closest('.tile'), unit = tile.querySelector('.unit'); tile.hidden = false;
+  const tiles = a.qa('#tiles-more .tile'); equal(tiles.filter(t => Math.abs(t.getBoundingClientRect().top - tiles[0].getBoundingClientRect().top) < 1).length, across);
+  for (const text of ['50 / 50', '100 / 0']) {
+    value.textContent = text; const v = value.getBoundingClientRect(), u = unit.getBoundingClientRect(), t = tile.getBoundingClientRect();
+    equal(value.getClientRects().length, 1); assert(u.top < v.bottom && u.bottom > v.top, 'the unit shares the line');
+    assert(v.left >= t.left && u.right <= t.right - 1, `the reading fits the tile: ${u.right} against ${t.right}`); assert(tile.scrollWidth <= tile.clientWidth, 'nothing is clipped');
+  }
+}, size));
+
+test('The target legend swatch is dashed in light and dark', async () => scenario('ride-workout-strip', async a => {
+  a.q('#main').insertAdjacentHTML('beforeend', '<div class="chart-legend"><span class="swatch target"></span></div>'); const swatch = a.q('.chart-legend .swatch.target');
+  for (const appearance of ['light', 'dark']) { a.doc.documentElement.dataset.appearance = appearance; const style = a.win.getComputedStyle(swatch); assert(/repeating-linear-gradient.*rgba\(0, 0, 0, 0\)/.test(style.backgroundImage), `no dashes in ${appearance}: ${style.backgroundImage}`); assert(swatch.getBoundingClientRect().height >= 2, 'the swatch is drawn'); }
+}));
 
 test('The cockpit draws Chaindance as a strip by default, with the placement menu in the header', async () => scenario('ride-workout-strip', async a => {
   const canvas = a.q('#chaindance-canvas'); assert(canvas); equal([canvas.width, canvas.height], [192, 60]); assert(!a.q('#chaindance-readout'));

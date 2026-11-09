@@ -56,7 +56,8 @@ public enum MeasurementRouting {
                           cadence: reading.role == configuration.resolvedCadenceSource.deviceRole ? reading.cadence : nil,
                           heartRate: reading.heartRate,
                           trainerPower: reading.role == .trainer ? reading.power : nil,
-                          leftBalance: reading.leftBalance)
+                          leftBalance: reading.leftBalance,
+                          rrIntervals: reading.rrIntervals)
     }
     public static func isEssential(_ role: DeviceRole, configuration: SessionConfiguration) -> Bool {
         role == .trainer || role == configuration.resolvedPowerSource.deviceRole || role == configuration.resolvedCadenceSource.deviceRole

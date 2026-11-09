@@ -5,7 +5,7 @@ import FTPunkDomain
 
 // MARK: A just-enough FIT decoder
 
-private struct FITMessage { let global: Int; let fields: [Int: UInt64] }
+private struct FITMessage { let global: Int; let fields: [Int: UInt64]; var arrays: [Int: [UInt64]] = [:] }
 private struct FITFile {
     var headerSize = 0, protocolVersion = 0, profileVersion = 0, dataSize = 0, dataType = ""
     var headerCRC = 0, fileCRC = 0, headerCRCValid = false, fileCRCValid = false
@@ -35,13 +35,14 @@ private func decodeFIT(_ data: Data) throws -> FITFile {
             definitions[local] = (global, fields.map { (num: $0.0, size: $0.1) })
         } else {
             let definition = try #require(definitions[local])
-            var values: [Int: UInt64] = [:]
+            var values: [Int: UInt64] = [:], arrays: [Int: [UInt64]] = [:]
             for field in definition.fields {
+                if field.size > 4 { arrays[field.num] = stride(from: 0, to: field.size, by: 2).map { le(position + $0, 2) } }
                 let raw = le(position, field.size); position += field.size
                 let invalid: UInt64 = field.size == 1 ? 0xFF : field.size == 2 ? 0xFFFF : 0xFFFF_FFFF
                 if raw != invalid { values[field.num] = raw }
             }
-            file.messages.append(FITMessage(global: definition.global, fields: values))
+            file.messages.append(FITMessage(global: definition.global, fields: values, arrays: arrays))
         }
     }
     #expect(position == end)
@@ -214,4 +215,69 @@ func dumpFitFixturesForExternalDecoders() throws {
     let directory = URL(fileURLWithPath: try #require(ProcessInfo.processInfo.environment["FTPUNK_FIT_DUMP_DIR"]))
     try FITEncoder.fileData(rampSession()).write(to: directory.appendingPathComponent("ramp.fit"))
     try FITEncoder.fileData(pausedWorkout()).write(to: directory.appendingPathComponent("workout-paused.fit"))
+}
+
+// MARK: Training load and RR intervals
+
+private func steadySession(ftp: Double? = 200, seconds: Int) throws -> TestSession {
+    var session = TestSession(startedAt: start, configuration: try configuration(prior: ftp))
+    session.samples = (0..<seconds).map { RideSample(time: Double($0), power: 200) }
+    session.endedAtOffset = Double(seconds)
+    return session
+}
+
+@Test func fitSessionCarriesNormalizedPowerStressAndIntensity() throws {
+    let file = try decodeFIT(try FITEncoder.fileData(try steadySession(seconds: 3600)))
+    let session = try #require(file.all(18).first), lap = try #require(file.all(19).first)
+    #expect(session.fields[34] == 200); #expect(session.fields[35] == 1000); #expect(session.fields[36] == 1000); #expect(lap.fields[33] == 200)
+}
+
+@Test func fitLoadFieldsAreInvalidWithoutFTPOrThirtySeconds() throws {
+    let noFTP = try #require(try decodeFIT(try FITEncoder.fileData(try steadySession(ftp: nil, seconds: 600))).all(18).first)
+    #expect(noFTP.fields[34] == 200); #expect(noFTP.fields[35] == nil); #expect(noFTP.fields[36] == nil)
+    let short = try decodeFIT(try FITEncoder.fileData(try steadySession(seconds: 20)))
+    let shortSession = try #require(short.all(18).first)
+    #expect(shortSession.fields[34] == nil); #expect(shortSession.fields[35] == nil); #expect(shortSession.fields[36] == nil)
+    #expect(short.all(19).first?.fields[33] == nil)
+}
+
+@Test func fitLapPowerUsesOnlyThatLapsUnpausedSamples() throws {
+    var session = try steadySession(seconds: 200)
+    session.rampStart = 20 // the first lap is too short for a normalized power
+    session.samples = session.samples.map { $0.time >= 100 && $0.time < 140 ? RideSample(time: $0.time, power: 900) : $0 }
+    session.events = [SessionEvent(time: 100, message: "Training paused; trainer release requested"), SessionEvent(time: 140, message: "Training resumed")]
+    let laps = try decodeFIT(try FITEncoder.fileData(session)).all(19)
+    #expect(laps.count == 2); #expect(laps[0].fields[33] == nil); #expect(laps[1].fields[33] == 200)
+}
+
+@Test func hrvValuesAreSplitAndPaddedToFixedMessages() {
+    let invalid: UInt64 = 0xFFFF
+    #expect(FITEncoder.hrvMessages([]).isEmpty)
+    #expect(FITEncoder.hrvMessages([1]) == [[1, invalid, invalid, invalid, invalid]])
+    #expect(FITEncoder.hrvMessages([1, 2, 3, 4, 5]) == [[1, 2, 3, 4, 5]])
+    #expect(FITEncoder.hrvMessages([1, 2, 3, 4, 5, 6]) == [[1, 2, 3, 4, 5], [6, invalid, invalid, invalid, invalid]])
+}
+
+@Test func hrvMessagesFollowTheirRecordAndSkipPausesAndEmptySeconds() throws {
+    var session = TestSession(startedAt: start, configuration: try configuration())
+    session.samples = [
+        RideSample(time: 1, power: 100, heartRate: 120, rrIntervals: [0.5]),
+        RideSample(time: 2, power: 100, heartRate: 120, rrIntervals: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]),
+        RideSample(time: 3.6, heartRate: 120, rrIntervals: [0.4]),
+        RideSample(time: 3.2, power: 100, rrIntervals: [0.3]), // out of order: time decides
+        RideSample(time: 4, rrIntervals: [0.9]), // RR but no record for this second
+        RideSample(time: 5.5, power: 100, heartRate: 120, rrIntervals: [0.8]), // paused
+        RideSample(time: 6, power: 100, heartRate: 120, rrIntervals: [70, .nan, 0]), // capped, unusable values dropped
+        RideSample(time: 7, power: 100, heartRate: 120)]
+    session.events = [SessionEvent(time: 5, message: "Training paused; trainer release requested"), SessionEvent(time: 6, message: "Training resumed")]
+    session.endedAtOffset = 8
+    let file = try decodeFIT(try FITEncoder.fileData(session)), none: UInt64 = 0xFFFF
+    let expected: [[UInt64]] = [
+        [500, none, none, none, none], [100, 200, 300, 400, 500], [600, 700, none, none, none], [300, 400, none, none, none], [65534, none, none, none, none]]
+    let written: [[UInt64]] = file.all(78).map { $0.arrays[0] ?? [] }
+    #expect(written == expected)
+    for (index, message) in file.messages.enumerated() where message.global == 78 {
+        #expect(file.messages[index - 1].global == 20 || file.messages[index - 1].global == 78)
+    }
+    #expect(file.all(20).count == 5) // seconds 1, 2, 3, 6 and 7
 }

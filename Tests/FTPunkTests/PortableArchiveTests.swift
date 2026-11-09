@@ -34,6 +34,16 @@ private func archiveFixture() throws -> Data {
     #expect(throws: (any Error).self) { try duplicate.validate() }
     var invalid = archive; invalid.activities[0].session.samples[0].time = .infinity
     #expect(throws: (any Error).self) { try invalid.validate() }
+    var invalidBalance = archive; invalidBalance.activities[0].session.samples[0].leftBalance = 100.5
+    #expect(throws: (any Error).self) { try invalidBalance.validate() }
+    invalidBalance.activities[0].session.samples[0].leftBalance = -1
+    #expect(throws: (any Error).self) { try invalidBalance.validate() }
+    invalidBalance.activities[0].session.samples[0].leftBalance = 47.5
+    try invalidBalance.validate()
+    var invalidRR = archive; invalidRR.activities[0].session.samples[0].rrIntervals = [-1]
+    #expect(throws: (any Error).self) { try invalidRR.validate() }
+    var withRR = archive; withRR.activities[0].session.samples[0].rrIntervals = [0.5, 0.75]
+    #expect(try PortableArchive.decode(withRR.encoded()).activities[0].session.samples[0].rrIntervals == [0.5, 0.75])
     var object = try #require(JSONSerialization.jsonObject(with: archiveFixture()) as? [String: Any])
     object["version"] = 4
     #expect(throws: (any Error).self) { try PortableArchive.decode(JSONSerialization.data(withJSONObject: object)) }

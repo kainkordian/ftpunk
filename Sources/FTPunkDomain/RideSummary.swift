@@ -24,7 +24,7 @@ public struct RideSummary: Equatable, Sendable {
         return RideSummary(
             duration: session.endedAtOffset ?? samples.last?.time ?? 0,
             averagePower: power.average(),
-            normalizedPower: normalizedPower(samples),
+            normalizedPower: TrainingLoad.make(session, track: track).normalizedPower,
             maximumPower: samples.compactMap(\.power).filter(\.isFinite).max(),
             averageHeartRate: Series(samples) { $0.heartRate.map(Double.init) }.average(includeZero: false),
             maximumHeartRate: samples.compactMap(\.heartRate).max(),
@@ -36,9 +36,11 @@ public struct RideSummary: Equatable, Sendable {
     }
 
     /// Normalized power: a 30-second rolling mean of one-second power, raised to the fourth power, averaged, and rooted.
-    /// Needs at least 30 seconds of riding; gaps longer than two seconds (pauses) are skipped, not counted as zeros.
-    public static func normalizedPower(_ samples: [RideSample]) -> Double? {
-        let perSecond = oneHertzPower(samples)
+    /// Needs at least 30 seconds of riding; gaps longer than two seconds (pauses) are skipped, not counted as zeros. Samples inside
+    /// `pauses` keep arriving but don't count. The root is two square roots because `pow` can differ between platforms and the FIT
+    /// files written here and by the web app must match byte for byte.
+    public static func normalizedPower(_ samples: [RideSample], pauses: [RidePause] = []) -> Double? {
+        let perSecond = oneHertzPower(samples, pauses: pauses)
         guard perSecond.count >= 30 else { return nil }
         var window = perSecond[0..<30].reduce(0, +)
         var fourth = 0.0, count = 0
@@ -47,11 +49,13 @@ public struct RideSummary: Equatable, Sendable {
             let mean = window / 30
             fourth += mean * mean * mean * mean; count += 1
         }
-        return count > 0 ? pow(fourth / Double(count), 0.25) : nil
+        guard count > 0 else { return nil }
+        let root = (fourth / Double(count)).squareRoot().squareRoot()
+        return root.isFinite ? root : nil
     }
 
     /// One value per second of riding: the mean of that second's samples, held across gaps of up to two seconds.
-    static func oneHertzPower(_ samples: [RideSample]) -> [Double] {
+    static func oneHertzPower(_ samples: [RideSample], pauses: [RidePause] = []) -> [Double] {
         var result: [Double] = [], held: Double?, heldAt = -Double.infinity
         var bucket: [Double] = [], bucketSecond: Int?
         func flush() {
@@ -64,13 +68,14 @@ public struct RideSummary: Equatable, Sendable {
         }
         var lastSecond: Int?
         for sample in samples {
-            guard let watts = sample.power, watts.isFinite, sample.time.isFinite, sample.time >= 0 else { continue }
+            guard let watts = sample.power, watts.isFinite, sample.time.isFinite, sample.time >= 0,
+                  !pauses.contains(where: { $0.contains(sample.time) }) else { continue }
             let second = Int(sample.time.rounded(.down))
             if second != bucketSecond {
                 flush()
                 if let last = lastSecond, let held, second > last + 1 {
                     // Fill short gaps with the last value; a longer gap (a pause) leaves no entries.
-                    let missing = second - last - 1
+                    let missing = ((last + 1)..<second).filter { gap in !pauses.contains { $0.contains(Double(gap)) } }.count
                     if Double(second) - heldAt <= 2 { result.append(contentsOf: Array(repeating: held, count: missing)) }
                 }
                 bucketSecond = second; lastSecond = second
@@ -96,6 +101,25 @@ public struct RideSummary: Equatable, Sendable {
             }
             return seconds > 0 ? total / seconds : nil
         }
+    }
+}
+
+/// Normalized power, intensity factor and training stress score of a session. Paused samples don't count. NP needs 30 seconds of riding;
+/// IF and TSS also need a known FTP (nil, never 0, without one).
+public struct TrainingLoad: Equatable, Sendable {
+    public var normalizedPower: Double?
+    public var intensityFactor: Double? = nil
+    public var trainingStressScore: Double? = nil
+
+    public static func make(_ session: TestSession, track: RideTrack? = nil) -> TrainingLoad {
+        let end = session.endedAtOffset ?? session.samples.last?.time ?? 0
+        let normalized = RideSummary.normalizedPower(session.samples.filter { $0.time <= end }, pauses: RidePause.list(session))
+        guard let power = normalized, let ftp = session.configuration.priorFTP?.watts, ftp.isFinite, ftp > 0 else {
+            return TrainingLoad(normalizedPower: normalized)
+        }
+        let seconds = Double((track ?? RideTrack.make(session)).points.count), intensity = power / ftp
+        return TrainingLoad(normalizedPower: power, intensityFactor: intensity,
+                            trainingStressScore: seconds * power * intensity / (ftp * 3600) * 100)
     }
 }
 

@@ -18,7 +18,9 @@
 .hr-chart { margin-top: var(--space-s); } .hr-chart .hr-line { fill: none; stroke: var(--heart, #e0457b); stroke-width: 2; stroke-linejoin: round; }
 .chart-legend { display: flex; gap: var(--space-m); list-style: none; padding: 0; margin: 0; font-size: .8rem; color: var(--secondary); }
 .chart-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2.25px solid var(--accent); vertical-align: middle; }
-.chart-legend .swatch.target { border-top: 2px dashed var(--ink); } .chart-legend .swatch.hr { border-top-color: var(--heart, #e0457b); }
+.chart-legend .swatch.target { width: 21px; height: 2px; border-top: 0; background: repeating-linear-gradient(90deg, var(--ink) 0 5px, transparent 5px 8px); }
+@media (forced-colors: active) { .chart-legend .swatch.target { background: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 8px); } }
+ .chart-legend .swatch.hr { border-top-color: var(--heart, #e0457b); }
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-m); } .summary-grid .big { font-size: 1.25rem; }
 :root { --balance-left: #2a78d6; --balance-right: #eb6834; }
 @media (prefers-color-scheme: dark) { :root:not([data-appearance="light"]) { --balance-left: #256abf; --balance-right: #d95926; } }

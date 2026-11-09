@@ -35,6 +35,7 @@ public struct MockRideStream: Sendable {
         return RideSample(time: time, power: scenario == .powerDropout ? nil : power,
                           cadence: scenario == .cadenceDropout ? nil : cadence,
                           heartRate: hr, trainerPower: powerSource == .trainer ? (scenario == .powerDropout ? nil : power) : max(0, Double(target) * 0.98),
-                          leftBalance: scenario == .powerDropout ? nil : 49 + 1.5 * sin(time / 29))
+                          leftBalance: scenario == .powerDropout ? nil : 49 + 1.5 * sin(time / 29),
+                          rrIntervals: hr > 0 ? [60.0 / Double(hr)] : nil)
     }
 }

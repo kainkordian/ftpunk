@@ -11,6 +11,7 @@ here with the date and versions used.
 | After step 2 | Ramp test with Assioma + matching **on**, and one with matching **off**. Compare `power_watts` and `trainer_watts` in the CSV export, especially the last minute. | archive/2026-11-04-roadmap/2 |
 | After step 3 | Upload one ramp-test FIT and one workout FIT to COROS Training Hub (Activity List → Import Data). Check power, cadence, HR, laps, sport "Indoor Bike". Check the Training Hub link. Upload the same FIT to Intervals.icu. | archive/2026-11-04-roadmap/3 |
 | After step 1 | Two riders with different Intervals.icu accounts: each ride is offered for upload to its own rider's account only. The consent screen lists the settings read permission. | next/1 |
+| Any time | Approve one finished ride for upload to Intervals.icu: it arrives as a FIT with distance, speed, calories, work, balance, normalized power, TSS and IF; a ride with an HR strap shows RR/HRV data. | archive/fit-upload-and-load-fields.md |
 | Any time | Low-load trainer command/release on the Suito-T, Bluetooth loss, app quit during a ride. | reference/architecture.md |
 | Checkpoint B | Run the XCUITests once. VoiceOver, Increase Contrast and Mac keyboard pass on the cockpit. | ROADMAP |
 

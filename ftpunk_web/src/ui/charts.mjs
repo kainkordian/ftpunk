@@ -63,7 +63,8 @@ export function trendChart(series, metric, { includeDebug = false } = {}) {
 /** Recorded heart rate, drawn like the power chart (minutes along the bottom); nothing when no heart rate was recorded. */
 export function heartRateChart(session) {
   const samples = session.samples.filter(s => Number.isFinite(s.heartRate) && s.heartRate > 0); if (samples.length < 2) return '';
-  const W = 600, H = 150, left = 44, right = 10, top = 8, bottom = 30, plotW = W - left - right, plotH = H - top - bottom;
+  // The top margin is the title's own row, clear of the highest tick at the larger phone-width axis text.
+  const W = 600, H = 172, left = 44, right = 10, top = 30, bottom = 30, plotW = W - left - right, plotH = H - top - bottom;
   const end = Math.max(60, session.endedAtOffset ?? session.samples.at(-1)?.time ?? 0), minutes = end / 60;
   const low = Math.floor((Math.min(...samples.map(s => s.heartRate)) - 5) / 10) * 10, high = Math.ceil((Math.max(...samples.map(s => s.heartRate)) + 5) / 10) * 10, span = Math.max(20, high - low);
   const x = seconds => left + (seconds / end) * plotW, y = bpm => top + plotH - ((bpm - low) / span) * plotH;
@@ -71,7 +72,7 @@ export function heartRateChart(session) {
   for (let b = low; b <= low + span; b += step) svg += `<line class="grid" x1="${left}" x2="${W - right}" y1="${num(y(b))}" y2="${num(y(b))}"/><text class="axis" x="${left - 6}" y="${num(y(b) + 4)}" text-anchor="end">${b}</text>`;
   const every = minutes > 60 ? 15 : minutes > 25 ? 5 : minutes > 10 ? 2 : 1;
   for (let m = 0; m <= minutes; m += every) svg += `<text class="axis" x="${num(x(m * 60))}" y="${H - 12}" text-anchor="middle">${m}</text>`;
-  svg += `<text class="axis-title" x="${num(left + plotW / 2)}" y="${H - 1}" text-anchor="middle">Minutes</text><text class="axis-title" x="10" y="${top + 6}">bpm</text>`;
+  svg += `<text class="axis-title" x="${num(left + plotW / 2)}" y="${H - 1}" text-anchor="middle">Minutes</text><text class="axis-title" x="10" y="15">bpm</text>`;
   const lines = []; let current = [], previous = null;
   for (const s of samples) { if (previous && s.time - previous.time > 5) { lines.push(current); current = []; } current.push(`${num(x(s.time))},${num(y(s.heartRate))}`); previous = s; }
   if (current.length) lines.push(current);

@@ -60,16 +60,27 @@ public struct CadenceTracker: Sendable {
 }
 
 public enum HeartRateMeasurement {
-    public static func decode(_ data: Data) throws -> Int {
+    public struct Reading: Equatable, Sendable {
+        public let heartRate: Int
+        /// Beat-to-beat intervals in seconds. Nil when the packet carried none.
+        public let rrIntervals: [Double]?
+    }
+
+    public static func decode(_ data: Data) throws -> Int { try reading(data).heartRate }
+
+    public static func reading(_ data: Data) throws -> Reading {
         var cursor = ByteCursor(data)
         let flags = try cursor.u8()
         guard flags & 0xe0 == 0 else { throw PacketError.unsupportedFlags }
         let value = flags & 1 == 0 ? Int(try cursor.u8()) : Int(try cursor.u16())
         if flags & 8 != 0 { try cursor.skip(2) }
+        var intervals: [Double]?
         if flags & 16 != 0 {
             guard cursor.remaining >= 2, cursor.remaining.isMultiple(of: 2) else { throw PacketError.truncated }
-            try cursor.skip(cursor.remaining)
+            var values: [Double] = []
+            while cursor.remaining > 0 { values.append(Double(try cursor.u16()) / 1024) }
+            intervals = values
         }
-        try cursor.finish(); return value
+        try cursor.finish(); return Reading(heartRate: value, rrIntervals: intervals)
     }
 }

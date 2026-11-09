@@ -13,6 +13,11 @@
 body[data-route="ride"] .tabbar { display: none; }
 @media (max-width: 420px) { .tiles.two.hero-tiles { gap: var(--space-s); } .support-tiles { grid-template-columns: repeat(3, 1fr); } .tile { padding: var(--space-s); } }
 
+/* "50 / 50" is about 3.5em wide: this tile scales its reading to its own width so the reading and its unit share one line. */
+.tile:has(#live-balance) { container-type: inline-size; }
+.tile > span:has(#live-balance) { white-space: nowrap; }
+#live-balance { font-size: min(calc(var(--metric) * var(--num-scale)), calc((100cqw - 1.875rem) / 3.6)); }
+
 /* Layout: one column; the Large scene on a wide window goes beside the readings (CockpitLayout, arranged by ride.mjs). */
 .cockpit[data-visual="hero"] { max-width: 1400px; }
 .cockpit-cols { display: block; }

@@ -14,7 +14,7 @@ import FTPunkStorage
         guard !session.isDemo else { return }
         guard try !repository.uploadJobs().contains(where: { $0.sessionID == session.id && $0.accountID == connection.athleteID }) else { return }
         var job = ActivityUploadJob(
-            sessionID: session.id, accountID: connection.athleteID, file: try ActivityExport.tcx(session),
+            sessionID: session.id, accountID: connection.athleteID, file: try FITEncoder.fileData(session),
             name: "FTPunk · \(session.riderName) · \(session.outcome?.title ?? "Activity")", description: ActivityExport.description(session)
         )
         job.automaticallyQueued = automatic

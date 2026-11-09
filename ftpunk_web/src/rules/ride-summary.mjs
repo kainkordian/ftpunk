@@ -1,6 +1,6 @@
 import { rampPower, PRESETS } from '../domain.mjs';
 import { trainingTarget } from '../training.mjs';
-import { rideTrack, rideBalance } from './virtual-ride.mjs';
+import { rideTrack, rideBalance, ridePauses } from './virtual-ride.mjs';
 // Ride figures, the target line and automatic pausing. Mirrors Sources/FTPunkDomain/RideSummary.swift.
 
 function weighted(points, includeZero = true) {
@@ -14,15 +14,15 @@ function weighted(points, includeZero = true) {
 const series = (samples, pick) => samples.flatMap(s => { const v = pick(s); return Number.isFinite(v) ? [{ time: s.time, value: v }] : []; });
 
 /** One value per second of riding: the mean of that second's samples, held across gaps of up to two seconds; longer gaps (pauses) leave no entries. */
-export function oneHertzPower(samples) {
-  const result = []; let held = null, heldAt = -Infinity, bucket = [], bucketSecond = null, lastSecond = null;
+export function oneHertzPower(samples, pauses = []) {
+  const result = [], paused = t => pauses.some(p => t >= p.stop && t < (p.resume ?? Infinity)); let held = null, heldAt = -Infinity, bucket = [], bucketSecond = null, lastSecond = null;
   const flush = () => { if (bucketSecond != null && bucket.length) { held = bucket.reduce((a, b) => a + b, 0) / bucket.length; heldAt = bucketSecond; result.push(held); } bucket = []; bucketSecond = null; };
   for (const s of samples) {
-    if (!Number.isFinite(s.power) || !Number.isFinite(s.time) || s.time < 0) continue;
+    if (!Number.isFinite(s.power) || !Number.isFinite(s.time) || s.time < 0 || paused(s.time)) continue;
     const second = Math.floor(s.time);
     if (second !== bucketSecond) {
       flush();
-      if (lastSecond != null && held != null && second > lastSecond + 1 && second - heldAt <= 2) for (let i = 0; i < second - lastSecond - 1; i++) result.push(held);
+      if (lastSecond != null && held != null && second > lastSecond + 1 && second - heldAt <= 2) for (let gap = lastSecond + 1; gap < second; gap++) if (!paused(gap)) result.push(held);
       bucketSecond = second; lastSecond = second;
     }
     bucket.push(s.power);
@@ -30,18 +30,29 @@ export function oneHertzPower(samples) {
   flush();
   return result;
 }
-/** A 30-second rolling mean of one-second power, to the fourth power, averaged, and rooted. Needs 30 seconds of riding. */
-export function normalizedPower(samples) {
-  const p = oneHertzPower(samples); if (p.length < 30) return null;
+/** A 30-second rolling mean of one-second power, to the fourth power, averaged, and rooted. Needs 30 seconds of riding. Samples inside `pauses` don't count.
+    Plain multiplication and two square roots, because `**` can differ between platforms and the FIT files must match the native app's byte for byte. */
+export function normalizedPower(samples, pauses = []) {
+  const p = oneHertzPower(samples, pauses); if (p.length < 30) return null;
   let window = p.slice(0, 30).reduce((a, b) => a + b, 0), fourth = 0, count = 0;
-  for (let end = 29; end < p.length; end++) { if (end > 29) window += p[end] - p[end - 30]; const mean = window / 30; fourth += mean ** 4; count++; }
-  return count ? (fourth / count) ** 0.25 : null;
+  for (let end = 29; end < p.length; end++) { if (end > 29) window += p[end] - p[end - 30]; const mean = window / 30; fourth += mean * mean * mean * mean; count++; }
+  if (!count) return null;
+  const root = Math.sqrt(Math.sqrt(fourth / count));
+  return Number.isFinite(root) ? root : null;
+}
+export const priorFTPWatts = session => { const p = session.configuration?.priorFTP; return typeof p === 'number' ? p : p?.watts ?? null; };
+/** Normalized power, intensity factor and training stress score. Paused samples don't count. NP needs 30 seconds of riding; IF and TSS also need a known FTP (null, never 0). */
+export function trainingLoad(session, { track = null, pauses = ridePauses(session), end = session.endedAtOffset ?? session.samples?.at(-1)?.time ?? 0 } = {}) {
+  const power = normalizedPower((session.samples ?? []).filter(s => s.time <= end), pauses), ftp = priorFTPWatts(session);
+  if (power == null || !Number.isFinite(ftp) || ftp <= 0) return { normalizedPower: power, intensityFactor: null, trainingStressScore: null };
+  const seconds = (track ?? rideTrack(session, { pauses, end })).seconds, intensity = power / ftp;
+  return { normalizedPower: power, intensityFactor: intensity, trainingStressScore: seconds * power * intensity / (ftp * 3600) * 100 };
 }
 export function rideSummary(session) {
   const samples = session.samples ?? [], powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), track = rideTrack(session), ridden = track.seconds > 0;
   return {
     duration: session.endedAtOffset ?? samples.at(-1)?.time ?? 0,
-    averagePower: weighted(series(samples, s => s.power)), normalizedPower: normalizedPower(samples), maximumPower: powers.length ? Math.max(...powers) : null,
+    averagePower: weighted(series(samples, s => s.power)), normalizedPower: trainingLoad(session, { track }).normalizedPower, maximumPower: powers.length ? Math.max(...powers) : null,
     averageHeartRate: weighted(series(samples, s => s.heartRate), false), maximumHeartRate: beats.length ? Math.max(...beats) : null,
     averageCadence: weighted(series(samples, s => s.cadence), false),
     kilojoules: ridden ? track.kilojoules : null, kilocalories: ridden ? track.kilocalories : null, distance: ridden ? track.distance : null, leftBalance: rideBalance(session, track)?.left ?? null,

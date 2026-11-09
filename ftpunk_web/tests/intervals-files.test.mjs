@@ -1,14 +1,14 @@
 import { test, assert, equal, rejects, throws, fixture } from './harness.mjs';
-import { fitFile, crc16, pauses } from '../src/fit.mjs';
+import { fitFile, crc16, pauses, hrvMessages } from '../src/fit.mjs';
 import { exportFile, fileName, FORMATS } from '../src/export.mjs';
-import { shouldAskToUpload } from '../src/rules/upload.mjs';
+import { shouldAskToUpload, uploadFileInfo } from '../src/rules/upload.mjs';
 import { decodeAthleteSettings, athleteChanges, applyChanges, syncNote, isEmpty, shouldRefreshAthlete } from '../src/rules/athlete-sync.mjs';
 import { IntervalsClient, sealKey, openKey, connectRider, disconnectRider, syncAthlete, syncAthleteIfNeeded, shouldPromptForUpload, setAskToUpload, setSyncEnabled, PREVIEW_AUTHORIZATION } from '../src/intervals.mjs';
 import { AppModel } from '../src/app-model.mjs';
 import { MemoryStore } from '../src/memory-store.mjs';
 import { LocalStore, DB_SCHEMA } from '../src/storage.mjs';
 import { BluetoothDevices } from '../src/bluetooth.mjs';
-import { archiveText } from '../src/archive.mjs';
+import { archiveText, makeArchive, validateArchive } from '../src/archive.mjs';
 import { rider, finishedRamp, ALEX_ID, SAM_ID } from '../src/preview-fixtures.mjs';
 import { scenarioNames } from '../src/ui/scenarios.mjs';
 // Plan 9b: FIT export (byte parity with the native encoder), export file names, the upload prompt rule, FTP and weight sync, one Intervals.icu connection per
@@ -77,7 +77,7 @@ test('FIT header, checksums, records and laps follow the format', async () => {
     else { counts[defs[local].global] = (counts[defs[local].global] ?? 0) + 1; at += defs[local].size; }
   }
   equal(at, file.length - 2); equal([counts[0], counts[18], counts[34], counts[19]], [1, 1, 1, 3]);
-  const seconds = new Set(session.samples.map(s => Math.floor(s.time))); equal(counts[20], seconds.size); assert(counts[20] < 421);
+  const seconds = new Set(session.samples.filter(s => s.power != null || s.cadence != null || s.heartRate != null).map(s => Math.floor(s.time))); equal(counts[20], seconds.size); assert(counts[20] < 421);
 });
 test('FIT pauses stop the timer, workouts get one lap per step, and unfinished or empty recordings are refused', async () => {
   const session = await fixture('fit-workout.session');
@@ -168,6 +168,93 @@ test('Home refresh syncs at most hourly and only for a connected rider with sync
   await connectRider(model, KEY); const after = model.calls.length; await syncAthleteIfNeeded(model); equal(model.calls.length, after); // just synced
   const settings = await model.store.riderSettings(model.profile.id); settings.sync.lastSynced = new Date(Date.now() - 2 * 3600000).toISOString(); await model.store.put('riderSettings', settings);
   await syncAthleteIfNeeded(model); equal(model.calls.length, after + 1); await syncAthleteIfNeeded(model); equal(model.calls.length, after + 1); // and not twice within the minute
+});
+
+// ----- FIT uploads, training load and RR intervals ------------------------------------------------------------------------------------------------------
+const TCX_TYPE = 'application/vnd.garmin.tcx+xml', FIT_TYPE = 'application/octet-stream';
+/** Every data message of a FIT file: `global`, field values by number (arrays for fields longer than four bytes; invalid values left out of plain fields). */
+function fitMessages(file) {
+  const view = new DataView(file.buffer, file.byteOffset, file.byteLength), defs = {}, messages = []; let at = 14;
+  while (at < file.length - 2) {
+    const header = file[at++], local = header & 15;
+    if (header & 0x40) { const n = file[at + 4]; defs[local] = { global: view.getUint16(at + 2, true), fields: Array.from({ length: n }, (_, i) => [file[at + 5 + i * 3], file[at + 6 + i * 3]]) }; at += 5 + n * 3; continue; }
+    const fields = {};
+    for (const [number, size] of defs[local].fields) {
+      if (size > 4) fields[number] = Array.from({ length: size / 2 }, (_, i) => view.getUint16(at + i * 2, true));
+      else { const raw = size === 1 ? view.getUint8(at) : size === 2 ? view.getUint16(at, true) : view.getUint32(at, true), invalid = 2 ** (8 * size) - 1; if (raw !== invalid) fields[number] = raw; }
+      at += size;
+    }
+    messages.push({ global: defs[local].global, fields });
+  }
+  return messages;
+}
+const baseRide = async () => { const s = structuredClone(await fixture('fit-workout.session')); s.training = null; s.events = []; s.rampStart = null; s.rampEnd = null; s.cooldownStart = null; return s; };
+const steadyRide = async (seconds, ftp = 200) => { const s = await baseRide(); s.configuration.priorFTP = ftp == null ? null : { ...s.configuration.priorFTP, watts: ftp }; s.samples = Array.from({ length: seconds }, (_, time) => ({ time, power: 200 })); s.endedAtOffset = seconds; return s; };
+
+test('Upload files are named from their content, so jobs queued as TCX still upload as TCX', async () => {
+  const fit = fitFile(await steadyRide(40), { utcOffsetSeconds: 0 });
+  equal(uploadFileInfo('a', fit), { name: 'a.fit', type: FIT_TYPE });
+  const inside = new Uint8Array(fit.length + 3); inside.set(fit, 3); equal(uploadFileInfo('a', inside.subarray(3)), { name: 'a.fit', type: FIT_TYPE });
+  for (const other of ['<x/>', '12345678.FIT string', new Uint8Array(4), new TextEncoder().encode('12345678.FI'), '']) equal(uploadFileInfo('a', other), { name: 'a.tcx', type: TCX_TYPE });
+});
+test('An approved ride uploads a .fit part; a job already queued as TCX goes out as .tcx; FIT bytes survive the database', async () => {
+  const store = await freshDatabase();
+  try {
+    const model = await makeModel({ store }), client = model.intervals; await connectRider(model, KEY);
+    const ride = finishedRamp(rider(), { daysAgo: 1 }).session; await model.store.put('sessions', ride);
+    model.calls.length = 0; await client.approve(ride, 'i1');
+    const post = model.calls.find(c => c.options.method === 'POST'), part = post.options.body.get('file');
+    equal([part.name, part.type], [`${ride.id}.fit`, FIT_TYPE]);
+    const sent = new Uint8Array(await part.arrayBuffer()); equal(String.fromCharCode(...sent.slice(8, 12)), '.FIT');
+    const url = new URL(post.url); equal(url.searchParams.get('external_id'), `ftpunk-web-${ride.id}`); equal(url.searchParams.get('device_name'), 'FTPunk Web');
+    const stored = (await store.all('jobs')).find(j => j.sessionID === ride.id); assert(ArrayBuffer.isView(stored.file)); assert(same(stored.file, sent)); equal(stored.status, 'uploaded');
+    // Retrying a job read back from the database sends the same bytes under the same name.
+    stored.status = 'queued'; await store.put('jobs', stored); model.calls.length = 0; await client.flush(true);
+    const again = model.calls.find(c => c.options.method === 'POST').options.body.get('file'); equal(again.name, `${ride.id}.fit`); assert(same(new Uint8Array(await again.arrayBuffer()), sent));
+    const old = finishedRamp(rider(), { daysAgo: 2 }).session; await model.store.put('sessions', old);
+    await store.put('jobs', { id: crypto.randomUUID(), sessionID: old.id, riderID: ALEX_ID, accountID: 'i1', accountName: 'x', file: '<TrainingCenterDatabase/>', name: 'n', description: 'd', status: 'queued', attempts: 0, retryAt: 0, error: null });
+    model.calls.length = 0; await client.flush(true);
+    const legacy = model.calls.find(c => c.options.method === 'POST').options.body.get('file'); equal([legacy.name, legacy.type], [`${old.id}.tcx`, TCX_TYPE]); equal(await legacy.text(), '<TrainingCenterDatabase/>');
+  } finally { store.db.close(); }
+});
+test('A ride the FIT encoder refuses leaves no queued job', async () => {
+  const model = await makeModel(), client = model.intervals; await connectRider(model, KEY);
+  const silent = finishedRamp(rider(), { daysAgo: 1 }).session; silent.samples = silent.samples.map(s => ({ time: s.time })); await model.store.put('sessions', silent);
+  model.calls.length = 0; await rejects(() => client.approve(silent, 'i1')); equal((await model.store.all('jobs')).length, 0); equal(model.calls.filter(c => c.options.method === 'POST').length, 0);
+});
+test('FIT session and laps carry normalized power, TSS and IF; invalid without FTP or under 30 s', async () => {
+  const of = async session => { const m = fitMessages(fitFile(session, { utcOffsetSeconds: 0 })); return { session: m.find(x => x.global === 18).fields, laps: m.filter(x => x.global === 19).map(x => x.fields) }; };
+  const full = await of(await steadyRide(3600)); equal([full.session[34], full.session[35], full.session[36], full.laps[0][33]], [200, 1000, 1000, 200]);
+  const noFTP = await of(await steadyRide(600, null)); equal([noFTP.session[34], noFTP.session[35], noFTP.session[36]], [200, undefined, undefined]);
+  const short = await of(await steadyRide(20)); equal([short.session[34], short.session[35], short.session[36], short.laps[0][33]], [undefined, undefined, undefined, undefined]);
+  const paused = await steadyRide(200); paused.rampStart = 20; paused.samples = paused.samples.map(s => s.time >= 100 && s.time < 140 ? { time: s.time, power: 900 } : s);
+  paused.events = [{ time: 100, message: 'Training paused; trainer release requested' }, { time: 140, message: 'Training resumed' }];
+  const laps = (await of(paused)).laps; equal([laps.length, laps[0][33], laps[1][33]], [2, undefined, 200]);
+});
+test('hrv messages are padded and split, follow their record, and skip pauses and seconds without a record', async () => {
+  const none = 0xFFFF; equal(hrvMessages([]), []); equal(hrvMessages([1]), [[1, none, none, none, none]]); equal(hrvMessages([1, 2, 3, 4, 5]), [[1, 2, 3, 4, 5]]); equal(hrvMessages([1, 2, 3, 4, 5, 6]), [[1, 2, 3, 4, 5], [6, none, none, none, none]]);
+  const ride = await baseRide();
+  ride.samples = [{ time: 1, power: 100, heartRate: 120, rrIntervals: [0.5] }, { time: 2, power: 100, heartRate: 120, rrIntervals: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7] }, { time: 3.6, heartRate: 120, rrIntervals: [0.4] }, { time: 3.2, power: 100, rrIntervals: [0.3] },
+    { time: 4, rrIntervals: [0.9] }, { time: 5.5, power: 100, heartRate: 120, rrIntervals: [0.8] }, { time: 6, power: 100, heartRate: 120, rrIntervals: [70, NaN, 0] }, { time: 7, power: 100, heartRate: 120 }];
+  ride.events = [{ time: 5, message: 'Training paused; trainer release requested' }, { time: 6, message: 'Training resumed' }]; ride.endedAtOffset = 8;
+  const messages = fitMessages(fitFile(ride, { utcOffsetSeconds: 0 }));
+  equal(messages.filter(m => m.global === 78).map(m => m.fields[0]), [[500, none, none, none, none], [100, 200, 300, 400, 500], [600, 700, none, none, none], [300, 400, none, none, none], [65534, none, none, none, none]]);
+  messages.forEach((m, i) => { if (m.global === 78) assert([20, 78].includes(messages[i - 1].global)); }); equal(messages.filter(m => m.global === 20).length, 5); // seconds 1, 2, 3, 6 and 7
+  const fixtureMessages = fitMessages(fitFile(await fixture('fit-ftp-test.session'), { utcOffsetSeconds: 0 })); assert(fixtureMessages.some(m => m.global === 78));
+});
+test('Pedal balance stays in archives; out-of-range values are refused', async () => {
+  const session = structuredClone(await fixture('fit-ftp-test.session')); assert(session.samples.some(s => Number.isFinite(s.leftBalance)));
+  const archive = JSON.parse(archiveText(makeArchive([rider({ id: session.configuration.riderID })], [session])));
+  equal(validateArchive(structuredClone(archive)).activities[0].session.samples.map(s => s.leftBalance ?? null), session.samples.map(s => s.leftBalance ?? null));
+  for (const value of [-0.5, 100.5, '50']) { const bad = structuredClone(archive); bad.activities[0].session.samples[0].leftBalance = value; throws(() => validateArchive(bad)); }
+  for (const value of [0, 100, null]) { const edge = structuredClone(archive); edge.activities[0].session.samples[0].leftBalance = value; validateArchive(edge); }
+});
+
+test('RR intervals stay in archives; bad values are refused', async () => {
+  const session = structuredClone(await fixture('fit-ftp-test.session')); assert(session.samples.some(s => s.rrIntervals?.length));
+  const archive = JSON.parse(archiveText(makeArchive([rider({ id: session.configuration.riderID })], [session])));
+  const rr = validateArchive(structuredClone(archive)).activities[0].session.samples.find(s => s.rrIntervals)?.rrIntervals; assert(rr?.length);
+  const bad = structuredClone(archive); bad.activities[0].session.samples[0].rrIntervals = [-1]; throws(() => validateArchive(bad));
 });
 
 // ----- one connection per rider -------------------------------------------------------------------------------------------------------------------------
