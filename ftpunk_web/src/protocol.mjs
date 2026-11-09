@@ -82,8 +82,10 @@ export function command(opcode, watts) {
 export function controlResponse(data) { const c = new Cursor(data); if (c.u8() !== 0x80) throw Error('Unexpected control response.'); const opcode = c.u8(), result = c.u8(); c.finish(); if (result < 1 || result > 5) throw Error('Invalid control result.'); return { opcode, result }; }
 export class Measurements {
   constructor() { this.values = {}; }
-  receive(r) { if (!Number.isFinite(r.time)) return; for (const key of ['power', 'cadence', 'heartRate']) if (Number.isFinite(r[key])) { this.values[r.role] ??= {}; this.values[r.role][key] = { value: r[key], time: r.time }; } }
+  receive(r) { if (!Number.isFinite(r.time)) return; for (const key of ['power', 'cadence', 'heartRate', 'leftBalance']) if (Number.isFinite(r[key])) { this.values[r.role] ??= {}; this.values[r.role][key] = { value: r[key], time: r.time }; } }
   reset(role) { delete this.values[role]; }
+  /** A power meter's balance wins over a trainer's while the meter is reporting one. */
+  takesBalance(role, time) { return role !== 'trainer' || this.fresh('externalPowerMeter', 'leftBalance', time) == null; }
   fresh(role, key, time, age = 2) { const v = this.values[role]?.[key]; return v && time >= v.time && time - v.time <= age ? v.value : null; }
   cadenceSource(source, time) { if (source === 'externalPowerMeter' && this.fresh(source, 'cadence', time) != null) return source; return this.fresh('trainer', 'cadence', time) != null ? 'trainer' : 'unavailable'; }
 }
@@ -94,6 +96,7 @@ export function route(reading, config, origin) {
   if (reading.role === config.cadenceSource) s.cadence = reading.cadence;
   if (reading.role === 'heartRate') s.heartRate = reading.heartRate;
   if (reading.role === 'trainer') s.trainerPower = reading.power;
+  if (Number.isFinite(reading.leftBalance)) s.leftBalance = reading.leftBalance;
   return s;
 }
 

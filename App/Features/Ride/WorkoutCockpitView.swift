@@ -28,6 +28,7 @@ struct WorkoutCockpitView: View {
                            containerWidth: width, regularWidthClass: sizeClass != .compact, kind: isWorkout ? .workout : .freeRide)
     }
     private var busy: Bool { model.trainingTransition != nil }
+    @AppStorage("dashboardShowsMoreReadings") private var showsMoreReadings = false
 
     var body: some View {
         ScrollView {
@@ -203,6 +204,12 @@ struct WorkoutCockpitView: View {
     }
 
     private var supportTiles: some View {
+        VStack(spacing: Space.xs) {
+            RideDashboardBar(session: engine.session, showsMore: $showsMoreReadings)
+            if showsMoreReadings { RideExtraTiles(session: engine.session, rows: stacked) } else { mainTiles }
+        }
+    }
+    private var mainTiles: some View {
         row {
             MetricTile(title: "HEART RATE", value: model.freshHeartRate.map(String.init), unit: "bpm", symbol: "heart.fill", tone: .heart)
             MetricTile(title: "CADENCE", value: liveCadence.map { String(Int($0)) }, unit: "rpm", symbol: "figure.indoor.cycle")

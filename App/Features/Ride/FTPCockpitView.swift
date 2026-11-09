@@ -25,6 +25,7 @@ struct FTPCockpitView: View {
     private var trainerCorner: CornerReading? { showsTrainer ? CornerReading(title: "TRAINER", value: trainerPower.map(String.init)) : nil }
     private var liveCadence: Double? { engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? $0.rpm : nil } }
     private var cadenceAvailable: Bool { config.resolvedCadenceSource != .unavailable }
+    @AppStorage("dashboardShowsMoreReadings") private var showsMoreReadings = false
 
     var body: some View {
         ScrollView {
@@ -226,7 +227,16 @@ struct FTPCockpitView: View {
         }
     }
 
-    @ViewBuilder private var supportTiles: some View {
+    /// The low-cadence warning matters more than the additional readings, so it brings the main ones back while it lasts.
+    private var supportTiles: some View {
+        let low = CadenceGuard.state(cadence: liveCadence, phase: engine.phase, cadenceAvailable: cadenceAvailable) == .low
+        return VStack(spacing: Space.xs) {
+            RideDashboardBar(session: engine.session, showsMore: $showsMoreReadings)
+            if showsMoreReadings && !low { RideExtraTiles(session: engine.session, rows: layout.metricRows) } else { mainTiles }
+        }
+    }
+
+    @ViewBuilder private var mainTiles: some View {
         let guardState = CadenceGuard.state(cadence: liveCadence, phase: engine.phase, cadenceAvailable: cadenceAvailable)
         let warmingUp = engine.phase == .warmup || engine.phase == .waiting
         let best = (engine.session.result?.bestMinutePower ?? engine.liveBestMinutePower).map { String(Int($0.rounded())) }

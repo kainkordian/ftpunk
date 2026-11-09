@@ -19,10 +19,11 @@ Fixed principles:
 - The trainer is only ever controlled by the ride engine. Visuals, imports and integrations
   never send trainer commands.
 
-## Where it stands (2026-11-06)
+## Where it stands (2026-11-09)
 
-Built and covered by tests (314 Swift tests, iOS + Mac builds pass):
+Built and covered by tests (338 Swift tests, iOS + Mac builds pass):
 
+- Simulated gravel-bike speed and distance from power (FIT records, laps, session), work in kJ, estimated kcal, left/right balance from a meter or trainer with an end-of-ride graph, and a main/additional readings switch in the cockpit. Not yet seen in a running app or on a real meter.
 - FTP test (three ramp presets, warm-up/cool-down, scoring, adopt result), workouts (classic
   library with flat warm-ups, Intervals.icu calendar, JSON and ZWO import, ZWO export, % FTP / W preview), free ERG,
   resistance, pause/resume.
@@ -136,6 +137,7 @@ capture, with the owner's permission), then the owner's checks in Chrome with a 
 
 Each item needs a decision from the owner before a plan is written.
 
+- Record heart-strap RR intervals for HRV; write normalized power, TSS and IF to the FIT session.
 - Web: Intervals.icu OAuth in the browser (needs a client secret, so a server; conflicts with local only). An own
   domain for the web app, so its storage isn't shared with the owner's other `github.io` sites.
 - Web: Chaindance hashes scenery with 64-bit BigInt per pixel; measure on a slow device and switch to 32-bit arithmetic if needed (the fingerprint

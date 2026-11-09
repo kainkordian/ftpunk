@@ -52,7 +52,7 @@ export class BluetoothDevices {
   async connect(role) {
     if (!this.available) throw Error('Open FTPunk in Chrome using localhost or HTTPS to connect Bluetooth devices.');
     // Must be invoked directly by the pairing button's user gesture.
-    const device = await this.bluetooth.requestDevice({ filters: [{ services: [SERVICES[role]] }] });
+    const device = await this.bluetooth.requestDevice({ filters: [{ services: [SERVICES[role]] }], ...(role === 'trainer' ? { optionalServices: [SERVICES.externalPowerMeter] } : {}) });
     if (Object.entries(this.devices).some(([r, d]) => r !== role && d.device.id === device.id)) throw Error('Use a separate external meter, or select Trainer as the power source.');
     this.disconnect(role);
     const entry = { device, name: device.name || DEVICE_LABELS[role], ready: false, listeners: [] };
@@ -65,8 +65,8 @@ export class BluetoothDevices {
     device.addEventListener('gattserverdisconnected', disconnected); entry.disconnected = disconnected; this.onChange();
     try {
       const server = await device.gatt.connect(), service = await server.getPrimaryService(SERVICES[role]);
-      const notify = async (id, decode) => {
-        const characteristic = await service.getCharacteristic(id);
+      const notify = async (id, decode, from = service) => {
+        const characteristic = await from.getCharacteristic(id);
         const listener = event => {
           if (this.devices[role] !== entry) return;
           const time = this.now(), data = event.target.value;
@@ -92,10 +92,14 @@ export class BluetoothDevices {
         const assembler = new BikeAssembler();
         await notify(0x2ad2, (data, time) => assembler.receive(indoorBike(data, this.legacyResistance), time));
         await notify(0x2ada, data => { if (data.byteLength && data.getUint8(0) === 0xff) { this.control?.close(); this.fail('trainer', Error('Another application took trainer control.')); } return null; });
+        // A trainer may also expose the Cycling Power service. It is only read for pedal balance; a power meter's balance wins, and it is fine when it is missing.
+        try {
+          await notify(0x2a63, (data, time) => { const left = cyclingPower(data).leftBalance; return Number.isFinite(left) && this.measurements.takesBalance('trainer', time) ? { leftBalance: left } : null; }, await server.getPrimaryService(SERVICES.externalPowerMeter));
+        } catch { /* no balance from this trainer */ }
         await this.control.send(0); this.trainerReady = true;
       } else if (role === 'externalPowerMeter') {
         const tracker = new CadenceTracker();
-        await notify(0x2a63, (data, time) => { const r = cyclingPower(data); return { power: r.power, cadence: r.crank ? tracker.receive(r.crank, time) : null }; });
+        await notify(0x2a63, (data, time) => { const r = cyclingPower(data); return { power: r.power, cadence: r.crank ? tracker.receive(r.crank, time) : null, leftBalance: r.leftBalance }; });
       } else await notify(0x2a37, data => ({ heartRate: heartRate(data) }));
       if (!device.gatt.connected || this.devices[role] !== entry) throw Error('The device disconnected while pairing.');
       entry.ready = true; this.onChange();

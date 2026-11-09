@@ -175,5 +175,5 @@ export class RampEngine {
 }
 export function mockSample(time, target, phase, scenario = 'exhaustion') {
   const exhausted = scenario === 'exhaustion' && phase === 'ramp' && target > 300;
-  return { time, power: scenario === 'powerDropout' && time > 75 ? null : Math.max(0, target * (exhausted ? 0.4 : 1) + 2 * Math.sin(time / 3)), cadence: scenario === 'cadenceDropout' && time > 75 ? null : exhausted ? 28 : 88 + 3 * Math.sin(time / 7), heartRate: Math.round(Math.min(190, 100 + target * 0.2)), trainerPower: target };
+  return { time, power: scenario === 'powerDropout' && time > 75 ? null : Math.max(0, target * (exhausted ? 0.4 : 1) + 2 * Math.sin(time / 3)), cadence: scenario === 'cadenceDropout' && time > 75 ? null : exhausted ? 28 : 88 + 3 * Math.sin(time / 7), heartRate: Math.round(Math.min(190, 100 + target * 0.2)), trainerPower: target, leftBalance: scenario === 'powerDropout' ? null : 49 + 1.5 * Math.sin(time / 29) };
 }

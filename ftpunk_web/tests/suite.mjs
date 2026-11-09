@@ -596,3 +596,37 @@ test('Optional heart-rate loss during preparation does not cancel the ride', asy
   prepared(); await starting; assert(controller.active); clearInterval(controller.timer);
   controller.stop(); await drain(); assert(!controller.busy);
 });
+
+import { rideTrack as vTrack, rideBalance as vBalance, balanceSeries as vSeries, balanceAxisReach as vReach, liveBalance as vLive, speedAt as vSpeedAt, trackSpan as vSpan, dragArea as vDrag } from '../src/rules/virtual-ride.mjs';
+import { balanceChart as vChart } from '../src/ui/charts.mjs';
+import { Measurements as vMeasurements, route as vRoute } from '../src/protocol.mjs';
+const vSamples = (from, to, watts, left) => Array.from({ length: to - from + 1 }, (_, i) => ({ time: from + i, power: watts, ...(left == null ? {} : { leftBalance: left }) }));
+const vSession = (samples, events = []) => ({ samples, events, endedAtOffset: samples.at(-1).time, configuration: { weightKG: 75 } });
+test('simulated speed: 200 W on a gravel bike is about 30 km/h and work is power over time', () => {
+  const t = vTrack(vSession(vSamples(0, 599, 200))), kmh = t.points.at(-1).speed * 3.6;
+  assert(kmh > 29 && kmh < 32); near(vDrag(75), 0.42, 1e-12); equal(t.kilojoules, 120); near(t.kilocalories, 119.5, 0.1); assert(t.distance > 4500 && t.distance < 5300);
+});
+test('simulated speed: paused time adds nothing and the bike restarts from a standstill', () => {
+  const t = vTrack(vSession(vSamples(0, 199, 200), [{ time: 100, message: 'Training paused; trainer release requested' }, { time: 160, message: 'Training resumed' }]));
+  assert(!t.points.some(p => p.second >= 100 && p.second < 160)); equal(t.kilojoules, 28); assert(t.points.find(p => p.second === 160).speed < 3); equal(vSpeedAt(t, 210), 0);
+});
+test('simulated speed: a short dropout holds the power, a long one coasts, lap spans add up', () => {
+  equal(vTrack(vSession([...vSamples(0, 9, 100), ...vSamples(12, 20, 100)])).kilojoules, 2.1);
+  equal(vTrack(vSession([...vSamples(0, 9, 100), ...vSamples(20, 25, 100)])).points.find(p => p.second === 15).power, 0);
+  const t = vTrack(vSession(vSamples(0, 299, 180))), a = vSpan(t, 0, 100), b = vSpan(t, 100, Infinity); equal(a.seconds + b.seconds, 300); near(a.distance + b.distance, t.distance, 1e-9);
+});
+test('pedal balance: weighted by power, ignored without power, absent when not reported', () => {
+  const s = vSession([...vSamples(0, 9, 300, 40), ...vSamples(10, 19, 100, 60), ...vSamples(20, 29, 0, 90)]), b = vBalance(s);
+  equal(b.seconds.length, 20); near(b.left, 45, 1e-9); equal(vBalance(vSession(vSamples(0, 9, 300))), null); equal(vChart(vSession(vSamples(0, 9, 300))), '');
+});
+test('pedal balance: the series splits at gaps, the axis is symmetric and the chart draws both sides', () => {
+  const s = vSession([...vSamples(0, 99, 200, 46), ...vSamples(120, 219, 200, 53)]), points = vSeries(vBalance(s));
+  equal(new Set(points.map(p => p.segment)).size, 2); near(points.at(-1).left, 53, 1e-9); equal(vReach(points), 6);
+  const html = vChart(s); assert(html.includes('left-area') && html.includes('right-area') && html.includes('L 56') && html.includes('R 56'));
+  equal(vLive([...vSamples(0, 50, 200, 40), ...vSamples(51, 60, 200, 52)]), (40 + 10 * 52) / 11);
+});
+test('pedal balance: a power meter wins over a trainer while it reports one, and readings reach the sample', () => {
+  const m = new vMeasurements(); assert(m.takesBalance('trainer', 10));
+  m.receive({ role: 'externalPowerMeter', time: 10, power: 200, leftBalance: 48 }); assert(!m.takesBalance('trainer', 11)); assert(m.takesBalance('trainer', 13));
+  equal(vRoute({ role: 'trainer', time: 5, leftBalance: 47 }, { powerSource: 'trainer', cadenceSource: 'trainer' }, 0).leftBalance, 47);
+});

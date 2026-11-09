@@ -167,8 +167,17 @@ private func pausedWorkout() throws -> TestSession {
     var noFTP = try rampSession()
     noFTP.configuration = try configuration(prior: nil)
     #expect(try decodeFIT(FITEncoder.fileData(noFTP)).all(18).first?.fields[45] == nil)
-    // Indoor distance and speed are unmeasured and never written.
-    #expect(file.all(20).allSatisfy { $0.fields[5] == nil && $0.fields[6] == nil })
+    // Distance and speed are simulated from power: they grow along the records and the session and laps carry the same total.
+    let distances = file.all(20).compactMap { $0.fields[5] }
+    #expect(distances.count == file.all(20).count && distances == distances.sorted() && distances.last! > 0)
+    #expect(file.all(20).allSatisfy { $0.fields[6] != nil })
+    let total = try #require(session.fields[9])
+    #expect(total == distances.last!)
+    let laps = file.all(19).compactMap { $0.fields[9] }.reduce(0, +)
+    #expect(laps >= total - 3 && laps <= total + 3)
+    #expect(session.fields[48]! > 0 && session.fields[11]! > 0 && session.fields[14]! > 0 && session.fields[15]! >= session.fields[14]!)
+    // Nothing reported balance in this session, so the fields stay invalid rather than 0.
+    #expect(session.fields[37] == nil && file.all(20).allSatisfy { $0.fields[30] == nil })
 }
 
 @Test func fitRefusesUnfinishedAndEmptyActivities() throws {

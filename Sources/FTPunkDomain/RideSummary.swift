@@ -10,10 +10,17 @@ public struct RideSummary: Equatable, Sendable {
     public var maximumHeartRate: Int?
     /// Average cadence while pedalling (zeros, i.e. coasting and stops, are left out, as other ride apps do).
     public var averageCadence: Double?
+    /// Work done, the rider's estimated energy use and the simulated distance. Nil when no power was recorded.
+    public var kilojoules: Double? = nil
+    public var kilocalories: Double? = nil
+    public var distance: Double? = nil
+    /// The left leg's share of the ride's work, in percent. Nil when balance was not reported.
+    public var leftBalance: Double? = nil
 
     public static func make(_ session: TestSession) -> RideSummary {
         let samples = session.samples
         let power = Series(samples) { $0.power }
+        let track = RideTrack.make(session), ridden = !track.points.isEmpty
         return RideSummary(
             duration: session.endedAtOffset ?? samples.last?.time ?? 0,
             averagePower: power.average(),
@@ -21,7 +28,11 @@ public struct RideSummary: Equatable, Sendable {
             maximumPower: samples.compactMap(\.power).filter(\.isFinite).max(),
             averageHeartRate: Series(samples) { $0.heartRate.map(Double.init) }.average(includeZero: false),
             maximumHeartRate: samples.compactMap(\.heartRate).max(),
-            averageCadence: Series(samples) { $0.cadence }.average(includeZero: false))
+            averageCadence: Series(samples) { $0.cadence }.average(includeZero: false),
+            kilojoules: ridden ? track.kilojoules : nil,
+            kilocalories: ridden ? track.kilocalories : nil,
+            distance: ridden ? track.distance : nil,
+            leftBalance: RideBalance.make(session, track: track)?.left)
     }
 
     /// Normalized power: a 30-second rolling mean of one-second power, raised to the fourth power, averaged, and rooted.

@@ -75,8 +75,14 @@ struct RideVisualHero: View {
                             CornerReadingBox(reading: CornerReading(title: "TRAINER", value: readout.trainerActual)).alignmentGuide(.lastTextBaseline) { $0[.top] + 24 }
                         }
                         Spacer(minLength: 0)
-                        if let detail = readout.detail {
-                            Text(detail).font(.headline.monospacedDigit()).foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
+                        VStack(alignment: .trailing, spacing: 2) {
+                            if let detail = readout.detail {
+                                Text(detail).font(.headline.monospacedDigit()).foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
+                            }
+                            if let speed = simulatedSpeed {
+                                Text("\(speed) km/h").font(.caption.weight(.semibold)).monospacedDigit().foregroundStyle(.white)
+                                    .padding(.horizontal, 6).padding(.vertical, 2).background(.black.opacity(0.35), in: RoundedRectangle(cornerRadius: 5))
+                            }
                         }
                     }
                     .padding(.horizontal, Space.m).padding(.top, Space.xs)
@@ -84,9 +90,15 @@ struct RideVisualHero: View {
                     .background(LinearGradient(colors: [.black.opacity(0.5), .black.opacity(0)], startPoint: .top, endPoint: .bottom))
                     .environment(\.colorScheme, .dark)
                 }
-                .accessibilityElement(children: .ignore).accessibilityLabel(readout.accessibilityText)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(readout.accessibilityText + (simulatedSpeed.map { ". Simulated speed \($0) kilometres per hour" } ?? ""))
                 .accessibilityIdentifier("ride-visual-readout")
             }
+    }
+
+    private var simulatedSpeed: String? {
+        let track = RideTrack.make(engine.session)
+        return track.points.isEmpty ? nil : RideFigures.kilometresPerHour(track.speed(at: engine.session.samples.last?.time ?? 0))
     }
 
     private func column(_ title: String, _ value: String?, tint: Color) -> some View {

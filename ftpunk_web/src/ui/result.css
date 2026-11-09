@@ -20,3 +20,10 @@
 .chart-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2.25px solid var(--accent); vertical-align: middle; }
 .chart-legend .swatch.target { border-top: 2px dashed var(--ink); } .chart-legend .swatch.hr { border-top-color: var(--heart, #e0457b); }
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-m); } .summary-grid .big { font-size: 1.25rem; }
+:root { --balance-left: #2a78d6; --balance-right: #eb6834; }
+@media (prefers-color-scheme: dark) { :root:not([data-appearance="light"]) { --balance-left: #256abf; --balance-right: #d95926; } }
+:root[data-appearance="dark"] { --balance-left: #256abf; --balance-right: #d95926; }
+.balance-head { margin-top: var(--space-s); } .balance-head .chart-legend { margin: 0; }
+.balance-chart .left-area { fill: var(--balance-left); fill-opacity: .6; } .balance-chart .right-area { fill: var(--balance-right); fill-opacity: .6; }
+.balance-chart .balance-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; } .balance-chart .even { stroke: var(--secondary); stroke-width: 1; stroke-dasharray: 4 3; }
+.chart-legend .swatch.balance-left { border-top-color: var(--balance-left); } .chart-legend .swatch.balance-right { border-top-color: var(--balance-right); }

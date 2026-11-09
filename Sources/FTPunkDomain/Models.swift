@@ -134,10 +134,12 @@ public struct RideSample: Codable, Equatable, Sendable {
     public var cadence: Double?
     public var heartRate: Int?
     public var trainerPower: Double?
+    /// The left leg's share of the power in percent, when the meter or trainer reports it.
+    public var leftBalance: Double?
     public init(time: Double, power: Double? = nil, cadence: Double? = nil,
-                heartRate: Int? = nil, trainerPower: Double? = nil) {
+                heartRate: Int? = nil, trainerPower: Double? = nil, leftBalance: Double? = nil) {
         self.time = time; self.power = power; self.cadence = cadence
-        self.heartRate = heartRate; self.trainerPower = trainerPower
+        self.heartRate = heartRate; self.trainerPower = trainerPower; self.leftBalance = leftBalance
     }
 }
 

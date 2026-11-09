@@ -1,6 +1,7 @@
 import { esc } from './components.mjs';
 import { resultBands, bestMinuteBand, ResultChartLayout, DurationFormat } from '../rules/presentation.mjs';
 import { rideSummary, targetSeries } from '../rules/ride-summary.mjs';
+import { rideBalance, balanceSeries, balanceAxisReach } from '../rules/virtual-ride.mjs';
 // SVG charts shared by the result screen, the activity detail and the Progress trend. Drawn in a fixed viewBox that scales as a whole,
 // so text stays proportional. Colours come from CSS classes (light and dark pairs in base.css).
 const num = n => Number(n.toFixed(1));
@@ -78,17 +79,41 @@ export function heartRateChart(session) {
   const sum = rideSummary(session);
   return `<svg class="power-chart hr-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Recorded heart rate over time. Average ${Math.round(sum.averageHeartRate ?? 0)} beats per minute, maximum ${sum.maximumHeartRate}.">${svg}</svg>`;
 }
+/** Left/right balance around an even 50 %: the left leg's share above the line, the right leg's below, smoothed over 30 seconds. Nothing when it was not reported. */
+export function balanceChart(session) {
+  const balance = rideBalance(session); if (!balance) return '';
+  const points = balanceSeries(balance); if (points.length < 2) return '';
+  const W = 600, H = 150, left = 44, right = 10, top = 8, bottom = 30, plotW = W - left - right, plotH = H - top - bottom;
+  const end = Math.max(60, session.endedAtOffset ?? session.samples.at(-1)?.time ?? 0), minutes = end / 60, reach = balanceAxisReach(points);
+  const x = seconds => left + (seconds / end) * plotW, y = share => top + plotH - ((share - (50 - reach)) / (2 * reach)) * plotH;
+  let svg = '';
+  for (const share of [50 - reach, 50 + reach]) svg += `<line class="grid" x1="${left}" x2="${W - right}" y1="${num(y(share))}" y2="${num(y(share))}"/><text class="axis" x="${left - 6}" y="${num(y(share) + 4)}" text-anchor="end">${share > 50 ? 'L' : 'R'} ${share > 50 ? share : 100 - share}</text>`;
+  svg += `<text class="axis" x="${left - 6}" y="${num(y(50) + 4)}" text-anchor="end">50</text>`;
+  const every = minutes > 60 ? 15 : minutes > 25 ? 5 : minutes > 10 ? 2 : 1;
+  for (let m = 0; m <= minutes; m += every) svg += `<text class="axis" x="${num(x(m * 60))}" y="${H - 12}" text-anchor="middle">${m}</text>`;
+  svg += `<text class="axis-title" x="${num(left + plotW / 2)}" y="${H - 1}" text-anchor="middle">Minutes</text>`;
+  const segments = new Map(); for (const p of points) segments.set(p.segment, [...(segments.get(p.segment) ?? []), p]);
+  for (const part of [...segments.values()].filter(s => s.length > 1)) {
+    const area = pick => `M${num(x(part[0].time))},${num(y(50))} ${part.map(p => `L${num(x(p.time))},${num(y(pick(p.left)))}`).join(' ')} L${num(x(part.at(-1).time))},${num(y(50))} Z`;
+    svg += `<path class="left-area" d="${area(v => Math.max(v, 50))}"/><path class="right-area" d="${area(v => Math.min(v, 50))}"/><polyline class="balance-line" points="${part.map(p => `${num(x(p.time))},${num(y(p.left))}`).join(' ')}"/>`;
+  }
+  svg += `<line class="even" x1="${left}" x2="${W - right}" y1="${num(y(50))}" y2="${num(y(50))}"/>`;
+  const leftShare = Math.round(balance.left);
+  return `<div class="row spread balance-head"><p class="label">Pedal balance</p><ul class="legend chart-legend"><li><span class="swatch balance-left"></span> Left ${leftShare} %</li><li><span class="swatch balance-right"></span> Right ${100 - leftShare} %</li></ul></div><svg class="power-chart balance-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Pedal balance over time. Left ${leftShare} percent, right ${100 - leftShare} percent overall.">${svg}</svg>`;
+}
 /** Power with its target, a legend, and heart rate beneath when it was recorded. */
 export function rideCharts(session) {
   const hasTarget = targetSeries(session).length > 0, hr = heartRateChart(session);
   const legend = `<ul class="legend chart-legend" aria-hidden="true"><li><span class="swatch power"></span> Power</li>${hasTarget ? '<li><span class="swatch target"></span> Target</li>' : ''}${hr ? '<li><span class="swatch hr"></span> Heart rate</li>' : ''}</ul>`;
-  return `${powerChart(session)}${legend}${hr}`;
+  return `${powerChart(session)}${legend}${hr}${balanceChart(session)}`;
 }
 /** Time, average and normalized power, heart rate and cadence for a finished ride. Figures that were not recorded are left out. */
 export function summaryCard(session) {
   if (!session.samples?.length) return '';
   const s = rideSummary(session), power = session.training?.resistance == null, round = n => Math.round(n);
   const items = [['Time', DurationFormat.clock(s.duration)], power && s.averagePower != null && ['Average power', `${round(s.averagePower)} W`], power && s.normalizedPower != null && ['Normalized power', `${round(s.normalizedPower)} W`],
-    s.averageHeartRate != null && ['Average heart rate', `${round(s.averageHeartRate)} bpm`], s.maximumHeartRate != null && ['Max heart rate', `${s.maximumHeartRate} bpm`], s.averageCadence != null && ['Average cadence', `${round(s.averageCadence)} rpm`]].filter(Boolean);
+    s.averageHeartRate != null && ['Average heart rate', `${round(s.averageHeartRate)} bpm`], s.maximumHeartRate != null && ['Max heart rate', `${s.maximumHeartRate} bpm`], s.averageCadence != null && ['Average cadence', `${round(s.averageCadence)} rpm`],
+    s.kilojoules != null && ['Energy', `${round(s.kilojoules)} kJ`], s.kilocalories != null && ['Estimated calories', `${round(s.kilocalories)} kcal`], s.distance != null && ['Simulated distance', `${(s.distance / 1000).toFixed(2)} km`],
+    s.leftBalance != null && ['Left / right', `${round(s.leftBalance)} / ${100 - round(s.leftBalance)} %`]].filter(Boolean);
   return `<section class="card summary-grid" id="ride-summary">${items.map(([t, v]) => `<div><p class="label">${esc(t)}</p><p class="num big">${esc(v)}</p></div>`).join('')}</section>`;
 }

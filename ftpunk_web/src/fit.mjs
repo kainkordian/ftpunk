@@ -1,6 +1,7 @@
 // A minimal FIT activity file writer with no dependencies, ported from Sources/FTPunkStorage/FITEncoder.swift. The output is byte-identical to the
 // native encoder for the same session (tests compare against the Swift-written fixtures `fit-*.fit` in contracts/fixtures/).
 // Field numbers and base types follow FIT profile 21.221 (see the Swift file for the table). Messages: file_id, event, record, lap, session, activity.
+import { ridePauses, rideTrack, rideBalance, trackSpan, kilocaloriesOf } from './rules/virtual-ride.mjs';
 export const PROFILE_VERSION = 21221;
 export const EPOCH_OFFSET = 631065600; // Unix seconds at 1989-12-31 00:00:00 UTC
 
@@ -34,20 +35,7 @@ class Writer {
   }
 }
 
-/** Pause requests, confirmed release and resume are stored as timestamped events. The timer stops at the confirmed release
-    (the request when no confirmation was recorded) and starts again at resume. */
-export function pauses(session) {
-  const result = []; let requested = null, confirmed = null;
-  for (const event of [...(session.events ?? [])].sort((a, b) => a.time - b.time)) {
-    switch (event.message) {
-      case 'Training paused; trainer release requested': requested = event.time; confirmed = null; break;
-      case 'Trainer release confirmed for pause': if (requested != null && confirmed == null) confirmed = event.time; break;
-      case 'Training resumed': if (requested != null) result.push({ stop: confirmed ?? requested, resume: event.time }); requested = null; confirmed = null; break;
-    }
-  }
-  if (requested != null) result.push({ stop: confirmed ?? requested, resume: null });
-  return result;
-}
+export const pauses = ridePauses;
 const finite = n => typeof n === 'number' && Number.isFinite(n);
 /** Warm-up, ramp and cool-down edges (plus the start and the end), shared by the TCX and FIT laps. */
 export const phaseBoundaries = (session, end) => [...new Set([0, session.rampStart, session.rampEnd, end].filter(t => finite(t) && t >= 0 && t <= end))].sort((a, b) => a - b);
@@ -98,6 +86,10 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
   const ms = seconds => Math.max(0, Math.round(seconds * 1000));
   const pausedSeconds = pauseList.reduce((n, p) => n + Math.min(end, p.resume ?? end) - Math.min(end, p.stop), 0), timerSeconds = Math.max(0, end - pausedSeconds);
   const startTime = fit(0), endTime = fit(end), writer = new Writer();
+  const capped = (value, limit) => Math.min(limit, Math.max(0, Math.round(value))), UINT32_MAX = 4294967294;
+  const track = rideTrack(session, { pauses: pauseList, end }), trackBySecond = new Map(track.points.map(p => [p.second, p]));
+  const balance = rideBalance(session, track, { pauses: pauseList, end }), leftBySecond = new Map((balance?.seconds ?? []).map(s => [s.second, s.left]));
+  let covered = null;
 
   writer.message(0, 0, [[0, ENUM, 4], [1, UINT16, 255], [2, UINT16, 1], [3, UINT32Z, serialOf(session.id)], [4, UINT32, startTime]]);
   const timer = (type, at) => writer.message(1, 21, [[253, UINT32, fit(at)], [0, ENUM, 0], [1, ENUM, type]]);
@@ -110,7 +102,11 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
   items.sort((a, b) => a.time - b.time || a.order - b.order);
   timer(0, records[0].time);
   for (const item of items) {
-    if (item.record) writer.message(2, 20, [[253, UINT32, fit(item.record.time)], [3, UINT8, item.record.heartRate], [4, UINT8, item.record.cadence], [7, UINT16, item.record.power]]);
+    if (item.record) {
+      const point = trackBySecond.get(item.record.time), left = leftBySecond.get(item.record.time); if (point) covered = point.distance;
+      writer.message(2, 20, [[253, UINT32, fit(item.record.time)], [3, UINT8, item.record.heartRate], [4, UINT8, item.record.cadence], [7, UINT16, item.record.power],
+        [5, UINT32, covered == null ? null : capped(covered * 100, UINT32_MAX)], [6, UINT16, point ? capped(point.speed * 1000, 65534) : null], [30, UINT8, left == null ? null : 0x80 | capped(100 - left, 100)]]);
+    }
     else if (item.stop != null) timer(4, item.stop);
     else timer(0, item.start);
   }
@@ -120,15 +116,21 @@ export function fitFile(session, { utcOffsetSeconds = null } = {}) {
   starts.forEach((begin, index) => {
     const finish = index + 1 < starts.length ? starts[index + 1] : end;
     const paused = pauseList.reduce((n, p) => n + Math.max(0, Math.min(finish, p.resume ?? end) - Math.max(begin, p.stop)), 0);
+    const lap = trackSpan(track, begin, index + 1 < starts.length ? finish : Infinity), on = lap.seconds > 0;
     writer.message(3, 19, [[254, UINT16, index], [253, UINT32, fit(finish)], [0, ENUM, 9], [1, ENUM, 1], [2, UINT32, fit(begin)], [7, UINT32, ms(finish - begin)],
-      [8, UINT32, ms(Math.max(0, finish - begin - paused))], [25, ENUM, 2], [39, ENUM, 6]]);
+      [8, UINT32, ms(Math.max(0, finish - begin - paused))], [25, ENUM, 2], [39, ENUM, 6],
+      [9, UINT32, on ? capped(lap.distance * 100, UINT32_MAX) : null], [11, UINT16, on ? capped(kilocaloriesOf(lap.joules), 65534) : null], [13, UINT16, on ? capped(lap.distance / lap.seconds * 1000, 65534) : null],
+      [14, UINT16, on ? capped(lap.maximumSpeed * 1000, 65534) : null], [41, UINT32, on ? capped(lap.joules, UINT32_MAX) : null]]);
   });
+  const ridden = track.seconds > 0;
   const power = stats(records.map(r => r.power).filter(v => v != null)), heart = stats(records.map(r => r.heartRate).filter(v => v != null)), cadence = stats(records.map(r => r.cadence).filter(v => v != null));
   const threshold = priorFTP(session);
   writer.message(4, 18, [[254, UINT16, 0], [253, UINT32, endTime], [0, ENUM, 8], [1, ENUM, 1], [2, UINT32, startTime], [5, ENUM, 2], [6, ENUM, 6],
     [7, UINT32, ms(end)], [8, UINT32, ms(timerSeconds)], [16, UINT8, heart?.average ?? null], [17, UINT8, heart?.maximum ?? null],
     [18, UINT8, cadence?.average ?? null], [19, UINT8, cadence?.maximum ?? null], [20, UINT16, power?.average ?? null], [21, UINT16, power?.maximum ?? null],
-    [25, UINT16, 0], [26, UINT16, starts.length], [45, UINT16, finite(threshold) ? Math.min(65534, Math.max(0, Math.round(threshold))) : null]]);
+    [25, UINT16, 0], [26, UINT16, starts.length], [45, UINT16, finite(threshold) ? Math.min(65534, Math.max(0, Math.round(threshold))) : null],
+    [9, UINT32, ridden ? capped(track.distance * 100, UINT32_MAX) : null], [11, UINT16, ridden ? capped(track.kilocalories, 65534) : null], [14, UINT16, ridden ? capped(track.distance / track.seconds * 1000, 65534) : null],
+    [15, UINT16, ridden ? capped(track.maximumSpeed * 1000, 65534) : null], [37, UINT16, balance ? 0x8000 | capped((100 - balance.left) * 100, 10000) : null], [48, UINT32, ridden ? capped(track.joules, UINT32_MAX) : null]]);
   const zone = utcOffsetSeconds ?? -new Date(startMs + end * 1000).getTimezoneOffset() * 60;
   writer.message(5, 34, [[253, UINT32, endTime], [0, UINT32, ms(timerSeconds)], [1, UINT16, 1], [2, ENUM, 0], [3, ENUM, 26], [4, ENUM, 1], [5, UINT32, Math.max(0, endTime + zone)]]);
 

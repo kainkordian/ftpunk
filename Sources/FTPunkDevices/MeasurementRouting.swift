@@ -16,6 +16,7 @@ public struct DeviceMeasurements: Sendable {
     private struct Value: Sendable { let time: Double; let value: Double }
     private var power: [DeviceRole: Value] = [:]
     private var cadence: [DeviceRole: Value] = [:]
+    private var balance: [DeviceRole: Value] = [:]
     public init() {}
     public mutating func receive(_ reading: DeviceReading) {
         guard reading.uptime.isFinite else { return }
@@ -25,8 +26,13 @@ public struct DeviceMeasurements: Sendable {
         if let rpm = reading.cadence, rpm.isFinite, rpm >= 0 {
             cadence[reading.role] = Value(time: reading.uptime, value: rpm)
         }
+        if let left = reading.leftBalance, left.isFinite {
+            balance[reading.role] = Value(time: reading.uptime, value: left)
+        }
     }
-    public mutating func reset(_ role: DeviceRole) { power[role] = nil; cadence[role] = nil }
+    public mutating func reset(_ role: DeviceRole) { power[role] = nil; cadence[role] = nil; balance[role] = nil }
+    /// A power meter's balance wins over a trainer's while the meter is reporting one.
+    public func takesBalance(from role: DeviceRole, at time: Double) -> Bool { role == .pedals || fresh(balance[.pedals], at: time) == nil }
     public func hasFreshPower(from source: PowerSource, at time: Double) -> Bool {
         fresh(power[source.deviceRole], at: time) != nil
     }
@@ -49,7 +55,8 @@ public enum MeasurementRouting {
                           power: reading.role == configuration.resolvedPowerSource.deviceRole ? reading.power : nil,
                           cadence: reading.role == configuration.resolvedCadenceSource.deviceRole ? reading.cadence : nil,
                           heartRate: reading.heartRate,
-                          trainerPower: reading.role == .trainer ? reading.power : nil)
+                          trainerPower: reading.role == .trainer ? reading.power : nil,
+                          leftBalance: reading.leftBalance)
     }
     public static func isEssential(_ role: DeviceRole, configuration: SessionConfiguration) -> Bool {
         role == .trainer || role == configuration.resolvedPowerSource.deviceRole || role == configuration.resolvedCadenceSource.deviceRole

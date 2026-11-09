@@ -6,12 +6,16 @@ import FTPunkDomain
 ///
 ///     file_id(0):  type 0 enum, manufacturer 1 uint16, product 2 uint16, serial_number 3 uint32z, time_created 4 uint32
 ///     event(21):   timestamp 253, event 0 enum (timer = 0), event_type 1 enum (start = 0, stop_all = 4)
-///     record(20):  timestamp 253, heart_rate 3 uint8, cadence 4 uint8, power 7 uint16
+///     record(20):  timestamp 253, heart_rate 3 uint8, cadence 4 uint8, power 7 uint16, distance 5 uint32 (cm), speed 6 uint16 (mm/s),
+///                  left_right_balance 30 uint8 (percent, 0x80 = the value is the right leg's)
 ///     lap(19):     timestamp 253, event 0, event_type 1, start_time 2, total_elapsed_time 7 (ms), total_timer_time 8 (ms),
-///                  sport 25, sub_sport 39, message_index 254
+///                  sport 25, sub_sport 39, message_index 254, total_distance 9, total_calories 11, avg_speed 13, max_speed 14, total_work 41
 ///     session(18): timestamp 253, event 0, event_type 1, start_time 2, sport 5, sub_sport 6, total_elapsed_time 7, total_timer_time 8,
 ///                  avg_heart_rate 16, max_heart_rate 17, avg_cadence 18, max_cadence 19, avg_power 20, max_power 21,
-///                  first_lap_index 25, num_laps 26, threshold_power 45, message_index 254
+///                  first_lap_index 25, num_laps 26, threshold_power 45, message_index 254, total_distance 9, total_calories 11, avg_speed 14,
+///                  max_speed 15, left_right_balance 37 uint16 (percent × 100, 0x8000 = right leg), total_work 48 (J)
+///
+/// Distance and speed are simulated from power (`RideTrack`); checked against profile 21.221 on 2026-11-09.
 ///     activity(34): timestamp 253, total_timer_time 0 (ms), num_sessions 1, type 2 (manual = 0), event 3 (activity = 26),
 ///                  event_type 4 (stop = 1), local_timestamp 5
 ///
@@ -66,26 +70,8 @@ public enum FITEncoder {
 
     // MARK: Session model
 
-    /// A timer stop and start pair read from the session's pause events.
-    struct Pause { let stop: Double, resume: Double? }
-
-    /// Pause requests, confirmed release and resume are stored as timestamped events (contracts/README.md). The timer stops
-    /// at the confirmed release (the request when no confirmation was recorded) and starts again at resume.
-    static func pauses(_ session: TestSession) -> [Pause] {
-        var result: [Pause] = [], requested: Double?, confirmed: Double?
-        for event in session.events.sorted(by: { $0.time < $1.time }) {
-            switch event.message {
-            case "Training paused; trainer release requested": requested = event.time; confirmed = nil
-            case "Trainer release confirmed for pause": if requested != nil, confirmed == nil { confirmed = event.time }
-            case "Training resumed":
-                if let requested { result.append(Pause(stop: confirmed ?? requested, resume: event.time)) }
-                requested = nil; confirmed = nil
-            default: break
-            }
-        }
-        if let requested { result.append(Pause(stop: confirmed ?? requested, resume: nil)) }
-        return result
-    }
+    typealias Pause = RidePause
+    static func pauses(_ session: TestSession) -> [Pause] { RidePause.list(session) }
 
     /// Where the laps start, as offsets from the start of the recording. Tests use the TCX boundaries (warm-up, ramp,
     /// cool-down). A workout gets one lap per step when it has at most 100 steps, mapped through its pauses.
@@ -134,6 +120,13 @@ public enum FITEncoder {
         }
         func ms(_ seconds: Double) -> UInt64 { UInt64(max(0, (seconds * 1000).rounded())) }
         func u(_ value: Int?) -> UInt64? { value.map { UInt64(max(0, $0)) } }
+        func capped(_ value: Double, _ limit: UInt64) -> UInt64 { min(limit, UInt64(max(0, value.rounded()))) }
+
+        let track = RideTrack.make(samples: session.samples, pauses: pauses, end: end, riderKG: session.configuration.weightKG)
+        let trackBySecond = Dictionary(uniqueKeysWithValues: track.points.map { ($0.second, $0) })
+        let balance = RideBalance.make(samples: session.samples, pauses: pauses, end: end, track: track)
+        let leftBySecond = Dictionary(uniqueKeysWithValues: (balance?.seconds ?? []).map { ($0.second, $0.left) })
+        var covered: Double?
 
         let pausedSeconds = pauses.reduce(0.0) { $0 + min(end, $1.resume ?? end) - min(end, $1.stop) }
         let timerSeconds = max(0, end - pausedSeconds)
@@ -163,9 +156,14 @@ public enum FITEncoder {
             case .stop(let at): timer(4, at: at)
             case .start(let at): timer(0, at: at)
             case .record(let record):
+                let point = trackBySecond[record.time]
+                if let point { covered = point.distance }
                 writer.message(local: 2, global: 20, [
                     Field(number: 253, type: .uint32, value: fit(Double(record.time))), Field(number: 3, type: .uint8, value: u(record.heartRate)),
-                    Field(number: 4, type: .uint8, value: u(record.cadence)), Field(number: 7, type: .uint16, value: u(record.power))])
+                    Field(number: 4, type: .uint8, value: u(record.cadence)), Field(number: 7, type: .uint16, value: u(record.power)),
+                    Field(number: 5, type: .uint32, value: covered.map { capped($0 * 100, 4_294_967_294) }),
+                    Field(number: 6, type: .uint16, value: point.map { capped($0.speed * 1000, 65534) }),
+                    Field(number: 30, type: .uint8, value: leftBySecond[record.time].map { 0x80 | capped(100 - $0, 100) })])
             }
         }
         if !(pauses.last.map { $0.resume == nil } ?? false) { timer(4, at: end) }
@@ -174,18 +172,25 @@ public enum FITEncoder {
         for (index, begin) in starts.enumerated() {
             let finish = index + 1 < starts.count ? starts[index + 1] : end
             let paused = pauses.reduce(0.0) { $0 + max(0, min(finish, $1.resume ?? end) - max(begin, $1.stop)) }
+            let lap = track.span(from: begin, to: index + 1 < starts.count ? finish : .infinity), lapRidden = lap.seconds > 0
             writer.message(local: 3, global: 19, [
                 Field(number: 254, type: .uint16, value: UInt64(index)), Field(number: 253, type: .uint32, value: fit(finish)),
                 Field(number: 0, type: .enumeration, value: 9), Field(number: 1, type: .enumeration, value: 1),
                 Field(number: 2, type: .uint32, value: fit(begin)), Field(number: 7, type: .uint32, value: ms(finish - begin)),
                 Field(number: 8, type: .uint32, value: ms(max(0, finish - begin - paused))),
-                Field(number: 25, type: .enumeration, value: 2), Field(number: 39, type: .enumeration, value: 6)])
+                Field(number: 25, type: .enumeration, value: 2), Field(number: 39, type: .enumeration, value: 6),
+                Field(number: 9, type: .uint32, value: lapRidden ? capped(lap.distance * 100, 4_294_967_294) : nil),
+                Field(number: 11, type: .uint16, value: lapRidden ? capped(lap.kilocalories, 65534) : nil),
+                Field(number: 13, type: .uint16, value: lapRidden ? capped(lap.averageSpeed * 1000, 65534) : nil),
+                Field(number: 14, type: .uint16, value: lapRidden ? capped(lap.maximumSpeed * 1000, 65534) : nil),
+                Field(number: 41, type: .uint32, value: lapRidden ? capped(lap.joules, 4_294_967_294) : nil)])
         }
 
         func stats(_ values: [Int]) -> (average: Int, maximum: Int)? {
             values.isEmpty ? nil : (Int((Double(values.reduce(0, +)) / Double(values.count)).rounded()), values.max() ?? 0)
         }
         let power = stats(records.compactMap(\.power)), heart = stats(records.compactMap(\.heartRate)), cadence = stats(records.compactMap(\.cadence))
+        let whole = track.whole, ridden = whole.seconds > 0
         writer.message(local: 4, global: 18, [
             Field(number: 254, type: .uint16, value: 0), Field(number: 253, type: .uint32, value: endTime),
             Field(number: 0, type: .enumeration, value: 8), Field(number: 1, type: .enumeration, value: 1),
@@ -195,7 +200,13 @@ public enum FITEncoder {
             Field(number: 18, type: .uint8, value: u(cadence?.average)), Field(number: 19, type: .uint8, value: u(cadence?.maximum)),
             Field(number: 20, type: .uint16, value: u(power?.average)), Field(number: 21, type: .uint16, value: u(power?.maximum)),
             Field(number: 25, type: .uint16, value: 0), Field(number: 26, type: .uint16, value: UInt64(starts.count)),
-            Field(number: 45, type: .uint16, value: session.configuration.priorFTP.map { UInt64(min(65534, max(0, $0.watts.rounded()))) })])
+            Field(number: 45, type: .uint16, value: session.configuration.priorFTP.map { UInt64(min(65534, max(0, $0.watts.rounded()))) }),
+            Field(number: 9, type: .uint32, value: ridden ? capped(whole.distance * 100, 4_294_967_294) : nil),
+            Field(number: 11, type: .uint16, value: ridden ? capped(whole.kilocalories, 65534) : nil),
+            Field(number: 14, type: .uint16, value: ridden ? capped(whole.averageSpeed * 1000, 65534) : nil),
+            Field(number: 15, type: .uint16, value: ridden ? capped(whole.maximumSpeed * 1000, 65534) : nil),
+            Field(number: 37, type: .uint16, value: balance.map { 0x8000 | capped((100 - $0.left) * 100, 10000) }),
+            Field(number: 48, type: .uint32, value: ridden ? capped(whole.joules, 4_294_967_294) : nil)])
 
         let zone = TimeInterval(TimeZone.current.secondsFromGMT(for: session.startedAt.addingTimeInterval(end)))
         writer.message(local: 5, global: 34, [

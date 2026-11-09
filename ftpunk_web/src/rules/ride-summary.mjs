@@ -1,5 +1,6 @@
 import { rampPower, PRESETS } from '../domain.mjs';
 import { trainingTarget } from '../training.mjs';
+import { rideTrack, rideBalance } from './virtual-ride.mjs';
 // Ride figures, the target line and automatic pausing. Mirrors Sources/FTPunkDomain/RideSummary.swift.
 
 function weighted(points, includeZero = true) {
@@ -37,12 +38,13 @@ export function normalizedPower(samples) {
   return count ? (fourth / count) ** 0.25 : null;
 }
 export function rideSummary(session) {
-  const samples = session.samples ?? [], powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite);
+  const samples = session.samples ?? [], powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), track = rideTrack(session), ridden = track.seconds > 0;
   return {
     duration: session.endedAtOffset ?? samples.at(-1)?.time ?? 0,
     averagePower: weighted(series(samples, s => s.power)), normalizedPower: normalizedPower(samples), maximumPower: powers.length ? Math.max(...powers) : null,
     averageHeartRate: weighted(series(samples, s => s.heartRate), false), maximumHeartRate: beats.length ? Math.max(...beats) : null,
     averageCadence: weighted(series(samples, s => s.cadence), false),
+    kilojoules: ridden ? track.kilojoules : null, kilocalories: ridden ? track.kilocalories : null, distance: ridden ? track.distance : null, leftBalance: rideBalance(session, track)?.left ?? null,
   };
 }
 

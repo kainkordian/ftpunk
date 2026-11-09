@@ -29,7 +29,7 @@ private func rampSession() throws -> TestSession {
         let t = Double(second)
         if second % 97 == 50 { continue } // a dropout: no record for this second
         let watts = Double(100 + second / 2)
-        session.samples.append(RideSample(time: t, power: watts, cadence: 88 + Double(second % 5)))
+        session.samples.append(RideSample(time: t, power: watts, cadence: 88 + Double(second % 5), leftBalance: 47.5 + Double(second % 7)))
         session.samples.append(RideSample(time: t + 0.4, trainerPower: watts + 4.4))
         if second >= 10 { session.samples.append(RideSample(time: t + 0.7, heartRate: 118 + second / 8)) }
     }

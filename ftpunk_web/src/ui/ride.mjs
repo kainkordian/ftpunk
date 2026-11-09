@@ -1,3 +1,4 @@
+import { rideTrack, speedAt, liveBalance } from '../rules/virtual-ride.mjs';
 import { esc, $, button, metricTile, phaseTimelineView, applyTimeline, stepRing, holdButton, bindHold, profileChart, moveProfileMarker, pill, watts, switchRow, selectField } from './components.mjs';
 import { registerSettingsSlot } from './settings.mjs';
 import { registerRoute, openSheet, rerender } from './shell.mjs';
@@ -20,6 +21,8 @@ const clock = DurationFormat.clock;
 function setText(selector, text) { const el = $(selector); if (el && el.textContent !== text) el.textContent = text; }
 function setHTML(selector, html) { const el = $(selector); if (el && lastHTML.get(selector) !== html) { el.innerHTML = html; lastHTML.set(selector, html); } }
 const level = tenths => (tenths / 10).toFixed(1);
+let trackCache = null;
+const extraTiles = rows => `<section id="tiles-more" class="tiles support-tiles ${rows ? 'rows' : ''}" hidden>${metricTile({ title: 'SPEED', value: null, unit: 'km/h', caption: 'Simulated', id: 'live-speed' })}${metricTile({ title: 'DISTANCE', value: null, unit: 'km', caption: 'Simulated', id: 'live-distance' })}${metricTile({ title: 'CALORIES', value: null, unit: 'kcal', caption: 'Estimated', id: 'live-kcal' })}${metricTile({ title: 'AVG POWER', value: null, unit: 'W', id: 'live-average' })}${metricTile({ title: 'BALANCE', value: null, unit: 'L/R', id: 'live-balance' })}</section>`;
 
 function header(model, engine) {
   const s = engine.session, ftp = kindOf(s) === 'ftp';
@@ -36,7 +39,7 @@ registerRoute('ride', {
       heroTiles: `<section class="tiles two hero-tiles">${metricTile({ title: target, value: null, unit: 'W', tone: 'accent', hero: true, id: 'live-target' })}${metricTile({ title: 'ACTUAL', value: null, unit: 'W', hero: true, id: 'live-power' })}</section>`,
       scene: chaindanceHTML({ hero: true }), strip: chaindanceHTML(),
       progress: kind === 'workout' ? `<div id="cockpit-profile">${profileChart(s.training, { intensity: engine.intensity, progressSeconds: 0, height: 'normal' })}</div><div id="cockpit-step" class="stack"></div>` : kind === 'ftp' ? '<div id="cockpit-progress"></div>' : '',
-      tiles: `<section class="tiles support-tiles ${layout.metricRows ? 'rows' : ''}">${metricTile({ title: 'HEART RATE', value: null, unit: 'bpm', tone: 'heart', id: 'live-heart' })}${metricTile({ title: 'CADENCE', value: null, unit: 'rpm', id: 'live-cadence' })}${kind === 'ftp' ? metricTile({ title: 'MAX 60 S', value: null, unit: 'W', id: 'live-best' }) : ''}</section><p class="footnote muted" id="cockpit-matching"></p>`,
+      tiles: `<div class="dash-bar"><span class="num" id="live-kj">— kJ</span><button type="button" class="dash-toggle" id="dash-toggle" data-action="dash-toggle" data-testid="dashboard-toggle">More readings</button></div><section id="tiles-main" class="tiles support-tiles ${layout.metricRows ? 'rows' : ''}">${metricTile({ title: 'HEART RATE', value: null, unit: 'bpm', tone: 'heart', id: 'live-heart' })}${metricTile({ title: 'CADENCE', value: null, unit: 'rpm', id: 'live-cadence' })}${kind === 'ftp' ? metricTile({ title: 'MAX 60 S', value: null, unit: 'W', id: 'live-best' }) : ''}</section>${extraTiles(layout.metricRows)}<p class="footnote muted" id="cockpit-matching"></p>`,
       controls: '<div id="cockpit-controls"></div>', notes: '<p class="muted" id="cockpit-notes"></p>',
     };
     const block = name => `<div class="blk" id="blk-${name}" data-block="${name}">${blocks[name] ?? ''}</div>`;
@@ -92,6 +95,15 @@ registerRoute('ride', {
     setText('#live-heart', watts(hr)); setText('#live-cadence', watts(cadence));
     const guard = CadenceGuard.state(cadence, engine.phase, c.cadenceSource !== 'unavailable');
     $('#live-cadence')?.closest('.tile')?.classList.toggle('warning', guard === 'low'); setText('#live-cadence-caption', guard === 'low' ? CadenceGuard.message : '');
+    if (trackCache?.session !== s || trackCache.length !== s.samples.length) trackCache = { session: s, length: s.samples.length, track: rideTrack(s) };
+    const track = trackCache.track, ridden = track.seconds > 0, speed = speedAt(track, s.samples.at(-1)?.time ?? 0), left = liveBalance(s.samples), more = model.prefs.dashboardMore === true && guard !== 'low';
+    const kmh = (speed * 3.6).toFixed(1), leftPart = left == null ? null : Math.round(left);
+    setText('#live-kj', ridden ? `${Math.round(track.kilojoules)} kJ` : '— kJ'); setText('#dash-toggle', model.prefs.dashboardMore === true ? 'Main readings' : 'More readings');
+    if ($('#tiles-main')) { $('#tiles-main').hidden = more; $('#tiles-more').hidden = !more; }
+    setText('#live-speed', ridden ? kmh : '—'); setText('#live-distance', ridden ? (track.distance / 1000).toFixed(2) : '—'); setText('#live-kcal', ridden ? String(Math.round(track.kilocalories)) : '—');
+    setText('#live-average', watts(track.averagePower == null ? null : Math.round(track.averagePower))); setText('#live-balance', leftPart == null ? '—' : `${leftPart} / ${100 - leftPart}`);
+    const balanceTile = $('#live-balance')?.closest('.tile'); if (balanceTile) balanceTile.hidden = leftPart == null;
+    const chip = $('#readout-speed'); if (chip) { chip.hidden = !ridden; setText('#readout-speed', `${kmh} km/h`); }
     if (kind === 'ftp') {
       const best = s.result?.bestMinutePower ?? engine.liveBest;
       if (engine.phase === 'waiting' || engine.phase === 'warmup') { setText('#live-best', engine.phase === 'warmup' ? clock(Math.max(0, c.warmupSeconds - phaseTime)) : 'Pedal'); setText('#live-best-caption', 'Ramp starts in'); const tile = $('#live-best')?.closest('.tile'); if (tile) tile.setAttribute('aria-label', 'Ramp starts in'); }
@@ -136,6 +148,7 @@ registerRoute('ride', {
       'intensity-minus': () => ride.adjustIntensity(-5), 'intensity-plus': () => ride.adjustIntensity(5),
       'res-minus': () => ride.adjustResistance(-1), 'res-plus': () => ride.adjustResistance(1), 'erg-minus': () => ride.adjustERG(-10), 'erg-plus': () => ride.adjustERG(10),
       'debug-controls': () => openDebugControls(model),
+      'dash-toggle': () => { model.prefs.dashboardMore = model.prefs.dashboardMore !== true; model.savePrefs(); },
     };
   },
 });

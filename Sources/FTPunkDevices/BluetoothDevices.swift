@@ -29,8 +29,9 @@ public struct DeviceReading: Sendable {
     public var power: Double?
     public var cadence: Double?
     public var heartRate: Int?
-    public init(role: DeviceRole, uptime: Double, power: Double? = nil, cadence: Double? = nil, heartRate: Int? = nil) {
-        self.role = role; self.uptime = uptime; self.power = power; self.cadence = cadence; self.heartRate = heartRate
+    public var leftBalance: Double?
+    public init(role: DeviceRole, uptime: Double, power: Double? = nil, cadence: Double? = nil, heartRate: Int? = nil, leftBalance: Double? = nil) {
+        self.role = role; self.uptime = uptime; self.power = power; self.cadence = cadence; self.heartRate = heartRate; self.leftBalance = leftBalance
     }
 }
 
@@ -60,6 +61,7 @@ public enum BluetoothError: Error, LocalizedError {
 /// Main-actor delegate isolation serializes this first hardware prototype's low-rate callbacks.
 /// The workout core and decoders are independent of UI and CoreBluetooth.
 @MainActor @Observable public final class BluetoothDevices: NSObject {
+    fileprivate static let powerService = CBUUID(string: "1818")
     public private(set) var nearby: [NearbyDevice] = []
     public private(set) var names: [DeviceRole: String] = [:]
     public private(set) var status = "Connect your trainer. An external power meter and heart-rate sensor are optional."
@@ -260,7 +262,8 @@ extension BluetoothDevices: @preconcurrency CBCentralManagerDelegate {
         guard let role = role(of: peripheral) else { central.cancelPeripheralConnection(peripheral); return }
         names[role] = peripheral.name ?? role.title
         if role == .trainer { trainerConnections += 1 }
-        peripheral.discoverServices([role.service])
+        // A trainer may also expose the Cycling Power service; it is only read for pedal balance, and it is fine when it is missing.
+        peripheral.discoverServices(role == .trainer ? [role.service, BluetoothDevices.powerService] : [role.service])
         status = "Discovering \(role.title.lowercased()) services…"
     }
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: (any Error)?) {
@@ -284,9 +287,19 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
             failure(BluetoothError.unsupported, role: role); return
         }
         peripheral.discoverCharacteristics(nil, for: service)
+        if role == .trainer, let power = peripheral.services?.first(where: { $0.uuid == BluetoothDevices.powerService }) {
+            peripheral.discoverCharacteristics(nil, for: power)
+        }
     }
     public func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: (any Error)?) {
         guard let role = role(of: peripheral) else { return }
+        if role == .trainer, service.uuid == BluetoothDevices.powerService {
+            // Optional extra: never lets a trainer's power service affect pairing.
+            if error == nil, let measurement = service.characteristics?.first(where: { $0.uuid.uuidString == "2A63" }) {
+                peripheral.setNotifyValue(true, for: measurement)
+            }
+            return
+        }
         if let error { failure(error, role: role); return }
         for characteristic in service.characteristics ?? [] {
             let uuid = characteristic.uuid.uuidString
@@ -302,6 +315,7 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
     }
     public func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: (any Error)?) {
         guard let role = role(of: peripheral) else { return }
+        if role == .trainer, characteristic.uuid.uuidString == "2A63" { return }
         if let error { failure(error, role: role); return }
         if role == .pedals, characteristic.uuid == CBUUID(string: "2A63"), characteristic.isNotifying {
             onExternalMeterReady?(names[role] ?? role.title)
@@ -320,6 +334,7 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
             if role == .trainer, characteristic.uuid.uuidString == "2AD6" {
                 resistanceRange = nil; status = "Resistance range unavailable."; updateReadiness(); return
             }
+            if role == .trainer, characteristic.uuid.uuidString == "2A63" { return }
             failure(error, role: role); return
         }
         guard let data = characteristic.value else { return }
@@ -348,10 +363,15 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
                 let value = try IndoorBikeData.decode(data, resistanceLayout: resistanceLayout)
                 let reading = DeviceReading(role: role, uptime: time, power: value.powerWatts, cadence: value.cadenceRPM)
                 measurements.receive(reading); onReading?(reading)
+            case (.trainer, "2A63"):
+                // Balance only: the trainer's power stream stays the FTMS one, and a power meter's balance wins when it has one.
+                let value = try CyclingPowerMeasurement.decode(data)
+                guard let left = value.leftBalancePercent, measurements.takesBalance(from: .trainer, at: time) else { return }
+                onReading?(DeviceReading(role: role, uptime: time, leftBalance: left))
             case (.pedals, "2A63"):
                 let value = try CyclingPowerMeasurement.decode(data)
                 let cadence = value.crank.flatMap { cadenceTracker.receive($0, at: time) }
-                let reading = DeviceReading(role: role, uptime: time, power: value.watts, cadence: cadence)
+                let reading = DeviceReading(role: role, uptime: time, power: value.watts, cadence: cadence, leftBalance: value.leftBalancePercent)
                 measurements.receive(reading); onReading?(reading)
             case (.heartRate, "2A37"):
                 onReading?(DeviceReading(role: role, uptime: time, heartRate: try HeartRateMeasurement.decode(data)))

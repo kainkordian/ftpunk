@@ -13,6 +13,7 @@ struct RideCharts: View {
             ResultPowerChart(session: session)
             legend
             if hasHeartRate { RideHeartRateChart(session: session) }
+            if let balance = RideBalance.make(session), balance.series().count >= 2 { RideBalanceChart(balance: balance) }
         }
     }
 
@@ -69,9 +70,80 @@ struct RideHeartRateChart: View {
     }
 }
 
+/// Left/right balance as a diverging chart around an even 50 %: the left leg's share above the line, the right leg's below, smoothed over 30 seconds.
+struct RideBalanceChart: View {
+    let balance: RideBalance
+    @Environment(\.colorScheme) private var colorScheme
+    private var leftColor: Color { colorScheme == .dark ? Color(red: 0.145, green: 0.416, blue: 0.749) : Color(red: 0.165, green: 0.471, blue: 0.839) }
+    private var rightColor: Color { colorScheme == .dark ? Color(red: 0.851, green: 0.349, blue: 0.149) : Color(red: 0.922, green: 0.408, blue: 0.204) }
+
+    var body: some View {
+        let points = balance.series(), reach = RideBalance.axisReach(points)
+        let left = Int(balance.left.rounded())
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: Space.m) {
+                Text("Pedal balance").font(.caption.weight(.bold)).foregroundStyle(Theme.secondary)
+                Spacer()
+                key("Left \(left) %", color: leftColor)
+                key("Right \(100 - left) %", color: rightColor)
+            }
+            Chart {
+                ForEach(points, id: \.time) { point in marks(point) }
+                RuleMark(y: .value("Even", 50.0)).foregroundStyle(Theme.secondary).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+            }
+            .chartYScale(domain: (50 - reach)...(50 + reach))
+            .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
+            .chartXAxis {
+                AxisMarks { _ in
+                    AxisGridLine().foregroundStyle(Theme.secondary.opacity(0.25))
+                    AxisTick().foregroundStyle(Theme.secondary)
+                    AxisValueLabel().foregroundStyle(Theme.secondary)
+                }
+            }
+            .chartYAxis {
+                AxisMarks(values: [50 - reach, 50, 50 + reach]) { value in
+                    AxisGridLine().foregroundStyle(Theme.secondary.opacity(0.25))
+                    AxisValueLabel { Text(Self.label(value.as(Double.self) ?? 50)).foregroundStyle(Theme.secondary) }
+                }
+            }
+            .frame(height: 130)
+            .accessibilityLabel("Pedal balance over time")
+            .accessibilityValue("Left \(left) percent, right \(100 - left) percent overall")
+        }
+    }
+
+    @ChartContentBuilder private func marks(_ point: RideBalance.Point) -> some ChartContent {
+        let minutes: Double = point.time / 60
+        AreaMark(x: .value("Minutes", minutes), yStart: .value("Even", 50.0), yEnd: .value("Left", max(point.left, 50.0)), series: .value("Part", "L\(point.segment)"))
+            .foregroundStyle(leftColor.opacity(0.6))
+        AreaMark(x: .value("Minutes", minutes), yStart: .value("Even", 50.0), yEnd: .value("Right", min(point.left, 50.0)), series: .value("Part", "R\(point.segment)"))
+            .foregroundStyle(rightColor.opacity(0.6))
+        LineMark(x: .value("Minutes", minutes), y: .value("Left share", point.left), series: .value("Part", "B\(point.segment)"))
+            .foregroundStyle(.primary).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
+    }
+
+    private func key(_ title: String, color: Color) -> some View {
+        HStack(spacing: 4) {
+            RoundedRectangle(cornerRadius: 2).fill(color).frame(width: 12, height: 12)
+            Text(title).font(.caption).foregroundStyle(Theme.secondary).monospacedDigit()
+        }
+    }
+    private static func label(_ value: Double) -> String {
+        value > 50 ? "L \(Int(value))" : value < 50 ? "R \(Int(100 - value))" : "50"
+    }
+}
+
 /// Average and normalized power, heart rate and cadence for a finished ride. Figures that were not recorded are left out.
 struct RideSummaryCard: View {
     let session: TestSession
+    private func energyItems(_ summary: RideSummary) -> [(String, String)] {
+        var items: [(String, String)] = []
+        if let kilojoules = summary.kilojoules { items.append(("Energy", RideFigures.kilojoules(kilojoules))) }
+        if let kilocalories = summary.kilocalories { items.append(("Estimated calories", "\(Int(kilocalories.rounded())) kcal")) }
+        if let distance = summary.distance { items.append(("Simulated distance", "\(RideFigures.kilometres(distance)) km")) }
+        if let left = summary.leftBalance { items.append(("Left / right", "\(RideFigures.balance(left)) %")) }
+        return items
+    }
     var body: some View {
         let summary = RideSummary.make(session)
         let showsPower = session.training?.resistance == nil
@@ -84,7 +156,7 @@ struct RideSummaryCard: View {
             summary.averageCadence.map { ("Average cadence", "\(Int($0.rounded())) rpm") },
         ].compactMap { $0 }
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), alignment: .leading)], alignment: .leading, spacing: Space.m) {
-            ForEach(items, id: \.0) { title, value in
+            ForEach(items + energyItems(summary), id: \.0) { title, value in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(Theme.secondary)
                     Text(value).font(.title3.bold()).monospacedDigit()

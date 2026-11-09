@@ -13,7 +13,7 @@ export function chaindanceHTML({ hero = false } = {}) {
   return `<div class="chaindance ${hero ? 'hero' : 'strip'}" id="chaindance" data-testid="chaindance"><canvas id="chaindance-canvas" width="${WIDTH}" height="${height}" role="img" aria-label="${BRAND_NAME}"></canvas>${hero ? `<div class="chaindance-readout" id="chaindance-readout">
     <div class="readout-col"><p class="readout-title" id="readout-target-title">TARGET</p><p class="readout-value accent-text"><span id="readout-target">—</span><span class="readout-unit" id="readout-unit">W</span></p></div>
     <div class="readout-col"><p class="readout-title">ACTUAL</p><p class="readout-value"><span id="readout-actual">—</span><span class="readout-unit" id="readout-unit2">W</span></p></div>
-    <p class="readout-detail" id="readout-detail"></p></div>` : ''}</div>`;
+    <div class="readout-side"><p class="readout-detail" id="readout-detail"></p><p class="readout-chip" id="readout-speed" hidden></p></div></div>` : ''}</div>`;
 }
 /** The placement menu. It sits in the cockpit header, outside the per-tick update path, so telemetry never rebuilds it (the native flicker bug of 2026-11-04). */
 export const placementMenuHTML = placement => `<label class="placement-menu"><span class="sr-only">${BRAND_NAME} view</span><select id="chaindance-placement" aria-label="${BRAND_NAME} view" title="${BRAND_NAME} view: ${placementTitle(placement)}">${PLACEMENTS.map(([id, title]) => `<option value="${id}" ${id === placement ? 'selected' : ''}>${title}</option>`).join('')}</select></label>`;

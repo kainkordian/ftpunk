@@ -39,3 +39,7 @@ body[data-route="ride"] .tabbar { display: none; }
 .chaindance-readout .readout-detail { margin-left: auto; align-self: flex-start; padding-top: var(--space-xs); font: 600 1rem/1.2 var(--font); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .chaindance { container-type: inline-size; }
 @media (prefers-contrast: more) { .chaindance { border-width: 2px; border-color: var(--ink); } }
+.chaindance-readout .readout-side { margin-left: auto; align-self: flex-start; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.chaindance-readout .readout-chip { font: 600 .75rem/1.2 var(--font); font-variant-numeric: tabular-nums; white-space: nowrap; padding: 2px 6px; border-radius: 5px; background: rgba(0, 0, 0, .35); }
+.dash-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs); color: var(--secondary); font-size: .8125rem; font-weight: 600; }
+.dash-toggle { min-height: 32px; padding: 0 var(--space-xs); border: 0; background: none; color: var(--accent); font: 600 .8125rem/1 var(--font); cursor: pointer; }

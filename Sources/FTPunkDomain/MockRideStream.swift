@@ -34,6 +34,7 @@ public struct MockRideStream: Sendable {
         let hr = manualHeartRate ?? Int(min(190, 100 + Double(target) * 0.2 + 2 * sin(time / 11)))
         return RideSample(time: time, power: scenario == .powerDropout ? nil : power,
                           cadence: scenario == .cadenceDropout ? nil : cadence,
-                          heartRate: hr, trainerPower: powerSource == .trainer ? (scenario == .powerDropout ? nil : power) : max(0, Double(target) * 0.98))
+                          heartRate: hr, trainerPower: powerSource == .trainer ? (scenario == .powerDropout ? nil : power) : max(0, Double(target) * 0.98),
+                          leftBalance: scenario == .powerDropout ? nil : 49 + 1.5 * sin(time / 29))
     }
 }
