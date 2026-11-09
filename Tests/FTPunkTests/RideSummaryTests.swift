@@ -154,3 +154,18 @@ private func loadSession(ftp: Double? = 200, seconds: Int, watts: Double = 200) 
     #expect(RideSummary.oneHertzPower(samples, pauses: pauses).count == 79)
     #expect(RideSummary.oneHertzPower(samples, pauses: []).count == 80)
 }
+
+@Test func pausedSamplesCountInNoneOfTheRideFigures() throws {
+    var session = TestSession(configuration: try config())
+    session.samples = (0...300).map { t in
+        (100..<160).contains(t) ? RideSample(time: Double(t), power: 900, cadence: 120, heartRate: 190)
+                                : RideSample(time: Double(t), power: 200, cadence: 90, heartRate: 140)
+    }
+    session.events = [SessionEvent(time: 100, message: "Training paused; trainer release requested"), SessionEvent(time: 160, message: "Training resumed")]
+    session.endedAtOffset = 300
+    let summary = RideSummary.make(session)
+    #expect(abs((summary.averagePower ?? 0) - 200) < 0.001 && summary.maximumPower == 200)
+    #expect(abs((summary.averageHeartRate ?? 0) - 140) < 0.001 && summary.maximumHeartRate == 140)
+    #expect(abs((summary.averageCadence ?? 0) - 90) < 0.001)
+    #expect(summary.duration == 300)
+}

@@ -1,6 +1,7 @@
 import Foundation
 
-/// The figures a finished ride shows: averages, normalized power and the peaks. Computed from the recorded samples only.
+/// The figures a finished ride shows: averages, normalized power and the peaks. Computed from the recorded samples only; samples that
+/// arrive during a pause don't count, and `duration` is the elapsed time including pauses.
 public struct RideSummary: Equatable, Sendable {
     public var duration: Double
     public var averagePower: Double?
@@ -18,11 +19,12 @@ public struct RideSummary: Equatable, Sendable {
     public var leftBalance: Double? = nil
 
     public static func make(_ session: TestSession) -> RideSummary {
-        let samples = session.samples
+        let pauses = RidePause.list(session)
+        let samples = session.samples.filter { sample in !pauses.contains { $0.contains(sample.time) } }
         let power = Series(samples) { $0.power }
         let track = RideTrack.make(session), ridden = !track.points.isEmpty
         return RideSummary(
-            duration: session.endedAtOffset ?? samples.last?.time ?? 0,
+            duration: session.endedAtOffset ?? session.samples.last?.time ?? 0,
             averagePower: power.average(),
             normalizedPower: TrainingLoad.make(session, track: track).normalizedPower,
             maximumPower: samples.compactMap(\.power).filter(\.isFinite).max(),

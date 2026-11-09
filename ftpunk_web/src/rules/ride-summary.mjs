@@ -49,9 +49,11 @@ export function trainingLoad(session, { track = null, pauses = ridePauses(sessio
   return { normalizedPower: power, intensityFactor: intensity, trainingStressScore: seconds * power * intensity / (ftp * 3600) * 100 };
 }
 export function rideSummary(session) {
-  const samples = session.samples ?? [], powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), track = rideTrack(session), ridden = track.seconds > 0;
+  // Samples that arrive during a pause don't count; `duration` is the elapsed time including pauses.
+  const pauses = ridePauses(session), samples = (session.samples ?? []).filter(s => !pauses.some(p => s.time >= p.stop && s.time < (p.resume ?? Infinity)));
+  const powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), track = rideTrack(session), ridden = track.seconds > 0;
   return {
-    duration: session.endedAtOffset ?? samples.at(-1)?.time ?? 0,
+    duration: session.endedAtOffset ?? session.samples?.at(-1)?.time ?? 0,
     averagePower: weighted(series(samples, s => s.power)), normalizedPower: trainingLoad(session, { track }).normalizedPower, maximumPower: powers.length ? Math.max(...powers) : null,
     averageHeartRate: weighted(series(samples, s => s.heartRate), false), maximumHeartRate: beats.length ? Math.max(...beats) : null,
     averageCadence: weighted(series(samples, s => s.cadence), false),

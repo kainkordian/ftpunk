@@ -233,3 +233,10 @@ test('Auto-pause pauses after 3 stopped seconds and resumes after 2 pedalled one
   equal(b.update({ time: 4, phase: 'riding', power: 0 }), null); equal(b.update({ time: 6, phase: 'riding', power: null }), null);
   const m = new AutoPause(); equal(m.update({ time: 0, phase: 'paused', power: 200, canResume: true }), null); equal(m.update({ time: 30, phase: 'paused', power: 200, canResume: true }), null);
 });
+
+test('Paused samples count in none of the ride figures', () => {
+  const samples = Array.from({ length: 301 }, (_, t) => t >= 100 && t < 160 ? { time: t, power: 900, cadence: 120, heartRate: 190 } : { time: t, power: 200, cadence: 90, heartRate: 140 });
+  const events = [{ time: 100, message: 'Training paused; trainer release requested' }, { time: 160, message: 'Training resumed' }];
+  const r = rideSummary(rideSession({ samples, events, endedAtOffset: 300 }));
+  near(r.averagePower, 200, 0.001); equal(r.maximumPower, 200); near(r.averageHeartRate, 140, 0.001); equal(r.maximumHeartRate, 140); near(r.averageCadence, 90, 0.001); equal(r.duration, 300);
+});
