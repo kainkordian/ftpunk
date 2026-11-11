@@ -5,7 +5,7 @@ import { freeRide, validatePlan, creditSession, progressMilliseconds } from '../
 import { makeArchive, archiveText, parseArchive, archiveSessions, validateArchive } from '../src/archive.mjs';
 import { configuration, PRESETS, rampPower, analyze, RampEngine, mockSample } from '../src/domain.mjs';
 import { indoorBike, cyclingPower, heartRate, heartRateMeasurement, PowerRange, supportsTargetPower, command, controlResponse, BikeAssembler, CadenceTracker, Measurements, route } from '../src/protocol.mjs';
-import { ControlPoint, BluetoothDevices } from '../src/bluetooth.mjs';
+import { ControlPoint, BluetoothDevices, connectionError } from '../src/bluetooth.mjs';
 import { LocalStore, acquireRideLease, loadPreferences, savePreferences } from '../src/storage.mjs';
 import { RideController } from '../src/controller.mjs';
 import { csv, tcx } from '../src/export.mjs';
@@ -489,6 +489,14 @@ test('Web Bluetooth pairing discovers ERG controls and receives real packet noti
   trainer.chars.get(0x2ad2).measure([0x44, 0, 0, 0, 180, 0, 200, 0]); equal(reading.power, 200); equal(reading.cadence, 90);
   await d.start(100); await d.setTarget(125); await d.stop(); equal(trainer.chars.get(0x2ad9).writes.slice(1), [[7], [5, 100, 0], [5, 125, 0], [8, 1]]);
   d.disconnect('trainer'); assert(!d.trainerReady); equal(d.measurements.fresh('trainer', 'power', 10), null);
+});
+test('A bare Chrome connection failure gets actionable advice and other errors pass through', async () => {
+  const bare = Object.assign(Error('Connection attempt failed.'), { name: 'NetworkError' });
+  const hint = connectionError(bare, 'heartRate'); assert(/Heart rate could not be reached/.test(hint.message) && /pair again/.test(hint.message)); assert(hint.cause === bare);
+  const cancelled = Object.assign(Error('User cancelled the requestDevice() chooser.'), { name: 'NotFoundError' }); assert(connectionError(cancelled, 'heartRate') === cancelled);
+  const hr = fakePeripheral('heartRate', 'hr-id'); hr.device.gatt.connect = async () => { throw bare; };
+  const d = new BluetoothDevices({ bluetooth: { requestDevice: async () => hr.device } });
+  await rejects(() => d.connect('heartRate')); assert(!d.devices.heartRate);
 });
 test('Bluetooth resistance requires both advertised support and a valid range', async () => {
   for (const [bits, bytes, allowed, canPair] of [[12, [0,0,232,3,10,0], true, true], [8, [0,0,232,3,10,0], false, true], [12, [0,100,1], false, true], [4, [0,100,1], false, false]]) {

@@ -41,7 +41,8 @@ struct DevicesSheet: View {
                     Section("Connections") {
                         ForEach([DeviceRole.trainer, .pedals, .heartRate]) { role in
                             DeviceStatusRow(role: role, connectedName: model.bluetooth.names[role],
-                                            detail: role == .trainer ? (model.bluetooth.trainerReady ? "ERG ready" : model.bluetooth.status) : nil) { self.role = role }
+                                            detail: role == .trainer ? (model.bluetooth.trainerReady ? "ERG ready" : model.bluetooth.status) : nil,
+                                    problem: model.bluetooth.problems[role]) { self.role = role }
                                 .disabled(model.isBusy)
                         }
                     }

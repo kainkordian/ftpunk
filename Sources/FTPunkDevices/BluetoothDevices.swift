@@ -45,10 +45,11 @@ public struct PacketCapture: Codable, Identifiable, Sendable {
 }
 
 public enum BluetoothError: Error, LocalizedError {
-    case notReady, busy, timedOut, rejected(UInt8), disconnected, unsupported, targetOutOfRange
+    case notReady, busy, timedOut, connectTimedOut, rejected(UInt8), disconnected, unsupported, targetOutOfRange
     public var errorDescription: String? {
         switch self {
         case .notReady: "Trainer control is not ready."
+        case .connectTimedOut: "The device did not answer."
         case .busy: "A trainer command is still in progress."
         case .timedOut: "The trainer did not confirm the command. Reconnect before retrying."
         case .rejected(let code): "The trainer rejected the command (result \(code))."
@@ -71,6 +72,8 @@ public enum BluetoothError: Error, LocalizedError {
     public private(set) var trainerReady = false
     /// Counts trainer connections, so the app can tell a new connection (a cold trainer, maybe) from the same one.
     public private(set) var trainerConnections = 0
+    /// Why a role is not connected, kept after the picker closes. Cleared when that role connects or is disconnected on purpose.
+    public private(set) var problems: [DeviceRole: String] = [:]
     public private(set) var resistanceRange: SupportedResistanceRange?
     public var supportsResistance: Bool { features?.supportsResistance == true && resistanceRange != nil }
     public private(set) var powerRange: SupportedPowerRange?
@@ -129,13 +132,20 @@ public enum BluetoothError: Error, LocalizedError {
         if role == .trainer { clearTrainer() }
         if role == .pedals { clearPedals() }
         selected[role] = peripheral; peripheral.delegate = self
-        status = "Connecting \(device.name)…"
+        status = "Connecting \(device.name)…"; problems.removeValue(forKey: role)
         central?.connect(peripheral)
+        // CoreBluetooth never gives up on a pending connection by itself.
+        Task { [weak self] in
+            try? await Task.sleep(for: .seconds(ConnectionAdvice.timeoutSeconds))
+            guard let self, self.selected[role] === peripheral, self.names[role] == nil else { return }
+            self.selected.removeValue(forKey: role); self.central?.cancelPeripheralConnection(peripheral)
+            self.failure(BluetoothError.connectTimedOut, role: role)
+        }
     }
 
     public func disconnect(_ role: DeviceRole) {
         guard let peripheral = selected.removeValue(forKey: role) else { return }
-        names.removeValue(forKey: role)
+        names.removeValue(forKey: role); problems.removeValue(forKey: role)
         if role == .trainer { clearTrainer() }
         if role == .pedals { clearPedals() }
         central?.cancelPeripheralConnection(peripheral)
@@ -231,6 +241,7 @@ public enum BluetoothError: Error, LocalizedError {
     }
     private func failure(_ error: any Error, role: DeviceRole) {
         status = error.localizedDescription
+        problems[role] = ConnectionAdvice.message(role: role, reason: status, connecting: names[role] == nil)
         measurements.reset(role)
         if role == .trainer { trainerReady = false }
         onDeviceFailure?(role, status)
@@ -261,7 +272,7 @@ extension BluetoothDevices: @preconcurrency CBCentralManagerDelegate {
     }
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         guard let role = role(of: peripheral) else { central.cancelPeripheralConnection(peripheral); return }
-        names[role] = peripheral.name ?? role.title
+        names[role] = peripheral.name ?? role.title; problems.removeValue(forKey: role)
         if role == .trainer { trainerConnections += 1 }
         // A trainer may also expose the Cycling Power service; it is only read for pedal balance, and it is fine when it is missing.
         peripheral.discoverServices(role == .trainer ? [role.service, BluetoothDevices.powerService] : [role.service])
@@ -386,5 +397,15 @@ extension BluetoothDevices: @preconcurrency CBPeripheralDelegate {
             if characteristic.uuid.uuidString == "2AD6" { resistanceRange = nil; updateReadiness() }
             if characteristic.uuid.uuidString == "2AD9" { resolve(.failure(error)); failure(error, role: role) }
         }
+    }
+}
+
+/// What to tell a rider when a sensor will not connect. The usual cause is a connection held elsewhere or a stale system pairing.
+public enum ConnectionAdvice {
+    public static let timeoutSeconds = 15
+    public static func message(role: DeviceRole, reason: String, connecting: Bool) -> String {
+        guard connecting else { return reason }
+        let name = role.title.lowercased()
+        return "\(reason) Could not connect the \(name). Close other apps or devices using it, wake it up, and if it still fails forget it in Settings → Bluetooth and pair again."
     }
 }

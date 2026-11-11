@@ -254,5 +254,7 @@ private func heroPixels(_ state: RideVisualState, animated: Bool = false, distan
     #expect(DeviceStatusRow.subtitle(role: .heartRate, connectedName: nil, detail: nil) == "Heart rate on screen and in the file")
     #expect(DeviceStatusRow.subtitle(role: .trainer, connectedName: nil, detail: nil) == "Required to ride · tap to connect")
     #expect(DeviceStatusRow.subtitle(role: .trainer, connectedName: "Suito-T", detail: "ERG ready") == "Suito-T · ERG ready")
+    #expect(DeviceStatusRow.subtitle(role: .heartRate, connectedName: nil, detail: nil, problem: "Could not connect.") == "Could not connect.")
+    #expect(DeviceStatusRow.subtitle(role: .heartRate, connectedName: "Strap", detail: nil, problem: "old") == "Strap")
 }
 

@@ -2,6 +2,12 @@ import { Measurements, BikeAssembler, CadenceTracker, indoorBike, cyclingPower, 
 export const SERVICES = { trainer: 0x1826, externalPowerMeter: 0x1818, heartRate: 0x180d };
 export const DEVICE_LABELS = { trainer: 'Smart trainer', externalPowerMeter: 'External power meter', heartRate: 'Heart rate' };
 const clock = () => performance.now() / 1000;
+/** Chrome's bare "Connection attempt failed" says nothing a rider can act on; add the usual remedies. */
+export function connectionError(error, role) {
+  if (error?.name !== 'NetworkError' && !/connection attempt failed|connection failed/i.test(error?.message ?? '')) return error;
+  const wrapped = Error(`${DEVICE_LABELS[role]} could not be reached. Close other apps or devices using it, wake it up, and if it still fails forget it in your system Bluetooth settings and pair again.`);
+  wrapped.cause = error; return wrapped;
+}
 
 // GATT write success is not an FTMS acknowledgement. One command remains in flight
 // until its matching Control Point indication arrives (or it times out).
@@ -104,7 +110,7 @@ export class BluetoothDevices {
       if (!device.gatt.connected || this.devices[role] !== entry) throw Error('The device disconnected while pairing.');
       entry.ready = true; this.onChange();
       if (role === 'externalPowerMeter') this.onMeterReady(entry.name);
-    } catch (error) { this.disconnect(role); throw error; }
+    } catch (error) { this.disconnect(role); throw connectionError(error, role); }
   }
   disconnect(role) {
     const d = this.devices[role]; if (!d) return;

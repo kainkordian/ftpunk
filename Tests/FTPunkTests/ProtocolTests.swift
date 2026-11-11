@@ -112,3 +112,9 @@ import FTPunkDomain
     let heartRate = try #require(sample.heartRate)
     #expect(sample.rrIntervals == [60.0 / Double(heartRate)])
 }
+
+@Test func connectionAdviceExplainsFailuresAndLeavesConnectedErrorsAlone() {
+    let hint = ConnectionAdvice.message(role: .heartRate, reason: "The device did not answer.", connecting: true)
+    #expect(hint.contains("heart rate") && hint.contains("pair again") && hint.hasPrefix("The device did not answer."))
+    #expect(ConnectionAdvice.message(role: .trainer, reason: "The Bluetooth connection ended.", connecting: false) == "The Bluetooth connection ended.")
+}
