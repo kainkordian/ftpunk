@@ -117,7 +117,19 @@ private func pausedWorkout() throws -> TestSession {
     let records = try decodeFIT(FITEncoder.fileData(session)).all(20)
     #expect(records.count == 2)
     #expect(records[0].fields[7] == 200 && records[0].fields[4] == 88 && records[0].fields[3] == 140)
-    #expect(records[1].fields[7] == 220 && records[1].fields[4] == nil)
+    #expect(records[1].fields[7] == 220 && records[1].fields[4] == 88)   // held: the meter had no new crank event
+}
+
+@Test func fitHoldsAMissingCadenceOrPowerForThreeSecondsAndNotAcrossLongerGaps() throws {
+    var session = TestSession(startedAt: start, configuration: try configuration())
+    // Second 1 has both; seconds 2–4 only heart rate (or power without cadence); second 5 too, but 4 s after the last values.
+    session.samples = [RideSample(time: 1.0, power: 200, cadence: 82), RideSample(time: 2.0, power: 205), RideSample(time: 3.0, heartRate: 140),
+                       RideSample(time: 4.0, heartRate: 141), RideSample(time: 5.0, heartRate: 142), RideSample(time: 6.0, power: 0, cadence: 0),
+                       RideSample(time: 7.0, heartRate: 143)]
+    session.endedAtOffset = 8
+    let records = try decodeFIT(FITEncoder.fileData(session)).all(20)
+    #expect(records.map { $0.fields[4] } == [82, 82, 82, 82, nil, 0, 0])
+    #expect(records.map { $0.fields[7] } == [200, 205, 205, 205, 205, 0, 0])
 }
 
 @Test func fitLapsMatchTheTcxLapsOfARampTest() throws {

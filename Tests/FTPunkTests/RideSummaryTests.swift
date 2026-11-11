@@ -169,3 +169,42 @@ private func loadSession(ftp: Double? = 200, seconds: Int, watts: Double = 200) 
     #expect(abs((summary.averageCadence ?? 0) - 90) < 0.001)
     #expect(summary.duration == 300)
 }
+
+@Test func trainerPowerIsSummarisedOnlyWhileAMeterIsTheSource() throws {
+    let meter = try SessionConfiguration(warmupSeconds: 0, riderID: RiderProfile.legacyID, powerSource: .externalPowerMeter, cadenceSource: .externalPowerMeter)
+    var session = TestSession(configuration: meter)
+    // Each notification is its own sample: the meter's at whole seconds, the trainer's 0.4 s later.
+    for t in 0...120 {
+        session.samples.append(RideSample(time: Double(t), power: 200, cadence: 90))
+        session.samples.append(RideSample(time: Double(t) + 0.4, trainerPower: 210))
+    }
+    session.endedAtOffset = 120.4
+    let summary = RideSummary.make(session)
+    #expect(abs((summary.averagePower ?? 0) - 200) < 0.001)
+    #expect(abs((summary.trainerAveragePower ?? 0) - 210) < 0.001)
+    #expect(abs((summary.trainerNormalizedPower ?? 0) - 210) < 0.001)
+    var trainerOnly = TestSession(configuration: try config())
+    trainerOnly.samples = (0...120).map { RideSample(time: Double($0), power: 200, trainerPower: 200) }
+    #expect(RideSummary.make(trainerOnly).trainerAveragePower == nil)
+}
+
+@Test func aMomentOfTheRecordingHasEveryFreshReading() throws {
+    let plan = try TrainingPlan(kind: .workout, name: "Hover", steps: [.init("Warm", seconds: 20, watts: 100), .init("Work", seconds: 40, watts: 200)])
+    var engine = RideEngine(configuration: try config(), training: plan)
+    for t in 0...30 { engine.receive(.init(time: Double(t), power: 205, cadence: 90, heartRate: 140)); engine.tick(at: Double(t)) }
+    let moment = RideMoment.at(engine.session, time: 25.5)
+    #expect(moment.power == 205 && moment.heartRate == 140 && moment.cadence == 90)
+    #expect(moment.target == TargetSeries.value(engine.session, at: 25.5))
+    #expect(moment.trainerPower == nil)
+    let stale = RideMoment.at(engine.session, time: 40)
+    #expect(stale.power == nil && stale.heartRate == nil)
+
+    let meter = try SessionConfiguration(warmupSeconds: 0, riderID: RiderProfile.legacyID, powerSource: .externalPowerMeter, cadenceSource: .externalPowerMeter)
+    var paired = TestSession(configuration: meter)
+    for t in 0...10 {
+        paired.samples.append(RideSample(time: Double(t), power: 200, cadence: 90))
+        paired.samples.append(RideSample(time: Double(t) + 0.4, trainerPower: 190))
+    }
+    let both = RideMoment.at(paired, time: 5.5)
+    #expect(both.power == 200 && both.trainerPower == 190)
+}

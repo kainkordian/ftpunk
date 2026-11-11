@@ -17,12 +17,16 @@ public struct RideSummary: Equatable, Sendable {
     public var distance: Double? = nil
     /// The left leg's share of the ride's work, in percent. Nil when balance was not reported.
     public var leftBalance: Double? = nil
+    /// The trainer's own power, only while a power meter was the ride's source (otherwise it is the same number as above).
+    public var trainerAveragePower: Double? = nil
+    public var trainerNormalizedPower: Double? = nil
 
     public static func make(_ session: TestSession) -> RideSummary {
         let pauses = RidePause.list(session)
         let samples = session.samples.filter { sample in !pauses.contains { $0.contains(sample.time) } }
         let power = Series(samples) { $0.power }
         let track = RideTrack.make(session), ridden = !track.points.isEmpty
+        let trainer = trainerSamples(session, unpaused: samples)
         return RideSummary(
             duration: session.endedAtOffset ?? session.samples.last?.time ?? 0,
             averagePower: power.average(),
@@ -34,7 +38,16 @@ public struct RideSummary: Equatable, Sendable {
             kilojoules: ridden ? track.kilojoules : nil,
             kilocalories: ridden ? track.kilocalories : nil,
             distance: ridden ? track.distance : nil,
-            leftBalance: RideBalance.make(session, track: track)?.left)
+            leftBalance: RideBalance.make(session, track: track)?.left,
+            trainerAveragePower: trainer.flatMap { Series($0) { $0.power }.average() },
+            trainerNormalizedPower: trainer.flatMap { normalizedPower($0, pauses: pauses) })
+    }
+
+    /// The trainer's readings as power samples, when a meter was the source and the trainer reported power.
+    private static func trainerSamples(_ session: TestSession, unpaused samples: [RideSample]) -> [RideSample]? {
+        guard session.configuration.resolvedPowerSource == .externalPowerMeter else { return nil }
+        let trainer = samples.compactMap { sample in sample.trainerPower.map { RideSample(time: sample.time, power: $0) } }
+        return trainer.isEmpty ? nil : trainer
     }
 
     /// Normalized power: a 30-second rolling mean of one-second power, raised to the fourth power, averaged, and rooted.
@@ -161,6 +174,9 @@ public enum TargetSeries {
         close(at: end)
         return points
     }
+
+    /// The target at one moment of the recording (nil when there was none, e.g. while paused).
+    public static func value(_ session: TestSession, at time: Double) -> Int? { targetFunction(session)?(time) }
 
     private static func targetFunction(_ session: TestSession) -> ((Double) -> Int?)? {
         let events = session.events.sorted { $0.time < $1.time }
@@ -292,5 +308,29 @@ public struct WorkoutClock: Sendable {
             result.append((time, bpm))
         }
         return result
+    }
+}
+
+/// Every reading of a recording at one moment, for the charts' hover detail. Each value is the latest reading in the
+/// two seconds up to that moment (the same freshness the cockpit uses), so a gap or a pause shows as no value.
+public struct RideMoment: Equatable, Sendable {
+    public var time: Double
+    public var power: Double?
+    public var target: Int?
+    public var trainerPower: Double?
+    public var heartRate: Int?
+    public var cadence: Double?
+    public var leftBalance: Double?
+
+    public static func at(_ session: TestSession, time: Double) -> RideMoment {
+        var moment = RideMoment(time: time)
+        let window = session.samples.filter { $0.time <= time && time - $0.time <= 2 }
+        moment.power = window.last { $0.power != nil }?.power
+        moment.trainerPower = session.configuration.resolvedPowerSource == .externalPowerMeter ? window.last { $0.trainerPower != nil }?.trainerPower : nil
+        moment.heartRate = window.last { $0.heartRate != nil }?.heartRate
+        moment.cadence = window.last { $0.cadence != nil }?.cadence
+        moment.leftBalance = window.last { $0.leftBalance != nil }?.leftBalance
+        moment.target = TargetSeries.value(session, at: time)
+        return moment
     }
 }

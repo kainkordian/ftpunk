@@ -7,13 +7,14 @@ struct RideCharts: View {
     let session: TestSession
     private var hasHeartRate: Bool { session.samples.contains { $0.heartRate != nil } }
     private var hasTarget: Bool { !TargetSeries.make(session).isEmpty }
+    @State private var hover = RideChartHover()
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.s) {
-            ResultPowerChart(session: session)
+            ResultPowerChart(session: session, hover: hover)
             legend
-            if hasHeartRate { RideHeartRateChart(session: session) }
-            if let balance = RideBalance.make(session), balance.series().count >= 2 { RideBalanceChart(balance: balance) }
+            if hasHeartRate { RideHeartRateChart(session: session, hover: hover) }
+            if let balance = RideBalance.make(session), balance.series().count >= 2 { RideBalanceChart(balance: balance, session: session, hover: hover) }
         }
     }
 
@@ -36,6 +37,7 @@ struct RideCharts: View {
 
 struct RideHeartRateChart: View {
     let session: TestSession
+    var hover: RideChartHover?
     private struct Point: Identifiable { let id: Int; let time: Double; let bpm: Int; let segment: Int }
     private var points: [Point] {
         var result: [Point] = [], segment = 0, previous: Double?
@@ -57,6 +59,7 @@ struct RideHeartRateChart: View {
         .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
         .chartYAxisLabel { Text("bpm").foregroundStyle(Theme.secondary) }
         .chartXAxis { axis }.chartYAxis { axis }
+        .chartOverlay { proxy in if let hover { RideChartHoverOverlay(proxy: proxy, session: session, hover: hover, chart: "heart") } }
         .frame(height: 130)
         .accessibilityLabel("Recorded heart rate over time")
         .accessibilityValue(summary.averageHeartRate.map { "Average \(Int($0.rounded())) beats per minute" + (summary.maximumHeartRate.map { ", maximum \($0)" } ?? "") } ?? "")
@@ -73,6 +76,8 @@ struct RideHeartRateChart: View {
 /// Left/right balance as a diverging chart around an even 50 %: the left leg's share above the line, the right leg's below, smoothed over 30 seconds.
 struct RideBalanceChart: View {
     let balance: RideBalance
+    var session: TestSession?
+    var hover: RideChartHover?
     @Environment(\.colorScheme) private var colorScheme
     private var leftColor: Color { colorScheme == .dark ? Color(red: 0.145, green: 0.416, blue: 0.749) : Color(red: 0.165, green: 0.471, blue: 0.839) }
     private var rightColor: Color { colorScheme == .dark ? Color(red: 0.851, green: 0.349, blue: 0.149) : Color(red: 0.922, green: 0.408, blue: 0.204) }
@@ -106,6 +111,7 @@ struct RideBalanceChart: View {
                     AxisValueLabel { Text(Self.label(value.as(Double.self) ?? 50)).foregroundStyle(Theme.secondary) }
                 }
             }
+            .chartOverlay { proxy in if let hover, let session { RideChartHoverOverlay(proxy: proxy, session: session, hover: hover, chart: "balance") } }
             .frame(height: 130)
             .accessibilityLabel("Pedal balance over time")
             .accessibilityValue("Left \(left) percent, right \(100 - left) percent overall")
@@ -151,6 +157,8 @@ struct RideSummaryCard: View {
             ("Time", DurationFormat.clock(summary.duration)),
             showsPower ? summary.averagePower.map { ("Average power", "\(Int($0.rounded())) W") } : nil,
             showsPower ? summary.normalizedPower.map { ("Normalized power", "\(Int($0.rounded())) W") } : nil,
+            showsPower ? summary.trainerAveragePower.map { ("Trainer avg power", "\(Int($0.rounded())) W") } : nil,
+            showsPower ? summary.trainerNormalizedPower.map { ("Trainer NP", "\(Int($0.rounded())) W") } : nil,
             summary.averageHeartRate.map { ("Average heart rate", "\(Int($0.rounded())) bpm") },
             summary.maximumHeartRate.map { ("Max heart rate", "\($0) bpm") },
             summary.averageCadence.map { ("Average cadence", "\(Int($0.rounded())) rpm") },

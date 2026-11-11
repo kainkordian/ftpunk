@@ -115,8 +115,24 @@ public enum FITEncoder {
             if let power = sample.power, power.isFinite { value.power = Int(min(65534, max(0, power.rounded()))) }
             records[second] = value
         }
-        return records.values.filter { $0.heartRate != nil || $0.cadence != nil || $0.power != nil }.sorted { $0.time < $1.time }
+        var merged = records.values.filter { $0.heartRate != nil || $0.cadence != nil || $0.power != nil }.sorted { $0.time < $1.time }
+        // A meter sends no cadence when its crank event did not change since the last notification, and a notification
+        // sometimes slips into the next second. Analysis tools read such holes as drops (Intervals.icu drew 80 rpm as
+        // spikes down to 50), so a missing cadence or power keeps the last value for up to `holdSeconds`, as head units do.
+        // A real stop is unaffected: the cadence tracker reports an explicit 0 after two seconds without movement.
+        var lastCadence: (time: Int, value: Int)?, lastPower: (time: Int, value: Int)?
+        for index in merged.indices {
+            let time = merged[index].time
+            if let cadence = merged[index].cadence { lastCadence = (time, cadence) }
+            else if let last = lastCadence, time - last.time <= holdSeconds { merged[index].cadence = last.value }
+            if let power = merged[index].power { lastPower = (time, power) }
+            else if let last = lastPower, time - last.time <= holdSeconds { merged[index].power = last.value }
+        }
+        return merged
     }
+
+    /// How long a missing cadence or power keeps its last value in the export.
+    static let holdSeconds = 3
 
     /// RR intervals in milliseconds per second of the ride, in time order. Paused and out-of-range samples and unusable values are left out.
     private static func rrBySecond(_ samples: [RideSample], pauses: [Pause], end: Double) -> [Int: [UInt64]] {

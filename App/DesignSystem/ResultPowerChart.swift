@@ -9,6 +9,7 @@ import FTPunkDomain
 /// best-minute label sits in a second row, clamped inside the plot. Nothing is drawn near the axis labels.
 struct ResultPowerChart: View {
     let session: TestSession
+    var hover: RideChartHover?
     @ScaledMetric(relativeTo: .caption2) private var phaseCharacterWidth = 6.4
     @ScaledMetric(relativeTo: .caption) private var bestCharacterWidth = 7.6
     @ScaledMetric(relativeTo: .caption2) private var rowHeight = 17.0
@@ -56,7 +57,10 @@ struct ResultPowerChart: View {
         .chartYAxis { axis }
         .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
         .chartYAxisLabel { Text("W").foregroundStyle(Theme.secondary) }
-        .chartOverlay { proxy in labels(proxy: proxy, bands: bands, best: best) }
+        .chartOverlay { proxy in
+            labels(proxy: proxy, bands: bands, best: best)
+            if let hover { RideChartHoverOverlay(proxy: proxy, session: session, hover: hover, chart: "power") }
+        }
         .frame(height: 210)
         .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time" + (targets.isEmpty ? "" : ", with the target power"))
         .accessibilityValue(accessibilityValue(bands: bands, best: best))
