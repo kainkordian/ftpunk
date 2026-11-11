@@ -16,6 +16,9 @@ struct WorkoutProfileChart: View {
     var showsAxis = false
     /// False when the rider has no FTP yet: tooltips then show durations only.
     var showsValues = true
+    /// Heart rate recorded so far, on the training clock (`WorkoutClock.heartRate`), drawn as a red line over the bars.
+    /// Its own scale: 0 to 200 bpm (or the highest reading, if higher), so it reads beside the targets, not against them.
+    var heartRate: [(time: Double, bpm: Int)] = []
 
     private var axisWidth: CGFloat { showsAxis && showsValues && (plan.ftpWatts.map { $0 > 0 } ?? false) ? 36 : 0 }
 
@@ -53,6 +56,17 @@ struct WorkoutProfileChart: View {
                 let dimmed = selected.map { $0 != index } ?? false
                 context.fill(path, with: .color(color(for: bar).opacity(done ? 0.45 : dimmed ? 0.6 : 1)))
                 if selected == index { context.stroke(path, with: .color(.primary), style: StrokeStyle(lineWidth: 2, lineJoin: .round)) }
+            }
+            if heartRate.count >= 2 {
+                let top = Double(max(200, heartRate.map(\.bpm).max() ?? 0))
+                var line = Path(), previous: Double?
+                for point in heartRate {
+                    let p = CGPoint(x: left + plotWidth * min(1, max(0, point.time / total)), y: size.height * (1 - Double(point.bpm) / top))
+                    // A gap of more than five seconds (a pause, a lost signal) breaks the line.
+                    if let previous, point.time - previous <= 5 { line.addLine(to: p) } else { line.move(to: p) }
+                    previous = point.time
+                }
+                context.stroke(line, with: .color(Chaindance.heartLine), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
             }
             if let progressSeconds {
                 let x = left + plotWidth * min(1, max(0, progressSeconds / total))

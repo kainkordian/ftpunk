@@ -34,6 +34,8 @@ public struct RideEngine: Sendable {
     private var pausedAt: Double?
     private var phaseBeforePause: WorkoutPhase?
     private var pausedSeconds = 0.0
+    /// Training time jumped over by skipping steps; the training clock runs ahead of the wall clock by this much.
+    private var skippedSeconds = 0.0
     public private(set) var intensity = 100
     private var resistanceLevel: Int?
     public var resumeResistance: Int? { resistanceLevel }
@@ -136,7 +138,7 @@ public struct RideEngine: Sendable {
     public var trainingElapsed: Double { activeTrainingTime(at: session.endedAtOffset ?? lastTick) }
     private func activeTrainingTime(at time: Double) -> Double {
         guard let start = trainingStartedAt else { return 0 }
-        return max(0, (pausedAt ?? time) - start - pausedSeconds)
+        return max(0, (pausedAt ?? time) - start - pausedSeconds + skippedSeconds)
     }
     public var resumeTarget: Int? {
         guard let plan = session.training else { return nil }
@@ -168,6 +170,24 @@ public struct RideEngine: Sendable {
 
     public var currentStep: (index: Int, step: TrainingPlan.Step, remaining: Double)? {
         session.training?.step(at: trainingElapsed)
+    }
+    /// A workout step can be skipped while riding or paused, except the last one: that ends the ride, which is Stop & save.
+    public var canSkipStep: Bool {
+        guard phase == .riding || phase == .paused, let plan = session.training, plan.kind == .workout,
+              let current = currentStep else { return false }
+        return current.index + 1 < plan.steps.count
+    }
+    /// Jumps the training clock to the start of the next step. Recorded as an event, so the ride summary and the
+    /// recorded target follow the skip (`WorkoutClock`).
+    @discardableResult public mutating func skipStep(at time: Double) -> Bool {
+        guard time.isFinite, time >= lastTick else { return false }
+        if phase == .riding { tick(at: time) }
+        guard canSkipStep, let plan = session.training,
+              let current = plan.step(at: activeTrainingTime(at: time)) else { return false }
+        skippedSeconds += current.remaining
+        if phase == .riding { targetPower = plan.target(at: activeTrainingTime(at: time), intensity: intensity) }
+        recordEvent(at: time, message: WorkoutClock.skipMessage(seconds: current.remaining, toStep: current.index + 1))
+        return true
     }
     @discardableResult public mutating func setIntensity(_ percent: Int, at time: Double, minimum: Int = 1, maximum: Int = 32767) -> Bool {
         guard phase.isActive, let plan = session.training, plan.kind == .workout,

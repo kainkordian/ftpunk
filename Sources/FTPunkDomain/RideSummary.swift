@@ -178,13 +178,7 @@ public enum TargetSeries {
                 return nil
             }
         }
-        guard plan.resistance == nil, let begin = time(of: WorkoutPhase.riding.title) else { return nil }
-        var pauses: [(start: Double, end: Double)] = [], requested: Double?
-        for event in events {
-            if event.message == "Training paused; trainer release requested" { requested = event.time }
-            else if event.message == "Training resumed", let start = requested { pauses.append((start, event.time)); requested = nil }
-        }
-        if let requested { pauses.append((requested, .infinity)) }
+        guard plan.resistance == nil, let clock = WorkoutClock(session) else { return nil }
         let intensityChanges: [(Double, Int)] = events.compactMap { event in
             let prefix = "Workout intensity changed to ", suffix = "%"
             guard event.message.hasPrefix(prefix), event.message.hasSuffix(suffix),
@@ -198,17 +192,12 @@ public enum TargetSeries {
             return (event.time, value)
         }
         return { t in
-            guard t >= begin else { return nil }
-            var paused = 0.0
-            for pause in pauses {
-                if t >= pause.start && t < pause.end { return nil }
-                if t >= pause.end { paused += pause.end - pause.start }
-            }
+            guard let training = clock.trainingTime(at: t) else { return nil }
             if plan.kind == .freeRide {
                 return ergChanges.last { $0.0 <= t }?.1 ?? plan.steps.first?.watts
             }
             let intensity = intensityChanges.last { $0.0 <= t }?.1 ?? 100
-            return plan.target(at: t - begin - paused, intensity: intensity)
+            return plan.target(at: training, intensity: intensity)
         }
     }
 }
@@ -248,5 +237,60 @@ public struct AutoPause: Sendable {
             self = AutoPause()
             return nil
         }
+    }
+}
+
+/// The training clock of a recorded workout, rebuilt from its events: it starts with riding, stops while paused and
+/// jumps ahead when a step is skipped. Matches `RideEngine`'s own clock.
+public struct WorkoutClock: Sendable {
+    static let skipPrefix = "Skipped ahead "
+    public static func skipMessage(seconds: Double, toStep index: Int) -> String {
+        "\(skipPrefix)\(String(format: "%.1f", seconds)) s to step \(index + 1)"
+    }
+    public let begin: Double
+    let pauses: [Pause]
+    let skips: [Skip]
+    struct Pause: Sendable { let start: Double, end: Double }
+    struct Skip: Sendable { let time: Double, seconds: Double }
+
+    public init?(_ session: TestSession) {
+        let events = session.events.sorted { $0.time < $1.time }
+        guard session.training != nil, let begin = events.first(where: { $0.message == WorkoutPhase.riding.title })?.time else { return nil }
+        var pauses: [Pause] = [], skips: [Skip] = [], requested: Double?
+        for event in events {
+            if event.message == "Training paused; trainer release requested" { requested = event.time }
+            else if event.message == "Training resumed", let start = requested { pauses.append(Pause(start: start, end: event.time)); requested = nil }
+            else if event.message.hasPrefix(Self.skipPrefix),
+                    let seconds = Double(event.message.dropFirst(Self.skipPrefix.count).prefix { $0 != " " }), seconds.isFinite, seconds > 0 {
+                skips.append(Skip(time: event.time, seconds: seconds))
+            }
+        }
+        if let requested { pauses.append(Pause(start: requested, end: .infinity)) }
+        self.begin = begin; self.pauses = pauses; self.skips = skips
+    }
+
+    /// Training seconds at a moment of the recording; nil before riding started and while paused.
+    public func trainingTime(at t: Double) -> Double? {
+        guard t >= begin else { return nil }
+        var paused = 0.0
+        for pause in pauses {
+            if t >= pause.start && t < pause.end { return nil }
+            if t >= pause.end { paused += pause.end - pause.start }
+        }
+        let skipped = skips.reduce(0.0) { $1.time <= t ? $0 + $1.seconds : $0 }
+        return t - begin - paused + skipped
+    }
+
+    /// Heart rate on the training clock, for drawing over the workout profile: at most one point per second, paused
+    /// samples left out.
+    public static func heartRate(_ session: TestSession) -> [(time: Double, bpm: Int)] {
+        guard let clock = WorkoutClock(session) else { return [] }
+        var result: [(time: Double, bpm: Int)] = []
+        for sample in session.samples {
+            guard let bpm = sample.heartRate, bpm > 0, let time = clock.trainingTime(at: sample.time) else { continue }
+            if let last = result.last, time >= last.time, time - last.time < 1 { continue }
+            result.append((time, bpm))
+        }
+        return result
     }
 }

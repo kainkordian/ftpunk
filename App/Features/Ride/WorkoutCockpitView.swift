@@ -1,57 +1,47 @@
 import SwiftUI
 import FTPunkDomain
 
-/// The cockpit for library workouts, free ERG and resistance rides. It reuses the FTP test layout:
-/// large target and actual numbers, supporting readings, and Pause/Resume as the primary action
-/// with Stop & save always one tap away.
+/// The dashboard for library workouts, free ERG and resistance rides, styled after the Chaindance (RG/SP) mockups.
+/// In a workout the time left in the step is the biggest number; target (with its −/+ controls inside the box) and
+/// actual stand beside it. Then the workout profile with the heart-rate line and Skip, a boxed row of heart rate,
+/// cadence and intensity, and every other ride figure below. Pause/Resume and Stop & save stay one tap away.
 struct WorkoutCockpitView: View {
     @Bindable var model: AppModel
     let engine: RampEngine
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showDebug = false
-    @State private var width = 0.0
 
     private var plan: TrainingPlan { engine.session.training! }
     private var isWorkout: Bool { plan.kind == .workout }
     private var isResistance: Bool { engine.resumeResistance != nil }
     private var paused: Bool { engine.phase == .paused }
     private var stacked: Bool { dynamicTypeSize.isAccessibilitySize }
-    private var row: AnyLayout { stacked ? AnyLayout(VStackLayout(spacing: Space.m)) : AnyLayout(HStackLayout(spacing: Space.m)) }
+    /// Narrow screens put the big box on its own row, with target and actual side by side beneath it.
+    private var narrow: Bool { sizeClass == .compact || stacked }
     private var livePower: Int? { engine.lastPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
     private var trainerPower: Int? { engine.lastTrainerPower.flatMap { model.elapsed - $0.time <= 2 ? Int($0.watts.rounded()) : nil } }
     private var showsTrainer: Bool { engine.session.configuration.resolvedPowerSource == .externalPowerMeter }
-    private var trainerCorner: CornerReading? { showsTrainer ? CornerReading(title: "TRAINER", value: trainerPower.map(String.init)) : nil }
     private var liveCadence: Double? { engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? $0.rpm : nil } }
-    private var layout: CockpitLayout {
-        CockpitLayout.make(phase: engine.phase, accessibilitySize: stacked, rideVisual: model.rideVisualPlacement,
-                           containerWidth: width, regularWidthClass: sizeClass != .compact, kind: isWorkout ? .workout : .freeRide)
-    }
     private var busy: Bool { model.trainingTransition != nil }
-    @AppStorage("dashboardShowsMoreReadings") private var showsMoreReadings = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: Space.m) {
                 header
                 banners
-                if layout.sideBySide {
-                    HStack(alignment: .top, spacing: Space.l) {
-                        VStack(spacing: Space.m) { ForEach(layout.leftColumn, id: \.self) { block($0) } }.frame(maxWidth: .infinity)
-                        VStack(spacing: Space.m) { ForEach(layout.rightColumn, id: \.self) { block($0) } }.frame(maxWidth: 420)
-                    }
-                } else {
-                    if isWorkout { profile }
-                    if layout.visual == .hero { hero } else { heroTiles }
-                    if layout.visual == .strip { RideVisualStrip(model: model, engine: engine) }
-                    lowerContent
-                }
+                mainRow
+                if isWorkout { profileBlock }
+                readingsRow
+                RideMoreReadings(session: engine.session)
+                Text(footer).font(.callout).foregroundStyle(Chaindance.dim).frame(maxWidth: .infinity, alignment: .leading)
                 LivePowerChart(session: engine.session)
             }
-            .padding(Space.l).frame(maxWidth: layout.maximumContentWidth).frame(maxWidth: .infinity)
+            .padding(Space.l).frame(maxWidth: 1100).frame(maxWidth: .infinity)
         }
-        .modifier(ReadWidth(width: $width))
+        .background(Chaindance.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
+        .environment(\.colorScheme, .dark)
         .sheet(isPresented: $showDebug) {
             NavigationStack {
                 ScrollView { DebugControlsView(model: model).padding() }
@@ -64,85 +54,36 @@ struct WorkoutCockpitView: View {
         }
     }
 
-    @ViewBuilder private var profile: some View {
-        WorkoutProfileChart(plan: plan, intensity: engine.intensity, progressSeconds: engine.trainingElapsed, height: 64)
-        stepBlock
-    }
-    /// Below the readings in the single column. (The profile sits above the readings there.)
-    @ViewBuilder private var lowerContent: some View {
-        block(.tiles); block(.controls); block(.notes)
-    }
-
-    /// One part of the cockpit. The wide Large layout places these in two columns (`CockpitLayout`).
-    @ViewBuilder private func block(_ block: CockpitBlock) -> some View {
-        switch block {
-        case .scene: hero
-        case .progress: if isWorkout { profile }
-        case .tiles: supportTiles
-        case .controls: adjustControls
-        case .notes: Text(footer).font(.callout).foregroundStyle(Theme.secondary).frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    private var hero: some View { RideVisualHero(model: model, engine: engine, readout: heroReadout) }
-    private var heroReadout: HeroReadout {
-        var detail: String?
-        if isWorkout, let current = engine.currentStep { detail = "STEP \(current.index + 1)/\(plan.steps.count) · \(clockText(current.remaining))" }
-        let actual = livePower.map(String.init)
-        if let level = engine.resumeResistance {
-            return HeroReadout(targetTitle: paused ? "RESUME LEVEL" : "RESISTANCE", target: String(format: "%.1f", Double(level) / 10), unit: "", actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer)
-        }
-        if paused { return HeroReadout(targetTitle: "PAUSED", target: engine.resumeTarget.map(String.init), actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer) }
-        return HeroReadout(target: engine.targetPower.map(String.init), actual: actual, trainerActual: trainerPower.map(String.init), detail: detail, showsTrainer: showsTrainer)
-    }
-
     // MARK: Header and banners
 
-    @ViewBuilder private var header: some View {
-        if stacked { compactHeader } else { regularHeader }
-    }
+    private var rideClock: String { clockText(isWorkout ? engine.trainingElapsed : model.elapsed) }
+    private var stateText: String { paused ? "Paused" : engine.phase == .waiting ? "Start pedaling" : "Riding" }
 
-    /// Accessibility text sizes: the title and the time only, so nothing wraps letter by letter and the readings stay above the fold.
-    private var compactHeader: some View {
-        HStack(alignment: .top, spacing: Space.s) {
+    private var header: some View {
+        HStack(alignment: .center, spacing: Space.m) {
             Button { model.cockpitPresented = false } label: {
-                Image(systemName: "chevron.down").font(.title3.weight(.semibold)).frame(width: 44, height: 44).contentShape(Rectangle())
+                Image(systemName: "chevron.down").font(.title3.weight(.semibold)).foregroundStyle(Chaindance.text)
+                    .frame(width: 44, height: 44).contentShape(Rectangle())
             }
             .buttonStyle(.plain).accessibilityLabel("Minimise ride").accessibilityHint("Keeps the ride going behind the live-ride bar")
             .accessibilityIdentifier("minimise-ride")
-            VStack(alignment: .leading, spacing: 2) {
-                Text(engine.session.activityTitle).font(.headline).foregroundStyle(Theme.accent).lineLimit(2).minimumScaleFactor(0.7)
-                Text(clockText(isWorkout ? engine.trainingElapsed : model.elapsed)).font(.headline).monospacedDigit()
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: Space.s) {
+                    Text(isWorkout ? "WORKOUT" : isResistance ? "RESISTANCE" : "FREE RIDE")
+                        .font(.system(.caption, design: .rounded).weight(.heavy)).tracking(1)
+                        .foregroundStyle(Chaindance.background).padding(.horizontal, 6).padding(.vertical, 2).background(Chaindance.lime)
+                    Text(engine.session.activityTitle).font(.system(.headline, design: .rounded).weight(.bold))
+                        .foregroundStyle(Chaindance.text).lineLimit(stacked ? 2 : 1).minimumScaleFactor(0.7)
+                }
+                Text("\(engine.session.riderName) · \(stateText)").font(.caption).foregroundStyle(Chaindance.dim)
+            }
+            Spacer(minLength: 0)
+            VStack(alignment: .trailing, spacing: 0) {
+                ChaindanceNumber(text: rideClock, size: 34)
+                Text(isWorkout ? "WORKOUT TIME" : "RIDE TIME").chaindanceCaption()
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(engine.session.activityTitle)
-            .accessibilityValue("\(isWorkout ? "Workout time" : "Ride time") \(clockText(isWorkout ? engine.trainingElapsed : model.elapsed)). \(paused ? "Paused" : engine.phase == .waiting ? "Start pedaling" : "Riding")")
-            Spacer(minLength: 0)
-            RideVisualMenu(model: model)
-            if engine.session.isDemo {
-                RideOptionsMenu(showDebug: { showDebug = true }).equatable()
-            }
-        }
-    }
-
-    private var regularHeader: some View {
-        HStack(spacing: Space.m) {
-            Button { model.cockpitPresented = false } label: {
-                Image(systemName: "chevron.down").font(.title3.weight(.semibold)).frame(width: 44, height: 44).contentShape(Rectangle())
-            }
-            .buttonStyle(.plain).accessibilityLabel("Minimise ride").accessibilityHint("Keeps the ride going behind the live-ride bar")
-            .accessibilityIdentifier("minimise-ride")
-            VStack(alignment: .leading, spacing: 2) {
-                Text(engine.session.activityTitle).font(.headline).foregroundStyle(Theme.accent).lineLimit(2)
-                Text("\(engine.session.riderName) · \(paused ? "Paused" : engine.phase == .waiting ? "Start pedaling" : "Riding")")
-                    .font(.caption).foregroundStyle(Theme.secondary)
-            }
-            Spacer(minLength: 0)
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(clockText(isWorkout ? engine.trainingElapsed : model.elapsed)).font(.headline).monospacedDigit()
-                Text(isWorkout ? "WORKOUT TIME" : "RIDE TIME").font(.caption2).foregroundStyle(Theme.secondary)
-            }
-            RideVisualMenu(model: model)
+            .accessibilityLabel(isWorkout ? "Workout time" : "Ride time").accessibilityValue("\(rideClock). \(stateText)")
             if engine.session.isDemo {
                 RideOptionsMenu(showDebug: { showDebug = true }).equatable()
             }
@@ -152,104 +93,217 @@ struct WorkoutCockpitView: View {
     @ViewBuilder private var banners: some View {
         if engine.session.isDemo { StatusPill(text: model.mockPaused ? "Debug · stream paused" : "Debug · mock sensors", symbol: "ladybug", tone: .warning) }
         if let transition = model.trainingTransition {
-            Text(transition).font(.headline).foregroundStyle(Theme.warning)
+            Text(transition).font(.headline).foregroundStyle(Chaindance.amber)
         } else if paused {
             Label("Trainer released. Progress is paused. Pedal before resuming.", systemImage: "pause.circle")
-                .font(.callout).foregroundStyle(Theme.warning).frame(maxWidth: .infinity, alignment: .leading)
+                .font(.headline).foregroundStyle(Chaindance.amber).frame(maxWidth: .infinity, alignment: .leading)
         }
-        if model.isFinishing { Label("Confirming trainer stop…", systemImage: "hourglass").font(.headline).foregroundStyle(Theme.warning) }
+        if model.isFinishing { Label("Confirming trainer stop…", systemImage: "hourglass").font(.headline).foregroundStyle(Chaindance.amber) }
     }
 
-    // MARK: Workout steps
+    // MARK: Big numbers
 
-    @ViewBuilder private var stepBlock: some View {
-        if let current = engine.currentStep {
-            let next = current.index + 1 < plan.steps.count ? plan.steps[current.index + 1] : nil
-            VStack(alignment: .leading, spacing: Space.xs) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(current.step.name).font(.title3.weight(.semibold)).lineLimit(2)
-                    Spacer(minLength: Space.s)
-                    Text(clockText(current.remaining)).font(.title2.bold()).monospacedDigit()
-                        .accessibilityLabel("Step time left").accessibilityValue(clockText(current.remaining))
+    @ViewBuilder private var mainRow: some View {
+        if narrow {
+            VStack(spacing: Space.m) {
+                bigBox
+                if isWorkout {
+                    (stacked ? AnyLayout(VStackLayout(spacing: Space.m)) : AnyLayout(HStackLayout(alignment: .top, spacing: Space.m))) { targetBox; actualBox }
+                } else { targetBox }
+            }
+        } else {
+            HStack(alignment: .top, spacing: Space.m) {
+                bigBox.frame(maxWidth: .infinity)
+                VStack(spacing: Space.m) {
+                    targetBox
+                    if isWorkout { actualBox }
                 }
-                Text("Step \(current.index + 1) of \(plan.steps.count)").font(.footnote).foregroundStyle(Theme.secondary)
-                if let next {
-                    Text("Next: \(next.name) · \(DurationFormat.compact(next.seconds)) · \(scaled(next.watts)) W").font(.subheadline).foregroundStyle(Theme.secondary)
-                } else {
-                    Text("Last step").font(.subheadline).foregroundStyle(Theme.secondary)
+                .frame(maxWidth: .infinity)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    /// Workout: time left in the step. Free ride: the actual power.
+    @ViewBuilder private var bigBox: some View {
+        if isWorkout {
+            if let current = engine.currentStep {
+                let left = clockText(current.remaining.rounded(.up))
+                ChaindanceBox(caption: "Step left", accent: paused ? .amber : .none, corner: "STEP \(current.index + 1)/\(plan.steps.count)", minHeight: 200) {
+                    VStack(spacing: Space.xs) {
+                        ChaindanceNumber(text: left, size: 128, color: paused ? Chaindance.amber : Chaindance.text)
+                        Text(current.step.name).font(.system(.title3, design: .rounded).weight(.semibold)).foregroundStyle(Chaindance.text).lineLimit(1)
+                    }
+                    .frame(maxHeight: .infinity)
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Step time left").accessibilityValue("\(left), \(current.step.name), step \(current.index + 1) of \(plan.steps.count)")
+            } else {
+                ChaindanceBox(caption: "Step left", minHeight: 200) {
+                    Text(engine.phase == .waiting ? "START PEDALING" : "—").font(.system(.largeTitle, design: .rounded).weight(.black))
+                        .foregroundStyle(Chaindance.lime).frame(maxHeight: .infinity)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading).accessibilityElement(children: .combine)
+        } else {
+            ChaindanceBox(caption: "Actual", corner: showsTrainer ? nil : "\(engine.session.configuration.resolvedPowerSource.title) power", minHeight: 200) {
+                powerReading(livePower, size: 128)
+            }
+            .overlay(alignment: .bottomLeading) { trainerLabel }
+            .accessibilityElement(children: .ignore).accessibilityLabel("Actual power")
+            .accessibilityValue(livePower.map { "\($0) watts" } ?? "No recent signal")
+        }
+    }
+
+    private func powerReading(_ value: Int?, size: CGFloat, color: Color = Chaindance.text) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+            ChaindanceNumber(text: value.map(String.init) ?? "—", size: size, color: color)
+            if value != nil { Text("W").chaindanceCaption() }
+        }
+        .frame(maxHeight: .infinity)
+    }
+
+    /// The trainer's own watts, bottom-left, while a power meter is the source (the big number is then the meter's).
+    @ViewBuilder private var trainerLabel: some View {
+        if showsTrainer {
+            HStack(spacing: 4) {
+                Text("TR").chaindanceCaption()
+                Text(trainerPower.map(String.init) ?? "—").font(.system(.headline, design: .rounded).weight(.bold)).monospacedDigit().foregroundStyle(Chaindance.text)
+            }
+            .padding(Space.m).accessibilityElement(children: .combine).accessibilityLabel("Trainer power")
+            .accessibilityValue(trainerPower.map { "\($0) watts" } ?? "not available")
+        }
+    }
+
+    private var actualBox: some View {
+        ChaindanceBox(caption: "Actual", corner: showsTrainer ? nil : engine.session.configuration.resolvedPowerSource.title) {
+            powerReading(livePower, size: 72)
+        }
+        .overlay(alignment: .bottomLeading) { trainerLabel }
+        .accessibilityElement(children: .ignore).accessibilityLabel("Actual power")
+        .accessibilityValue(livePower.map { "\($0) watts" } ?? "No recent signal")
+    }
+
+    /// The target, with its −/+ controls inside the box: intensity in a workout, watts in ERG, the level in resistance.
+    private var targetBox: some View {
+        let caption: String, value: String?, unit: String
+        if let level = engine.resumeResistance {
+            caption = paused ? "Resume level" : "Resistance"; value = String(format: "%.1f", Double(level) / 10); unit = ""
+        } else if paused {
+            caption = "Paused · resumes at"; value = engine.resumeTarget.map(String.init); unit = "W"
+        } else {
+            caption = "Target"; value = (engine.targetPower ?? engine.resumeTarget).map(String.init); unit = "W"
+        }
+        return ChaindanceBox(caption: caption, accent: paused ? .amber : .lime, corner: isWorkout ? "\(engine.intensity) %" : nil) {
+            VStack(spacing: Space.s) {
+                HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                    ChaindanceNumber(text: value ?? "—", size: 72, color: paused ? Chaindance.amber : Chaindance.lime)
+                    if value != nil, !unit.isEmpty { Text(unit).chaindanceCaption() }
+                }
+                .accessibilityElement(children: .ignore).accessibilityLabel(caption).accessibilityValue(value.map { "\($0) \(unit)" } ?? "none")
+                targetControls
+            }
+        }
+    }
+
+    @ViewBuilder private var targetControls: some View {
+        if isWorkout {
+            stepper(minus: ("−5 %", "Lower intensity", { model.adjustIntensity(by: -5) }, engine.intensity <= 50, "intensity-minus"),
+                    plus: ("+5 %", "Raise intensity", { model.adjustIntensity(by: 5) }, engine.intensity >= 150, "intensity-plus"))
+        } else if isResistance {
+            stepper(minus: ("− LEVEL", "Lower resistance", { model.adjustResistance(by: -1) }, false, "resistance-minus"),
+                    plus: ("+ LEVEL", "Raise resistance", { model.adjustResistance(by: 1) }, false, "resistance-plus"))
+        } else {
+            stepper(minus: ("−10 W", "Lower ERG target", { model.adjustERG(by: -10) }, false, "erg-minus"),
+                    plus: ("+10 W", "Raise ERG target", { model.adjustERG(by: 10) }, false, "erg-plus"))
+        }
+    }
+    private typealias StepAction = (title: String, label: String, action: () -> Void, disabled: Bool, id: String)
+    private func stepper(minus: StepAction, plus: StepAction) -> some View {
+        HStack(spacing: Space.s) {
+            Button(minus.title, action: minus.action).disabled(minus.disabled || busy).accessibilityLabel(minus.label).accessibilityIdentifier(minus.id)
+                .keyboardShortcut(.downArrow, modifiers: [])
+            Button(plus.title, action: plus.action).disabled(plus.disabled || busy).accessibilityLabel(plus.label).accessibilityIdentifier(plus.id)
+                .keyboardShortcut(.upArrow, modifiers: [])
+        }
+        .buttonStyle(ChaindanceStepButtonStyle())
+    }
+
+    // MARK: Profile, next step and Skip
+
+    @ViewBuilder private var profileBlock: some View {
+        VStack(alignment: .leading, spacing: Space.s) {
+            WorkoutProfileChart(plan: plan, intensity: engine.intensity, progressSeconds: engine.trainingElapsed, height: 96,
+                                heartRate: WorkoutClock.heartRate(engine.session))
+            (stacked ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.s)) : AnyLayout(HStackLayout(spacing: Space.m))) {
+                nextText
+                Spacer(minLength: 0)
+                HStack(spacing: 4) {
+                    Rectangle().fill(Chaindance.heartLine).frame(width: 16, height: 3)
+                    Text("Heart rate").font(.caption).foregroundStyle(Chaindance.dim)
+                }
+                .accessibilityHidden(true)
+                Button { model.skipStep() } label: { Label("Skip step", systemImage: "forward.end.fill") }
+                    .buttonStyle(ChaindanceOutlineButtonStyle())
+                    .disabled(!engine.canSkipStep || busy)
+                    .keyboardShortcut(.rightArrow, modifiers: .command)
+                    .accessibilityHint("Moves on to the next step. The last step can't be skipped; use Stop & save.")
+                    .accessibilityIdentifier("skip-step")
+            }
+        }
+    }
+
+    @ViewBuilder private var nextText: some View {
+        if let current = engine.currentStep {
+            let next = current.index + 1 < plan.steps.count ? plan.steps[current.index + 1] : nil
+            Group {
+                if let next {
+                    Text("NEXT ▸ ").foregroundStyle(Chaindance.dim) + Text("\(next.name) · \(DurationFormat.compact(next.seconds)) · \(scaled(next.watts)) W").foregroundStyle(Chaindance.text)
+                } else {
+                    Text("LAST STEP").foregroundStyle(Chaindance.dim)
+                }
+            }
+            .font(.system(.headline, design: .rounded).weight(.semibold))
         } else if engine.phase == .waiting {
-            Text("Start pedaling to begin.").font(.title3).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Start pedaling to begin.").font(.headline).foregroundStyle(Chaindance.text)
         }
     }
     private func scaled(_ watts: Int) -> Int { Int((Double(watts) * Double(engine.intensity) / 100).rounded()) }
 
-    // MARK: Tiles
+    // MARK: Readings
 
-    private var heroTiles: some View {
-        row {
-            if let level = engine.resumeResistance {
-                MetricTile(title: paused ? "RESUME LEVEL" : "RESISTANCE", value: String(format: "%.1f", Double(level) / 10),
-                           tone: .accent, caption: "Trainer level · no ERG", role: .hero)
-            } else if paused {
-                MetricTile(title: "PAUSED", value: nil, tone: .warning, caption: engine.resumeTarget.map { "Resumes at \($0) W" } ?? "Trainer released", role: .hero)
-            } else {
-                MetricTile(title: "TARGET", value: engine.targetPower.map(String.init), unit: "W", tone: .accent,
-                           caption: engine.targetPower == nil ? nil : "ERG target", role: .hero)
-            }
-            MetricTile(title: "ACTUAL", value: livePower.map(String.init), unit: "W", caption: "\(engine.session.configuration.resolvedPowerSource.title) power", role: .hero, corner: trainerCorner)
-        }
-    }
-
-    private var supportTiles: some View {
-        VStack(spacing: Space.xs) {
-            RideDashboardBar(session: engine.session, showsMore: $showsMoreReadings)
-            if showsMoreReadings { RideExtraTiles(session: engine.session, rows: stacked) } else { mainTiles }
-        }
-    }
-    private var mainTiles: some View {
-        row {
-            MetricTile(title: "HEART RATE", value: model.freshHeartRate.map(String.init), unit: "bpm", symbol: "heart.fill", tone: .heart)
-            MetricTile(title: "CADENCE", value: liveCadence.map { String(Int($0)) }, unit: "rpm", symbol: "figure.indoor.cycle")
-        }
-    }
-
-    // MARK: Adjustments and actions
-
-    @ViewBuilder private var adjustControls: some View {
-        if isWorkout {
-            adjuster(title: "Intensity", value: "\(engine.intensity) %", minus: ("−5 %", { model.adjustIntensity(by: -5) }, engine.intensity <= 50, "intensity-minus"),
-                     plus: ("+5 %", { model.adjustIntensity(by: 5) }, engine.intensity >= 150, "intensity-plus"))
-        } else if isResistance {
-            adjuster(title: "Resistance", value: String(format: "%.1f", Double(engine.resumeResistance ?? 0) / 10),
-                     minus: ("− level", { model.adjustResistance(by: -1) }, false, "resistance-minus"),
-                     plus: ("+ level", { model.adjustResistance(by: 1) }, false, "resistance-plus"))
-        } else {
-            adjuster(title: "ERG target", value: "\(engine.targetPower ?? engine.resumeTarget ?? 0) W",
-                     minus: ("−10 W", { model.adjustERG(by: -10) }, false, "erg-minus"), plus: ("+10 W", { model.adjustERG(by: 10) }, false, "erg-plus"))
-        }
-    }
-    private func adjuster(title: String, value: String, minus: (String, () -> Void, Bool, String), plus: (String, () -> Void, Bool, String)) -> some View {
-        let layout = stacked ? AnyLayout(VStackLayout(spacing: Space.s)) : AnyLayout(HStackLayout(spacing: Space.m))
+    private var readingsRow: some View {
+        let layout = stacked ? AnyLayout(VStackLayout(spacing: Space.m)) : AnyLayout(HStackLayout(spacing: Space.m))
+        let heart = model.freshHeartRate.map(String.init)
+        let cadence = liveCadence.map { String(Int($0)) }
         return layout {
-            Button(minus.0, action: minus.1).disabled(minus.2 || busy).accessibilityIdentifier(minus.3)
-            VStack(spacing: 2) {
-                Text(title.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(Theme.secondary)
-                Text(value).font(.title2.bold()).monospacedDigit()
-            }.frame(maxWidth: .infinity).accessibilityElement(children: .combine)
-            Button(plus.0, action: plus.1).disabled(plus.2 || busy).accessibilityIdentifier(plus.3)
+            reading(caption: "♥ BPM", value: heart, accent: .pink, spoken: "Heart rate")
+            reading(caption: "RPM", value: cadence, accent: .none, spoken: "Cadence")
+            if isWorkout {
+                reading(caption: "Intensity", value: "\(engine.intensity)", unit: "%", accent: .cyan, spoken: "Intensity")
+            } else {
+                let kilojoules = RideTrack.make(engine.session).kilojoules
+                reading(caption: "Work", value: String(Int(kilojoules.rounded())), unit: "kJ", accent: .cyan, spoken: "Work")
+            }
         }
-        .buttonStyle(FTPunkSecondaryButtonStyle()).controlSize(.large)
+    }
+    private func reading(caption: String, value: String?, unit: String = "", accent: Chaindance.Accent, spoken: String) -> some View {
+        ChaindanceBox(caption: caption, accent: accent) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                ChaindanceNumber(text: value ?? "—", size: 60, color: accent.color ?? Chaindance.text)
+                if value != nil, !unit.isEmpty { Text(unit).chaindanceCaption() }
+            }
+        }
+        .accessibilityElement(children: .ignore).accessibilityLabel(spoken)
+        .accessibilityValue(value.map { "\($0) \(unit)" } ?? "No recent signal")
     }
 
     private var footer: String {
         if isResistance { return "Use your gears and cadence to choose the effort. Levels are trainer-specific, not watts." }
         if paused { return "Pedal until fresh power and cadence arrive, then resume." }
-        // The same rule as the avatar: when Chaindance stands up, so does the text.
         return CoachingText.line(for: RideVisualState.make(RideVisualInput(model: model, engine: engine)), phase: engine.phase)
     }
+
+    // MARK: Actions
 
     private var actions: some View {
         let layout = stacked ? AnyLayout(VStackLayout(spacing: Space.s)) : AnyLayout(HStackLayout(spacing: Space.m))
@@ -271,6 +325,55 @@ struct WorkoutCockpitView: View {
             .keyboardShortcut(".", modifiers: .command)
             .accessibilityIdentifier("stop-save")
         }
-        .padding(.horizontal, Space.l).padding(.vertical, Space.m).frame(maxWidth: .infinity).background(.bar)
+        .padding(.horizontal, Space.l).padding(.vertical, Space.m).frame(maxWidth: .infinity)
+        .background(Chaindance.panel)
+        .overlay(alignment: .top) { Rectangle().fill(Chaindance.line).frame(height: 3) }
+    }
+}
+
+/// Every other ride figure, always on the dashboard: power (average, normalized, maximum), heart rate (average,
+/// maximum), average cadence, work, calories, simulated speed and distance, and pedal balance when it is reported.
+struct RideMoreReadings: View {
+    let session: TestSession
+
+    private struct Item: Identifiable {
+        let caption: String, value: String?, unit: String, note: String?
+        var id: String { caption }
+    }
+    private var items: [Item] {
+        let summary = RideSummary.make(session), track = RideTrack.make(session)
+        let ridden = !track.points.isEmpty
+        let whole: (Double?) -> String? = { $0.map { String(Int($0.rounded())) } }
+        var result = [
+            Item(caption: "Avg power", value: whole(summary.averagePower), unit: "W", note: nil),
+            Item(caption: "NP", value: whole(summary.normalizedPower), unit: "W", note: nil),
+            Item(caption: "Max power", value: whole(summary.maximumPower), unit: "W", note: nil),
+            Item(caption: "Avg HR", value: whole(summary.averageHeartRate), unit: "bpm", note: nil),
+            Item(caption: "Max HR", value: summary.maximumHeartRate.map(String.init), unit: "bpm", note: nil),
+            Item(caption: "Avg RPM", value: whole(summary.averageCadence), unit: "rpm", note: nil),
+            Item(caption: "Work", value: ridden ? String(Int(track.kilojoules.rounded())) : nil, unit: "kJ", note: nil),
+            Item(caption: "Calories", value: ridden ? String(Int(track.kilocalories.rounded())) : nil, unit: "kcal", note: "Est."),
+            Item(caption: "Speed", value: ridden ? RideFigures.kilometresPerHour(track.speed(at: session.samples.last?.time ?? 0)) : nil, unit: "km/h", note: "Sim."),
+            Item(caption: "Distance", value: ridden ? RideFigures.kilometres(track.distance) : nil, unit: "km", note: "Sim."),
+        ]
+        if let left = RideBalance.live(session.samples) {
+            result.append(Item(caption: "Balance", value: RideFigures.balance(left), unit: "L/R", note: nil))
+        }
+        return result
+    }
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Space.m)], spacing: Space.m) {
+            ForEach(items) { item in
+                ChaindanceBox(caption: item.caption, corner: item.note) {
+                    HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                        ChaindanceNumber(text: item.value ?? "—", size: 34)
+                        if item.value != nil { Text(item.unit).chaindanceCaption() }
+                    }
+                }
+                .accessibilityElement(children: .ignore).accessibilityLabel(item.caption)
+                .accessibilityValue(item.value.map { "\($0) \(item.unit)" + (item.note.map { ", \($0 == "Sim." ? "simulated" : "estimated")" } ?? "") } ?? "Not yet")
+            }
+        }
     }
 }

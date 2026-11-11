@@ -23,6 +23,7 @@ Fixed principles:
 
 Built and covered by tests (356 Swift tests, 280 web tests, iOS + Mac builds pass):
 
+- **Workout dashboard rework (2026-11-11, native only):** the workout / free-ride cockpit follows the Chaindance (RG/SP) mockups without the rider scene: square boxes, much bigger numbers with the step's time left as the biggest, TARGET with its −/+ inside the box (↑/↓ keys too), ACTUAL with the trainer's watts bottom-left, a red heart-rate line over the workout profile, Skip step (not the last step; recorded as an event, so the summary's target follows), and all ride figures always shown. Bluetooth connect failures now time out and show a re-pair hint. 359 Swift tests pass; the two xcodebuild CI builds were not run and the new screen has not been looked at.
 - **FIT uploads and training-load fields (2026-11-09, native + web):** Intervals.icu now receives the FIT file, so simulated distance, speed, calories, work and balance reach it. Jobs queued earlier as TCX still upload as TCX (the file name and type are read from the bytes). The FIT session gains normalized power, TSS and IF, laps gain normalized power (no FTP or under 30 s leaves them invalid), paused samples no longer count towards NP (also on the ride card), and heart-strap RR intervals are recorded and written as `hrv` messages. Both encoders stay byte-identical. Not exercised: a real upload to Intervals.icu, RR from a real strap.
 
 - Simulated gravel-bike speed and distance from power (FIT records, laps, session), work in kJ, estimated kcal, left/right balance from a meter or trainer with an end-of-ride graph, and a main/additional readings switch in the cockpit. Not yet seen in a running app or on a real meter.
@@ -148,6 +149,7 @@ Each item needs a decision from the owner before a plan is written.
 - FIT *workout* files, cadence targets, free-ride segments in workouts.
 - Release: Developer ID signing, notarization, App Store. Live OAuth approval.
 - Trainer spin-down calibration from the app (FTMS Spin Down Control). Needs hardware testing.
+- Web: port the 2026-11-11 native workout dashboard (Chaindance boxes, bigger numbers, target controls in the box, heart-rate line on the profile, Skip step, all figures shown). The FTP test cockpit could get the same look.
 - Builder: keep repeat-group labels ("Main set"), accept cadence targets and zones in the text editor, push custom workouts to Intervals.icu (needs a decision).
 - Trainer warmth cools down when the trainer idles (today it only resets on a new Bluetooth connection).
 - Account/server sync between devices (the original architecture keeps room for it).

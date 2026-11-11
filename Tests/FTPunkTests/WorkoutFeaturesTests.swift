@@ -145,3 +145,28 @@ private func featureConfig() throws -> SessionConfiguration {
     #expect(archive.workouts?[0].plan.steps[0].endWatts == 200)
     #expect(try PortableArchive.decode(archive.encoded()).workouts?[0].plan == archive.workouts?[0].plan)
 }
+
+@Test func skippingAStepMovesTheTrainingClockAndTheRecordedTargetFollows() throws {
+    let plan = try TrainingPlan(kind: .workout, name: "Skips", steps: [.init("Warm", seconds: 20, watts: 100), .init("Work", seconds: 20, watts: 200), .init("Cool", seconds: 20, watts: 120)])
+    var engine = RideEngine(configuration: try featureConfig(), training: plan)
+    for t in 0...5 { engine.receive(.init(time: Double(t), power: 100, cadence: 90, heartRate: 120 + t)); engine.tick(at: Double(t)) }
+    #expect(engine.currentStep?.index == 0); #expect(engine.canSkipStep)
+    let skipped = engine.skipStep(at: 5); #expect(skipped)
+    #expect(engine.currentStep?.index == 1); #expect(engine.targetPower == 200); #expect(engine.trainingElapsed == 20)
+    // Paused, a skip still moves on, and resuming carries on from the new step.
+    let paused = engine.pause(at: 6); #expect(paused)
+    let skippedPaused = engine.skipStep(at: 6); #expect(skippedPaused); #expect(engine.currentStep?.index == 2)
+    // The last step is never skipped: that would end the ride without Stop & save.
+    #expect(!engine.canSkipStep); let last = engine.skipStep(at: 6); #expect(!last)
+    for t in 6...9 { engine.receive(.init(time: Double(t), power: 120, cadence: 90, heartRate: 130)) }
+    let resumed = engine.resume(at: 9); #expect(resumed); engine.tick(at: 9); #expect(engine.targetPower == 120)
+
+    let clock = try #require(WorkoutClock(engine.session))
+    #expect(clock.trainingTime(at: 4) == 4); #expect(clock.trainingTime(at: 5) == 20)
+    #expect(clock.trainingTime(at: 7) == nil); #expect(clock.trainingTime(at: 9) == 40)
+    let targets = TargetSeries.make(engine.session)
+    #expect(targets.contains { $0.time == 5 && $0.watts == 200 })
+    let heart = WorkoutClock.heartRate(engine.session)
+    #expect(heart.first?.time == 0); #expect(heart.contains { $0.time == 20 && $0.bpm == 125 })
+    #expect(!heart.contains { $0.time > 20 && $0.time < 40 })
+}

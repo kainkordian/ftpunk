@@ -791,6 +791,11 @@ struct UploadConsent: Identifiable {
         powerMatcher.restartSettle(at: elapsed); checkpoint(force: true)
         if !isActive { finalize() }
     }
+    /// Moves a workout on to its next step; the trainer gets the new target on the next tick.
+    func skipStep() {
+        guard isActive, trainingControlTask == nil, engine?.skipStep(at: elapsed) == true else { return }
+        powerMatcher.restartSettle(at: elapsed); checkpoint(force: true)
+    }
     func adjustResistance(by steps: Int) {
         guard isActive, trainingControlTask == nil, let current = engine?.resumeResistance, let range = resistanceLimits else { return }
         engine?.adjustResistance(to: range.quantized(current + steps * range.increment), at: elapsed)
