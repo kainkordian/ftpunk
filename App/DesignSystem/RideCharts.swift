@@ -14,6 +14,7 @@ struct RideCharts: View {
             ResultPowerChart(session: session, hover: hover)
             legend
             if hasHeartRate { RideHeartRateChart(session: session, hover: hover) }
+            if let hrv = HeartRateVariability.make(session), hrv.alpha1.count >= 2 { RideAlphaChart(session: session, hrv: hrv, hover: hover) }
             if let balance = RideBalance.make(session), balance.series().count >= 2 { RideBalanceChart(balance: balance, session: session, hover: hover) }
         }
     }
@@ -63,6 +64,57 @@ struct RideHeartRateChart: View {
         .frame(height: 130)
         .accessibilityLabel("Recorded heart rate over time")
         .accessibilityValue(summary.averageHeartRate.map { "Average \(Int($0.rounded())) beats per minute" + (summary.maximumHeartRate.map { ", maximum \($0)" } ?? "") } ?? "")
+    }
+    private var axis: some AxisContent {
+        AxisMarks { _ in
+            AxisGridLine().foregroundStyle(Theme.secondary.opacity(0.25))
+            AxisTick().foregroundStyle(Theme.secondary)
+            AxisValueLabel().foregroundStyle(Theme.secondary)
+        }
+    }
+}
+
+/// DFA α1 of the beat-to-beat intervals in two-minute windows, with the usual threshold lines: about 0.75 near the
+/// aerobic threshold and 0.5 near the anaerobic one. The lines are population values, not this rider's measured thresholds.
+struct RideAlphaChart: View {
+    let session: TestSession
+    let hrv: HeartRateVariability.Result
+    var hover: RideChartHover?
+    private let color = Color.purple
+
+    var body: some View {
+        let peak = max(1.6, hrv.alpha1.map(\.alpha1).max() ?? 0)
+        let end = max(session.endedAtOffset ?? 0, session.samples.last?.time ?? 0)
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: Space.m) {
+                Text("HRV · DFA α1").font(.caption.weight(.bold)).foregroundStyle(Theme.secondary)
+                Spacer()
+                Text("0.75 ≈ aerobic threshold · 0.5 ≈ anaerobic").font(.caption).foregroundStyle(Theme.secondary)
+            }
+            Chart {
+                RuleMark(y: .value("Aerobic threshold", 0.75)).foregroundStyle(Theme.secondary).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                RuleMark(y: .value("Anaerobic threshold", 0.5)).foregroundStyle(Theme.secondary.opacity(0.6)).lineStyle(StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                ForEach(Array(hrv.alpha1.enumerated()), id: \.offset) { index, point in
+                    LineMark(x: .value("Minutes", point.time / 60), y: .value("DFA alpha 1", point.alpha1), series: .value("Part", "a\(segment(index))"))
+                        .foregroundStyle(color).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
+                }
+            }
+            .chartXScale(domain: 0...max(1, end / 60))
+            .chartYScale(domain: 0...(peak * 1.05))
+            .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
+            .chartXAxis { axis }.chartYAxis { axis }
+            .chartOverlay { proxy in if let hover { RideChartHoverOverlay(proxy: proxy, session: session, hover: hover, chart: "alpha") } }
+            .frame(height: 120)
+            .accessibilityLabel("Heart-rate variability, DFA alpha 1, over time")
+            .accessibilityValue(String(format: "From %.2f to %.2f", hrv.alpha1.map(\.alpha1).min() ?? 0, hrv.alpha1.map(\.alpha1).max() ?? 0))
+        }
+    }
+
+    /// Windows dropped for artifacts or pauses break the line instead of joining across them.
+    private func segment(_ index: Int) -> Int {
+        var segment = 0
+        for i in stride(from: 1, through: index, by: 1) where hrv.alpha1[i].time - hrv.alpha1[i - 1].time > HeartRateVariability.stepSeconds + 1 { segment += 1 }
+        return segment
     }
     private var axis: some AxisContent {
         AxisMarks { _ in
@@ -148,6 +200,10 @@ struct RideSummaryCard: View {
         if let kilocalories = summary.kilocalories { items.append(("Estimated calories", "\(Int(kilocalories.rounded())) kcal")) }
         if let distance = summary.distance { items.append(("Simulated distance", "\(RideFigures.kilometres(distance)) km")) }
         if let left = summary.leftBalance { items.append(("Left / right", "\(RideFigures.balance(left)) %")) }
+        if let hrv = HeartRateVariability.make(session), let rmssd = hrv.rmssd {
+            items.append(("HRV (RMSSD)", String(format: "%.1f ms", rmssd)))
+            if hrv.artifactShare >= 0.01 { items.append(("Beat artifacts", String(format: "%.1f %%", hrv.artifactShare * 100))) }
+        }
         return items
     }
     var body: some View {
