@@ -14,10 +14,12 @@
 .power-chart .best-label { fill: var(--accent); font: 700 12px var(--font); } .power-chart .best-label-bg { fill: var(--surface); opacity: .85; }
 .calc summary { cursor: pointer; font-weight: 600; }
 .result-actions .btn { width: 100%; }
+.power-chart .trainer-line { fill: none; stroke: var(--warning, #b8741a); stroke-width: 1.5; stroke-linejoin: round; }
 .power-chart .target-line { fill: none; stroke: var(--ink); opacity: .75; stroke-width: 1.75; stroke-dasharray: 5 3; stroke-linejoin: round; }
 .hr-chart { margin-top: var(--space-s); } .hr-chart .hr-line { fill: none; stroke: var(--heart, #e0457b); stroke-width: 2; stroke-linejoin: round; }
 .chart-legend { display: flex; gap: var(--space-m); list-style: none; padding: 0; margin: 0; font-size: .8rem; color: var(--secondary); }
 .chart-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2.25px solid var(--accent); vertical-align: middle; }
+.chart-legend .swatch.trainer { border-top-color: var(--warning, #b8741a); border-top-width: 1.5px; }
 .chart-legend .swatch.target { width: 21px; height: 2px; border-top: 0; background: repeating-linear-gradient(90deg, var(--ink) 0 5px, transparent 5px 8px); }
 @media (forced-colors: active) { .chart-legend .swatch.target { background: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 8px); } }
  .chart-legend .swatch.hr { border-top-color: var(--heart, #e0457b); }

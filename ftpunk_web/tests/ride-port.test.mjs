@@ -157,3 +157,10 @@ test('The ride overview lists trainer power and HRV, draws the alpha1 chart, and
     assert(card1.hidden && [...host.querySelectorAll('.hover-rule')].every(r => r.getAttribute('visibility') === 'hidden'), 'leaving clears it');
   } finally { host.remove(); }
 });
+
+test('The power chart draws the trainer’s reported power as its own line while a meter is the source', () => {
+  const html = rideCharts(hrvSession());
+  assert(html.includes('class="trainer-line"') && html.includes('Trainer reported') && html.includes('and the power the trainer reported'));
+  const plain = baseSession(); plain.samples = [{ time: 1, power: 100 }, { time: 2, power: 100 }, { time: 3, power: 100 }]; plain.endedAtOffset = 3;
+  assert(!rideCharts(plain).includes('trainer-line'));
+});

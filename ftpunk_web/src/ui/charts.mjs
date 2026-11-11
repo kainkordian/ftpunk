@@ -12,7 +12,7 @@ const num = n => Number(n.toFixed(1));
 export function powerChart(session) {
   const W = 600, H = 220, left = 44, right = 10, top = 8, bottom = 30, plotW = W - left - right, plotH = H - top - bottom;
   const samples = session.samples.filter(s => Number.isFinite(s.power)), end = Math.max(60, session.endedAtOffset ?? session.samples.at(-1)?.time ?? 0);
-  const targets = targetSeries(session), peak = Math.max(0, ...samples.map(s => s.power), ...targets.map(p => p.watts)), ceiling = ResultChartLayout.ceiling(peak), minutes = end / 60;
+  const targets = targetSeries(session), trainerSamples = session.configuration.powerSource === 'externalPowerMeter' ? session.samples.filter(s => Number.isFinite(s.trainerPower)) : [], peak = Math.max(0, ...samples.map(s => s.power), ...targets.map(p => p.watts), ...trainerSamples.map(s => s.trainerPower)), ceiling = ResultChartLayout.ceiling(peak), minutes = end / 60;
   const x = seconds => left + (seconds / end) * plotW, y = watts => top + plotH - (watts / ceiling) * plotH;
   const bands = resultBands(session), best = bestMinuteBand(session);
   let svg = bands.map((b, i) => `<rect class="band band-${i % 2}" x="${num(x(b.start))}" y="${top}" width="${num(x(b.end) - x(b.start))}" height="${plotH}"/>`).join('');
@@ -27,6 +27,10 @@ export function powerChart(session) {
   for (const s of samples) { if (previous && s.time - previous.time > 2) { lines.push(current); current = []; } current.push(`${num(x(s.time))},${num(y(s.power))}`); previous = s; }
   if (current.length) lines.push(current);
   svg += lines.filter(l => l.length > 1).map(l => `<polyline class="power-line" points="${l.join(' ')}"/>`).join('');
+  const trainerLines = []; let trainerRun = [], trainerPrevious = null;
+  for (const s of trainerSamples) { if (trainerPrevious && s.time - trainerPrevious.time > 2) { trainerLines.push(trainerRun); trainerRun = []; } trainerRun.push(`${num(x(s.time))},${num(y(s.trainerPower))}`); trainerPrevious = s; }
+  if (trainerRun.length) trainerLines.push(trainerRun);
+  svg += trainerLines.filter(l => l.length > 1).map(l => `<polyline class="trainer-line" points="${l.join(' ')}"/>`).join('');
   const targetLines = new Map(); for (const p of targets) { if (!targetLines.has(p.segment)) targetLines.set(p.segment, []); targetLines.get(p.segment).push(`${num(x(p.time))},${num(y(p.watts))}`); }
   svg += [...targetLines.values()].filter(l => l.length > 1).map(l => `<polyline class="target-line" points="${l.join(' ')}"/>`).join('');
   for (const b of bands) { const label = ResultChartLayout.fittingLabel(b.title, x(b.end) - x(b.start) - 8, 6.4); if (label) svg += `<text class="band-label" x="${num(x(b.start) + 4)}" y="${top + 13}">${esc(label)}</text>`; }
@@ -37,7 +41,7 @@ export function powerChart(session) {
   const phases = bands.map(b => `${b.title} minute ${Math.floor(b.start / 60)} to ${Math.floor(b.end / 60)}`).join(', '), bestText = best ? `${best.title} between minute ${Math.floor(best.start / 60)} and ${Math.floor(best.end / 60)}` : '';
   const source = session.configuration.powerSource === 'trainer' ? 'Trainer' : 'External power meter';
   svg += `<line class="hover-rule" x1="0" x2="0" y1="${top}" y2="${top + plotH}" visibility="hidden"/>`;
-  return `<svg class="power-chart" data-hover="1" viewBox="0 0 ${W} ${H}" role="img" aria-label="Recorded power from ${source} over time${targets.length ? ", with the target power" : ""}. ${esc([phases, bestText].filter(Boolean).join('. '))}">${svg}</svg>`;
+  return `<svg class="power-chart" data-hover="1" viewBox="0 0 ${W} ${H}" role="img" aria-label="Recorded power from ${source} over time${targets.length ? ", with the target power" : ""}${trainerLines.length ? " and the power the trainer reported" : ""}. ${esc([phases, bestText].filter(Boolean).join('. '))}">${svg}</svg>`;
 }
 
 /** The FTP trend: one colour per rider (stable order), circles for real results and diamonds for debug results, and a legend that says so. */
@@ -128,9 +132,9 @@ export function alpha1Chart(session) {
 const chartSessions = new Map();
 /** Power with its target, a legend, and heart rate, DFA α1 and balance beneath when recorded. The wrapper carries what the hover needs (see `installRideHover`). */
 export function rideCharts(session) {
-  const hasTarget = targetSeries(session).length > 0, hr = heartRateChart(session), end = Math.max(60, session.endedAtOffset ?? session.samples.at(-1)?.time ?? 0), key = String(session.id ?? 'ride');
+  const hasTarget = targetSeries(session).length > 0, hasTrainer = session.configuration.powerSource === 'externalPowerMeter' && session.samples.some(s => Number.isFinite(s.trainerPower)), hr = heartRateChart(session), end = Math.max(60, session.endedAtOffset ?? session.samples.at(-1)?.time ?? 0), key = String(session.id ?? 'ride');
   chartSessions.set(key, session);
-  const legend = `<ul class="legend chart-legend" aria-hidden="true"><li><span class="swatch power"></span> Power</li>${hasTarget ? '<li><span class="swatch target"></span> Target</li>' : ''}${hr ? '<li><span class="swatch hr"></span> Heart rate</li>' : ''}</ul>`;
+  const legend = `<ul class="legend chart-legend" aria-hidden="true"><li><span class="swatch power"></span> ${hasTrainer ? 'Power meter' : 'Power'}</li>${hasTrainer ? '<li><span class="swatch trainer"></span> Trainer reported</li>' : ''}${hasTarget ? '<li><span class="swatch target"></span> Target</li>' : ''}${hr ? '<li><span class="swatch hr"></span> Heart rate</li>' : ''}</ul>`;
   return `<div class="ride-charts" data-ride="${esc(key)}" data-end="${end}">${powerChart(session)}${legend}${hr}${alpha1Chart(session)}${balanceChart(session)}<div class="hover-card" hidden></div></div>`;
 }
 

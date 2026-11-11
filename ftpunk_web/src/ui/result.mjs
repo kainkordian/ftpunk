@@ -73,7 +73,7 @@ export function uploadControls(model, session) {
   const connection = model.connectionFor(riderIDOf(session));
   if (!connection) return `<section class="stack" data-slot="upload"><a class="btn link" href="#/settings" data-testid="connect-to-upload">Connect Intervals.icu to upload</a></section>`;
   const job = model.jobs.find(j => j.sessionID === session.id && j.accountID === connection.id);
-  return `<section class="stack" data-slot="upload"><button type="button" class="btn link" data-action="request-upload" data-session="${esc(session.id)}" ${job || model.busy ? 'disabled' : ''}>↑ ${job ? `Upload ${esc(job.status)}` : 'Upload to Intervals.icu…'}</button><p class="footnote">You will be asked to confirm the rider and account before anything is sent.</p></section>`;
+  return `<section class="stack" data-slot="upload"><button type="button" class="btn link" data-action="request-upload" data-session="${esc(session.id)}" ${job || model.busy ? 'disabled' : ''}>↑ ${job ? `Upload ${esc(job.status)}` : 'Upload to Intervals.icu…'}</button>${job && job.status !== 'uploading' ? `<button type="button" class="btn link" data-action="reupload" data-session="${esc(session.id)}" ${model.busy ? 'disabled' : ''}>↻ Upload again…</button>${job.status === 'uploaded' ? '<p class="footnote">Sends a freshly built file. Intervals.icu may treat it as a duplicate; delete the old activity there first to replace it.</p>' : ''}` : ''}<p class="footnote">You will be asked to confirm the rider and account before anything is sent.</p></section>`;
 }
 /** The consent dialog: names the rider and the destination account, offers Upload or Keep local, and never uploads by itself. */
 export function requestUpload(model, session) {
@@ -94,6 +94,13 @@ export const exportActions = model => ({
   ...Object.fromEntries(FORMAT_ORDER.map(f => [`export-${f}`, el => exportSession(sessionFor(model, el), f)])),
   ...Object.fromEntries(FORMAT_ORDER.map(f => [`share-${f}`, el => shareSession(sessionFor(model, el), f)])),
   'request-upload': el => requestUpload(model, model.history.find(s => s.id === el.dataset.session)),
+  reupload: async el => {
+    const session = model.history.find(s => s.id === el.dataset.session), connection = session && model.connectionFor(riderIDOf(session));
+    if (!session || !connection) return;
+    // Drop the finished upload record(s) for this account, then ask for consent again; nothing is sent without it.
+    for (const job of model.jobs.filter(j => j.sessionID === session.id && j.accountID === connection.id && j.status !== 'uploading')) await model.store.delete('jobs', job.id);
+    await model.reload(); model.onChange(); requestUpload(model, session);
+  },
   'info-estimate': () => openInfoSheet('estimate'),
 });
 

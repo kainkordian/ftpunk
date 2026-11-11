@@ -728,6 +728,19 @@ struct UploadConsent: Identifiable {
               !jobs.contains(where: { $0.sessionID == session.id && $0.accountID == connection.athleteID }) else { return }
         uploadConsent = UploadConsent(session: session, accountID: connection.athleteID, accountName: connection.athleteName)
     }
+    /// Drops the finished upload record of a saved activity and opens the consent sheet again, so the activity is sent anew
+    /// with a freshly encoded file. Intervals.icu matches uploads by `external_id`, so it may treat this as a duplicate
+    /// of the earlier one; delete the old activity there first if the new file should replace it.
+    func requestReupload(_ session: TestSession) {
+        guard let connection = connections[session.riderID], !session.isDemo, session.endedAtOffset != nil else { return }
+        let finished = jobs.filter { $0.sessionID == session.id && $0.accountID == connection.athleteID && $0.status != .uploading }
+        guard !finished.isEmpty, finished.count == jobs.filter({ $0.sessionID == session.id && $0.accountID == connection.athleteID }).count else { return }
+        do {
+            for job in finished { try store.deleteUploadJob(id: job.id) }
+            try reload()
+            requestUpload(session)
+        } catch { errorMessage = error.localizedDescription }
+    }
     /// After a finished ride: ask when `UploadPromptRule` says so. Never uploads by itself.
     func askToUploadAfterRide(_ session: TestSession) {
         let connection = connections[session.riderID]

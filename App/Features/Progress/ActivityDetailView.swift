@@ -109,6 +109,14 @@ struct ActivityDetailView: View {
                     if job.status == .needsAttention || job.status == .queued {
                         Button("Retry upload") { Task { await model.flushUploads(manual: true) } }
                     }
+                    if job.status != .uploading {
+                        Button("Upload again…") { model.requestReupload(session) }.disabled(model.connections[session.riderID] == nil)
+                            .accessibilityIdentifier("reupload-activity")
+                        if job.status == .uploaded {
+                            Text("Sends a freshly built file. Intervals.icu may treat it as a duplicate; delete the old activity there first to replace it.")
+                                .font(.caption).foregroundStyle(Theme.secondary)
+                        }
+                    }
                 } else {
                     Button("Upload activity…") { model.requestUpload(session) }.disabled(model.connections[session.riderID] == nil)
                 }

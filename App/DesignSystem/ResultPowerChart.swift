@@ -25,10 +25,42 @@ struct ResultPowerChart: View {
         }
         return result
     }
+    /// The trainer's own reported power, only while a power meter is the source (otherwise it is the line above).
+    private var trainerPoints: [Point] {
+        guard session.configuration.resolvedPowerSource == .externalPowerMeter else { return [] }
+        var result: [Point] = [], segment = 0
+        var previous: Double?
+        for (index, sample) in session.samples.enumerated() {
+            guard let power = sample.trainerPower else { continue }
+            if let previous, sample.time - previous > 2 { segment += 1 }
+            result.append(Point(id: index, time: sample.time, power: power, segment: segment)); previous = sample.time
+        }
+        return result
+    }
     private var targets: [TargetPoint] { TargetSeries.make(session) }
-    private var ceiling: Double { ResultChartLayout.ceiling(forPeak: max(points.map(\.power).max() ?? 0, targets.map(\.watts).max() ?? 0)) }
+    private var ceiling: Double {
+        ResultChartLayout.ceiling(forPeak: max(points.map(\.power).max() ?? 0, targets.map(\.watts).max() ?? 0, trainerPoints.map(\.power).max() ?? 0))
+    }
 
     var body: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            chart
+            if !trainerPoints.isEmpty {
+                HStack(spacing: Space.l) {
+                    legend("Power meter", Theme.accent)
+                    legend("Trainer reported", Theme.warning)
+                    if !targets.isEmpty { legend("Target", .primary.opacity(0.75)) }
+                }
+                .font(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
+            }
+        }
+    }
+
+    private func legend(_ title: String, _ color: Color) -> some View {
+        HStack(spacing: 6) { Capsule().fill(color).frame(width: 16, height: 3); Text(title) }
+    }
+
+    @ViewBuilder private var chart: some View {
         let bands = ResultChartModel.bands(for: session)
         let best = ResultChartModel.bestMinute(for: session)
         Chart {
@@ -46,6 +78,11 @@ struct ResultPowerChart: View {
                     .foregroundStyle(Theme.accent)
                     .lineStyle(StrokeStyle(lineWidth: 2.25, lineJoin: .round))
             }
+            ForEach(trainerPoints) { point in
+                LineMark(x: .value("Minutes", point.time / 60), y: .value("Trainer reported power", point.power), series: .value("Continuous signal", "r\(point.segment)"))
+                    .foregroundStyle(Theme.warning)
+                    .lineStyle(StrokeStyle(lineWidth: 1.5, lineJoin: .round))
+            }
             ForEach(Array(targets.enumerated()), id: \.offset) { _, point in
                 LineMark(x: .value("Minutes", point.time / 60), y: .value("Target power", point.watts), series: .value("Continuous signal", "t\(point.segment)"))
                     .foregroundStyle(.primary.opacity(0.75))
@@ -62,7 +99,7 @@ struct ResultPowerChart: View {
             if let hover { RideChartHoverOverlay(proxy: proxy, session: session, hover: hover, chart: "power") }
         }
         .frame(height: 210)
-        .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time" + (targets.isEmpty ? "" : ", with the target power"))
+        .accessibilityLabel("Recorded power from \(session.configuration.resolvedPowerSource.title) over time" + (targets.isEmpty ? "" : ", with the target power") + (trainerPoints.isEmpty ? "" : " and the power the trainer reported"))
         .accessibilityValue(accessibilityValue(bands: bands, best: best))
     }
 
