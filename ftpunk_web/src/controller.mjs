@@ -166,6 +166,13 @@ export class RideController {
     if (!range || !this.engine.setIntensity(this.engine.intensity + delta, this.elapsed, range.minimum, range.maximum)) { this.onError(Error('Choose 50–150% intensity within the trainer’s supported power range.')); return; }
     this.restartMatching(); this.checkpoint(true).catch(e => this.storageFailed(e)); this.onChange();
   }
+  /** Moves a workout on to its next step; the target goes out through the next tick, and power matching restarts its settle (native AppModel.skipStep). */
+  skipStep() {
+    if (!this.active || this.trainingTransition) return;
+    if (!this.demo) this.elapsed = Math.max(this.elapsed, this.now() - this.origin);
+    if (!this.engine.skipStep(this.elapsed)) return;
+    this.restartMatching(); this.checkpoint(true).catch(e => this.storageFailed(e)); this.onChange();
+  }
   adjustResistance(steps) {
     if (!this.active || this.trainingTransition || this.engine.resistanceLevel == null) return;
     const range = this.devices.resistanceRange ?? (this.demo ? { increment: 10, quantized: n => Math.max(0, Math.min(1000, n)) } : null);

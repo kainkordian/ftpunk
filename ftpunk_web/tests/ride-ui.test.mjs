@@ -30,10 +30,8 @@ test('The heart-rate chart keeps its title on a row of its own above the plot', 
   }
 });
 
-for (const [label, size, across] of [['five across', { width: 1280, height: 900 }, 5], ['three across on a phone', { width: 390, height: 844 }, 3]]) test(`The balance reading stays on one line with its unit, ${label}`, async () => scenario('ride-workout-strip', async a => {
-  a.q('#tiles-main').hidden = true; a.q('#tiles-more').hidden = false;
-  const value = a.q('#live-balance'), tile = value.closest('.tile'), unit = tile.querySelector('.unit'); tile.hidden = false;
-  const tiles = a.qa('#tiles-more .tile'); equal(tiles.filter(t => Math.abs(t.getBoundingClientRect().top - tiles[0].getBoundingClientRect().top) < 1).length, across);
+for (const [label, size] of [['wide', { width: 1280, height: 900 }], ['on a phone', { width: 390, height: 844 }]]) test(`The balance reading stays on one line with its unit, ${label}`, async () => scenario('ride-workout-strip', async a => {
+  const value = a.q('#live-balance'), tile = value.closest('.cd-box'), unit = tile.querySelector('.cd-unit'); assert(tile && unit, 'the balance tile has a value and a unit');
   for (const text of ['50 / 50', '100 / 0']) {
     value.textContent = text; const v = value.getBoundingClientRect(), u = unit.getBoundingClientRect(), t = tile.getBoundingClientRect();
     equal(value.getClientRects().length, 1); assert(u.top < v.bottom && u.bottom > v.top, 'the unit shares the line');
@@ -46,42 +44,21 @@ test('The target legend swatch is dashed in light and dark', async () => scenari
   for (const appearance of ['light', 'dark']) { a.doc.documentElement.dataset.appearance = appearance; const style = a.win.getComputedStyle(swatch); assert(/repeating-linear-gradient.*rgba\(0, 0, 0, 0\)/.test(style.backgroundImage), `no dashes in ${appearance}: ${style.backgroundImage}`); assert(swatch.getBoundingClientRect().height >= 2, 'the swatch is drawn'); }
 }));
 
-test('The cockpit draws Chaindance as a strip by default, with the placement menu in the header', async () => scenario('ride-workout-strip', async a => {
-  const canvas = a.q('#chaindance-canvas'); assert(canvas); equal([canvas.width, canvas.height], [192, 60]); assert(!a.q('#chaindance-readout'));
-  assert(pixels(canvas).lit > 200, 'the strip is not blank'); assert(/Chaindance/.test(canvas.getAttribute('aria-label')) && canvas.getAttribute('role') === 'img');
-  assert(a.win.getComputedStyle(canvas).imageRendering === 'pixelated');
-  const menu = a.q('#chaindance-placement'); assert(menu && menu.value === 'strip' && menu.options.length === 3 && menu.closest('.cockpit-header'));
-  // The strip sits between the readings: after the target and actual, before the supporting tiles.
-  const order = a.qa('.cockpit [data-block]').map(b => b.dataset.block); equal(order, ['progress', 'heroTiles', 'strip', 'tiles', 'controls', 'notes']);
-  assert(a.q('#blk-notes').textContent.length > 5);
+test('The workout cockpit is the dashboard: no Chaindance, the figures grid, and a Skip button that skips', async () => scenario('ride-workout-strip', async a => {
+  assert(a.q('.cockpit.dash') && !a.q('#chaindance-canvas') && !a.q('#chaindance-placement'), 'no Chaindance in the workout cockpit');
+  equal(a.qa('#cd-figures .cd-fig').length, 11, 'every figure box is there'); assert(a.q('#cockpit-profile svg') && a.q('#live-power') && a.q('#live-target'));
+  const before = a.model.ride.engine.session.events.length, skip = a.q('#skip-step'); assert(skip && !skip.disabled); skip.click();
+  await a.wait(() => a.model.ride.engine.session.events.some(e => /^Skipped ahead [\d.]+ s to step \d+$/.test(e.message)), 'skip event'); assert(a.model.ride.engine.session.events.length > before);
 }));
-test('The menu is outside the per-tick update path: telemetry never rebuilds it', async () => scenario('ride-workout-strip', async a => {
-  const menu = a.q('#chaindance-placement'), canvas = a.q('#chaindance-canvas'), header = a.q('.cockpit-header');
+test('The dashboard header and canvases are not rebuilt by telemetry; only text changes', async () => scenario('ride-workout-strip', async a => {
+  const header = a.q('.cockpit-header'), figures = a.q('#cd-figures'), big = a.q('#cd-big'), profile = a.q('#cockpit-profile svg');
   for (let i = 0; i < 5; i++) { a.model.ride.advanceMock(3); a.model.onChange(); await new Promise(r => setTimeout(r, 30)); }
-  assert(a.q('#chaindance-placement') === menu && a.q('#chaindance-canvas') === canvas && a.q('.cockpit-header') === header, 'the header, the menu and the canvas keep their elements');
+  assert(a.q('.cockpit-header') === header && a.q('#cd-figures') === figures && a.q('#cd-big') === big && a.q('#cockpit-profile svg') === profile, 'the elements keep their identity across ticks');
 }));
-test('Changing the placement re-renders once, is a preference, and Off removes the visual', async () => scenario('ride-workout-strip', async a => {
-  const menu = a.q('#chaindance-placement'); menu.value = 'hero'; menu.dispatchEvent(new a.win.Event('change', { bubbles: true }));
-  await a.wait(() => a.q('.cockpit')?.dataset.visual === 'hero' && a.q('#chaindance-canvas')?.height === 96, 'Large view'); equal(a.model.prefs.rideVisualPlacement, 'hero');
-  const off = a.q('#chaindance-placement'); off.value = 'off'; off.dispatchEvent(new a.win.Event('change', { bubbles: true }));
-  await a.wait(() => a.q('.cockpit')?.dataset.visual === 'off', 'Off'); assert(!a.q('#chaindance') && a.q('#live-target')); equal(a.model.prefs.rideVisualPlacement, 'off');
-  assert(a.q('#chaindance-placement').value === 'off');
-}));
-test('The Large view: a taller raster, the readout in the sky band, and two columns on a wide window', async () => scenario('ride-workout-large', async a => {
-  const canvas = a.q('#chaindance-canvas'); equal([canvas.width, canvas.height], [192, 96]); assert(pixels(canvas).lit > 300);
-  const readout = a.q('#chaindance-readout'), box = a.q('#chaindance').getBoundingClientRect(), r = readout.getBoundingClientRect();
-  assert(Math.abs(r.height / box.height - 36 / 96) < 0.01, `readout is ${(r.height / box.height).toFixed(3)} of the scene`); assert(r.top >= box.top - 1 && r.bottom <= box.top + box.height * 0.376 + 1);
-  assert(/\d/.test(a.q('#readout-target').textContent) && /\d/.test(a.q('#readout-actual').textContent) && /STEP \d\/\d+ · \d+:\d\d/.test(a.q('#readout-detail').textContent), 'target, actual and the step show in the sky');
-  assert(!a.q('#live-target'), 'the big tiles are replaced by the readout');
-  const cols = a.q('#cockpit-cols'); assert(cols.classList.contains('side-by-side'), 'wide window: two columns');
-  equal(a.qa('#col-main > [data-block]').map(b => b.dataset.block), ['scene', 'progress']); equal(a.qa('#col-side > [data-block]').map(b => b.dataset.block), ['tiles', 'controls', 'notes']);
-  const left = a.q('#col-main').getBoundingClientRect(), right = a.q('#col-side').getBoundingClientRect(); assert(right.left >= left.right - 1 && right.width <= 421, 'the readings column is beside the scene');
-  assert(a.q('#blk-scene').getBoundingClientRect().width > 450, 'the scene takes the wide column');
-}));
-test('The Large view stays one column on a narrow window and puts the scene first', async () => scenario('ride-workout-large', async a => {
-  assert(!a.q('#cockpit-cols').classList.contains('side-by-side')); equal(a.qa('#col-main > [data-block]').map(b => b.dataset.block), ['progress', 'scene', 'tiles', 'controls', 'notes']); assert(a.q('#col-side').children.length === 0);
-  const box = a.q('#chaindance').getBoundingClientRect(); assert(box.width <= 400 && box.width > 300, `the scene fills the phone width: ${box.width}`);
-}, { width: 390, height: 844 }));
+test('Free rides and resistance rides use the dashboard too; the FTP cockpit keeps Chaindance', async () => {
+  for (const name of ['ride-free', 'ride-resistance']) await scenario(name, async a => { assert(a.q('.cockpit.dash') && !a.q('#chaindance-canvas'), `${name} is the dashboard`); });
+  await scenario('ride-ftp', async a => { assert(!a.q('.cockpit.dash') && a.q('#chaindance-canvas'), 'the FTP cockpit is unchanged'); });
+});
 test('Matching status: warming shows in the warm-up like native, and a fade hold is reported', async () => {
   await scenario('ride-ftp-cold', async a => {
     equal(a.model.ride.matchingStatus.kind, 'warming'); assert(a.model.ride.engine.session.configuration.powerMatchingEnabled, 'the ride uses power matching');
@@ -105,10 +82,10 @@ test('Settings → Ride display offers Chaindance on/off and its layout, and the
   const toggle = a.q('#st-chaindance'); toggle.checked = false; toggle.dispatchEvent(new a.win.Event('change', { bubbles: true })); await a.wait(() => a.model.prefs.rideVisualPlacement === 'off' && !a.q('#st-chaindance-layout'), 'off');
   const again = a.q('#st-chaindance'); again.checked = true; again.dispatchEvent(new a.win.Event('change', { bubbles: true })); await a.wait(() => a.model.prefs.rideVisualPlacement === 'strip', 'on restores the strip');
 }));
-test('Extra-large ride numbers use the compact cockpit and fall back from the Large view to the strip', async () => {
+test('Extra-large ride numbers use the compact header on the dashboard', async () => {
   const a = await open('scenario=ride-workout-large'); try {
     a.model.prefs.extraLarge = true; a.model.savePrefs(); a.win.__ftpunk.rerender?.(); a.win.dispatchEvent(new a.win.HashChangeEvent('hashchange'));
-    await a.wait(() => a.q('.cockpit')?.dataset.visual === 'strip', 'strip fallback'); assert(a.q('.cockpit-header').classList.contains('compact')); assert(a.q('.support-tiles.rows'));
+    await a.wait(() => a.q('.cockpit-header')?.classList.contains('compact'), 'compact header'); assert(a.q('.cockpit.dash') && !a.q('#chaindance-canvas'));
   } finally { a.close(); }
 });
 

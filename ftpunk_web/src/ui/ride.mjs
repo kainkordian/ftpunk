@@ -10,9 +10,10 @@ import { matchingStatusText } from '../matching.mjs';
 import { rideVisualState, rideVisualInput, resolvePlacement, PLACEMENT_KEY, BRAND_NAME } from '../chaindance/state.mjs';
 import { cockpitLayout, coachingText, singleColumn } from '../chaindance/layout.mjs';
 import { chaindanceHTML, placementMenuHTML, ChaindanceView } from '../chaindance/view.mjs';
-// The cockpits: the FTP test, workouts, free ERG and resistance rides. Glanceable numbers, a step countdown, Pause/Resume and Stop & save
-// (one tap), and a deliberate hold to finish the ramp. `render` builds the skeleton once; `update` sets text and swaps only the regions that changed.
-let signature = null, lastHTML = new Map(), view = null, layoutObserver = null;
+import { dashboardHTML, updateDashboard, installDashboardKeys } from './dashboard.mjs';
+// The cockpits. The FTP test is built here (Chaindance strip or Large view, a hold to finish the ramp); workouts, free ERG and resistance rides use the
+// Chaindance-style dashboard in dashboard.mjs. Both: Pause/Resume and Stop & save (one tap). `render` builds the skeleton once; `update` sets text and swaps only the regions that changed.
+let keysInstalled = false, signature = null, lastHTML = new Map(), view = null, layoutObserver = null;
 
 const placementOf = model => resolvePlacement(model.prefs[PLACEMENT_KEY]);
 const layoutKindOf = kind => kind === 'ftp' ? 'ftpTest' : kind === 'workout' ? 'workout' : 'freeRide';
@@ -32,6 +33,7 @@ registerRoute('ride', {
   tab: 'home', documentTitle: model => model.ride.engine ? PHASES[model.ride.engine.phase] ?? 'Ride' : 'Ride',
   render(model) {
     const engine = model.ride.engine; if (!engine) return '<p class="loading">No ride is running.</p>';
+    if (kindOf(engine.session) !== 'ftp') return dashboardHTML(model, engine);
     signature = null; lastHTML = new Map(); const s = engine.session, kind = kindOf(s), c = s.configuration;
     const target = kind === 'resistance' ? 'RESISTANCE' : 'TARGET';
     const layout = cockpitLayout({ phase: engine.phase, accessibilitySize: model.prefs.extraLarge, rideVisual: placementOf(model), kind: layoutKindOf(kind) });
@@ -53,6 +55,8 @@ registerRoute('ride', {
     applyTimeline(root);
     view?.stop(); layoutObserver?.disconnect(); view = null; layoutObserver = null;
     const engine = model.ride.engine; if (!engine) return;
+    if (!keysInstalled) { keysInstalled = true; installDashboardKeys(model); }
+    if (kindOf(engine.session) !== 'ftp') return;
     const cockpit = $('.cockpit', root), host = $('#chaindance', root), visual = cockpit.dataset.visual, kind = layoutKindOf(kindOf(engine.session));
     if (host) view = new ChaindanceView(host, () => ({ engine: model.ride.engine, elapsed: model.ride.elapsed, playbackSpeed: model.ride.demo ? model.ride.speed : 1, mockPaused: model.ride.demo && model.ride.mockPaused }), { hero: visual === 'hero' });
     // Wide windows put the Large scene beside the readings: the blocks move between two columns (CockpitLayout); the elements themselves are kept.
@@ -66,7 +70,9 @@ registerRoute('ride', {
     arrange();
   },
   update(model) {
-    const ride = model.ride, engine = ride.engine; if (!engine || !$('#cockpit-title')) return;
+    const ride = model.ride, engine = ride.engine; if (!engine) return;
+    if (kindOf(engine.session) !== 'ftp') return updateDashboard(model);
+    if (!$('#cockpit-title')) return;
     const s = engine.session, c = s.configuration, kind = kindOf(s), elapsed = ride.elapsed, active = engine.active, paused = engine.phase === 'paused';
     const phaseTime = Math.max(0, elapsed - engine.phaseStartedAt), preset = PRESETS[c.preset], stepNumber = Math.floor(phaseTime / preset.seconds) + 1;
     const freshPower = engine.lastPower && elapsed - engine.lastPower.time <= 2, cadence = engine.lastCadence && elapsed - engine.lastCadence.time <= 2 ? engine.lastCadence.rpm : null;
@@ -113,18 +119,10 @@ registerRoute('ride', {
       setHTML('#cockpit-progress', engine.phase === 'ramp' ? stepRing({ fraction: remaining / preset.seconds, remaining: Math.ceil(remaining), nextChange: `+${preset.step} W` })
         : engine.phase === 'cooldown' ? (s.result ? `<div class="card accent stack"><p class="label accent-text">Provisional result</p><h2>${Math.round(s.result.estimatedFTP)} W estimated FTP</h2><p class="footnote">${Math.round(s.result.factor * 100)} % of your best minute, ${Math.round(s.result.bestMinutePower)} W. The final result appears when you save.</p></div>` : '<p class="muted">ⓘ No FTP estimate from this ramp. You can still save the ride.</p>') : '');
     }
-    if (kind === 'workout') {
-      moveProfileMarker($('#cockpit-profile'), s.training, engine.trainingElapsed);
-      const current = engine.currentStep, steps = s.training.steps, next = current && current.index + 1 < steps.length ? steps[current.index + 1] : null, scaled = w => Math.round(w * engine.intensity / 100);
-      setHTML('#cockpit-step', current ? `<div class="row spread nowrap"><strong class="step-name">${esc(current.step.name)}</strong><span class="num big-clock" aria-label="Step time left">${clock(current.remaining)}</span></div><p class="footnote">Step ${current.index + 1} of ${steps.length}</p><p class="muted">${next ? `Next: ${esc(next.name)} · ${DurationFormat.compact(next.seconds)} · ${scaled(next.watts)} W` : 'Last step'}</p>` : engine.phase === 'waiting' ? '<p class="step-name">Start pedaling to begin.</p>' : '');
-    }
     // banners
     setHTML('#cockpit-banners', `${s.isDemo ? `<p>${pill(ride.mockPaused ? 'Debug · stream paused' : 'Debug · mock sensors', 'warning', '▶')}</p>` : ''}${ride.trainingTransition ? `<p class="warn">${ride.trainingTransition === 'pausing' ? 'Releasing the trainer…' : 'Resuming the trainer…'}</p>` : paused ? '<p class="warn">⏸ Trainer released. Progress is paused. Pedal before resuming.</p>' : ''}${ride.finishing ? '<p class="warn">⏳ Confirming trainer stop…</p>' : ''}${s.endReason ? `<p class="notice error" role="alert">${esc(s.endReason)}</p>` : ''}${kind === 'ftp' && c.cadenceSource === 'unavailable' && engine.phase === 'ramp' ? '<p class="warn">⚠ No cadence source: hold to finish when you cannot continue.</p>' : ''}`);
-    // adjustments and notes
     const busy = ride.trainingTransition != null;
-    const adjuster = (title, value, minus, plus, minusOff = false, plusOff = false) => `<div class="adjuster"><button type="button" class="btn secondary" data-action="${minus[1]}" ${minusOff || busy ? 'disabled' : ''}>${minus[0]}</button><div class="adjust-value"><p class="caption muted">${title}</p><p class="num">${value}</p></div><button type="button" class="btn secondary" data-action="${plus[1]}" ${plusOff || busy ? 'disabled' : ''}>${plus[0]}</button></div>`;
-    setHTML('#cockpit-controls', !active ? '' : kind === 'workout' ? adjuster('INTENSITY', `${engine.intensity} %`, ['−5 %', 'intensity-minus'], ['+5 %', 'intensity-plus'], engine.intensity <= 50, engine.intensity >= 150)
-      : kind === 'resistance' ? adjuster('RESISTANCE', level(resistance ?? 0), ['− level', 'res-minus'], ['+ level', 'res-plus']) : kind === 'free' ? adjuster('ERG TARGET', `${engine.target ?? engine.resumeTarget ?? 0} W`, ['−10 W', 'erg-minus'], ['+10 W', 'erg-plus']) : '');
+    setHTML('#cockpit-controls', '');
     const status = ride.matchingStatus, visual = rideVisualState(rideVisualInput(engine, elapsed, { playbackSpeed: ride.demo ? ride.speed : 1 }));
     const showsCoaching = kind !== 'ftp' || cockpitLayout({ phase: engine.phase, accessibilitySize: model.prefs.extraLarge, rideVisual: $('.cockpit').dataset.visual, kind: 'ftpTest' }).showsCoachingLine;
     setText('#cockpit-matching', c.powerMatchingEnabled && active ? `Power matching: ${matchingStatusText(status) || 'waiting for readings'}` : '');
@@ -148,7 +146,7 @@ registerRoute('ride', {
       'intensity-minus': () => ride.adjustIntensity(-5), 'intensity-plus': () => ride.adjustIntensity(5),
       'res-minus': () => ride.adjustResistance(-1), 'res-plus': () => ride.adjustResistance(1), 'erg-minus': () => ride.adjustERG(-10), 'erg-plus': () => ride.adjustERG(10),
       'debug-controls': () => openDebugControls(model),
-      'dash-toggle': () => { model.prefs.dashboardMore = model.prefs.dashboardMore !== true; model.savePrefs(); },
+      'skip-step': () => ride.skipStep(), 'dash-toggle': () => { model.prefs.dashboardMore = model.prefs.dashboardMore !== true; model.savePrefs(); },
     };
   },
 });

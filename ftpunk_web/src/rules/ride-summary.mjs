@@ -1,5 +1,5 @@
 import { rampPower, PRESETS } from '../domain.mjs';
-import { trainingTarget } from '../training.mjs';
+import { trainingTarget, SKIP_PREFIX } from '../training.mjs';
 import { rideTrack, rideBalance, ridePauses } from './virtual-ride.mjs';
 // Ride figures, the target line and automatic pausing. Mirrors Sources/FTPunkDomain/RideSummary.swift.
 
@@ -48,15 +48,24 @@ export function trainingLoad(session, { track = null, pauses = ridePauses(sessio
   const seconds = (track ?? rideTrack(session, { pauses, end })).seconds, intensity = power / ftp;
   return { normalizedPower: power, intensityFactor: intensity, trainingStressScore: seconds * power * intensity / (ftp * 3600) * 100 };
 }
-export function rideSummary(session) {
+/** The trainer's own average power and NP, only while a power meter is the source (otherwise it is the same number as the main one). Null when the trainer reported nothing. */
+function trainerFigures(session, samples, pauses) {
+  const none = { trainerAveragePower: null, trainerNormalizedPower: null };
+  if (session.configuration?.powerSource !== 'externalPowerMeter') return none;
+  const trainer = samples.flatMap(s => Number.isFinite(s.trainerPower) ? [{ time: s.time, power: s.trainerPower }] : []);
+  if (!trainer.length) return none;
+  return { trainerAveragePower: weighted(series(trainer, s => s.power)), trainerNormalizedPower: normalizedPower(trainer, pauses) };
+}
+export function rideSummary(session, { track = rideTrack(session) } = {}) {
   // Samples that arrive during a pause don't count; `duration` is the elapsed time including pauses.
   const pauses = ridePauses(session), samples = (session.samples ?? []).filter(s => !pauses.some(p => s.time >= p.stop && s.time < (p.resume ?? Infinity)));
-  const powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), track = rideTrack(session), ridden = track.seconds > 0;
+  const powers = samples.map(s => s.power).filter(Number.isFinite), beats = samples.map(s => s.heartRate).filter(Number.isFinite), ridden = track.seconds > 0;
   return {
     duration: session.endedAtOffset ?? session.samples?.at(-1)?.time ?? 0,
     averagePower: weighted(series(samples, s => s.power)), normalizedPower: trainingLoad(session, { track }).normalizedPower, maximumPower: powers.length ? Math.max(...powers) : null,
     averageHeartRate: weighted(series(samples, s => s.heartRate), false), maximumHeartRate: beats.length ? Math.max(...beats) : null,
     averageCadence: weighted(series(samples, s => s.cadence), false),
+    ...trainerFigures(session, samples, pauses),
     kilojoules: ridden ? track.kilojoules : null, kilocalories: ridden ? track.kilocalories : null, distance: ridden ? track.distance : null, leftBalance: rideBalance(session, track)?.left ?? null,
   };
 }
@@ -73,19 +82,48 @@ function targetFunction(session) {
       return null;
     };
   }
-  const begin = timeOf('Training'); if (plan.resistance != null || begin == null) return null;
-  const pauses = []; let requested = null;
-  for (const e of events) { if (e.message === 'Training paused; trainer release requested') requested = e.time; else if (e.message === 'Training resumed' && requested != null) { pauses.push([requested, e.time]); requested = null; } }
-  if (requested != null) pauses.push([requested, Infinity]);
+  const clock = WorkoutClock.of(session); if (plan.resistance != null || clock == null) return null;
   const intensities = events.flatMap(e => { const v = intValue(e.message, 'Workout intensity changed to ', '%'); return v == null ? [] : [[e.time, v]]; });
   const erg = events.flatMap(e => { const v = intValue(e.message, 'ERG target changed to ', ' W'); return v == null ? [] : [[e.time, v]]; });
   const last = (list, t) => list.filter(x => x[0] <= t).at(-1)?.[1];
   return t => {
-    if (t < begin) return null; let paused = 0;
-    for (const [start, end] of pauses) { if (t >= start && t < end) return null; if (t >= end) paused += end - start; }
+    const training = clock.trainingTime(t); if (training == null) return null;
     if (plan.kind === 'freeRide') return last(erg, t) ?? plan.steps[0]?.watts ?? null;
-    return trainingTarget(plan, t - begin - paused, last(intensities, t) ?? 100);
+    return trainingTarget(plan, training, last(intensities, t) ?? 100);
   };
+}
+/** Training seconds at a moment of a workout recording: the riding start, minus pauses, plus skipped steps. Mirrors native WorkoutClock. */
+export class WorkoutClock {
+  /** @returns {WorkoutClock|null} null without a plan or a riding start. */
+  static of(session) {
+    const events = [...(session.events ?? [])].sort((a, b) => a.time - b.time), begin = events.find(e => e.message === 'Training')?.time;
+    if (session.training == null || begin == null) return null;
+    const pauses = [], skips = []; let requested = null;
+    for (const e of events) {
+      if (e.message === 'Training paused; trainer release requested') requested = e.time;
+      else if (e.message === 'Training resumed' && requested != null) { pauses.push([requested, e.time]); requested = null; }
+      else if (e.message.startsWith(SKIP_PREFIX)) { const seconds = Number(e.message.slice(SKIP_PREFIX.length).split(' ')[0]); if (Number.isFinite(seconds) && seconds > 0) skips.push([e.time, seconds]); }
+    }
+    if (requested != null) pauses.push([requested, Infinity]);
+    return new WorkoutClock(begin, pauses, skips);
+  }
+  constructor(begin, pauses, skips) { this.begin = begin; this.pauses = pauses; this.skips = skips; }
+  /** Null before riding started and while paused. */
+  trainingTime(t) {
+    if (t < this.begin) return null; let paused = 0;
+    for (const [start, end] of this.pauses) { if (t >= start && t < end) return null; if (t >= end) paused += end - start; }
+    return t - this.begin - paused + this.skips.reduce((sum, [time, seconds]) => time <= t ? sum + seconds : sum, 0);
+  }
+  /** Heart rate on the training clock, for the workout profile: at most one point per second, paused samples left out. */
+  heartRate(session) {
+    const result = [];
+    for (const s of session.samples ?? []) {
+      if (!(s.heartRate > 0)) continue; const time = this.trainingTime(s.time); if (time == null) continue;
+      const last = result.at(-1); if (last && time >= last.time && time - last.time < 1) continue;
+      result.push({ time, bpm: s.heartRate });
+    }
+    return result;
+  }
 }
 /** The target the ride asked for, as step-shaped line points; a pause starts a new segment. Rebuilt from the session, so older rides have it too. */
 export function targetSeries(session) {
@@ -120,4 +158,13 @@ export class AutoPause {
     }
     this.reset(); return null;
   }
+}
+
+/** The target at one moment of the recording; null when there was none (e.g. while paused). */
+export const targetValue = (session, time) => targetFunction(session)?.(time) ?? null;
+/** Every reading at one moment, for the charts' hover card: the latest value in the two seconds up to `time`, so a gap or a pause shows as null. */
+export function rideMoment(session, time) {
+  const window = (session.samples ?? []).filter(s => s.time <= time && time - s.time <= 2), latest = key => window.findLast(s => Number.isFinite(s[key]))?.[key] ?? null;
+  return { time, power: latest('power'), target: targetValue(session, time), trainerPower: session.configuration?.powerSource === 'externalPowerMeter' ? latest('trainerPower') : null,
+    heartRate: latest('heartRate'), cadence: latest('cadence'), leftBalance: latest('leftBalance') };
 }

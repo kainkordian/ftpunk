@@ -38,6 +38,9 @@ export const checklistCard = (rows, title = '') => `<section class="check-card">
 export function metricTile({ title, value, unit = '', tone = 'normal', caption = '', hero = false, id = '', placeholder = '—' }) {
   return `<div class="tile ${tone}${hero ? ' hero' : ''}" role="group" aria-label="${esc(title)}"><span class="caption">${esc(title)}</span><span><span class="value" ${id ? `id="${esc(id)}"` : ''}>${esc(value ?? placeholder)}</span>${unit ? `<span class="unit">${esc(unit)}</span>` : ''}</span>${caption || id ? `<span class="caption" ${id ? `id="${esc(id)}-caption"` : ''}>${esc(caption)}</span>` : ''}</div>`;
 }
+/** One square box of the workout dashboard (Chaindance style): an uppercase caption top-left, optional corner text top-right, the content below. `tone`: lime, cyan, pink, amber or ''. */
+export const dashBox = ({ caption, captionId = '', corner = '', cornerId = '', tone = '', id = '', cls = '', body }) =>
+  `<div class="cd-box ${cls}" ${tone ? `data-tone="${tone}"` : ''} ${id ? `id="${esc(id)}"` : ''}><div class="cd-head"><span class="cd-caption" ${captionId ? `id="${esc(captionId)}"` : ''}>${esc(caption)}</span><span class="cd-caption cd-corner" ${cornerId ? `id="${esc(cornerId)}"` : ''}>${esc(corner)}</span></div>${body}</div>`;
 /** Warm-up, ramp and cool-down as one bar with a progress fill. */
 export function phaseTimelineView(timeline, current, { showLabels = true } = {}) {
   const label = phase => ({ warmup: 'warm-up', ramp: 'ramp' }[phase] ?? 'cool-down');
@@ -80,7 +83,7 @@ export function bindHold(root, handlers, { now = () => performance.now(), reduce
 
 /** Step profile of a workout: bar height is the target on a fixed 0–130 % of FTP scale, ramps are slanted, bars are coloured by zone.
     Without an FTP the bars are neutral. `progressSeconds` adds a marker (the cockpit moves it through `moveProfileMarker`). */
-export function profileChart(plan, { intensity = 100, progressSeconds = null, height = 'normal', interactive = false, id = '' } = {}) {
+export function profileChart(plan, { intensity = 100, progressSeconds = null, height = 'normal', interactive = false, id = '', heartPath = null } = {}) {
   const bars = profileBars(plan, intensity), total = Math.max(1, plan.steps.reduce((n, s) => n + s.seconds, 0)), W = 1000, H = 100, hasFTP = plan.ftpWatts > 0;
   const paths = bars.map((bar, i) => {
     const x0 = (bar.start * W).toFixed(1), x1 = Math.max(bar.start * W + 1, bar.end * W - 0.5).toFixed(1), y0 = ((1 - bar.startHeight) * H).toFixed(1), y1 = ((1 - bar.endHeight) * H).toFixed(1);
@@ -90,7 +93,7 @@ export function profileChart(plan, { intensity = 100, progressSeconds = null, he
   const marker = progressSeconds == null ? '' : `<rect class="marker" id="profile-marker" x="${Math.max(0, Math.min(1, progressSeconds / total)) * W - 3}" y="0" width="6" height="${H}"/>`;
   const peak = Math.max(...plan.steps.map(s => Math.max(s.watts, s.endWatts ?? s.watts))) * intensity / 100;
   const label = `Workout profile: ${plan.steps.length} steps over ${Math.round(total / 60)} minutes, peak target ${Math.round(peak)} watts${hasFTP ? `, ${Math.round(peak / plan.ftpWatts * 100)} percent of FTP` : ''}`;
-  return `<div class="profile ${height}${interactive ? ' interactive' : ''}" ${id ? `id="${esc(id)}"` : ''}><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}">${line}${paths}${marker}</svg>${interactive ? '<div class="tooltip" role="status" hidden></div>' : ''}</div>`;
+  return `<div class="profile ${height}${interactive ? ' interactive' : ''}" ${id ? `id="${esc(id)}"` : ''}><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}">${line}${paths}${heartPath == null ? '' : `<path class="hr-line" id="profile-hr" d="${heartPath}"/>`}${marker}</svg>${interactive ? '<div class="tooltip" role="status" hidden></div>' : ''}</div>`;
 }
 export function moveProfileMarker(root, plan, seconds) {
   const marker = $('#profile-marker', root), total = Math.max(1, plan.steps.reduce((n, s) => n + s.seconds, 0));

@@ -242,6 +242,23 @@ test('hrv messages are padded and split, follow their record, and skip pauses an
   messages.forEach((m, i) => { if (m.global === 78) assert([20, 78].includes(messages[i - 1].global)); }); equal(messages.filter(m => m.global === 20).length, 5); // seconds 1, 2, 3, 6 and 7
   const fixtureMessages = fitMessages(fitFile(await fixture('fit-ftp-test.session'), { utcOffsetSeconds: 0 })); assert(fixtureMessages.some(m => m.global === 78));
 });
+test('FIT merges notifications of the same second and holds a missing cadence', async () => {
+  const ride = await baseRide();
+  ride.samples = [{ time: 1.1, power: 200 }, { time: 1.4, trainerPower: 210 }, { time: 1.6, cadence: 88 }, { time: 1.9, heartRate: 140 }, { time: 2.5, trainerPower: 205 }, { time: 3.2, power: 220 }];
+  ride.endedAtOffset = 4;
+  const records = fitMessages(fitFile(ride, { utcOffsetSeconds: 0 })).filter(m => m.global === 20).map(m => m.fields);
+  equal(records.length, 2);
+  equal([records[0][7], records[0][4], records[0][3]], [200, 88, 140]);
+  equal([records[1][7], records[1][4]], [220, 88]);
+});
+test('FIT holds a missing cadence or power for three seconds and not across longer gaps', async () => {
+  const ride = await baseRide();
+  ride.samples = [{ time: 1, power: 200, cadence: 82 }, { time: 2, power: 205 }, { time: 3, heartRate: 140 }, { time: 4, heartRate: 141 }, { time: 5, heartRate: 142 }, { time: 6, power: 0, cadence: 0 }, { time: 7, heartRate: 143 }];
+  ride.endedAtOffset = 8;
+  const records = fitMessages(fitFile(ride, { utcOffsetSeconds: 0 })).filter(m => m.global === 20).map(m => m.fields);
+  equal(records.map(f => f[4] ?? null), [82, 82, 82, 82, null, 0, 0]);
+  equal(records.map(f => f[7] ?? null), [200, 205, 205, 205, 205, 0, 0]);
+});
 test('Pedal balance stays in archives; out-of-range values are refused', async () => {
   const session = structuredClone(await fixture('fit-ftp-test.session')); assert(session.samples.some(s => Number.isFinite(s.leftBalance)));
   const archive = JSON.parse(archiveText(makeArchive([rider({ id: session.configuration.riderID })], [session])));

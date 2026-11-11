@@ -29,3 +29,11 @@
 .balance-chart .left-area { fill: var(--balance-left); fill-opacity: .6; } .balance-chart .right-area { fill: var(--balance-right); fill-opacity: .6; }
 .balance-chart .balance-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; } .balance-chart .even { stroke: var(--secondary); stroke-width: 1; stroke-dasharray: 4 3; }
 .chart-legend .swatch.balance-left { border-top-color: var(--balance-left); } .chart-legend .swatch.balance-right { border-top-color: var(--balance-right); }
+
+/* Ride overview: α1 line and reference lines, hover rule and card. */
+.power-chart .alpha-line { fill: none; stroke: var(--accent); stroke-width: 2.25; stroke-linejoin: round; }
+.power-chart .reference { stroke: var(--secondary); stroke-width: 1.25; stroke-dasharray: 4 4; }
+.power-chart .hover-rule { stroke: var(--ink); stroke-width: 1; opacity: .7; pointer-events: none; }
+.ride-charts { position: relative; display: flex; flex-direction: column; gap: var(--space-s); touch-action: pan-y; }
+.hover-card { position: absolute; z-index: 3; pointer-events: none; padding: var(--space-xs) var(--space-s); background: var(--surface); border: 1px solid var(--card-line, var(--grid)); border-radius: var(--radius-s, 6px); font: .8125rem/1.35 var(--font); font-variant-numeric: tabular-nums; box-shadow: 0 2px 8px rgb(0 0 0 / .25); white-space: nowrap; }
+.hover-card[hidden] { display: none; }

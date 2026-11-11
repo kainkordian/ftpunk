@@ -35,3 +35,7 @@ export function supportsIntensity(plan, percent, minimum = 1, maximum = 32767) {
   return Number.isInteger(percent) && percent >= 50 && percent <= 150 && plan.steps.every(s => [s.watts, s.endWatts ?? s.watts].every(w => { const n = Math.round(w * percent / 100); return n >= Math.max(1, minimum) && n <= maximum; }));
 }
 export function resistanceRide(level) { return validatePlan({ version: 2, kind: 'freeRide', name: 'Resistance ride', resistance: level, steps: [{ name: 'Ride at your own pace', seconds: 86400, watts: 1 }] }); }
+
+/** The event recorded when a workout step is skipped. Native writes the same text (WorkoutClock.skipMessage), so a synced session reads alike. */
+export const SKIP_PREFIX = 'Skipped ahead ';
+export const skipMessage = (seconds, toStep) => `${SKIP_PREFIX}${seconds.toFixed(1)} s to step ${toStep + 1}`;

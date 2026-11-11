@@ -68,8 +68,19 @@ function merge(samples, pauseList, end) {
     if (finite(sample.power)) value.power = Math.min(65534, Math.max(0, Math.round(sample.power)));
     records.set(second, value);
   }
-  return [...records.values()].filter(r => r.heartRate != null || r.cadence != null || r.power != null).sort((a, b) => a.time - b.time);
+  const merged = [...records.values()].filter(r => r.heartRate != null || r.cadence != null || r.power != null).sort((a, b) => a.time - b.time);
+  // A missing cadence or power keeps the last value for up to HOLD_SECONDS (a meter skips crank events; analysis tools read holes as drops).
+  let lastCadence = null, lastPower = null;
+  for (const record of merged) {
+    if (record.cadence != null) lastCadence = { time: record.time, value: record.cadence };
+    else if (lastCadence && record.time - lastCadence.time <= HOLD_SECONDS) record.cadence = lastCadence.value;
+    if (record.power != null) lastPower = { time: record.time, value: record.power };
+    else if (lastPower && record.time - lastPower.time <= HOLD_SECONDS) record.power = lastPower.value;
+  }
+  return merged;
 }
+/** How long a missing cadence or power keeps its last value in the export. */
+export const HOLD_SECONDS = 3;
 const stats = values => values.length ? { average: Math.round(values.reduce((a, b) => a + b, 0) / values.length), maximum: values.reduce((m, v) => Math.max(m, v), 0) } : null;
 const serialOf = id => { const hex = String(id ?? '').replace(/[^0-9a-f]/gi, '').slice(0, 8); return Math.max(1, hex.length === 8 ? parseInt(hex, 16) : 0); };
 

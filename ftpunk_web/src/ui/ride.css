@@ -48,3 +48,58 @@ body[data-route="ride"] .tabbar { display: none; }
 .chaindance-readout .readout-chip { font: 600 .75rem/1.2 var(--font); font-variant-numeric: tabular-nums; white-space: nowrap; padding: 2px 6px; border-radius: 5px; background: rgba(0, 0, 0, .35); }
 .dash-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xs); color: var(--secondary); font-size: .8125rem; font-weight: 600; }
 .dash-toggle { min-height: 32px; padding: 0 var(--space-xs); border: 0; background: none; color: var(--accent); font: 600 .8125rem/1 var(--font); cursor: pointer; }
+
+/* The workout / free-ride dashboard (Chaindance RG/SP style, from App/DesignSystem/ChaindanceStyle.swift). Dark whatever the theme: the palette is redefined here. */
+body[data-route="ride"]:has(.cockpit.dash) { background: #07051a; }
+body[data-route="ride"]:has(.cockpit.dash) .sidebar { border-color: #2c2463; color: #ecf0fa; }
+.cockpit.dash { --cd-bg: #07051a; --cd-panel: #0f0b27; --cd-line: #2c2463; --cd-dim: #9a94d0; --cd-text: #ecf0fa; --cd-lime: #c5f74d; --cd-cyan: #00d3e0; --cd-pink: #ff6fb8; --cd-amber: #fcb852; --cd-heart: #ff3b45;
+  --ink: var(--cd-text); --secondary: var(--cd-dim); --surface: var(--cd-panel); --accent: var(--cd-lime); --on-accent: #07051a; --warning: var(--cd-amber); --card-line: var(--cd-line);
+  color-scheme: dark; color: var(--cd-text); max-width: 1100px; padding-bottom: 110px; }
+.cd-dim { color: var(--cd-dim); }
+.cd-caption { font: 700 .8125rem/1.2 var(--font); text-transform: uppercase; letter-spacing: .1em; color: var(--cd-dim); }
+.cd-title { font-weight: 700; display: flex; align-items: center; gap: var(--space-s); flex-wrap: wrap; }
+.cd-badge { background: var(--cd-lime); color: var(--cd-bg); font-size: .75rem; font-weight: 800; letter-spacing: .08em; padding: 2px 6px; }
+.cd-num { display: inline-block; font-family: var(--font); font-weight: 900; letter-spacing: -.04em; font-variant-numeric: tabular-nums; line-height: 1; color: var(--cd-text); white-space: nowrap; }
+.cd-xl { font-size: calc(clamp(64px, 20vw, 128px) * var(--num-scale)); } .cd-l { font-size: calc(clamp(48px, 13vw, 72px) * var(--num-scale)); }
+.cd-m { font-size: calc(clamp(34px, 9vw, 60px) * var(--num-scale)); } .cd-s { font-size: calc(clamp(24px, 6vw, 34px) * var(--num-scale)); }
+.cockpit-header .clock .cd-m { font-size: 2.1rem; }
+.cd-unit { margin-left: 6px; font: 700 .8125rem/1 var(--font); text-transform: uppercase; letter-spacing: .1em; color: var(--cd-dim); }
+.cd-value { display: flex; align-items: baseline; justify-content: center; flex-wrap: nowrap; min-width: 0; }
+.cd-box { position: relative; display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; padding: var(--space-m); background: var(--cd-panel); border: 3px solid var(--cd-line); border-radius: 0; }
+.cd-box[data-tone="lime"] { border-color: var(--cd-lime); background: color-mix(in srgb, var(--cd-lime) 8%, var(--cd-panel)); box-shadow: 0 0 8px color-mix(in srgb, var(--cd-lime) 30%, transparent); }
+.cd-box[data-tone="amber"] { border-color: var(--cd-amber); background: color-mix(in srgb, var(--cd-amber) 8%, var(--cd-panel)); box-shadow: 0 0 8px color-mix(in srgb, var(--cd-amber) 30%, transparent); }
+.cd-box[data-tone="cyan"] { border-color: var(--cd-cyan); } .cd-box[data-tone="pink"] { border-color: var(--cd-pink); }
+.cd-box[data-tone="lime"] .cd-num, .cd-box[data-tone="lime"] #live-target { color: var(--cd-lime); } .cd-box[data-tone="amber"] .cd-num { color: var(--cd-amber); }
+.cd-box[data-tone="cyan"] .cd-num { color: var(--cd-cyan); } .cd-box[data-tone="pink"] .cd-num { color: var(--cd-pink); }
+.cockpit.dash.is-paused #cd-big .cd-num { color: var(--cd-amber); } .cockpit.dash.is-paused #cd-big { border-color: var(--cd-amber); }
+.cd-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-s); }
+.cd-corner { color: var(--cd-text); text-align: right; }
+.cd-bigbody { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-xs); min-width: 0; }
+.cd-bigbox { min-height: 200px; } .cd-step-name { font: 600 1.25rem/1.2 var(--font); color: var(--cd-text); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cd-trainer { position: absolute; left: var(--space-m); bottom: var(--space-s); display: flex; gap: 4px; align-items: baseline; } .cd-trainer-value { font: 700 1.1rem/1 var(--font); font-variant-numeric: tabular-nums; }
+.cd-main { display: grid; gap: var(--space-m); grid-template-columns: 1fr; } .cd-pair { display: grid; gap: var(--space-m); grid-template-columns: 1fr; align-content: start; }
+.cd-main.is-workout .cd-pair { grid-template-columns: 1fr 1fr; }
+@media (min-width: 760px) { .cd-main { grid-template-columns: 1fr 1fr; } .cd-main.is-workout .cd-pair { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .cd-main.is-workout .cd-pair { grid-template-columns: 1fr; } }
+.cd-steps { display: flex; gap: var(--space-s); justify-content: center; }
+.cd-step-btn { min-width: 64px; min-height: 44px; padding: 0 var(--space-m); border: 0; border-radius: 0; background: var(--cd-lime); color: var(--cd-bg); font: 800 1rem/1 var(--font); font-variant-numeric: tabular-nums; cursor: pointer; }
+.cd-step-btn:hover:not([disabled]) { background: color-mix(in srgb, var(--cd-lime) 85%, #fff); } .cd-step-btn[disabled] { background: var(--cd-line); color: var(--cd-dim); cursor: not-allowed; }
+.cd-profile-block { display: flex; flex-direction: column; gap: var(--space-s); }
+.cd-profile .profile { border-radius: 0; background: color-mix(in srgb, var(--cd-dim) 9%, transparent); } .cd-profile .profile svg { height: 96px; border-radius: 0; } .cd-profile .profile .marker { fill: var(--cd-text); }
+.profile .hr-line { fill: none; stroke: var(--cd-heart, #ff3b45); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.cd-profile-row { display: flex; align-items: center; gap: var(--space-m); flex-wrap: wrap; }
+.cd-next { flex: 1 1 200px; font: 600 1.05rem/1.3 var(--font); color: var(--cd-text); min-width: 0; }
+.cd-legend { display: inline-flex; align-items: center; gap: 4px; font-size: .8125rem; color: var(--cd-dim); } .cd-swatch { display: inline-block; width: 16px; height: 3px; background: var(--cd-heart); }
+.cd-outline-btn { min-height: 44px; padding: 0 var(--space-m); border: 2px solid var(--cd-cyan); border-radius: 0; background: var(--cd-panel); color: var(--cd-cyan); font: 700 .875rem/1 var(--font); text-transform: uppercase; letter-spacing: .08em; cursor: pointer; }
+.cd-outline-btn:hover:not([disabled]) { background: color-mix(in srgb, var(--cd-cyan) 20%, var(--cd-panel)); } .cd-outline-btn[disabled] { border-color: var(--cd-line); color: var(--cd-dim); cursor: not-allowed; }
+.cd-readings { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-m); } @media (max-width: 420px) { .cd-readings { grid-template-columns: 1fr; } }
+.cd-figures { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-m); }
+.cd-fig .cd-value { justify-content: flex-start; container-type: inline-size; }
+#live-balance { font-size: calc(clamp(22px, 5vw, 30px) * var(--num-scale)); }
+.cd-footer { font-size: 1rem; }
+.cd-chart { display: flex; flex-direction: column; gap: var(--space-s); } .cd-chart canvas { width: 100%; height: 160px; display: block; background: var(--cd-panel); border: 3px solid var(--cd-line); }
+.cd-actions { position: sticky; bottom: 0; z-index: 4; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m); padding: var(--space-m) var(--space-l); margin: 0 calc(-1 * var(--space-l)); background: var(--cd-panel); border-top: 3px solid var(--cd-line); }
+.cd-actions .btn { flex: 1 1 160px; min-height: 52px; border-radius: 0; }
+.cd-actions .btn.primary { background: var(--cd-lime); color: var(--cd-bg); } .cd-actions .btn.secondary { background: transparent; border-color: var(--cd-dim); color: var(--cd-text); }
+.cd-header .icon-btn, .cd-header .btn { color: var(--cd-text); }
+@media (prefers-contrast: more) { .cd-box { border-width: 4px; } }

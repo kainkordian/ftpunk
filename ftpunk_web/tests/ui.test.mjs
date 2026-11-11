@@ -74,8 +74,8 @@ test('The FTP cockpit mid-ramp shows target, actual, the step countdown and a ho
   assert(a.q('#live-link, #live-bar')?.hidden !== false); equal(a.model.ride.engine.session.configuration.ftpFactor, 0.72);
 }));
 test('The workout cockpit shows the profile with a progress marker, the step and the intensity controls', async () => scenario('ride-workout', async a => {
-  await a.wait(() => a.q('#cockpit-step')?.textContent.includes('Step'), 'step'); assert(a.q('#profile-marker') && a.q('[data-action="intensity-minus"]') && a.q('[data-action="pause-resume"]'));
-  const before = a.q('#live-target').textContent; a.q('[data-action="intensity-plus"]').click(); await a.wait(() => a.model.ride.engine.intensity === 105, 'intensity'); assert(a.q('.adjust-value').textContent.includes('105 %'));
+  await a.wait(() => a.q('#cd-step-corner')?.textContent.includes('/'), 'step'); assert(a.q('#profile-marker') && a.q('[data-action="intensity-minus"]') && a.q('[data-action="pause-resume"]'));
+  const before = a.q('#live-target').textContent; a.q('[data-action="intensity-plus"]').click(); await a.wait(() => a.model.ride.engine.intensity === 105, 'intensity'); await a.wait(() => a.q('#cd-intensity-corner')?.textContent.includes('105'), 'intensity shown');
   a.q('[data-action="pause-resume"]').click(); await a.wait(() => a.model.ride.engine.phase === 'paused', 'pause'); assert(before.length);
 }));
 test('The result shows the estimate with its delta, the chart and adoption; adopting updates the rider', async () => scenario('result', async a => {

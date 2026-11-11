@@ -1,4 +1,4 @@
-import { validatePlan, stepAt, trainingTarget, supportsIntensity } from './training.mjs';
+import { validatePlan, stepAt, trainingTarget, supportsIntensity, skipMessage } from './training.mjs';
 // Ported from FTPunkDomain. No browser APIs: the workout clock is supplied by its owner.
 export const PRESETS = Object.freeze({
   standard: { title: '25 W / min', start: 100, step: 5, seconds: 12, cooldown: 75, warmup: 100, audience: 'Reference guideline · 60 kg and above' },
@@ -49,7 +49,7 @@ export class RampEngine {
   constructor(config, { demo = false, date = new Date().toISOString(), devices = [], training = null } = {}) {
     this.phase = 'waiting'; this.target = null; this.phaseStartedAt = 0; this.lastTick = 0; this.lastAnalysis = -Infinity; this.lowCadenceSince = null; this.lastPower = null; this.lastCadence = null; this.liveBest = null;
     if (training) training = validatePlan(training);
-    this.trainingStartedAt = null; this.pausedAt = null; this.pausedSeconds = 0; this.freeRideTarget = training?.resistance == null ? training?.steps[0].watts : null; this.resistanceLevel = training?.resistance ?? null; this.intensity = 100;
+    this.trainingStartedAt = null; this.pausedAt = null; this.pausedSeconds = 0; this.skippedSeconds = 0; this.freeRideTarget = training?.resistance == null ? training?.steps[0].watts : null; this.resistanceLevel = training?.resistance ?? null; this.intensity = 100;
     this.session = { training, id: uuid(), startedAt: date, configuration: structuredClone(config), isDemo: demo, devices, samples: [], events: [], outcome: null, result: null, endedAtOffset: null };
   }
   get active() { return !['completed', 'interrupted'].includes(this.phase); }
@@ -108,7 +108,7 @@ export class RampEngine {
       } else this.lowCadenceSince = null;
     } else if (this.phase === 'cooldown' && time - this.phaseStartedAt >= c.cooldownSeconds) this.end(time);
   }
-  trainingTime(time) { return this.trainingStartedAt == null ? 0 : Math.max(0, (this.pausedAt ?? time) - this.trainingStartedAt - this.pausedSeconds); }
+  trainingTime(time) { return this.trainingStartedAt == null ? 0 : Math.max(0, (this.pausedAt ?? time) - this.trainingStartedAt - this.pausedSeconds + this.skippedSeconds); }
   get trainingElapsed() { return this.trainingTime(this.session.endedAtOffset ?? this.lastTick); }
   get resumeTarget() { return this.session.training?.kind === 'freeRide' ? this.freeRideTarget : this.session.training ? trainingTarget(this.session.training, this.trainingElapsed, this.intensity) : null; }
   canResume(time) {
@@ -130,6 +130,21 @@ export class RampEngine {
     this.event(time, 'Training resumed'); return true;
   }
   get currentStep() { return this.session.training ? stepAt(this.session.training, this.trainingElapsed) : null; }
+  /** A workout step can be skipped while riding or paused, except the last one: that ends the ride, which is Stop & save. */
+  get canSkipStep() {
+    const plan = this.session.training, current = this.currentStep;
+    return ['riding', 'paused'].includes(this.phase) && plan?.kind === 'workout' && current != null && current.index + 1 < plan.steps.length;
+  }
+  /** Jumps the training clock to the start of the next step and records it as an event, so the summary's target follows (WorkoutClock). */
+  skipStep(time) {
+    if (!Number.isFinite(time) || time < this.lastTick) return false;
+    if (this.phase === 'riding') this.tick(time);
+    const plan = this.session.training, current = plan && this.canSkipStep ? stepAt(plan, this.trainingTime(time)) : null;
+    if (!current) return false;
+    this.skippedSeconds += current.remaining;
+    if (this.phase === 'riding') this.target = trainingTarget(plan, this.trainingTime(time), this.intensity);
+    this.event(time, skipMessage(current.remaining, current.index + 1)); return true;
+  }
   get targetResistance() { return this.phase === 'riding' ? this.resistanceLevel : null; }
   setIntensity(percent, time, minimum = 1, maximum = 32767) {
     if (!this.active || this.session.training?.kind !== 'workout' || !supportsIntensity(this.session.training, percent, minimum, maximum)) return false;
