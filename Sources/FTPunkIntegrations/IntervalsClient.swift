@@ -92,6 +92,7 @@ public actor IntervalsClient: ActivityUploader {
         guard data.count <= 10 * 1024 * 1024, let events = try JSONSerialization.jsonObject(with: data) as? [[String: Any]], events.count <= 1000 else { throw IntervalsError.invalidResponse }
         var workouts: [CachedWorkout] = [], skipped: [String] = []
         for event in events {
+            guard CalendarWorkoutPolicy.qualifies(event) else { continue }
             let name = event["name"] as? String ?? "Untitled workout"
             do {
                 let rawID: String
@@ -99,7 +100,11 @@ public actor IntervalsClient: ActivityUploader {
                 else if let id = event["id"] as? NSNumber, CFGetTypeID(id) != CFBooleanGetTypeID(), id.doubleValue.isFinite, id.doubleValue.rounded() == id.doubleValue { rawID = id.stringValue }
                 else { throw IntervalsError.invalidResponse }
                 guard !rawID.isEmpty, rawID.count <= 80 else { throw IntervalsError.invalidResponse }
-                let plan = try WorkoutImport.parse(JSONSerialization.data(withJSONObject: event), ftp: ftp)
+                // The file importer accepts Ride only. Calendar cycling also includes VirtualRide;
+                // normalize this copy without changing file-import behaviour.
+                var cyclingEvent = event
+                cyclingEvent["type"] = "Ride"
+                let plan = try WorkoutImport.parse(JSONSerialization.data(withJSONObject: cyclingEvent), ftp: ftp)
                 workouts.append(CachedWorkout(id: "intervals:\(accountID):\(riderID.uuidString.lowercased()):\(rawID)", riderID: riderID, source: "Intervals.icu · \(name)", plan: plan,
                                               scheduledDate: ScheduledDate.from(intervalsLocal: event["start_date_local"] as? String)))
             } catch { skipped.append("\(name): \(error.localizedDescription)") }

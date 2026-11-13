@@ -16,6 +16,7 @@ import FTPunkIntegrations
     }
 
     private let store: LocalStore
+    private let client: IntervalsClient
     private let persistTimes: Bool
     private(set) var cached: [CachedWorkout] = []
     private(set) var downloading = false
@@ -24,8 +25,8 @@ import FTPunkIntegrations
     var syncMessage: String?
     @ObservationIgnored private var lastDownloads: [String: Date] = [:]
 
-    init(store: LocalStore, persistTimes: Bool) {
-        self.store = store; self.persistTimes = persistTimes
+    init(store: LocalStore, persistTimes: Bool, client: IntervalsClient = AppInfo.intervalsClient) {
+        self.store = store; self.persistTimes = persistTimes; self.client = client
     }
 
     func reload() throws { cached = try store.workouts() }
@@ -63,20 +64,20 @@ import FTPunkIntegrations
         let today = ScheduledDate.string(for: now)
         let end = ScheduledDate.string(for: Calendar.current.date(byAdding: .day, value: 14, to: now) ?? now)
         do {
-            let result = try await AppInfo.intervalsClient.workouts(connection: connection, riderID: context.riderID, ftp: context.ftp, oldest: today, newest: end)
+            let result = try await client.workouts(connection: connection, riderID: context.riderID, ftp: context.ftp, oldest: today, newest: end)
             let after = current()
             guard after.connection?.authorizationHeader == connection.authorizationHeader, after.riderID == context.riderID, !after.isBusy else {
                 throw ArchiveError.invalid("The rider, ride or account changed. Download again.")
             }
             try store.saveWorkouts(result.workouts)
-            // Calendar entries inside the window that were removed or moved are not kept as phantom workouts.
+            // Replace this rider/account calendar only after a successful qualified download.
             let stale = TodayWorkouts.stale(cached: try store.workouts(), riderID: context.riderID, accountID: connection.athleteID,
-                                            downloaded: Set(result.workouts.map(\.id)), today: today, windowEnd: end)
+                                            downloaded: Set(result.workouts.map(\.id)))
             for id in stale { try store.deleteWorkout(id: id) }
             try reload()
             recordDownload(for: connection.athleteID, at: now)
-            syncMessage = nil
-            report = "Saved \(result.workouts.count) workouts for offline use." + (result.skipped.isEmpty ? "" : "\nSkipped:\n" + result.skipped.prefix(20).joined(separator: "\n"))
+            syncMessage = CalendarWorkoutPolicy.syncSummary(count: result.workouts.count)
+            report = result.skipped.isEmpty ? nil : result.skipped.joined(separator: "\n")
             return nil
         } catch {
             if quiet { syncMessage = "Couldn’t refresh Intervals.icu workouts: \(error.localizedDescription)"; return nil }

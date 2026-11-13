@@ -41,11 +41,11 @@ public enum TodayWorkouts {
         workouts.filter { $0.riderID == riderID && !$0.isFromIntervals }.sorted { $0.savedAt > $1.savedAt }
     }
 
-    /// Cached calendar entries inside the downloaded window that the latest download no longer returned.
-    public static func stale(cached: [CachedWorkout], riderID: UUID, accountID: String, downloaded: Set<String>, today: String, windowEnd: String) -> [String] {
+    /// Replace this rider/account calendar with the qualified download. Older caches have lost
+    /// their original sport/target units, so entries outside the new window are also removed.
+    public static func stale(cached: [CachedWorkout], riderID: UUID, accountID: String, downloaded: Set<String>) -> [String] {
         let prefix = "intervals:\(accountID):\(riderID.uuidString.lowercased()):"
-        return cached.filter { $0.id.hasPrefix(prefix) && !downloaded.contains($0.id)
-            && ($0.scheduledDate.map { $0 >= today && $0 <= windowEnd } ?? true) }.map(\.id)
+        return cached.filter { $0.riderID == riderID && $0.id.hasPrefix(prefix) && !downloaded.contains($0.id) }.map(\.id)
     }
 }
 

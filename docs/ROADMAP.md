@@ -21,8 +21,9 @@ Fixed principles:
 
 ## Where it stands (2026-11-11)
 
-Built and covered by tests (365 Swift tests, 301 web tests, iOS + Mac builds pass):
+Built and covered by tests (370 Swift tests, 301 web tests, iOS + Mac builds pass):
 
+- **Plan 10, step 3 (2026-11-13, native):** calendar downloads admit Ride/VirtualRide events with original % FTP power targets, including nested ramps and mixed targets (owner confirmed that % qualifies). Other events are silent; only qualifying decode failures are named. Both Home sync-message locations use the qualified-count summary. At the next successful download the current rider/account calendar cache is replaced, including older entries whose original units were lost (owner approved); files, other accounts and riders are preserved. Checked: 370 Swift tests, including isolated download/cache tests, and both CI builds. No live account or stored app data accessed; visual review remains queued.
 - **Plan 10, step 2 (2026-11-13, native):** Chaindance defaults to off when no preference exists; explicit on/off, Strip and Large choices are preserved. Settings and README explain the default. Checked: 365 Swift tests and both CI builds. Visual previews deliberately retain their explicit on setting; visual review remains queued.
 - **Plan 10, step 1 (2026-11-13, native):** workout cards, Devices, actionable pre-flight rows and About preserve the native accessibility button action. Today cards already do. Added a library-card accessibility XCUITest. Checked: 365 Swift tests and both CI builds. UI test execution and visual review remain queued until the owner finishes riding and authorizes review.
 

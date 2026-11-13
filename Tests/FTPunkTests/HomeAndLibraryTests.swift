@@ -86,9 +86,9 @@ private func catalogFixture() throws -> [String: Any] {
 @Test func intervalsEventsKeepTheirLocalCalendarDay() throws {
     let events: [[String: Any]] = [
         ["id": 1, "name": "Dated", "type": "Ride", "category": "WORKOUT", "start_date_local": "2026-11-02T06:00:00",
-         "workout_doc": ["steps": [["duration": 600, "power": ["units": "w", "value": 150]]]]],
+         "workout_doc": ["steps": [["duration": 600, "power": ["units": "%ftp", "value": 75]]]]],
         ["id": 2, "name": "Undated", "type": "Ride", "category": "WORKOUT",
-         "workout_doc": ["steps": [["duration": 600, "power": ["units": "w", "value": 150]]]]]
+         "workout_doc": ["steps": [["duration": 600, "power": ["units": "%ftp", "value": 75]]]]]
     ]
     let result = try IntervalsClient.decodeWorkouts(JSONSerialization.data(withJSONObject: events), accountID: "9", riderID: RiderProfile.legacyID, ftp: 200)
     #expect(result.workouts.count == 2)
@@ -118,13 +118,15 @@ private func cached(_ id: String, _ date: String?, rider: UUID = RiderProfile.le
     #expect(TodayWorkouts.mine(library, riderID: rider).map(\.id) == ["mine"])
 }
 
-@Test func staleCalendarEntriesInsideTheWindowArePruned() throws {
+@Test func calendarReplacementPrunesOnlyTheCurrentRiderAndAccount() throws {
     let rider = RiderProfile.legacyID
     let kept = try cached("kept", "2026-11-05"), gone = try cached("gone", "2026-11-06"), outside = try cached("later", "2026-12-25"),
         past = try cached("past", "2026-10-01"), undated = try cached("undated", nil), mine = try cached("mine", nil, intervals: false)
-    let stale = TodayWorkouts.stale(cached: [kept, gone, outside, past, undated, mine], riderID: rider, accountID: "1",
-                                    downloaded: [kept.id], today: "2026-11-02", windowEnd: "2026-11-16")
-    #expect(Set(stale) == [gone.id, undated.id])
+    let otherRider = try cached("other", "2026-11-06", rider: UUID())
+    let otherAccount = CachedWorkout(id: "intervals:2:\(rider.uuidString.lowercased()):old", riderID: rider, source: "Intervals.icu", plan: kept.plan)
+    let stale = TodayWorkouts.stale(cached: [kept, gone, outside, past, undated, mine, otherRider, otherAccount], riderID: rider, accountID: "1",
+                                    downloaded: [kept.id])
+    #expect(Set(stale) == [gone.id, outside.id, past.id, undated.id])
 }
 
 @Test func calendarRefreshesAfterAnHourAndNeverDuringARide() {

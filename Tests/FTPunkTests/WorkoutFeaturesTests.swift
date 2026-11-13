@@ -81,7 +81,7 @@ private func featureConfig() throws -> SessionConfiguration {
     let event = try JSONSerialization.jsonObject(with: fixture("workout-intervals"))
     let data = try JSONSerialization.data(withJSONObject: [event, ["id": 456, "name": "Unsupported", "type": "Run"]])
     let result = try IntervalsClient.decodeWorkouts(data, accountID: "123", riderID: RiderProfile.legacyID, ftp: 200)
-    #expect(result.workouts.count == 1); #expect(result.skipped.count == 1)
+    #expect(result.workouts.count == 1); #expect(result.skipped.isEmpty)
     #expect(result.workouts[0].id == "intervals:123:\(RiderProfile.legacyID.uuidString.lowercased()):123")
 }
 @Test @MainActor func libraryIsAtomicIdempotentPortableAndProtectsUnrelatedRiders() throws {
