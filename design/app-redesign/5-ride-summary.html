@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FTPunk mockup · Ride summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wdth,wght@75..100,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0d0c15}
+.card{background:#191827;border-radius:24px;box-sizing:border-box}
+.eyebrow{font:800 12px/1 Tektur,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#a9a9bf}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:22px;font:800 15px Tektur,sans-serif;background:#232235;color:#f3f4f8}
+.stat{background:#191827;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.stat b{font:900 34px/1 Tektur,sans-serif;font-variant-numeric:tabular-nums}
+.stat b span{font:700 16px Tektur,sans-serif;color:#a9a9bf;margin-left:6px}
+.more{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:12px;height:72px;padding:0 22px;border-radius:20px;background:#191827;font:800 16px Tektur,sans-serif;min-width:0}
+.axis{font:700 13px Tektur,sans-serif;fill:#a9a9bf}
+</style>
+</head>
+<body>
+<div style="width:1470px;height:920px;box-sizing:border-box;padding:28px 32px;display:flex;flex-direction:column;gap:20px;background:#0d0c15;color:#f3f4f8;font-family:Tektur,sans-serif;overflow:hidden">
+  <header style="height:56px;flex-shrink:0;display:flex;align-items:center;gap:14px">
+    <span style="display:grid;place-items:center;width:40px;height:40px;border-radius:20px;background:#c5f74d;color:#10110a" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l4 4 8-9"></path></svg></span>
+    <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font:900 24px/1 Tektur">FTP test · ramp 25 W / min</h1><span style="font:600 14px/1 Tektur;color:#a9a9bf">Thu 12 Nov · Kordian · saved on this Mac</span></div>
+    <span style="flex-grow:1"></span>
+    <button type="button" class="btn">Export FIT</button>
+    <button type="button" class="btn">Other formats<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l4 4 4-4"></path></svg></button>
+    <button type="button" class="btn" style="background:#c5f74d;color:#10110a;padding:0 32px">Done</button>
+  </header>
+
+  <div style="height:244px;flex-shrink:0;display:grid;grid-template-columns:540px minmax(0,1fr);gap:20px">
+    <section class="card" style="padding:24px 26px;background:#1c2414;display:flex;flex-direction:column;justify-content:space-between">
+      <span class="eyebrow" style="color:#c5f74d">Estimated FTP</span>
+      <p style="margin:0;display:flex;align-items:baseline;gap:14px"><span style="font:900 92px/.9 Tektur;font-variant-numeric:tabular-nums">209 W</span><span style="font:700 22px Tektur;color:#a9a9bf">2.54 W/kg</span></p>
+      <span style="font:700 15px Tektur;white-space:nowrap"><span style="color:#fcb852">−41 W</span> vs current 250 W · 72 % of best minute 290 W</span>
+      <div style="display:flex;gap:10px">
+        <button type="button" class="btn" style="flex-grow:1;background:#c5f74d;color:#10110a">Use 209 W as Kordian’s FTP</button>
+        <button type="button" class="btn" style="background:#2d3a1c">Keep 250 W</button>
+      </div>
+    </section>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px">
+      <div class="stat"><span class="eyebrow">Time</span><b>8:38</b></div>
+      <div class="stat"><span class="eyebrow">Best minute</span><b>290<span>W</span></b></div>
+      <div class="stat"><span class="eyebrow">Average power</span><b>194<span>W</span></b></div>
+      <div class="stat"><span class="eyebrow">Normalized power</span><b>220<span>W</span></b></div>
+      <div class="stat"><span class="eyebrow" style="color:#ff7ab8">Average heart rate</span><b>139<span>bpm</span></b></div>
+      <div class="stat"><span class="eyebrow" style="color:#ff7ab8">Max heart rate</span><b>162<span>bpm</span></b></div>
+      <div class="stat"><span class="eyebrow">Average cadence</span><b>87<span>rpm</span></b></div>
+      <div class="stat"><span class="eyebrow">Work</span><b>101<span>kJ</span></b></div>
+    </div>
+  </div>
+
+  <section class="card" style="flex-grow:1;min-height:0;padding:20px 24px;display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;align-items:center;gap:20px;font:700 14px Tektur;color:#a9a9bf">
+      <h2 style="margin:0;font:900 18px Tektur;color:#f3f4f8;flex-grow:1">Power and heart rate</h2>
+      <span style="display:flex;align-items:center;gap:8px"><i style="width:22px;height:4px;border-radius:2px;background:#c5f74d"></i>Power</span>
+      <span style="display:flex;align-items:center;gap:8px"><i style="width:22px;height:0;border-top:3px dashed #a9a9bf"></i>Target</span>
+      <span style="display:flex;align-items:center;gap:8px"><i style="width:22px;height:4px;border-radius:2px;background:#ff7ab8"></i>Heart rate</span>
+      <span style="display:flex;align-items:center;gap:8px"><i style="width:22px;height:12px;border-radius:4px;background:#c5f74d;opacity:.3"></i>Best minute</span>
+    </div>
+    <svg role="img" aria-label="Power rising with the ramp to 300 watts, heart rate rising to 162, best minute shaded near the end" viewBox="0 0 1400 320" style="flex-grow:1;width:100%;min-height:0">
+      <g stroke="#2b2a40" stroke-width="1.5"><path d="M50 205H1310M50 140H1310M50 75H1310M50 270H1310"></path></g>
+      <rect x="974" y="10" width="146" height="260" rx="10" fill="#c5f74d" opacity=".16"></rect>
+      <text x="1047" y="34" text-anchor="middle" style="font:800 14px Tektur,sans-serif;fill:#c5f74d">Best minute 290 W</text>
+      <polyline fill="none" stroke="#a9a9bf" stroke-width="2" stroke-dasharray="7 7" points="50,189 74,189 74,205 1120,69 1120,205 1150,205"></polyline>
+      <polyline fill="none" stroke="#ff7ab8" stroke-width="3" stroke-linejoin="round" points="50,172 200,176 400,166 600,150 800,130 1000,108 1120,92 1126,222 1150,226"></polyline>
+      <polyline fill="none" stroke="#c5f74d" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" points="50,205 60,190 74,189 82,204 250,183 450,156 650,131 850,105 1000,86 1120,72 1126,190 1138,196 1150,268"></polyline>
+      <g class="axis"><text x="40" y="274" text-anchor="end">0</text><text x="40" y="209" text-anchor="end">100</text><text x="40" y="144" text-anchor="end">200</text><text x="40" y="79" text-anchor="end">300 W</text>
+      <text x="1322" y="209" style="fill:#ff7ab8">110</text><text x="1322" y="144" style="fill:#ff7ab8">140</text><text x="1322" y="79" style="fill:#ff7ab8">170 bpm</text>
+      <text x="50" y="298">0:00</text><text x="342" y="298" text-anchor="middle">2:00</text><text x="634" y="298" text-anchor="middle">4:00</text><text x="926" y="298" text-anchor="middle">6:00</text><text x="1218" y="298" text-anchor="middle">8:00</text></g>
+    </svg>
+  </section>
+
+  <div style="height:72px;flex-shrink:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+    <button type="button" class="more"><span style="flex-grow:1">Heart-rate variability<span style="display:block;font:600 13px Tektur;color:#a9a9bf">RMSSD 1.2 ms · DFA α1 chart</span></span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#a9a9bf" stroke-width="2.4" stroke-linecap="round"><path d="M5 2l5 5-5 5"></path></svg></button>
+    <button type="button" class="more"><span style="flex-grow:1">Pedal balance<span style="display:block;font:600 13px Tektur;color:#a9a9bf">Left 49 % · right 51 %</span></span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#a9a9bf" stroke-width="2.4" stroke-linecap="round"><path d="M5 2l5 5-5 5"></path></svg></button>
+    <button type="button" class="more"><span style="flex-grow:1">How the estimate is calculated<span style="display:block;font:600 13px Tektur;color:#a9a9bf">The 72–77 % range explained</span></span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#a9a9bf" stroke-width="2.4" stroke-linecap="round"><path d="M5 2l5 5-5 5"></path></svg></button>
+  </div>
+</div>
+</body>
+</html>

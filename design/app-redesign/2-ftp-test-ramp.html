@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FTPunk mockup · FTP test cockpit, ramp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wdth,wght@75..100,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0d0c15}
+.tile{background:#191827;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.lab{font:800 30px/1 Tektur,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#a9a9bf;display:flex;align-items:center;gap:12px}
+.num{font-family:Tektur,sans-serif;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:.8;font-variation-settings:"wdth" 85}
+.unit{font:800 44px/1 Tektur,sans-serif;color:#a9a9bf;margin-left:12px}
+.pick{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:12px;height:56px;padding:0 20px 0 18px;border-radius:28px;background:#232235;font:800 30px/1 Tektur,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#a9a9bf}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 20px;border-radius:22px;font:800 17px Tektur,sans-serif;background:#232235;color:#f3f4f8}
+.seg{flex:1;height:16px;border-radius:8px;background:#2b2a40}
+</style>
+</head>
+<body>
+<div style="width:1470px;height:920px;box-sizing:border-box;padding:20px 24px 24px;display:flex;flex-direction:column;gap:16px;background:#0d0c15;color:#f3f4f8;font-family:Tektur,sans-serif;overflow:hidden">
+  <header style="height:60px;flex-shrink:0;display:flex;align-items:center;gap:16px">
+    <button type="button" class="btn" aria-label="Minimise ride" style="width:44px;padding:0;justify-content:center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l6 6 6-6"></path></svg></button>
+    <span style="display:inline-flex;align-items:center;height:30px;padding:0 14px;border-radius:15px;background:#c5f74d;color:#10110a;font:900 15px Tektur;letter-spacing:.08em">FTP TEST</span>
+    <span style="font:800 24px Tektur">Ramp · 25 W / min</span>
+    <span style="flex-grow:1"></span>
+    <button type="button" class="btn" style="background:#3a1c2e;color:#ff9ccb">Hold to finish</button>
+    <button type="button" class="btn">Stop &amp; save</button>
+    <button type="button" class="btn" aria-label="More options" style="width:44px;padding:0;justify-content:center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="2"></circle><circle cx="10" cy="10" r="2"></circle><circle cx="16" cy="10" r="2"></circle></svg></button>
+  </header>
+
+  <div style="height:440px;flex-shrink:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+    <section class="tile" style="padding:26px 32px">
+      <div style="display:flex;align-items:center;min-height:68px"><button type="button" class="pick" aria-label="Power average, 3 seconds. Change"><svg aria-hidden="true" width="26" height="30" viewBox="0 0 26 30" fill="#a9a9bf"><path d="M15 0L2 17h9l-2 13 15-19h-10z"></path></svg>Power · 3 s<svg aria-hidden="true" width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l4 4 4-4"></path></svg></button></div>
+      <p style="margin:0;display:flex;align-items:baseline;justify-content:center"><span class="num" style="font-size:300px">281</span><span class="unit" style="font-size:64px">W</span></p>
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:16px"><span class="lab">Target</span><span class="num" style="font-size:84px;color:#c5f74d">285</span><span class="unit" style="font-size:36px;margin-left:0">W</span></div>
+    </section>
+    <section class="tile" style="padding:26px 32px">
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:68px"><span class="lab"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#a9a9bf" stroke-width="3" stroke-linecap="round"><circle cx="15" cy="15" r="12"></circle><path d="M15 15l7-7"></path><circle cx="15" cy="15" r="2" fill="#a9a9bf"></circle></svg>Cadence</span><span class="lab" style="text-transform:none;letter-spacing:0">keep it turning</span></div>
+      <p style="margin:0;display:flex;align-items:baseline;justify-content:center"><span class="num" style="font-size:300px">84</span><span class="unit" style="font-size:64px">rpm</span></p>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="flex-grow:1;height:24px;border-radius:12px;background:#2b2a40;position:relative" aria-hidden="true">
+          <i style="position:absolute;left:0;width:37.5%;top:0;bottom:0;border-radius:12px 0 0 12px;background:#ff6b6b;opacity:.6"></i>
+          <i style="position:absolute;left:37.5%;width:12.5%;top:0;bottom:0;background:#fcb852;opacity:.6"></i>
+          <i style="position:absolute;left:calc(70% - 19px);top:-7px;width:38px;height:38px;border-radius:19px;background:#f3f4f8"></i>
+        </div>
+        <span style="font:800 28px/1 Tektur;color:#a9a9bf;white-space:nowrap">ends below 45</span>
+      </div>
+    </section>
+  </div>
+
+  <div style="height:250px;flex-shrink:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px">
+    <section style="background:#191827;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:22px 28px">
+      <span style="display:flex;align-items:center;justify-content:space-between;min-height:32px"><span class="lab" style="color:#ff7ab8"><svg aria-hidden="true" width="30" height="28" viewBox="0 0 30 28" fill="#ff7ab8"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>Heart rate</span><span style="font:700 24px/1 Tektur,sans-serif;color:#a9a9bf">Max 171</span></span>
+      <span style="display:flex;align-items:baseline;justify-content:center"><span class="num" style="font-size:150px;color:#ff7ab8">171</span><span class="unit">bpm</span></span>
+      <span style="min-height:30px;font:800 30px/1 Tektur,sans-serif;text-align:center"></span>
+    </section>
+    <section class="tile" style="padding:22px 28px">
+      <span class="lab" style="min-height:32px">Next step</span>
+      <span style="display:flex;align-items:baseline;justify-content:center;gap:28px"><span class="num" style="font-size:150px;color:#c5f74d">+5</span><span class="unit" style="margin-left:-12px">W</span><span class="num" style="font-size:150px">8</span><span class="unit" style="margin-left:-12px">s</span></span>
+      <span style="display:flex;gap:8px" aria-hidden="true"><i style="flex:1;height:32px;border-radius:10px;background:#c5f74d"></i><i style="flex:1;height:32px;border-radius:10px;background:#c5f74d"></i><i style="flex:1;height:32px;border-radius:10px;background:#c5f74d"></i><i style="flex:1;height:32px;border-radius:10px;background:#c5f74d"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i><i style="flex:1;height:32px;border-radius:10px;background:#2b2a40"></i></span>
+    </section>
+  </div>
+
+  <footer style="flex-grow:1;min-height:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font:800 28px/1 Tektur;color:#a9a9bf">
+    <span>Ramp time <span style="color:#f3f4f8">7:28</span></span>
+    <span>Best 60 s <span style="color:#5fd9e8">272 W</span></span>
+    <span>Stop pedalling to finish</span>
+  </footer>
+</div>
+</body>
+</html>

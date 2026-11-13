@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FTPunk mockup · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wdth,wght@75..100,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0d0c15}
+.card{background:#191827;border-radius:24px;box-sizing:border-box}
+.eyebrow{font:800 12px/1 Tektur,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#a9a9bf}
+.nav{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:14px;font:700 16px Tektur,sans-serif;color:#a9a9bf}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:22px;font:800 15px Tektur,sans-serif;background:#232235;color:#f3f4f8}
+.row{display:flex;align-items:center;gap:12px;min-height:44px}
+.dot{width:10px;height:10px;border-radius:5px;flex-shrink:0}
+.set{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 22px;border-top:1px solid #26253a}
+.set:first-of-type{border-top:0}
+.set div{flex-grow:1;display:flex;flex-direction:column;gap:3px;font:700 16px Tektur,sans-serif}
+.set div span{font:600 13px Tektur,sans-serif;color:#a9a9bf}
+.sw{all:unset;cursor:pointer;width:52px;height:30px;border-radius:15px;background:#3a3950;position:relative;flex-shrink:0}
+.sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:12px;background:#f3f4f8}
+.sw[aria-pressed="true"]{background:#c5f74d}
+.sw[aria-pressed="true"] i{left:25px;background:#10110a}
+.segs{display:inline-flex;padding:3px;border-radius:19px;background:#0d0c15;flex-shrink:0}
+.segs button{all:unset;cursor:pointer;height:32px;padding:0 16px;border-radius:16px;font:800 14px Tektur,sans-serif;color:#a9a9bf;display:inline-flex;align-items:center}
+.segs button[aria-pressed="true"]{background:#c5f74d;color:#10110a}
+</style>
+</head>
+<body>
+<div style="width:1470px;height:920px;display:flex;background:#0d0c15;color:#f3f4f8;font-family:Tektur,sans-serif;overflow:hidden">
+  <nav aria-label="Sections" style="width:236px;flex-shrink:0;box-sizing:border-box;padding:24px 16px;display:flex;flex-direction:column;gap:6px;background:#12111c">
+    <p style="margin:0 0 20px 14px;font:900 26px Tektur;color:#c5f74d">FTPunk</p>
+    <button type="button" class="nav"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9l7-6 7 6v8H3z"></path></svg>Home</button>
+    <button type="button" class="nav"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l5-6 3 3 6-8"></path></svg>Progress</button>
+    <button type="button" class="nav" style="background:#232235;color:#f3f4f8"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="3"></circle><circle cx="10" cy="10" r="7.5" stroke-dasharray="3 3"></circle></svg>Settings</button>
+    <div style="flex-grow:1"></div>
+    <div class="card" style="padding:14px;display:flex;flex-direction:column;gap:2px;border-radius:20px">
+      <span class="eyebrow" style="margin-bottom:6px">Devices</span>
+      <span class="row" style="min-height:30px;white-space:nowrap;font:700 13px Tektur"><i class="dot" style="background:#fcb852"></i>Trainer<span style="flex-grow:1"></span><span style="color:#fcb852">Offline</span></span>
+      <span class="row" style="min-height:30px;white-space:nowrap;font:700 13px Tektur;color:#a9a9bf"><i class="dot" style="background:#5a5973"></i>Power meter<span style="flex-grow:1"></span>Optional</span>
+      <span class="row" style="min-height:30px;white-space:nowrap;font:700 13px Tektur;color:#a9a9bf"><i class="dot" style="background:#5a5973"></i>Heart rate<span style="flex-grow:1"></span>Optional</span>
+      <button type="button" class="btn" style="margin-top:8px;background:#c5f74d;color:#10110a">Connect</button>
+    </div>
+    <button type="button" class="nav" style="height:56px;margin-top:8px;background:#191827;color:#f3f4f8"><span style="display:grid;place-items:center;width:32px;height:32px;border-radius:16px;background:#c5f74d;color:#10110a;font:900 14px Tektur">K</span><span style="display:flex;flex-direction:column;line-height:1.2">Kordian<span style="font:600 12px Tektur;color:#a9a9bf">Switch rider</span></span></button>
+  </nav>
+
+  <main style="flex-grow:1;min-width:0;box-sizing:border-box;padding:28px 32px;display:grid;grid-template-columns:240px minmax(0,720px);gap:28px;align-content:start">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="margin:0 0 16px 14px;font:900 28px Tektur">Settings</h1>
+      <button type="button" class="nav">Riders</button>
+      <button type="button" class="nav">Devices</button>
+      <button type="button" class="nav" style="background:#191827;color:#f3f4f8">Ride screen</button>
+      <button type="button" class="nav">Intervals.icu<span style="flex-grow:1"></span><i class="dot" style="background:#c5f74d"></i></button>
+      <button type="button" class="nav">Backup and transfer</button>
+      <button type="button" class="nav">About and help</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px;padding-top:6px">
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <h2 class="eyebrow" style="margin:0 0 0 22px">Dashboard</h2>
+        <div class="card">
+          <div class="set"><div>Power average<span>The big number on the ride screen. Recordings always keep every sample.</span></div><span class="segs"><button type="button" aria-pressed="true">3 s</button><button type="button" aria-pressed="false">10 s</button><button type="button" aria-pressed="false">30 s</button><button type="button" aria-pressed="false">60 s</button></span></div>
+          <div class="set"><div>Number size<span>Fit to screen fills the window, sized to read from about 2 m in full screen.</span></div><span class="segs"><button type="button" aria-pressed="true">Fit to screen</button><button type="button" aria-pressed="false">Compact</button></span></div>
+          <div class="set"><div>Sound before each step<span>Three short beeps in the last 3 s of a workout step.</span></div><button type="button" class="sw" aria-pressed="true" aria-label="Sound before each step"><i></i></button></div>
+          <div class="set"><div>Pause when I stop pedalling<span>Workouts and free rides. Never during the FTP test.</span></div><button type="button" class="sw" aria-pressed="true" aria-label="Pause when I stop pedalling"><i></i></button></div>
+        </div>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <h2 class="eyebrow" style="margin:0 0 0 22px">Chaindance</h2>
+        <div class="card">
+          <div class="set"><div>Show the night-city ride<span>Off by default. When on, it takes the place of the timeline strip.</span></div><button type="button" class="sw" aria-pressed="false" aria-label="Show the night-city ride"><i></i></button></div>
+        </div>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:10px">
+        <h2 class="eyebrow" style="margin:0 0 0 22px">Appearance</h2>
+        <div class="card">
+          <div class="set"><div>Font<span>Used for the whole app, ride screen included.</span></div><span class="segs"><button type="button" aria-pressed="true">Tektur</button><button type="button" aria-pressed="false">SF Rounded</button><button type="button" aria-pressed="false">System</button></span></div>
+          <div class="set"><div>Theme<span>The ride screen is always dark.</span></div><span class="segs"><button type="button" aria-pressed="true">System</button><button type="button" aria-pressed="false">Light</button><button type="button" aria-pressed="false">Dark</button></span></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

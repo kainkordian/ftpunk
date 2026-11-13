@@ -138,6 +138,17 @@ Swift tests in `contracts/fixtures/`.
 Checkpoint D: `python3 ftpunk_web/tools/test.py`, native tests and builds, then a visual review of the web scenarios (headless Chrome
 capture, with the owner's permission), then the owner's checks in Chrome with a real trainer and a real key.
 
+### Milestone E: readable from the bike, one look (planned 2026-11-12)
+
+From the owner's Mac walkthrough; the owner reviewed the mockups on 2026-11-13. Designs: `design/app-redesign/` (static HTML).
+Plans 11 and 12 replace `next/macos-chaindance-design.md`, which moves to the archive when plan 11 starts.
+
+| # | Plan | Size |
+|---|------|------|
+| 10 | [Quick fixes](next/10-quick-fixes.md): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
+| 11 | [Ride dashboard readable from 2 m](next/11-ride-dashboard.md): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
+| 12 | [The app around the ride](next/12-app-around-the-ride.md): tokens, shell, Home, summary, Progress, Settings | L |
+
 ## Parked (deliberately not now)
 
 Each item needs a decision from the owner before a plan is written.
