@@ -107,6 +107,19 @@ final class FTPunkUITests: XCTestCase {
 
     // MARK: Workouts and free rides
 
+    /// Find the card by its accessibility button label and activate that element.
+    /// This fails if a replacement accessibility element hides the button's press action.
+    func testLibraryCardAccessibilityElementOpensDetails() throws {
+        launch(scenario: "library")
+        let card = app.buttons.matching(NSPredicate(format: "label == %@", "Sweet spot 3×10")).firstMatch
+        scrollTo(card)
+        XCTAssertTrue(card.exists, "The workout is exposed as a labelled accessibility button")
+        XCTAssertTrue(card.isEnabled)
+        card.tap()
+        XCTAssertTrue(element("primary-action").waitForExistence(timeout: 10), "The workout detail sheet opens")
+        XCTAssertTrue(app.staticTexts["Targets use your FTP of 250 W."].exists)
+    }
+
     /// Library card → detail → pre-flight → start → pause → resume → stop.
     func testWorkoutFromTheLibraryPausesResumesAndStops() throws {
         launch(scenario: "library")

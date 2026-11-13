@@ -16,7 +16,6 @@ struct DevicesPill: View {
             .padding(.horizontal, Space.m).frame(minHeight: 44).contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel("Devices")
         .accessibilityValue(summary.description)
         .accessibilityHint("Connect or manage your trainer, power meter and heart-rate sensor")

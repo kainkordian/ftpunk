@@ -23,7 +23,6 @@ struct WorkoutCard: View {
             .ftpCard(fill: 0.05).contentShape(RoundedRectangle(cornerRadius: Radius.card))
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityValue([detail, badge].compactMap { $0 }.joined(separator: ". "))
         .accessibilityHint("Shows the workout steps and start options")

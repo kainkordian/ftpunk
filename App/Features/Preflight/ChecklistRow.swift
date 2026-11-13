@@ -14,7 +14,6 @@ struct ChecklistRow: View {
         if let action {
             Button(action: action) { content(chevron: true) }
                 .buttonStyle(.plain)
-                .accessibilityElement(children: .ignore)
                 .accessibilityLabel(title)
                 .accessibilityValue([value, detail].compactMap { $0 }.joined(separator: ". "))
                 .accessibilityAddTraits(.isButton)

@@ -293,7 +293,6 @@ struct SettingsView: View {
                     .foregroundStyle(.primary).padding(12).contentShape(Rectangle())
                     .background(Theme.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
             }.buttonStyle(.plain)
-                .accessibilityElement(children: .ignore)
                 .accessibilityLabel("About FTPunk. \(AppInfo.versionLabel). \(AppInfo.credits).")
                 .accessibilityValue(model.debugUnlocked ? "Debug tools enabled" : "\(10 - model.aboutTapCount) activations remaining")
                 .accessibilityHint(model.debugUnlocked ? "Debug tools are enabled above." : "Activate ten times to unlock debug tools.")
