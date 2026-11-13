@@ -44,3 +44,17 @@ No change to ride logic, trainer control, the ramp protocol, scoring or the 72 %
 
 `swift test` passes, both CI builds pass (commands in `AGENTS.md`). Move this file to
 `docs/archive/` and update the roadmap. Ask the owner before any visual review.
+
+## Implementation and owner clarifications (2026-11-13)
+
+All four steps are implemented in separate commits. Swift tests (370) and both CI builds pass.
+The accessibility XCUITest compiles; its execution, menu/shortcut runtime checks and visual
+comparison remain queued while the owner rides. No app launches, screenshots or changes to
+installed app files or stored app data were performed.
+
+- Mixed-target cycling workouts qualify when they contain % FTP power targets.
+- On the next successful calendar download, replace the current rider/account’s entire calendar
+  cache with the qualified 14-day download. Old entries have lost their original sport/units;
+  imported files, other riders and other accounts remain untouched.
+- The menu’s More readings action is FTP-only until plan 11; workout/free-ride screens currently
+  show all readings and have no toggle.

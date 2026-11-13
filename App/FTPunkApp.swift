@@ -1,6 +1,9 @@
 import SwiftUI
 import FTPunkDomain
 import FTPunkStorage
+#if os(macOS)
+import AppKit
+#endif
 
 @main struct FTPunkApp: App {
     @ViewState private var model: AppModel? = nil
@@ -9,6 +12,9 @@ import FTPunkStorage
     @AppStorage("appearance") private var appearance = AppearanceMode.system.rawValue
 
     init() {
+        #if os(macOS)
+        NSWindow.allowsAutomaticWindowTabbing = false
+        #endif
         let preview = ProcessInfo.processInfo.arguments.contains("--debug-preview")
         do {
             let store = try LocalStore(inMemory: preview)
@@ -24,6 +30,17 @@ import FTPunkStorage
         WindowGroup {
             if let model {
                 ContentView(model: model)
+                    #if os(macOS)
+                    .background {
+                        // The cockpit already owns this shortcut. Keep it available after minimising too.
+                        if !model.cockpitPresented {
+                            Button("") { model.engine?.phase == .paused ? model.resumeTraining() : model.pauseTraining() }
+                                .keyboardShortcut("p", modifiers: [.command, .shift])
+                                .disabled(!model.isActive || model.engine?.session.training == nil || model.trainingTransition != nil)
+                                .opacity(0).frame(width: 0, height: 0).accessibilityHidden(true)
+                        }
+                    }
+                    #endif
                     .modifier(PreviewTextSize(override: model.previewTextSize))
                     #if os(macOS)
                     .frame(minWidth: model.previewPhoneLayout ? 393 : 640, minHeight: 600)
@@ -77,6 +94,7 @@ import FTPunkStorage
         #if os(macOS)
         .defaultSize(width: 900, height: 820)
         .commands {
+            MacAppCommands(model: model)
             CommandGroup(after: .toolbar) {
                 // Off, strip, hero. (Command-Shift-P is Pause in the cockpit.)
                 Button("Cycle \(RideVisualBranding.name) view") { if let model { model.rideVisualPlacement = model.rideVisualPlacement.next } }

@@ -1,7 +1,7 @@
 # FTPunk roadmap
 
 The single source of truth for what FTPunk is, where it stands and what comes next.
-Updated 2026-11-09. If this file and an archived plan disagree, this file wins.
+Updated 2026-11-13. If this file and an archived plan disagree, this file wins.
 
 ## What FTPunk is
 
@@ -19,10 +19,11 @@ Fixed principles:
 - The trainer is only ever controlled by the ride engine. Visuals, imports and integrations
   never send trainer commands.
 
-## Where it stands (2026-11-11)
+## Where it stands (2026-11-13)
 
 Built and covered by tests (370 Swift tests, 301 web tests, iOS + Mac builds pass):
 
+- **Plan 10, step 4 (2026-11-13, native):** Settings/Go/Ride menus and window/tab suppression implemented. Actions call the cockpit’s existing model entry points; existing shortcuts are retained, including pause while minimised. More readings uses the FTP cockpit’s stored toggle and is FTP-only until plan 11 (owner approved). Checked: 370 Swift tests and both CI builds. Plan 10 implementation is archived; runtime menu/keyboard checks, accessibility UI-test execution and visual comparison remain queued until the owner finishes riding and authorizes review. Plan 11 has not started.
 - **Plan 10, step 3 (2026-11-13, native):** calendar downloads admit Ride/VirtualRide events with original % FTP power targets, including nested ramps and mixed targets (owner confirmed that % qualifies). Other events are silent; only qualifying decode failures are named. Both Home sync-message locations use the qualified-count summary. At the next successful download the current rider/account calendar cache is replaced, including older entries whose original units were lost (owner approved); files, other accounts and riders are preserved. Checked: 370 Swift tests, including isolated download/cache tests, and both CI builds. No live account or stored app data accessed; visual review remains queued.
 - **Plan 10, step 2 (2026-11-13, native):** Chaindance defaults to off when no preference exists; explicit on/off, Strip and Large choices are preserved. Settings and README explain the default. Checked: 365 Swift tests and both CI builds. Visual previews deliberately retain their explicit on setting; visual review remains queued.
 - **Plan 10, step 1 (2026-11-13, native):** workout cards, Devices, actionable pre-flight rows and About preserve the native accessibility button action. Today cards already do. Added a library-card accessibility XCUITest. Checked: 365 Swift tests and both CI builds. UI test execution and visual review remain queued until the owner finishes riding and authorizes review.
@@ -88,7 +89,7 @@ the latest screens. The web app (`ftpunk_web/`) has the same caveat: its new scr
 
 ## Next steps
 
-The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). `next/` is empty.
+The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). Milestone E is below; native plan 10 is implemented, with plans 11 and 12 awaiting the owner’s review checkpoints.
 
 ### Step 0: baseline commit (done 2026-11-04)
 
@@ -147,9 +148,11 @@ capture, with the owner's permission), then the owner's checks in Chrome with a 
 From the owner's Mac walkthrough; the owner reviewed the mockups on 2026-11-13. Designs: `design/app-redesign/` (static HTML).
 Plans 11 and 12 replace `next/macos-chaindance-design.md`, which moves to the archive when plan 11 starts.
 
+Owner clarifications (2026-11-13): cyan overrides the Next tile during the last 10 s; step heart-rate averages go below the profile; existing Chaindance Large/Strip integration is retained without art changes; rider/devices move to the Mac sidebar. The web mapping is approved, including a platform rounded-font/system fallback; web implementation follows native plans 10–12.
+
 | # | Plan | Size |
 |---|------|------|
-| 10 | [Quick fixes](next/10-quick-fixes.md): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
+| 10 | [Quick fixes](archive/10-quick-fixes.md) (implemented 2026-11-13; visual review queued): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
 | 11 | [Ride dashboard readable from 2 m](next/11-ride-dashboard.md): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
 | 12 | [The app around the ride](next/12-app-around-the-ride.md): tokens, shell, Home, summary, Progress, Settings | L |
 
