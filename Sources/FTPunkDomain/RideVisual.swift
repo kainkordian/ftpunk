@@ -391,12 +391,12 @@ extension RideVisualSmoothing {
     }
 }
 
-/// The strip's on/off choice (kept under its old keys). It replaces the earlier `showStelvioASCII`: absent means on, a stored value is kept.
+/// The strip's on/off choice (kept under its old keys). It replaces the earlier `showStelvioASCII`: absent means off, a stored value is kept.
 public enum RideVisualPreference {
     public static let key = "rideVisualEnabled"
     public static let legacyKey = "showStelvioASCII"
 
-    public static func resolve(stored: Bool?, legacy: Bool?) -> Bool { stored ?? legacy ?? true }
+    public static func resolve(stored: Bool?, legacy: Bool?) -> Bool { stored ?? legacy ?? false }
 
     /// Reads the preference, carrying an explicit value of the old toggle over to the new key once.
     public static func load(from defaults: UserDefaults = .standard) -> Bool {

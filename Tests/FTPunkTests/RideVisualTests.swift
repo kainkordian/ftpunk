@@ -203,8 +203,8 @@ private func step(index: Int = 2, count: Int = 9, watts: Double = 225, end: Doub
     #expect(RideVisualSmoothing.power([RideSample(time: 1, power: .infinity), RideSample(time: 2, power: 150)], now: 2) == 150)
 }
 
-@Test func theToggleIsOnByDefaultAndKeepsAnExplicitOffFromTheOldStelvioSwitch() throws {
-    #expect(RideVisualPreference.resolve(stored: nil, legacy: nil))
+@Test func theToggleIsOffByDefaultAndKeepsExplicitChoicesFromTheOldStelvioSwitch() throws {
+    #expect(!RideVisualPreference.resolve(stored: nil, legacy: nil))
     #expect(!RideVisualPreference.resolve(stored: nil, legacy: false))
     #expect(RideVisualPreference.resolve(stored: nil, legacy: true))
     #expect(!RideVisualPreference.resolve(stored: false, legacy: true) && RideVisualPreference.resolve(stored: true, legacy: false))
@@ -212,7 +212,7 @@ private func step(index: Int = 2, count: Int = 9, watts: Double = 225, end: Doub
     let suite = "ftpunk.tests.\(UUID().uuidString)"
     let defaults = try #require(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
-    #expect(RideVisualPreference.load(from: defaults) && defaults.object(forKey: RideVisualPreference.key) == nil) // untouched: still the default
+    #expect(!RideVisualPreference.load(from: defaults) && defaults.object(forKey: RideVisualPreference.key) == nil) // untouched: still the default
     defaults.set(false, forKey: RideVisualPreference.legacyKey)
     #expect(!RideVisualPreference.load(from: defaults))
     #expect(defaults.object(forKey: RideVisualPreference.key) as? Bool == false && defaults.object(forKey: RideVisualPreference.legacyKey) == nil)

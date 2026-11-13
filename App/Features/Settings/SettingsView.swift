@@ -182,7 +182,7 @@ struct SettingsView: View {
                 }
             }
         } header: { Text(SettingsGroup.rideDisplay.title) } footer: {
-            Text("Numbers follow your system text size; extra-large is easier to read from the bike. \(RideVisualBranding.name) is a neon night-city ride that follows your power. It never controls the trainer. You can also change it during a ride. Increase Contrast, Bold Text and Reduce Motion are supported.")
+            Text("Numbers follow your system text size; extra-large is easier to read from the bike. \(RideVisualBranding.name) is off by default: a neon night-city ride that follows your power. It never controls the trainer. You can also change it during a ride. Increase Contrast, Bold Text and Reduce Motion are supported.")
         }
     }
 

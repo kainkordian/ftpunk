@@ -23,6 +23,7 @@ Fixed principles:
 
 Built and covered by tests (365 Swift tests, 301 web tests, iOS + Mac builds pass):
 
+- **Plan 10, step 2 (2026-11-13, native):** Chaindance defaults to off when no preference exists; explicit on/off, Strip and Large choices are preserved. Settings and README explain the default. Checked: 365 Swift tests and both CI builds. Visual previews deliberately retain their explicit on setting; visual review remains queued.
 - **Plan 10, step 1 (2026-11-13, native):** workout cards, Devices, actionable pre-flight rows and About preserve the native accessibility button action. Today cards already do. Added a library-card accessibility XCUITest. Checked: 365 Swift tests and both CI builds. UI test execution and visual review remain queued until the owner finishes riding and authorizes review.
 
 - **Trainer line and upload again (2026-11-12, native + web):** the ride overview's power chart draws the trainer's reported power as an amber line (with legend) while a meter is the source, and a saved ride's Intervals.icu section has "Upload again…", which drops the old upload record and reopens the consent sheet with a freshly built file. Unverified: not looked at on screen; Intervals.icu may treat a re-upload as a duplicate (same `external_id`), so the old activity may need deleting there first; the re-upload path has no automated test.

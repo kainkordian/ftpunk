@@ -57,7 +57,7 @@ struct UploadConsent: Identifiable {
     var preflightPath: [RideKind] = []
     /// How the strip shows in the cockpits. A strip unless the rider chose otherwise; migrated from the earlier on/off
     /// toggle (and before that `showStelvioASCII`).
-    var rideVisualPlacement = RideVisualPlacement.strip {
+    var rideVisualPlacement = RideVisualPlacement.off {
         didSet { if !preview { RideVisualPreference.savePlacement(rideVisualPlacement) } }
     }
     /// On/off view of `rideVisualPlacement`. Switching on restores the strip.

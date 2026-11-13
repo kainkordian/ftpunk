@@ -200,10 +200,10 @@ final class FTPunkUITests: XCTestCase {
 
     // MARK: Chaindance
 
-    /// The FTP cockpit shows Chaindance by default; the header menu switches it off and on again.
+    /// The explicitly enabled visual preview shows Chaindance; the header menu switches it off and on again.
     func testPixelRideShowsInTheCockpitAndTheMenuTogglesIt() throws {
         launch(scenario: "visual-ramp-threshold")
-        XCTAssertTrue(element("ride-visual").waitForExistence(timeout: 20), "Chaindance is on by default")
+        XCTAssertTrue(element("ride-visual").waitForExistence(timeout: 20), "The visual preview enables Chaindance")
         XCTAssertTrue(element("ride-visual").label.hasPrefix("Chaindance: threshold effort, level"), "It carries a summary label")
         tap("ride-visual-menu")
         app.buttons["Off"].tap()

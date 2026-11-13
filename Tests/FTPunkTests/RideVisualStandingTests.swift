@@ -101,7 +101,7 @@ private func stands(_ input: RideVisualInput) -> Bool { RideVisualState.make(inp
 }
 
 @Test func placementMigratesFromTheOldToggle() throws {
-    #expect(RideVisualPreference.resolvePlacement(stored: nil, enabled: nil, legacy: nil) == .strip)
+    #expect(RideVisualPreference.resolvePlacement(stored: nil, enabled: nil, legacy: nil) == .off)
     #expect(RideVisualPreference.resolvePlacement(stored: nil, enabled: true, legacy: nil) == .strip)
     #expect(RideVisualPreference.resolvePlacement(stored: nil, enabled: false, legacy: true) == .off)
     #expect(RideVisualPreference.resolvePlacement(stored: "hero", enabled: false, legacy: nil) == .hero)
@@ -109,6 +109,8 @@ private func stands(_ input: RideVisualInput) -> Bool { RideVisualState.make(inp
     let suite = "ftpunk.placement.\(UUID().uuidString)"
     let defaults = try #require(UserDefaults(suiteName: suite))
     defer { defaults.removePersistentDomain(forName: suite) }
+    #expect(RideVisualPreference.loadPlacement(from: defaults) == .off)
+    #expect(RideVisualPreference.resolvePlacement(stored: "strip", enabled: false, legacy: nil) == .strip)
     defaults.set(false, forKey: RideVisualPreference.key) // an older build's "off"
     #expect(RideVisualPreference.loadPlacement(from: defaults) == .off)
     RideVisualPreference.savePlacement(.hero, to: defaults)
