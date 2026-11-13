@@ -22,8 +22,8 @@ app against (see "Fidelity" in plans 11 and 12).
 The numbers are sample values. The same boards live on the owner's private design canvas
 "FTPunk · 2 m ride dashboard and app redesign"; if the two differ, the canvas is newer.
 
-## Zone colours (decided after the mockups)
+## Zone colours
 
-`1-workout.html` still shows a cyan Next tile, a lime target and pink heart rate. The owner
-decided: Next tile and power target use the power-zone colour from the workout profile, heart
-rate becomes red. Details in `docs/next/11-ride-dashboard.md` ("Decided by the owner").
+`1-workout.html` (sweet-spot step, recovery next) and `1b-workout-recovery-step.html` (recovery
+step, sweet spot next) show the zone-coloured Next tile and target. Heart rate is red on all
+boards. Rules: `docs/next/11-ride-dashboard.md`, "Decided by the owner".

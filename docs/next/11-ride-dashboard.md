@@ -65,18 +65,18 @@ two near-identical hints; "Workout time" jumps on Skip while the saved ride show
 - Sound before each step: yes.
 - Skip step: clicking the cyan **Next** tile skips to that step. No separate button.
 - Chaindance: off by default (plan 10), no work on it.
-- **Zone colours (workout screen only), decided without a mockup; the mockups still show the
-  fixed cyan Next tile and lime target, and this paragraph wins where they differ:**
-  - The **Next** tile takes the colour of the next step's power zone from the workout profile
-    (same palette as the profile strip). The fast-forward icon and the top-right duration stay.
-  - In the **power** tile only the *target* takes the current step's zone colour. The 3 s power
-    number stays white.
-  - **Heart rate moves from pink to red** (the colour of the heart-rate line), because threshold
-    and VO2max are pink in the zone palette. Do this on every ride screen so heart rate has one colour.
-  - Sweet spot is close to the lime accent; accept that, no special case.
-  - FTP test keeps lime/cyan, free ride keeps lime. No zone colours there.
-  - Contrast: text on a zone-coloured tile must keep at least 4.5:1; pick dark or white text per zone.
-  - Report these as intended deviations from `1-workout.html` in the wrap-up.
+- **Zone colours on the workout screen** (mockups `1-workout.html` and `1b-workout-recovery-step.html`):
+  - The **Next** tile takes the power-zone colour of the next step: tile background is the zone
+    colour at 14 % over the tile surface, and the icon, the "Next" label and the digits use the zone
+    colour. The duration in the top right corner stays white.
+  - In the **power** tile only the *target* takes the current step's zone colour. The power number
+    stays white.
+  - Use the app's existing zone palette (the one the profile strip uses); it wins over the hex values
+    in the mockups. Where a zone colour has less than 4.5:1 contrast on its tile, lighten it for text
+    only (mockup: recovery bar `#7d8191`, recovery text `#b4b8c8`).
+  - **Heart rate is red** (`#ff5c5c` in the mockups; use the app's existing heart-rate line red if it
+    has a token) on every ride screen and in the ride summary: label, digits, line and per-step averages.
+  - The FTP test keeps lime and cyan and free ride keeps lime. No zone colours there.
 
 ## The layout
 

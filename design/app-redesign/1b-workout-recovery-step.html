@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FTPunk mockup · Workout cockpit, recovery step</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wdth,wght@75..100,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0d0c15}
+.tile{background:#191827;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.lab{font:800 30px/1 Tektur,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#a9a9bf;display:flex;align-items:center;gap:12px}
+.num{font-family:Tektur,sans-serif;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:.8;font-variation-settings:"wdth" 85}
+.unit{font:800 44px/1 Tektur,sans-serif;color:#a9a9bf;margin-left:12px}
+.adj{all:unset;cursor:pointer;display:grid;place-items:center;min-width:56px;height:56px;padding:0 6px;box-sizing:border-box;border-radius:28px;background:#232235;color:#f3f4f8;font:800 26px Tektur,sans-serif}
+.pick{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:12px;height:56px;padding:0 20px 0 18px;border-radius:28px;background:#232235;font:800 30px/1 Tektur,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#a9a9bf}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 20px;border-radius:22px;font:800 17px Tektur,sans-serif;background:#232235;color:#f3f4f8}
+</style>
+</head>
+<body>
+<div style="width:1470px;height:920px;box-sizing:border-box;padding:20px 24px 24px;display:flex;flex-direction:column;gap:16px;background:#0d0c15;color:#f3f4f8;font-family:Tektur,sans-serif;overflow:hidden">
+  <header style="height:60px;flex-shrink:0;display:flex;align-items:center;gap:16px">
+    <button type="button" class="btn" aria-label="Minimise ride" style="width:44px;padding:0;justify-content:center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l6 6 6-6"></path></svg></button>
+    <span style="display:inline-flex;align-items:center;height:30px;padding:0 14px;border-radius:15px;background:#c5f74d;color:#10110a;font:900 15px Tektur;letter-spacing:.08em">WORKOUT</span>
+    <span style="font:800 24px Tektur">Sweet spot 3×12 min @ 90 %</span>
+    <span style="flex-grow:1"></span>
+    <span style="display:flex;align-items:center;gap:14px;font:700 16px Tektur;color:#a9a9bf"><span style="display:flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:5px;background:#c5f74d"></i>Trainer</span><span style="display:flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:5px;background:#c5f74d"></i>Power</span><span style="display:flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:5px;background:#c5f74d"></i>Heart rate</span></span>
+    <span style="font:800 24px Tektur;font-variant-numeric:tabular-nums;margin:0 8px">18:42</span>
+    <button type="button" class="btn"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="1" width="4" height="14" rx="1.5"></rect><rect x="10" y="1" width="4" height="14" rx="1.5"></rect></svg>Pause</button>
+    <button type="button" class="btn">Stop &amp; save</button>
+    <button type="button" class="btn" aria-label="More options" style="width:44px;padding:0;justify-content:center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="2"></circle><circle cx="10" cy="10" r="2"></circle><circle cx="16" cy="10" r="2"></circle></svg></button>
+  </header>
+
+  <div style="height:372px;flex-shrink:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+    <section class="tile" style="padding:26px 32px">
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:68px">
+        <button type="button" class="pick" aria-label="Power average, 3 seconds. Change"><svg aria-hidden="true" width="26" height="30" viewBox="0 0 26 30" fill="#a9a9bf"><path d="M15 0L2 17h9l-2 13 15-19h-10z"></path></svg>Power · 3 s<svg aria-hidden="true" width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l4 4 4-4"></path></svg></button>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px;border-radius:34px;background:#0d0c15"><button type="button" class="adj" aria-label="Lower intensity by 1 percent">−</button><span style="min-width:120px;text-align:center;font:800 30px/1 Tektur,sans-serif">100 %</span><button type="button" class="adj" aria-label="Raise intensity by 1 percent">+</button></span>
+      </div>
+      <p style="margin:0;display:flex;align-items:baseline;justify-content:center"><span class="num" style="font-size:220px">127</span><span class="unit" style="font-size:56px">W</span></p>
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:16px"><span class="lab">Target</span><span class="num" style="font-size:76px;color:#b4b8c8">125</span><span class="unit" style="font-size:34px;margin-left:0">W</span></div>
+    </section>
+    <section class="tile" style="padding:26px 32px">
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:68px">
+        <span class="lab"><svg aria-hidden="true" width="28" height="30" viewBox="0 0 28 30" fill="none" stroke="#a9a9bf" stroke-width="3" stroke-linecap="round"><circle cx="14" cy="17" r="11"></circle><path d="M14 17V10M10 2h8"></path></svg>Step left</span>
+        
+      </div>
+      <p style="margin:0;text-align:center"><span class="num" style="font-size:220px">3:10</span></p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="display:flex;align-items:center;gap:14px;font:800 40px/1 Tektur"><i style="width:22px;height:22px;border-radius:7px;background:#7d8191" aria-hidden="true"></i>Recovery 2 of 3</span>
+        <div style="height:16px;border-radius:8px;background:#2b2a40;overflow:hidden" aria-hidden="true"><i style="display:block;width:37%;height:100%;border-radius:8px;background:#7d8191"></i></div>
+      </div>
+    </section>
+  </div>
+
+  <div style="height:252px;flex-shrink:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <section style="background:#191827;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;min-width:0;padding:22px 28px">
+      <span style="display:flex;align-items:center;justify-content:space-between;min-height:32px"><span class="lab" style="color:#ff5c5c"><svg aria-hidden="true" width="30" height="28" viewBox="0 0 30 28" fill="#ff5c5c"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>Heart rate</span></span>
+      <span style="flex-grow:1;display:flex;align-items:center;justify-content:center"><span style="display:flex;align-items:baseline"><span class="num" style="font-size:185px;color:#ff5c5c">128</span><span class="unit" style="font-size:38px">bpm</span></span></span>
+    </section>
+    <section style="background:#191827;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;min-width:0;padding:22px 28px">
+      <span style="display:flex;align-items:center;justify-content:space-between;min-height:32px"><span class="lab" style="color:#a9a9bf"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#a9a9bf" stroke-width="3" stroke-linecap="round"><circle cx="15" cy="15" r="12"></circle><path d="M15 15l7-7"></path><circle cx="15" cy="15" r="2" fill="#a9a9bf"></circle></svg>Cadence</span></span>
+      <span style="flex-grow:1;display:flex;align-items:center;justify-content:center"><span style="display:flex;align-items:baseline"><span class="num" style="font-size:185px;color:#f3f4f8">86</span><span class="unit" style="font-size:38px">rpm</span></span></span>
+    </section>
+    <button type="button" aria-label="Next: Sweet spot, 225 watts, 12 minutes. Skip to it now" style="all:unset;cursor:pointer;background:#2a3320;border-radius:32px;box-sizing:border-box;display:flex;flex-direction:column;min-width:0;padding:22px 28px">
+      <span style="display:flex;align-items:center;justify-content:space-between;min-height:32px"><span class="lab" style="color:#b5d14a"><svg aria-hidden="true" width="30" height="26" viewBox="0 0 30 26" fill="#b5d14a"><path d="M0 2l13 11L0 24zM15 2l13 11-13 11z"></path></svg>Next</span><span style="font:800 30px/1 Tektur,sans-serif;color:#f3f4f8">12:00</span></span>
+      <span style="flex-grow:1;display:flex;align-items:center;justify-content:center"><span style="display:flex;align-items:baseline"><span class="num" style="font-size:185px;color:#b5d14a">225</span><span class="unit" style="font-size:38px">W</span></span></span>
+    </button>
+  </div>
+
+  <section aria-label="Workout profile with the heart-rate line and the average heart rate of each finished step" style="flex-grow:1;min-height:0;background:#191827;border-radius:28px;padding:12px 24px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:20px;font:800 22px/1 Tektur;color:#a9a9bf"><span style="flex-grow:1"><span style="color:#f3f4f8">45:50</span> ridden</span><span><span style="color:#f3f4f8">20:10</span> to go</span><button type="button" class="btn" style="height:36px;font-size:15px" aria-expanded="false">More metrics<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8l4-4 4 4"></path></svg></button></div>
+    <div style="position:relative;height:52px;display:flex;align-items:flex-end;gap:4px" aria-hidden="true">
+      <i style="flex:15;height:34px;border-radius:8px;background:#4fae9c;opacity:.4"></i><i style="flex:12;height:52px;border-radius:8px;background:#b5d14a;opacity:.4"></i><i style="flex:5;height:28px;border-radius:8px;background:#7d8191;opacity:.4"></i><i style="flex:12;height:52px;border-radius:8px;background:#b5d14a;opacity:.4"></i><i style="flex:5;height:28px;border-radius:8px;background:#7d8191"></i><i style="flex:12;height:52px;border-radius:8px;background:#b5d14a"></i><i style="flex:5;height:28px;border-radius:8px;background:#7d8191"></i>
+      <svg viewBox="0 0 1374 52" preserveAspectRatio="none" style="position:absolute;left:0;top:0;width:100%;height:52px"><polyline fill="none" stroke="#ff5c5c" stroke-width="3" stroke-linejoin="round" points="0,44 90,37 200,34 310,33 340,27 420,17 520,14 570,16 600,26 650,31 690,30 730,21 776,16 860,13 912,14 935,24 958,29"></polyline></svg>
+      <i style="position:absolute;left:69.8%;top:-6px;bottom:-4px;width:4px;border-radius:2px;background:#f3f4f8"></i>
+    </div>
+    <div style="display:flex;gap:4px;height:20px;font:800 19px/1 Tektur,sans-serif"><span style="flex:15;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"><svg aria-hidden="true" width="16" height="15" viewBox="0 0 30 28" fill="#ff5c5c"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>121</span><span style="flex:12;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"><svg aria-hidden="true" width="16" height="15" viewBox="0 0 30 28" fill="#ff5c5c"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>141</span><span style="flex:5;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"><svg aria-hidden="true" width="16" height="15" viewBox="0 0 30 28" fill="#ff5c5c"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>133</span><span style="flex:12;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"><svg aria-hidden="true" width="16" height="15" viewBox="0 0 30 28" fill="#ff5c5c"><path d="M15 27C4 19 0 13 0 8a8 8 0 0115-4 8 8 0 0115 4c0 5-4 11-15 19z"></path></svg>143</span><span style="flex:5;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"></span><span style="flex:12;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"></span><span style="flex:5;display:flex;align-items:center;justify-content:center;gap:6px;color:#ff5c5c"></span></div>
+  </section>
+</div>
+</body>
+</html>
