@@ -185,3 +185,8 @@ with values on, off and at 110 %, the repeat groups of the compact list and the 
 decimals). The Swift test `workoutPreviewMatchesTheSharedFixtureAt250Watts` fails on drift; regenerate with
 `FTPUNK_WRITE_FIXTURES=1 swift test --filter workoutPreviewMatchesTheSharedFixtureAt250Watts`. The web copies both fixtures to
 `ftpunk_web/tests/fixtures/`; `python3 ftpunk_web/tools/test.py` fails if a copy differs from `contracts/fixtures/`.
+
+Free rides can change mode without replacing the original plan. Timestamped events
+`Free ride mode: resistance <tenths-level>` and `Free ride mode: ERG <watts> W` record
+acknowledged transitions; target reconstruction suppresses ERG targets during resistance
+spans and preserves earlier targets. Existing pause/resume and ERG target events still apply.

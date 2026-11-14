@@ -32,6 +32,9 @@ struct UploadConsent: Identifiable {
     var engine: RampEngine?
     var elapsed = 0.0
     /// Preview scenarios can render the iPhone layout inside a Mac window.
+    var previewDashboardReadings: [String: String] = [:]
+    var previewDashboardMore: Bool?
+    var previewDashboardCompact: Bool?
     var previewPhoneLayout = false
     var previewTextSize: DynamicTypeSize?
     /// Preview scenarios only: the Settings group to show first, with the API key form open.
@@ -468,7 +471,7 @@ struct UploadConsent: Identifiable {
                 }
             }
         }
-        if !demoMode, isActive, let level = engine?.targetResistance, level != lastAcknowledgedResistance, targetTask == nil,
+        if !demoMode, isActive, trainingControlTask == nil, let level = engine?.targetResistance, level != lastAcknowledgedResistance, targetTask == nil,
            let generation = ownership.generation {
             commandStartedAt = elapsed
             targetTask = Task { [weak self] in
@@ -483,7 +486,7 @@ struct UploadConsent: Identifiable {
                 } catch { if self.ownership.canControl(generation) { self.interrupt(error.localizedDescription) } }
             }
         }
-        if !demoMode, isActive, let workoutTarget = engine?.targetPower, targetTask == nil {
+        if !demoMode, isActive, trainingControlTask == nil, let workoutTarget = engine?.targetPower, targetTask == nil {
             let target: Int
             if engine?.session.configuration.usesPowerMatching == true, let range = bluetooth.powerRange {
                 let cadence = engine?.lastCadence.flatMap { elapsed - $0.time <= 2 ? $0.rpm : nil }
@@ -524,6 +527,12 @@ struct UploadConsent: Identifiable {
         let label = rampStarted ? "ramp start" : rampEnded ? "ramp end" : "ramp"
         engine?.recordEvent(at: elapsed, message: String(format: "Power matching (%@): gain %.3f, offset %+.1f W, trainer warmth %.0f kJ, fade guard %.0f s, %d measurements",
                                                          label, powerMatcher.gain, powerMatcher.offset, trainerWarmth.kilojoules, powerMatcher.fadeSeconds, powerMatcher.measurementCount))
+    }
+    func installDashboardPreview(_ value: RideEngine, elapsed time: Double) {
+        guard preview, store.isInMemory else { return }
+        engine = value; elapsed = time; cockpitPresented = true; mockPaused = true
+        heartRate = value.session.samples.last?.heartRate
+        heartRateTime = value.session.samples.last?.time
     }
     func advanceMock(seconds: Double) {
         guard demoMode, isActive, seconds.isFinite, seconds > 0 else { return }
@@ -789,6 +798,44 @@ struct UploadConsent: Identifiable {
         if !saved.isEmpty { riders = saved }
         if let updated = saved.first(where: { $0.id == profile.id }) { profile.cycleProgress = updated.cycleProgress }
     }
+    /// Serialises mode changes with pause/resume and pending target writes. The engine commits only
+    /// after the trainer acknowledges the new mode; failures use the existing interruption path.
+    func switchFreeRideMode(resistance: Bool) {
+        guard isActive, trainingControlTask == nil, let current = engine,
+              current.session.training?.kind == .freeRide,
+              (current.resumeResistance != nil) != resistance,
+              let generation = ownership.generation, let range = resistanceLimits else { return }
+        let level = range.quantized(current.lastFreeRideResistance ?? resistanceLevel)
+        let requestedWatts = current.freeRideERGTarget ?? freeRideWatts
+        let watts = demoMode ? max(1, requestedWatts) : bluetooth.powerRange?.quantized(requestedWatts) ?? 100
+        if demoMode {
+            _ = engine?.switchFreeRide(resistance: resistance ? level : nil, watts: watts, at: elapsed)
+            powerMatcher.restartSettle(at: elapsed); checkpoint(force: true)
+            return
+        }
+        let pending = targetTask
+        trainingTransition = "Changing trainer mode…"
+        trainingControlTask = Task { [weak self] in
+            guard let self else { return }
+            defer { self.trainingControlTask = nil; self.trainingTransition = nil }
+            await pending?.value
+            guard self.ownership.canControl(generation), self.isActive else { return }
+            do {
+                try await self.bluetooth.stopTrainer()
+                guard self.ownership.canControl(generation), self.isActive else { return }
+                if self.engine?.phase != .paused && self.engine?.phase != .waiting {
+                    if resistance { try await self.bluetooth.startResistance(level: level) }
+                    else { try await self.bluetooth.startTrainer(power: watts) }
+                }
+                guard self.ownership.canControl(generation), self.isActive else { return }
+                _ = self.engine?.switchFreeRide(resistance: resistance ? level : nil, watts: watts, at: self.elapsed)
+                self.lastAcknowledgedTarget = resistance ? nil : watts
+                self.lastAcknowledgedResistance = resistance ? level : nil
+                self.powerMatcher.restartSettle(at: self.elapsed); self.checkpoint(force: true)
+            } catch { if self.ownership.canControl(generation) { self.interrupt(error.localizedDescription) } }
+        }
+    }
+
     func adjustIntensity(by delta: Int) {
         guard isActive, trainingControlTask == nil, let engine, engine.session.training?.kind == .workout else { return }
         let percent = engine.intensity + delta

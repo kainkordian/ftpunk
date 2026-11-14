@@ -23,7 +23,7 @@ struct RideCharts: View {
         HStack(spacing: Space.m) {
             swatch("Power", color: Theme.accent, dashed: false)
             if hasTarget { swatch("Target", color: .primary.opacity(0.75), dashed: true) }
-            if hasHeartRate { swatch("Heart rate", color: .pink, dashed: false) }
+            if hasHeartRate { swatch("Heart rate", color: Chaindance.heartLine, dashed: false) }
         }
         .font(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
     }
@@ -54,7 +54,7 @@ struct RideHeartRateChart: View {
         let summary = RideSummary.make(session)
         Chart(points) { point in
             LineMark(x: .value("Minutes", point.time / 60), y: .value("Heart rate", point.bpm), series: .value("Continuous signal", "h\(point.segment)"))
-                .foregroundStyle(.pink).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
+                .foregroundStyle(Chaindance.heartLine).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
         }
         .chartYScale(domain: .automatic(includesZero: false))
         .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
@@ -222,8 +222,8 @@ struct RideSummaryCard: View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), alignment: .leading)], alignment: .leading, spacing: Space.m) {
             ForEach(items + energyItems(summary), id: \.0) { title, value in
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(Theme.secondary)
-                    Text(value).font(.title3.bold()).monospacedDigit()
+                    Text(title.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(title.lowercased().contains("heart") ? Chaindance.heartLine : Theme.secondary)
+                    Text(value).font(.title3.bold()).monospacedDigit().foregroundStyle(title.lowercased().contains("heart") ? Chaindance.heartLine : Color.primary)
                 }
                 .accessibilityElement(children: .combine)
             }
@@ -237,19 +237,25 @@ struct RideSummaryCard: View {
 /// target as a dashed line. It reads the running session, so it follows the ride.
 struct LivePowerChart: View {
     let session: TestSession
+    var showsHeartRate = false
+    var compact = false
     private static let window = 600.0
     private struct Point: Identifiable { let id: Int; let time: Double; let power: Double; let segment: Int }
 
     var body: some View {
+        Group { if compact { stripPlot } else { fullChart } }
+    }
+    private var fullChart: some View {
         let end = max(60, session.samples.last?.time ?? 0), start = max(0, end - Self.window)
         let points = visiblePoints(from: start)
         let targets = TargetSeries.make(session, from: start)
         let peak = max(200, points.map(\.power).max() ?? 0, targets.map(\.watts).max() ?? 0)
-        VStack(alignment: .leading, spacing: Space.s) {
-            HStack {
+        return VStack(alignment: .leading, spacing: Space.s) {
+            if !compact { HStack {
                 Text("Power over time").font(.headline)
                 Spacer()
                 Text("Last 10 minutes").font(.caption).foregroundStyle(Theme.secondary)
+            }
             }
             Chart {
                 ForEach(points) { point in
@@ -261,16 +267,64 @@ struct LivePowerChart: View {
                         .foregroundStyle(.primary.opacity(0.75)).lineStyle(StrokeStyle(lineWidth: 1.75, lineJoin: .round, dash: [5, 3]))
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Path { path in
+                        guard showsHeartRate else { return }
+                        var previous: Double?
+                        let plot = proxy.plotFrame.map { geo[$0] } ?? CGRect(origin: .zero, size: geo.size)
+                        for sample in session.samples where sample.time >= start {
+                            guard let bpm = sample.heartRate, let x = proxy.position(forX: sample.time / 60) else { continue }
+                            let point = CGPoint(x: plot.minX + x, y: plot.minY + plot.height * (1 - min(1, Double(bpm) / 220)))
+                            if let previous, sample.time - previous <= 5 { path.addLine(to: point) } else { path.move(to: point) }
+                            previous = sample.time
+                        }
+                    }.stroke(Chaindance.heartLine, lineWidth: 2)
+                }.allowsHitTesting(false)
+            }
             .chartXScale(domain: (start / 60)...(end / 60))
             .chartYScale(domain: 0...(peak * 1.15))
             .chartXAxis { axis }.chartYAxis { axis }
-            .chartYAxisLabel { Text("W").foregroundStyle(Theme.secondary) }
-            .frame(height: 160)
+            .chartYAxisLabel { Text(showsHeartRate ? "W · HR 0–220 bpm" : "W").foregroundStyle(Theme.secondary) }
+            .frame(height: compact ? nil : 160).frame(maxHeight: compact ? .infinity : nil)
             .accessibilityLabel("Measured power over the last ten minutes" + (targets.isEmpty ? "" : ", with the target power"))
             .accessibilityIdentifier("live-power-chart")
         }
-        .padding(Space.m)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12))
+        .padding(compact ? 0 : Space.m)
+        .background(compact ? Color.clear : Theme.surface, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    /// The dashboard strip is a plot, without axes or a second title taking its height.
+    private var stripPlot: some View {
+        let end = max(60, session.samples.last?.time ?? 0), start = max(0, end - Self.window)
+        let points = visiblePoints(from: start)
+        let targets = TargetSeries.make(session, from: start)
+        let heart = session.samples.filter { $0.time >= start && $0.heartRate != nil }
+        let powers = points.map(\.power) + targets.map(\.watts)
+        let low = max(0, (powers.min() ?? 0) - 20), high = max(low + 40, (powers.max() ?? 200) + 20)
+        let lowHR = Double(max(0, (heart.compactMap(\.heartRate).min() ?? 100) - 8))
+        let highHR = Double((heart.compactMap(\.heartRate).max() ?? 160) + 8)
+        return Canvas { context, size in
+            func line(_ values: [(Double, Double, Int)], low: Double, high: Double, color: Color, dashed: Bool = false) {
+                var path = Path(), previous: (Double, CGPoint, Int)?
+                for (time, value, segment) in values {
+                    let p = CGPoint(x: size.width * (time - start) / max(1, end - start), y: size.height * (1 - (value - low) / max(1, high - low)))
+                    if let prior = previous, prior.2 == segment, time - prior.0 <= (dashed ? end - start + 1 : 5) {
+                        if dashed { path.addLine(to: p) }
+                        else { path.addQuadCurve(to: CGPoint(x: (prior.1.x + p.x)/2, y: (prior.1.y + p.y)/2), control: prior.1) }
+                    } else { path.move(to: p) }
+                    previous = (time, p, segment)
+                }
+                if let previous { path.addLine(to: previous.1) }
+                context.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: dashed ? 2 : 3, lineCap: .round, lineJoin: .round, dash: dashed ? [5, 3] : []))
+            }
+            line(targets.map { ($0.time, $0.watts, $0.segment) }, low: low, high: high, color: RideStyle.dim, dashed: true)
+            line(points.map { ($0.time, $0.power, $0.segment) }, low: low, high: high, color: RideStyle.lime)
+            if showsHeartRate { line(heart.map { ($0.time, Double($0.heartRate ?? 0), 0) }, low: lowHR, high: highHR, color: RideStyle.heart) }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Last ten minutes: power, dashed target and heart rate, each on its own scale")
+        .accessibilityIdentifier("live-power-chart")
     }
 
     private func visiblePoints(from start: Double) -> [Point] {

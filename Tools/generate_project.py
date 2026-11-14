@@ -39,6 +39,8 @@ for path in sorted((ROOT / "App").rglob("*.swift")):
     swift_files.append(file_id)
 for name, filetype in [("Info.plist", "text.plist.xml"), ("MacInfo.plist", "text.plist.xml"), ("Mac.entitlements", "text.plist.entitlements")]:
     files.append(add(name, f"isa = PBXFileReference; lastKnownFileType = {filetype}; path = App/{name}; sourceTree = SOURCE_ROOT;"))
+fonts = add("fonts", 'isa = PBXFileReference; lastKnownFileType = folder; path = App/Resources/Fonts; sourceTree = SOURCE_ROOT;')
+files.append(fonts)
 assets = add("assets", 'isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App/Assets.xcassets; sourceTree = SOURCE_ROOT;')
 files.append(assets)
 package = add("package", 'isa = XCLocalSwiftPackageReference; relativePath = ".";')
@@ -56,6 +58,7 @@ for scheme_name, target_name, mac in [("FTPunk", IOS_TARGET_NAME, False), ("FTPu
     product = add(prefix + "product", 'isa = PBXFileReference; explicitFileType = wrapper.application; path = FTPunk.app; sourceTree = BUILT_PRODUCTS_DIR;')
     products.append(product)
     sources = [add(prefix + file_id + ".build", f"isa = PBXBuildFile; fileRef = {file_id};") for file_id in swift_files]
+    font_resource = add(prefix + "fonts.build", f"isa = PBXBuildFile; fileRef = {fonts};")
     resource = add(prefix + "assets.build", f"isa = PBXBuildFile; fileRef = {assets};")
     dependencies, frameworks = [], []
     for module in ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations"]:
@@ -65,7 +68,7 @@ for scheme_name, target_name, mac in [("FTPunk", IOS_TARGET_NAME, False), ("FTPu
     phases = [
         add(prefix + "sources", f"isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = {refs(sources)}; runOnlyForDeploymentPostprocessing = 0;"),
         add(prefix + "frameworks", f"isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = {refs(frameworks)}; runOnlyForDeploymentPostprocessing = 0;"),
-        add(prefix + "resources", f"isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({resource}); runOnlyForDeploymentPostprocessing = 0;")
+        add(prefix + "resources", f"isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({resource}, {font_resource}); runOnlyForDeploymentPostprocessing = 0;")
     ]
     configs = []
     for mode in ["Debug", "Release"]:

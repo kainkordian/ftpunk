@@ -19,6 +19,7 @@ contents = args.output / "Contents"
 (contents / "Resources").mkdir(parents=True, exist_ok=True)
 icon = Path(__file__).resolve().parents[1] / "design" / "app-icon" / "FTPunk.icns"
 shutil.copy2(icon, contents / "Resources" / "FTPunk.icns")
+shutil.copytree(Path(__file__).resolve().parents[1] / "App/Resources/Fonts", contents / "Resources/Fonts", dirs_exist_ok=True)
 # Replace atomically so rebuilding does not overwrite a running executable's inode.
 staged_binary = contents / "MacOS" / (executable + ".next")
 shutil.copy2(args.binary, staged_binary)
@@ -30,6 +31,7 @@ with (contents / "Info.plist").open("wb") as file:
         "CFBundleDisplayName": "FTPunk" if args.production else "FTPunk Debug Preview", "CFBundlePackageType": "APPL",
         "CFBundleVersion": "1", "CFBundleShortVersionString": "1.0",
         "CFBundleIconFile": "FTPunk.icns",
+        "ATSApplicationFontsPath": "Fonts",
         "NSPrincipalClass": "NSApplication", "LSMinimumSystemVersion": "14.0",
         "NSBluetoothAlwaysUsageDescription": "FTPunk connects to your smart trainer and optional external power meter or heart-rate sensor to perform and record your ramp test.",
         "CFBundleURLTypes": [{"CFBundleURLName": "com.kainkordian.ftpunk.oauth",

@@ -19,6 +19,21 @@ enum ZonePalette {
     }
     static func color(for zone: IntensityZone) -> Color { Theme.colorPair(pair(for: zone)) }
 
+    /// Recovery text is neutral and lighter than the bar. Other zones retain their hues.
+    static func dashboardText(for zone: IntensityZone) -> ActionRGB {
+        if zone == .recovery { return ActionRGB(red: 180/255, green: 184/255, blue: 200/255) }
+        let surface = ActionRGB(red: 25/255, green: 24/255, blue: 39/255)
+        let tint = pair(for: zone).dark
+        let background = ActionRGB(red: surface.red * 0.86 + tint.red * 0.14,
+                                   green: surface.green * 0.86 + tint.green * 0.14,
+                                   blue: surface.blue * 0.86 + tint.blue * 0.14)
+        var text = tint
+        while text.contrast(with: background) < 4.5 {
+            text = ActionRGB(red: min(1, text.red + 0.02), green: min(1, text.green + 0.02), blue: min(1, text.blue + 0.02))
+        }
+        return text
+    }
+
     /// Surfaces a profile can sit on, for contrast checks: card on the page, chart tint on the card.
     static let lightBackground = ActionRGB(red: 0.90, green: 0.90, blue: 0.90)
     static let darkBackground = ActionRGB(red: 0.10, green: 0.10, blue: 0.10)

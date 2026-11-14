@@ -22,4 +22,6 @@
     <key>UIApplicationSceneManifest</key><dict>
         <key>UIApplicationSupportsMultipleScenes</key><false/>
     </dict>
+    <key>UIAppFonts</key>
+    <array><string>Fonts/Tektur.ttf</string></array>
 </dict></plist>

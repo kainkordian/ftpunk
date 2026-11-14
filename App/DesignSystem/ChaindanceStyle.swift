@@ -16,7 +16,7 @@ enum Chaindance {
     static let pink = Color(red: 0xff / 255, green: 0x6f / 255, blue: 0xb8 / 255)
     static let amber = Color(red: 0xfc / 255, green: 0xb8 / 255, blue: 0x52 / 255)
     /// The heart-rate line over the workout profile.
-    static let heartLine = Color(red: 1, green: 0.23, blue: 0.27)
+    static let heartLine = Color(red: 1, green: 92/255, blue: 92/255)
 
     enum Accent { case none, lime, cyan, pink, amber
         var color: Color? {

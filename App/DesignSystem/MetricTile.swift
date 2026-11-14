@@ -17,7 +17,7 @@ struct MetricTile: View {
     var corner: CornerReading?
 
     private var tint: Color {
-        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: .pink }
+        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Chaindance.heartLine }
     }
 
     var body: some View {
@@ -60,7 +60,7 @@ struct MetricRow: View {
     var corner: CornerReading?
 
     private var tint: Color {
-        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: .pink }
+        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Chaindance.heartLine }
     }
     private var heading: some View {
         VStack(alignment: .leading, spacing: 2) {

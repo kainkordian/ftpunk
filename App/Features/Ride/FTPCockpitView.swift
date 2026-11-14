@@ -4,7 +4,7 @@ import FTPunkDomain
 /// The FTP test cockpit. Glanceable from the saddle: big target and actual numbers, the ramp step
 /// and a countdown to the next one, and nothing that moves while the rider is working. Finishing
 /// needs a deliberate hold; Stop & save is always one tap.
-struct FTPCockpitView: View {
+struct LegacyFTPCockpitView: View {
     @Bindable var model: AppModel
     let engine: RampEngine
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -311,5 +311,14 @@ struct FTPCockpitView: View {
             stopButton.buttonStyle(FTPunkSecondaryButtonStyle())
         }
         .padding(.horizontal, Space.l).padding(.vertical, Space.m).frame(maxWidth: .infinity).background(.bar)
+    }
+}
+
+struct FTPCockpitView: View {
+    @Bindable var model: AppModel
+    let engine: RampEngine
+    var body: some View {
+        if model.rideVisualPlacement == .hero { LegacyFTPCockpitView(model: model, engine: engine) }
+        else { RideDashboard(model: model, engine: engine) }
     }
 }

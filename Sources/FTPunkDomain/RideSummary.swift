@@ -194,7 +194,7 @@ public enum TargetSeries {
                 return nil
             }
         }
-        guard plan.resistance == nil, let clock = WorkoutClock(session) else { return nil }
+        guard let clock = WorkoutClock(session) else { return nil }
         let intensityChanges: [(Double, Int)] = events.compactMap { event in
             let prefix = "Workout intensity changed to ", suffix = "%"
             guard event.message.hasPrefix(prefix), event.message.hasSuffix(suffix),
@@ -210,7 +210,12 @@ public enum TargetSeries {
         return { t in
             guard let training = clock.trainingTime(at: t) else { return nil }
             if plan.kind == .freeRide {
-                return ergChanges.last { $0.0 <= t }?.1 ?? plan.steps.first?.watts
+                let mode = events.last { $0.time <= t && $0.message.hasPrefix("Free ride mode:") }
+                if let mode, mode.message.hasPrefix("Free ride mode: resistance") { return nil }
+                if mode == nil && plan.resistance != nil { return nil }
+                let changed = ergChanges.last { $0.0 <= t && $0.0 >= (mode?.time ?? 0) }?.1
+                let switched = mode.flatMap { Int($0.message.dropFirst("Free ride mode: ERG ".count).dropLast(2)) }
+                return changed ?? switched ?? plan.steps.first?.watts
             }
             let intensity = intensityChanges.last { $0.0 <= t }?.1 ?? 100
             return plan.target(at: training, intensity: intensity)

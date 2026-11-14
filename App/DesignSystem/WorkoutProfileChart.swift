@@ -20,6 +20,9 @@ struct WorkoutProfileChart: View {
     /// Its own scale: 0 to 200 bpm (or the highest reading, if higher), so it reads beside the targets, not against them.
     var heartRate: [(time: Double, bpm: Int)] = []
 
+    var stepHeartRates: [Double?] = []
+    var dashboard = false
+
     private var axisWidth: CGFloat { showsAxis && showsValues && (plan.ftpWatts.map { $0 > 0 } ?? false) ? 36 : 0 }
 
     var body: some View {
@@ -39,7 +42,7 @@ struct WorkoutProfileChart: View {
                                  at: CGPoint(x: left - 4, y: y), anchor: .trailing)
                 }
             }
-            if hasFTP {
+            if hasFTP && !dashboard {
                 // 100 % of FTP, so each bar can be read against the rider's threshold.
                 let y = size.height * (1 - 100 / WorkoutProfile.scaleMaxPercent)
                 var line = Path(); line.move(to: CGPoint(x: left, y: y)); line.addLine(to: CGPoint(x: size.width, y: y))
@@ -54,27 +57,52 @@ struct WorkoutProfileChart: View {
                 path.closeSubpath()
                 let done = progressSeconds.map { $0 >= segment.end } ?? false
                 let dimmed = selected.map { $0 != index } ?? false
-                context.fill(path, with: .color(color(for: bar).opacity(done ? 0.45 : dimmed ? 0.6 : 1)))
+                let fill = color(for: bar).opacity(done ? 0.4 : dimmed ? 0.6 : 1)
+                if dashboard {
+                    var clipped = context
+                    let gap = 4 * size.height / 52
+                    let rect = CGRect(x: x0, y: min(y0, y1), width: max(1, x1 - x0 - gap), height: size.height - min(y0, y1))
+                    clipped.clip(to: Path(roundedRect: rect, cornerRadius: 8 * size.height / 52))
+                    clipped.fill(path, with: .color(fill))
+                } else { context.fill(path, with: .color(fill)) }
                 if selected == index { context.stroke(path, with: .color(.primary), style: StrokeStyle(lineWidth: 2, lineJoin: .round)) }
             }
             if heartRate.count >= 2 {
-                let top = Double(max(200, heartRate.map(\.bpm).max() ?? 0))
-                var line = Path(), previous: Double?
+                let bottom = dashboard ? Double(max(0, (heartRate.map(\.bpm).min() ?? 100) - 8)) : 0
+                let top = dashboard ? Double((heartRate.map(\.bpm).max() ?? 160) + 8) : Double(max(200, heartRate.map(\.bpm).max() ?? 0))
+                var line = Path(), previous: Double?, previousPoint: CGPoint?
                 for point in heartRate {
-                    let p = CGPoint(x: left + plotWidth * min(1, max(0, point.time / total)), y: size.height * (1 - Double(point.bpm) / top))
+                    let p = CGPoint(x: left + plotWidth * min(1, max(0, point.time / total)), y: size.height * (1 - (Double(point.bpm) - bottom) / max(1, top - bottom)))
                     // A gap of more than five seconds (a pause, a lost signal) breaks the line.
-                    if let previous, point.time - previous <= 5 { line.addLine(to: p) } else { line.move(to: p) }
-                    previous = point.time
+                    if let previous, point.time - previous <= 5, let prior = previousPoint {
+                        if dashboard { line.addQuadCurve(to: CGPoint(x: (prior.x + p.x)/2, y: (prior.y + p.y)/2), control: prior) }
+                        else { line.addLine(to: p) }
+                    } else { line.move(to: p) }
+                    previous = point.time; previousPoint = p
                 }
-                context.stroke(line, with: .color(Chaindance.heartLine), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                if dashboard, let previousPoint { line.addLine(to: previousPoint) }
+                context.stroke(line, with: .color(Chaindance.heartLine), style: StrokeStyle(lineWidth: dashboard ? 3 : 2, lineCap: .round, lineJoin: .round))
             }
             if let progressSeconds {
                 let x = left + plotWidth * min(1, max(0, progressSeconds / total))
                 context.fill(Path(CGRect(x: x - 1.5, y: 0, width: 3, height: size.height)), with: .color(.primary))
             }
         }
-        .frame(height: height).clipShape(RoundedRectangle(cornerRadius: 8))
-        .background(Theme.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
+        .safeAreaInset(edge: .bottom, spacing: 2) {
+            if !stepHeartRates.isEmpty {
+                GeometryReader { geo in
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
+                        if index < stepHeartRates.count, let average = stepHeartRates[index] {
+                            Text("♥ \(Int(average.rounded()))").font(.ftp(19, weight: .bold)).foregroundStyle(Chaindance.heartLine)
+                                .frame(width: geo.size.width * (segment.end - segment.start) / total)
+                                .position(x: geo.size.width * (segment.start + segment.end) / 2 / total, y: 10)
+                        }
+                    }
+                }.frame(height: 20)
+            }
+        }
+        .frame(height: height + (stepHeartRates.isEmpty ? 0 : 22)).clipShape(RoundedRectangle(cornerRadius: 8))
+        .background(dashboard ? Color.clear : Theme.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 8))
         .overlay { interactionLayer(left: left, bars: bars) }
         .modifier(ChartAccessibility(interactive: selectedStep != nil, label: accessibilityValue(peak: peak, hasFTP: hasFTP),
                                      steps: selectedStep == nil ? [] : WorkoutPreview.steps(for: plan, intensity: intensity, showValues: showsValues)))

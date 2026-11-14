@@ -17,7 +17,7 @@ import FTPunkStorage
         "preflight-blocked", "ride-warmup", "ride-ramp", "ride-ramp-low-cadence", "ride-cooldown", "result-new-ftp", "result-interrupted", "result-upload-prompt",
         "workout-running", "workout-paused", "free-ride", "resistance", "progress-two-riders",
         "visual-ramp-threshold", "visual-workout-vo2", "visual-recovery", "visual-summit", "visual-paused", "visual-off",
-        "settings-devices", "settings-intervals", "workout-detail", "visual-hero", "visual-sprint", "settings-intervals-connected", "builder-blocks", "builder-text"]
+        "settings-devices", "settings-intervals", "workout-detail", "visual-hero", "visual-sprint", "settings-intervals-connected", "builder-blocks", "builder-text", "dash-workout", "dash-workout-recovery-next", "dash-workout-countdown", "dash-workout-paused", "dash-workout-scaled", "dash-ftp-warmup", "dash-ftp-ramp", "dash-ftp-low-cadence", "dash-ftp-ending", "dash-ftp-cooldown", "dash-free-ride", "dash-free-ride-resistance", "dash-more-metrics", "dash-signal-lost"]
     #expect(Set(PreviewScenario.allCases.map(\.rawValue)) == expected)
 }
 

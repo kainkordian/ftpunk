@@ -10,6 +10,7 @@ struct HoldToConfirmButton: View {
     var accessibilityActionName: String
     var shortcut: KeyboardShortcut?
     var identifier = "hold-to-confirm"
+    var dashboardScale: Double? = nil
     let action: () -> Void
     @State private var pressStart: Date?
     @Environment(\.colorSchemeContrast) private var contrast
@@ -19,18 +20,23 @@ struct HoldToConfirmButton: View {
             let held = pressStart.map { clock.date.timeIntervalSince($0) } ?? 0
             let fraction = HoldProgress.fraction(held: held)
             HStack(spacing: Space.s) {
-                ZStack {
+                if dashboardScale == nil { ZStack {
                     Circle().stroke(Theme.secondary.opacity(0.35), lineWidth: 3)
                     Circle().trim(from: 0, to: fraction).stroke(Theme.accent, style: StrokeStyle(lineWidth: 3, lineCap: .round)).rotationEffect(.degrees(-90))
                     if let systemImage { Image(systemName: systemImage).font(.footnote) }
-                }.frame(width: 26, height: 26)
-                Text(pressStart == nil ? title : holdingTitle).font(.headline)
+                }.frame(width: 26, height: 26) }
+                Text(pressStart == nil ? title : holdingTitle).font(dashboardScale.map { .ftp(17 * $0, weight: .bold) } ?? .headline)
             }
-            .foregroundStyle(.primary).multilineTextAlignment(.center)
-            .padding(.horizontal, 18).padding(.vertical, 12)
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: Radius.control))
-            .overlay(RoundedRectangle(cornerRadius: Radius.control).strokeBorder(Theme.secondary, lineWidth: contrast == .increased ? 2.5 : 1.5))
+            .foregroundStyle(dashboardScale == nil ? Color.primary : Color(red: 1, green: 156/255, blue: 203/255)).multilineTextAlignment(.center)
+            .padding(.horizontal, 18 * (dashboardScale ?? 1)).padding(.vertical, dashboardScale == nil ? 12 : 6)
+            .frame(maxWidth: .infinity, minHeight: dashboardScale.map { 44 * $0 } ?? 52)
+            .background(dashboardScale == nil ? Theme.surface : Color(red: 58/255, green: 28/255, blue: 46/255), in: RoundedRectangle(cornerRadius: dashboardScale.map { 22 * $0 } ?? Radius.control))
+            .overlay(RoundedRectangle(cornerRadius: Radius.control).strokeBorder(dashboardScale == nil ? Theme.secondary : Color.clear, lineWidth: contrast == .increased ? 2.5 : 1.5))
+            .overlay {
+                if dashboardScale != nil, fraction > 0 {
+                    Capsule().trim(from: 0, to: fraction).stroke(RideStyle.lime, lineWidth: 3)
+                }
+            }
             .contentShape(RoundedRectangle(cornerRadius: Radius.control))
         }
         .gesture(DragGesture(minimumDistance: 0)

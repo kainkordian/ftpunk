@@ -16,4 +16,6 @@
         <key>CFBundleURLName</key><string>com.kainkordian.ftpunk.oauth</string>
         <key>CFBundleURLSchemes</key><array><string>ftpunk</string></array>
     </dict></array>
+    <key>ATSApplicationFontsPath</key>
+    <string>Fonts</string>
 </dict></plist>

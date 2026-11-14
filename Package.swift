@@ -17,7 +17,7 @@ let package = Package(
         .target(name: "FTPunkStorage", dependencies: ["FTPunkDomain"]),
         .target(name: "FTPunkIntegrations", dependencies: ["FTPunkDomain", "FTPunkStorage"]),
         .executableTarget(name: "FTPunkApp", dependencies: ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations"],
-                          path: "App", exclude: ["Info.plist", "MacInfo.plist", "Mac.entitlements", "Assets.xcassets"]),
+                          path: "App", exclude: ["Info.plist", "MacInfo.plist", "Mac.entitlements", "Assets.xcassets"], resources: [.copy("Resources/Fonts")]),
         .testTarget(name: "FTPunkTests", dependencies: ["FTPunkDomain", "FTPunkDevices", "FTPunkStorage", "FTPunkIntegrations", "FTPunkApp"])
     ]
 )

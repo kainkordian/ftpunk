@@ -161,7 +161,8 @@ States (all in the same tiles, nothing moves):
 - **Paused / auto-paused:** slot B turns amber with a pause glyph, the strip shows one line,
   "Paused · pedal to resume" (merge the two current hints), Pause becomes Resume.
 - **FTP test:** see the focus layout above for the ramp states.
-- **Last 10 s of a workout step:** slot E fills cyan; beeps at 3, 2, 1 s when the sound is on.
+- **Last 10 s of a workout step:** slot E has cyan tint and cyan digits (owner confirmed
+  2026-11-14); beeps at 3, 2, 1 s when the sound is on.
 - **Target change:** the target pulses for 2 s (no pulse with Reduce Motion).
 - **No fresh signal:** the tile shows "—" and an amber "No signal" caption with an icon.
 - **Meter as source:** "Trainer 194 W" beside the target in A.
@@ -222,7 +223,7 @@ States (all in the same tiles, nothing moves):
     and the two cadence sounds of the FTP ramp. One setting switches all of them.
 11. **Menu bar:** the Ride menu from plan 10 gains the 1 % / 5 % and 5 W / 25 W items and
     "More metrics".
-12. **Preview scenarios:** `dash-workout`, `dash-workout-countdown`, `dash-workout-paused`,
+12. **Preview scenarios:** `dash-workout`, `dash-workout-recovery-next`, `dash-workout-countdown`, `dash-workout-paused`,
     `dash-workout-scaled`, `dash-ftp-warmup`, `dash-ftp-ramp`, `dash-ftp-low-cadence`, `dash-ftp-ending`, `dash-ftp-cooldown`, `dash-free-ride`,
     `dash-free-ride-resistance`, `dash-more-metrics`, `dash-signal-lost`; add them to
     `ShellAndScenarioTests.scenarioNamesMatchThePlan` and to the Mac walkthrough at 1470×923.
@@ -240,3 +241,92 @@ the scenarios in full screen on the Air, looked at from the bike. Report anythin
 
 Chaindance scenes, the web app (park "web port of the ride dashboard" in the roadmap),
 an Undo for Skip step.
+
+## Implementation checkpoint (2026-11-14)
+
+Implementation is in place. Verified: 379 Swift tests, both CI builds and `git diff --check`
+pass. Rebuilt `dist/FTPunk.app` with the font and license after confirming it was stopped;
+the app was not launched. This plan remains in `next/` until the required visual comparison is complete.
+The earlier `macos-chaindance-design.md` was moved to the archive when this plan started.
+
+Free ride required an engine change: it now commits acknowledged ERG/resistance transitions
+as timestamped mode events, retains the previous watts/level across switches, and rebuilds
+recorded target spans across them. The coordinator serialises release/restart with outstanding
+target writes; failures use the existing interruption path. The ramp protocol, cadence
+threshold/timer, scoring, best-minute calculation and 72 % estimate are unchanged.
+
+All fourteen `dash-*` scenarios are seeded, and the Mac walkthrough uses 1470×923 for them.
+The references use some independent illustrative totals and a header clock that differs from
+the ride clock. Their preview-only display fixtures seed those exact figures; live rides use
+recorded samples and calculated totals. No preview fixture changes scoring or trainer control.
+
+### Deviations from the mockup
+
+- The hold control traces progress around its pill border while pressed; the reference only
+  draws its idle state. The existing 1.5 s hold and accessibility action remain.
+- Compact phones wrap the header controls into rows and stack the tiles, as required for the
+  undrawn phone state. Dynamic Type and the iPhone extra-large preference affect numbers.
+- The Mac Settings section list/detail pane and the full two-column Settings design belong
+  to plan 12, step 7. Plan 11 supplies the ride-screen preferences within the existing Form;
+  its controls and row descriptions now use the same pill/switch family.
+- Visual reviews are performed by the owner. The owner reviewed the 14 Nov build at
+  1470×923 and confirmed structure, content and states; the corrections below need an owner
+  recheck. No agent visual review or capture was performed.
+
+## Owner review corrections (2026-11-14)
+
+The owner reported 26 fidelity differences in the original 14 Nov `dist/FTPunk.app` build.
+The correction pass addresses them as follows. Verified: 382 Swift tests, both CI builds,
+and `git diff --check` pass. Rebuilt `dist/FTPunk.app` while stopped; its code sections match
+the tested executable and its bundle signature is valid. No app launch or agent visual
+review. This plan remains open for the owner's visual recheck.
+
+- **Digits and geometry (1–3):** preserve intrinsic text line height before applying the CSS
+  0.8-em layout box. Tektur's intrinsic line height is 1.3 em: the old vertical compression
+  explains the observed 61.5% size. Font cap heights are 154 / 129.5 / 53.2 / 210 pt at
+  220 / 185 / 76 / 300 pt. Dashboard-only window chrome extends the content into the title-bar
+  region and restores the shell chrome on leaving. Tile padding and the step-name line box
+  no longer impose a larger minimum height on tile B.
+- **Power/header (4–9):** custom-label button menus hide native indicators, retain the caption
+  typeface and colours, and draw their own chevrons/pills. Debug text has a chip; FTP titles
+  name the phase; free-ride mode labels include their explanations.
+- **Workout (10–14):** recovery text is neutral #b4b8c8 with contrast coverage; step names have
+  zone bullets; dashboard profile bars are separated and rounded without a tinted lane or
+  100% line. Heart rate uses a dedicated range and a curved trace with continuous preview
+  data. More metrics has a chevron; paused/finishing text retains its strip tile.
+- **FTP (15–21):** lime segments represent elapsed time (0 immediately after a step up,
+  4 of 12 when 8 s remain in a 12 s step). Added a rule/test for that meaning. Removed the
+  Next step icon, muted gauge warning bands, accented footer values, and gave warning units
+  the dark digit colour. Warm-up progress is grey, the ramp phase bar is an olive-to-lime
+  gradient, and First step / Best 60 s tiles have cyan surfaces. Warm-up cadence is 88;
+  ramp, low-cadence, ending and cool-down preview best-minute readings are consistently 272.
+- **Free ride (22–25):** the dim sub-line includes "km simulated" and the reference fixture
+  distance; average power has its cyan surface/icon and preview average cadence is 89.
+  The compact chart is a plot-only Canvas with independent power/heart-rate ranges and a
+  dim-label legend with coloured swatches. More metrics is left-aligned at reference font
+  sizes, with the Chart chevron. Preview sensor curves vary through the chart window while
+  preserving the reference current/average values; earlier peaks remain in ride totals.
+- **Settings (26):** Theme and auto-pause now share the custom control family, and the row
+  explanations are present. The section list/detail shell remains explicitly in plan 12.
+
+Owner decision: keep the last-10-second Next tile's cyan tint and cyan digits. Zone colours
+continue to come from the app palette; text is lightened only for legibility as specified.
+
+## Owner recheck follow-up (2026-11-14)
+
+The owner confirmed sizes, layout, ramp segments and Settings rows at 1470×923. Two final
+corrections are implemented for the next dist build: the cadence gauge's amber band uses a
+dark amber on the warning tile, while the neutral tile retains its muted amber; and
+`dash-workout-recovery-next` reproduces mockup 1b (Recovery 2 of 3, 127 W / target 125 W,
+3:10 left, heart rate 128, cadence 86, Next 225 W for 12:00, 45:50 ridden). The scenario
+keeps more than 10 s remaining so its Next tile shows the step-zone colour, without the
+countdown cyan override. Its fixture values and scenario registration have regression coverage.
+The optional Chaindance layout control/description is recorded in plan 12, step 7.
+
+Verified after these changes: 382 Swift tests, both CI builds and `git diff --check` pass.
+Rebuilt `dist/FTPunk.app` while stopped and verified its bundle signature; no app launch.
+The owner handles visual checks. The darker gauge band and new mockup 1b scenario await
+that final check; all previously confirmed layout/sizing findings remain accepted.
+
+Owner authorized committing/pushing this work and starting plan 12 on 2026-11-14. Archived
+at that checkpoint; the dark gauge band and mockup 1b scenario remain visually unverified.

@@ -34,30 +34,33 @@ struct MacAppCommands: Commands {
                 Button("Skip step") { model?.skipStep() }
                     .keyboardShortcut(.rightArrow, modifiers: .command)
                     .disabled(model?.engine?.canSkipStep != true || transitioning)
-                Button("Raise target") { adjustTarget(1) }
+                Button(workout ? "Raise intensity by 1 %" : "Raise target by 5 W / one level") { adjustTarget(1) }
                     .keyboardShortcut(.upArrow, modifiers: [])
                     .disabled(!training || transitioning || (workout && (model?.engine?.intensity ?? 100) >= 150))
-                Button("Lower target") { adjustTarget(-1) }
+                Button(workout ? "Lower intensity by 1 %" : "Lower target by 5 W / one level") { adjustTarget(-1) }
                     .keyboardShortcut(.downArrow, modifiers: [])
                     .disabled(!training || transitioning || (workout && (model?.engine?.intensity ?? 100) <= 50))
+                Button(workout ? "Raise intensity by 5 %" : "Raise target by 25 W / five levels") { adjustTarget(1, large: true) }
+                    .keyboardShortcut(.upArrow, modifiers: .shift).disabled(!training || transitioning)
+                Button(workout ? "Lower intensity by 5 %" : "Lower target by 25 W / five levels") { adjustTarget(-1, large: true) }
+                    .keyboardShortcut(.downArrow, modifiers: .shift).disabled(!training || transitioning)
                 Button("Finish ramp") { model?.finishRamp() }
                     .keyboardShortcut("f", modifiers: [.command, .shift])
                     .disabled(model?.engine?.phase != .ramp)
                 Button("Stop & save") { model?.stop() }.keyboardShortcut(".", modifiers: .command)
-                // Workout/free-ride cockpits already show all readings. Their toggle arrives in plan 11.
-                Button(showsMoreReadings ? "Main readings" : "More readings") { showsMoreReadings.toggle() }
-                    .disabled(training)
+                Button(showsMoreReadings ? "Chart" : "More metrics") { showsMoreReadings.toggle() }
+                    .keyboardShortcut("m", modifiers: []).disabled(!training)
                 Button("Minimise ride") { model?.cockpitPresented = false }
                     .disabled(model?.cockpitPresented != true)
             }.disabled(!running)
         }
     }
 
-    private func adjustTarget(_ direction: Int) {
+    private func adjustTarget(_ direction: Int, large: Bool = false) {
         guard let model else { return }
-        if workout { model.adjustIntensity(by: 5 * direction) }
-        else if model.engine?.resumeResistance != nil { model.adjustResistance(by: direction) }
-        else { model.adjustERG(by: 10 * direction) }
+        if workout { model.adjustIntensity(by: (large ? 5 : 1) * direction) }
+        else if model.engine?.resumeResistance != nil { model.adjustResistance(by: (large ? 5 : 1) * direction) }
+        else { model.adjustERG(by: (large ? 25 : 5) * direction) }
     }
 }
 #endif

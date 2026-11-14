@@ -41,7 +41,9 @@ public struct RideEngine: Sendable {
     public var resumeResistance: Int? { resistanceLevel }
     public var targetResistance: Int? { phase == .riding ? resistanceLevel : nil }
     private var freeRideTarget: Int?
-    private var lowCadenceSince: Double?
+    public var freeRideERGTarget: Int? { freeRideTarget }
+    public private(set) var lastFreeRideResistance: Int?
+    public private(set) var lowCadenceSince: Double?
     private var lastTick: Double = 0
     private var lastLiveAnalysisAt = -Double.infinity
 
@@ -49,7 +51,7 @@ public struct RideEngine: Sendable {
         session = TestSession(startedAt: date, configuration: configuration, isDemo: isDemo, devices: devices)
         session.training = training
         freeRideTarget = training?.resistance == nil ? training?.steps.first?.watts : nil
-        resistanceLevel = training?.resistance
+        resistanceLevel = training?.resistance; lastFreeRideResistance = training?.resistance
     }
 
     public mutating func receive(_ sample: RideSample) {
@@ -86,7 +88,7 @@ public struct RideEngine: Sendable {
             if fresh && moving {
                 if let plan = session.training {
                     trainingStartedAt = time
-                    transition(to: .riding, at: time); targetPower = plan.kind == .freeRide ? freeRideTarget : plan.target(at: 0, intensity: intensity)
+                    transition(to: .riding, at: time); targetPower = plan.kind == .freeRide ? (resistanceLevel == nil ? freeRideTarget : nil) : plan.target(at: 0, intensity: intensity)
                     return
                 }
                 if session.configuration.warmupSeconds == 0 {
@@ -127,7 +129,7 @@ public struct RideEngine: Sendable {
         case .riding:
             guard let plan = session.training else { return }
             if plan.step(at: activeTrainingTime(at: time)) != nil {
-                targetPower = plan.kind == .freeRide ? freeRideTarget : plan.target(at: activeTrainingTime(at: time), intensity: intensity)
+                targetPower = plan.kind == .freeRide ? (resistanceLevel == nil ? freeRideTarget : nil) : plan.target(at: activeTrainingTime(at: time), intensity: intensity)
             } else { session.outcome = .completed; endActivity(at: time) }
         case .cooldown:
             if time - phaseStartedAt >= session.configuration.cooldownSeconds { endActivity(at: time) }
@@ -142,7 +144,7 @@ public struct RideEngine: Sendable {
     }
     public var resumeTarget: Int? {
         guard let plan = session.training else { return nil }
-        return plan.kind == .freeRide ? freeRideTarget : plan.target(at: trainingElapsed, intensity: intensity)
+        return plan.kind == .freeRide ? (resistanceLevel == nil ? freeRideTarget : nil) : plan.target(at: trainingElapsed, intensity: intensity)
     }
     public func canResume(at time: Double) -> Bool {
         guard phase == .paused, time.isFinite, time >= lastTick,
@@ -199,13 +201,26 @@ public struct RideEngine: Sendable {
     }
     public mutating func adjustResistance(to level: Int, at time: Double) {
         guard phase.isActive, resistanceLevel != nil, (0...32767).contains(level) else { return }
-        resistanceLevel = level; recordEvent(at: time, message: "Resistance target changed to \(Double(level) / 10)")
+        resistanceLevel = level; lastFreeRideResistance = level; recordEvent(at: time, message: "Resistance target changed to \(Double(level) / 10)")
     }
     public mutating func adjustFreeRide(to watts: Int, at time: Double) {
-        guard phase.isActive, session.training?.resistance == nil, session.training?.kind == .freeRide, (1...32767).contains(watts) else { return }
+        guard phase.isActive, resistanceLevel == nil, session.training?.kind == .freeRide, (1...32767).contains(watts) else { return }
         freeRideTarget = watts
         if phase == .riding { targetPower = watts }
         recordEvent(at: time, message: "ERG target changed to \(watts) W")
+    }
+
+    /// Commits a mode change after the coordinator has confirmed release and restart.
+    /// The original plan remains intact; timestamped events preserve the target history.
+    @discardableResult public mutating func switchFreeRide(resistance: Int?, watts: Int, at time: Double) -> Bool {
+        guard session.training?.kind == .freeRide, phase == .riding || phase == .paused || phase == .waiting,
+              time.isFinite, time >= lastTick, (1...32767).contains(watts),
+              resistance.map({ (0...32767).contains($0) }) ?? true else { return false }
+        resistanceLevel = resistance; freeRideTarget = watts
+        if let resistance { lastFreeRideResistance = resistance }
+        targetPower = phase == .riding && resistance == nil ? watts : nil
+        recordEvent(at: time, message: resistance.map { "Free ride mode: resistance \($0)" } ?? "Free ride mode: ERG \(watts) W")
+        return true
     }
 
     public mutating func finishRamp(at time: Double, outcome: SessionOutcome = .finishedEarly, cooldownStart: Double? = nil) {

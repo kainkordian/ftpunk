@@ -134,7 +134,7 @@ extension AppModel {
     func resetPreview(seed: (LocalStore) throws -> Void = { _ in }) throws {
         guard preview, store.isInMemory else { throw StoreError.persistentStoreProtected }
         if isStarting || isActive { stop() }
-        engine = nil; mockPaused = false
+        engine = nil; mockPaused = false; previewDashboardReadings = [:]; previewDashboardMore = nil; previewDashboardCompact = nil
         try store.eraseAllForPreview()
         try seed(store)
         let saved = try store.profiles()

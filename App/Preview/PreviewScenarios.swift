@@ -19,6 +19,20 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
     case settingsDevices = "settings-devices", settingsIntervals = "settings-intervals", workoutDetail = "workout-detail"
     case visualHero = "visual-hero", visualSprint = "visual-sprint", settingsIntervalsConnected = "settings-intervals-connected"
     case builderBlocks = "builder-blocks", builderText = "builder-text"
+    case dashWorkout = "dash-workout"
+    case dashWorkoutRecoveryNext = "dash-workout-recovery-next"
+    case dashWorkoutCountdown = "dash-workout-countdown"
+    case dashWorkoutPaused = "dash-workout-paused"
+    case dashWorkoutScaled = "dash-workout-scaled"
+    case dashFtpWarmup = "dash-ftp-warmup"
+    case dashFtpRamp = "dash-ftp-ramp"
+    case dashFtpLowCadence = "dash-ftp-low-cadence"
+    case dashFtpEnding = "dash-ftp-ending"
+    case dashFtpCooldown = "dash-ftp-cooldown"
+    case dashFreeRide = "dash-free-ride"
+    case dashFreeRideResistance = "dash-free-ride-resistance"
+    case dashMoreMetrics = "dash-more-metrics"
+    case dashSignalLost = "dash-signal-lost"
     var id: String { rawValue }
 
     /// The requested scenario, only when the process is an explicit in-memory preview.
@@ -38,7 +52,13 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
 
     static func apply(_ scenario: PreviewScenario, to model: AppModel) async throws {
         let alex = PreviewFixtures.rider()
+        if scenario.rawValue.hasPrefix("dash-") {
+            try await dashboard(scenario, model: model, rider: alex)
+            return
+        }
         switch scenario {
+        case .dashWorkout, .dashWorkoutRecoveryNext, .dashWorkoutCountdown, .dashWorkoutPaused, .dashWorkoutScaled, .dashFtpWarmup, .dashFtpRamp, .dashFtpLowCadence, .dashFtpEnding, .dashFtpCooldown, .dashFreeRide, .dashFreeRideResistance, .dashMoreMetrics, .dashSignalLost: break
+
         case .firstLaunch:
             try model.resetPreview()
             model.onboardingPending = true
@@ -176,6 +196,64 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
             model.skipMockWarmup(); model.advanceMock(seconds: 95)
             model.rideVisualEnabled = false; model.mockPaused = true
         }
+    }
+
+    private static func dashboard(_ scenario: PreviewScenario, model: AppModel, rider: RiderProfile) async throws {
+        try model.resetPreview { try $0.saveProfile(rider) }
+        model.demoMode = true; model.mockSpeed = 1
+        let recoveryNext = scenario == .dashWorkoutRecoveryNext
+        let isFTP = scenario.rawValue.contains("ftp-")
+        let isFree = scenario.rawValue.contains("free-ride") || scenario == .dashMoreMetrics
+        let steps: [TrainingPlan.Step] = [
+            .init("Warm-up", seconds: 900, watts: 165), .init("Sweet spot 1 of 3", seconds: 720, watts: 225),
+            .init("Recovery", seconds: 300, watts: 125), .init("Sweet spot 2 of 3", seconds: 720, watts: 225),
+            .init(recoveryNext ? "Recovery 2 of 3" : "Recovery", seconds: 300, watts: 125), .init("Sweet spot 3 of 3", seconds: 720, watts: 225), .init("Cool-down", seconds: 300, watts: 125)]
+        let plan: TrainingPlan? = isFTP ? nil : isFree ? try .freeRide(watts: 180) : try TrainingPlan(kind: .workout, name: "Sweet spot 3×12 min @ 90 %", ftpWatts: 250, steps: steps)
+        if let plan { await model.start(training: plan) } else { await model.start() }
+        model.mockPaused = true
+        let config = try SessionConfiguration(warmupSeconds: isFTP ? 600 : 0, manualWarmupPower: 125, cooldownSeconds: 180)
+        var engine = RideEngine(configuration: config, isDemo: true, training: plan)
+        let end: Int = isFTP ? (scenario == .dashFtpWarmup ? 348 : 1048) : isFree ? 1458 : scenario == .dashWorkoutCountdown ? 2632 : recoveryNext ? 2750 : 2238
+        for second in 0...end {
+            let time = Double(second)
+            let cadence: Double = scenario == .dashFtpLowCadence && second >= end - 2 ? 54 : scenario == .dashFtpEnding && second >= end - 2 ? 40 : isFTP ? (scenario == .dashFtpWarmup ? 88 : 84) : isFree ? (second < end - 3 ? 89 : 90) : recoveryNext ? 86 : 88
+            let rampWatts = Double(100 + max(0, (second - 600) / 12) * 5)
+            let freePower = 179.8 + 8 * sin(time * .pi / 90) + 3 * sin(time * .pi / 23.5)
+            let workoutPower = recoveryNext && second >= 2640 ? 127.0 : 228.0
+            let watts: Double = isFTP ? second < 600 ? 123 : second >= end - 3 ? 281 : rampWatts : isFree ? second >= end - 3 ? 183 : second == 300 ? 312 : freePower : workoutPower
+            let workoutStart = second < 900 ? 0 : second < 1620 ? 900 : second < 1920 ? 1620 : 1920
+            let workoutDuration = second < 900 ? 900.0 : second < 1620 ? 720.0 : second < 1920 ? 300.0 : 720.0
+            let heartStart = second < 900 ? 115.0 : second < 1620 ? 127.0 : second < 1920 ? 147.0 : 127.0
+            let heartEnd = second < 900 ? 127.0 : second < 1620 ? 147.0 : second < 1920 ? 127.0 : 147.0
+            let fraction = min(1, Double(second - workoutStart) / workoutDuration)
+            let rise = second < 900 ? (1 - cos(fraction * .pi)) / 2 : 1 - pow(1 - fraction, 7.0 / 3)
+            var workoutHeart = Int((heartStart + (heartEnd - heartStart) * rise).rounded())
+            if recoveryNext && second >= 1920 && second < 2640 {
+                let progress = Double(second - 1920) / 720
+                workoutHeart = Int((127 + 23 * (1 - pow(1 - progress, 16.0 / 7))).rounded())
+            } else if recoveryNext && second >= 2640 {
+                let progress = min(1, Double(second - 2640) / 300)
+                workoutHeart = Int((150 - 24 * (1 - pow(1 - progress, 6))).rounded())
+            }
+            let heart = isFTP ? second < 600 ? 112 : 171 : isFree ? second >= end - 4 ? 131 : second == 300 ? 144 : Int((128 + 4 * sin(time * .pi / 90) + 3 * sin(time * .pi / 45)).rounded()) : workoutHeart
+            engine.receive(.init(time: time, power: watts, cadence: cadence, heartRate: heart, leftBalance: 49))
+            engine.tick(at: time)
+        }
+        if scenario == .dashWorkoutPaused { _ = engine.pause(at: Double(end)) }
+        if scenario == .dashWorkoutScaled { _ = engine.setIntensity(110, at: Double(end)) }
+        if scenario == .dashFreeRideResistance { _ = engine.switchFreeRide(resistance: 40, watts: 180, at: Double(end)) }
+        if scenario == .dashFtpCooldown { engine.finishRamp(at: Double(end)) }
+        model.installDashboardPreview(engine, elapsed: Double(end) + (scenario == .dashSignalLost ? 3 : 0))
+        model.previewDashboardMore = scenario == .dashMoreMetrics
+        // The references contain independent illustrative totals (including a header clock that
+        // differs from the ride clock). Seed those presentation-only figures explicitly, rather
+        // than changing recorded samples, the simulation or any engine rule to manufacture them.
+        model.previewDashboardReadings = ["headerClock": "18:42"]
+        if isFree {
+            model.previewDashboardReadings.merge(["Normalized": "184", "Max power": "312", "Work": "262", "Calories": "261", "Speed": "30.6", "Distance": "12.4", "Balance": "49/51", "Max HR": "144", "NP": "184"]) { _, new in new }
+        }
+        if isFTP && scenario != .dashFtpWarmup { model.previewDashboardReadings["bestMinute"] = "272" }
+        model.rideVisualPlacement = .off
     }
 
     /// A workout with every kind of block: constant % FTP, a ramp, a repeat, and a watts step.

@@ -1,7 +1,7 @@
 # FTPunk roadmap
 
 The single source of truth for what FTPunk is, where it stands and what comes next.
-Updated 2026-11-13. If this file and an archived plan disagree, this file wins.
+Updated 2026-11-14. If this file and an archived plan disagree, this file wins.
 
 ## What FTPunk is
 
@@ -19,14 +19,16 @@ Fixed principles:
 - The trainer is only ever controlled by the ride engine. Visuals, imports and integrations
   never send trainer commands.
 
-## Where it stands (2026-11-13)
+## Where it stands (2026-11-14)
 
-Built and covered by tests (370 Swift tests, 301 web tests, iOS + Mac builds pass):
+Built and covered by tests (382 Swift tests, 301 web tests, iOS + Mac builds pass):
 
-- **Plan 10, step 4 (2026-11-13, native):** Settings/Go/Ride menus and window/tab suppression implemented. Actions call the cockpit’s existing model entry points; existing shortcuts are retained, including pause while minimised. More readings uses the FTP cockpit’s stored toggle and is FTP-only until plan 11 (owner approved). Checked: 370 Swift tests and both CI builds. Plan 10 implementation is archived; runtime menu/keyboard checks, accessibility UI-test execution and visual comparison remain queued until the owner finishes riding and authorizes review. Plan 11 has not started.
-- **Plan 10, step 3 (2026-11-13, native):** calendar downloads admit Ride/VirtualRide events with original % FTP power targets, including nested ramps and mixed targets (owner confirmed that % qualifies). Other events are silent; only qualifying decode failures are named. Both Home sync-message locations use the qualified-count summary. At the next successful download the current rider/account calendar cache is replaced, including older entries whose original units were lost (owner approved); files, other accounts and riders are preserved. Checked: 370 Swift tests, including isolated download/cache tests, and both CI builds. No live account or stored app data accessed; visual review remains queued.
-- **Plan 10, step 2 (2026-11-13, native):** Chaindance defaults to off when no preference exists; explicit on/off, Strip and Large choices are preserved. Settings and README explain the default. Checked: 365 Swift tests and both CI builds. Visual previews deliberately retain their explicit on setting; visual review remains queued.
-- **Plan 10, step 1 (2026-11-13, native):** workout cards, Devices, actionable pre-flight rows and About preserve the native accessibility button action. Today cards already do. Added a library-card accessibility XCUITest. Checked: 365 Swift tests and both CI builds. UI test execution and visual review remain queued until the owner finishes riding and authorizes review.
+- **Plan 11 (2026-11-14, native):** shared dashboard implemented. The owner reviewed the first 14 Nov `dist` build at 1470×923: structure, content and states were right; 26 fidelity differences were reported. Corrections now cover intrinsic font sizing (the 0.8-em box had compressed Tektur's 1.3-em line height), title-bar space, tile sizing, menu/header styling, profile/chart rendering, elapsed lime ramp segments, warning colours/units, fixture readings and Settings controls/descriptions. The last-10-second Next tile keeps cyan tint and cyan digits (owner confirmed). Settings' section list/detail shell stays in plan 12. Verified: 382 Swift tests, both CI builds, `git diff --check`; `dist/FTPunk.app` rebuilt while stopped with a verified bundle signature, including the darker gauge band and mockup 1b scenario. No app launch or agent visual review. The owner’s Mac recheck at 1470×923 confirmed sizes, layout, ramp segments and Settings rows. The last two corrections darken the gauge amber band on warning tiles and add `dash-workout-recovery-next` for mockup 1b; those two items await the owner’s final check. The optional Chaindance layout pill/description is deferred to plan 12. Sound delivery, physical shortcuts and from-bike readability remain unverified. Free-ride mode switching uses acknowledged release/restart and timestamped engine events; ramp rules/scoring remain unchanged. Owner authorized committing/pushing and starting plan 12; plan 11 is archived, with those two visual checks still explicitly unverified.
+
+- **Plan 10, step 4 (2026-11-13, native):** plan 10 reviewed: implemented with no functional deviations. Verified on a fresh FTPunkMac Debug build in `--debug-preview`: 370 Swift tests and both CI builds pass; library and Today cards open on an accessibility press; Settings… / Go / Ride menu actions work for workouts and FTP ramps, including while minimised; no File menu or tab bar. `testLibraryCardAccessibilityElementOpensDetails` passed on the iPhone 18 Pro simulator. At the plan 10 review, More readings was FTP-only (owner approved); plan 11 now adds the workout/free-ride metrics toggle. Pause/Resume displays Space; ⌘⇧P remains available through the cockpit and hidden button (owner approved keeping Space displayed). Still unverified: physical shortcut key presses, Chaindance off by default on a truly fresh settings state (visual), and the live Intervals.icu sync message. Plan 10 is archived; plan 11 review corrections passed automated checks and await the owner’s recheck (2026-11-14).
+- **Plan 10, step 3 (2026-11-13, native):** calendar downloads admit Ride/VirtualRide events with original % FTP power targets, including nested ramps and mixed targets (owner confirmed that % qualifies). Other events are silent; only qualifying decode failures are named. Both Home sync-message locations use the qualified-count summary. At the next successful download the current rider/account calendar cache is replaced, including older entries whose original units were lost (owner approved); files, other accounts and riders are preserved. Checked: 370 Swift tests, including isolated download/cache tests, and both CI builds. The live Intervals.icu sync message remains unverified.
+- **Plan 10, step 2 (2026-11-13, native):** Chaindance defaults to off when no preference exists; explicit on/off, Strip and Large choices are preserved. Settings and README explain the default. Checked: 365 Swift tests and both CI builds. Visual previews deliberately retain their explicit on setting; the default on a truly fresh settings state remains visually unverified.
+- **Plan 10, step 1 (2026-11-13, native):** workout cards, Devices, actionable pre-flight rows and About preserve the native accessibility button action. Today cards already do. Added a library-card accessibility XCUITest. Checked: 365 Swift tests and both CI builds. Library and Today cards passed accessibility press checks in the Mac review; `testLibraryCardAccessibilityElementOpensDetails` passed on the iPhone 18 Pro simulator (2026-11-13).
 
 - **Trainer line and upload again (2026-11-12, native + web):** the ride overview's power chart draws the trainer's reported power as an amber line (with legend) while a meter is the source, and a saved ride's Intervals.icu section has "Upload again…", which drops the old upload record and reopens the consent sheet with a freshly built file. Unverified: not looked at on screen; Intervals.icu may treat a re-upload as a duplicate (same `external_id`), so the old activity may need deleting there first; the re-upload path has no automated test.
 - **Web ride port (2026-11-11):** the web app now matches the three native commits: FIT holds cadence/power for 3 s (same numbers as native tests), Skip step (engine, controller, exact event text, summary target honours skips; Cmd/Ctrl+Right), the Chaindance-style dashboard for workout, free and resistance rides (the FTP cockpit is unchanged), and on the ride overview trainer power, hover readings on every chart, HRV (RMSSD, beat-artifact share) and a DFA α1 chart. Unverified: no visual check of the dashboard CSS or hover, no real strap/trainer/pointer on a device. The web ↑/↓ keys are new (the old cockpit had none).- **Workout dashboard rework (2026-11-11, native only):** the workout / free-ride cockpit follows the Chaindance (RG/SP) mockups without the rider scene: square boxes, much bigger numbers with the step's time left as the biggest, TARGET with its −/+ inside the box (↑/↓ keys too), ACTUAL with the trainer's watts bottom-left, a red heart-rate line over the workout profile, Skip step (not the last step; recorded as an event, so the summary's target follows), and all ride figures always shown. Bluetooth connect failures now time out and show a re-pair hint. The iOS and Mac CI builds pass (2026-11-11); the new screen has not been looked at.
@@ -79,8 +81,8 @@ Built and covered by tests (370 Swift tests, 301 web tests, iOS + Mac builds pas
 **Not verified yet:** none of the seven roadmap plans has been looked at on a screen (Chaindance Large, the builder, the
 Settings changes, the export controls), and the save panel / Files behaviour of `fileExporter` is untested. A FIT file has been decoded
 with fitdecode and fitparse but not uploaded to COROS; the Intervals.icu `SETTINGS:READ` scope is unconfirmed on a real
-consent screen. The XCUITests have never run. No VoiceOver, Increase Contrast or keyboard
-pass has been done. Nothing has run on a real trainer, iPhone or meter (see
+consent screen. The library-card accessibility XCUITest passed on 2026-11-13; the remaining XCUITests are unverified. Plan 10 Mac accessibility presses and menu actions passed; a full VoiceOver, Increase Contrast or physical keyboard
+pass remains unverified. Nothing has run on a real trainer, iPhone or meter (see
 [DEVICE_CHECKS.md](DEVICE_CHECKS.md)). The iOS Simulator screenshot matrix hasn't been run for
 the latest screens. The web app (`ftpunk_web/`) has the same caveat: its new screens have been checked only by DOM and layout-bound tests in headless Chrome, never looked at.
 
@@ -89,7 +91,7 @@ the latest screens. The web app (`ftpunk_web/`) has the same caveat: its new scr
 
 ## Next steps
 
-The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). Milestone E is below; native plan 10 is implemented, with plans 11 and 12 awaiting the owner’s review checkpoints.
+The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). Milestone E is below; native plan 10 is reviewed; plan 11 is archived following the owner’s commit/push and plan 12 instruction; its last two visual checks remain unverified. Plan 12 is next.
 
 ### Step 0: baseline commit (done 2026-11-04)
 
@@ -146,20 +148,23 @@ capture, with the owner's permission), then the owner's checks in Chrome with a 
 ### Milestone E: readable from the bike, one look (planned 2026-11-12)
 
 From the owner's Mac walkthrough; the owner reviewed the mockups on 2026-11-13. Designs: `design/app-redesign/` (static HTML).
-Plans 11 and 12 replace `next/macos-chaindance-design.md`, which moves to the archive when plan 11 starts.
+Plans 11 and 12 replace the [earlier Mac design](archive/macos-chaindance-design.md), archived when plan 11 started on 2026-11-14.
 
 Owner clarifications (2026-11-13): cyan overrides the Next tile during the last 10 s; step heart-rate averages go below the profile; existing Chaindance Large/Strip integration is retained without art changes; rider/devices move to the Mac sidebar. The web mapping is approved, including a platform rounded-font/system fallback; web implementation follows native plans 10–12.
 
 | # | Plan | Size |
 |---|------|------|
-| 10 | [Quick fixes](archive/10-quick-fixes.md) (implemented 2026-11-13; visual review queued): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
-| 11 | [Ride dashboard readable from 2 m](next/11-ride-dashboard.md): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
+| 10 | [Quick fixes](archive/10-quick-fixes.md) (implemented and reviewed 2026-11-13; no functional deviations): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
+| 11 | [Ride dashboard readable from 2 m](archive/11-ride-dashboard.md) (implemented 2026-11-14; final two visual checks unverified): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
 | 12 | [The app around the ride](next/12-app-around-the-ride.md): tokens, shell, Home, summary, Progress, Settings | L |
 
 ## Parked (deliberately not now)
 
 Each item needs a decision from the owner before a plan is written.
 
+- Web port of the plan 11 ride dashboard (native first).
+- Correct the singular calendar sync summary (“1 cycling workout”); owner deferred the wording fix and test on 2026-11-13.
+- Add a Chaindance-off preview scenario: `--debug-preview` currently forces `.strip`, so previews cannot demonstrate the fresh-settings default.
 - Web: Intervals.icu OAuth in the browser (needs a client secret, so a server; conflicts with local only). An own
   domain for the web app, so its storage isn't shared with the owner's other `github.io` sites.
 - Web: Chaindance hashes scenery with 64-bit BigInt per pixel; measure on a slow device and switch to 32-bit arithmetic if needed (the fingerprint

@@ -91,7 +91,7 @@ import FTPunkStorage
 
 @Test func settingsAreGroupedAsPlannedAndDebugStaysHiddenUntilUnlocked() {
     #expect(SettingsGroup.visible(debugUnlocked: false).map(\.title) ==
-            ["Riders", "Devices", "Ride display", "Intervals.icu", "Backup & transfer", "About"])
+            ["Riders", "Devices", "Ride screen", "Intervals.icu", "Backup & transfer", "About"])
     #expect(SettingsGroup.visible(debugUnlocked: true).contains(.debug))
     #expect(SettingsGroup.visible(debugUnlocked: true).map(\.title).last == "About")
     #expect(SettingsTopic.powerMatching.paragraphs.count == 3)

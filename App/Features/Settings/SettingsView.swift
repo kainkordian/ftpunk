@@ -13,7 +13,7 @@ enum SettingsGroup: String, CaseIterable, Identifiable {
         switch self {
         case .riders: "Riders"
         case .devices: "Devices"
-        case .rideDisplay: "Ride display"
+        case .rideDisplay: "Ride screen"
         case .intervals: "Intervals.icu"
         case .backup: "Backup & transfer"
         case .debug: "Debug"
@@ -59,6 +59,10 @@ struct SettingsView: View {
     @Bindable var model: AppModel
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("appearance") private var appearance = AppearanceMode.system.rawValue
+    @AppStorage("ridePowerWindow") private var ridePowerWindow = 3
+    @AppStorage("dashboardCompactNumbers") private var dashboardCompactNumbers = false
+    @AppStorage("rideStepSound") private var rideStepSound = true
+    @AppStorage("appFont") private var appFont = "tektur"
     @AppStorage("extraLargeRideNumbers") private var extraLargeRideNumbers = false
     @State private var captureURL: URL?
     @State private var topic: SettingsTopic?
@@ -166,15 +170,23 @@ struct SettingsView: View {
 
     private var rideDisplaySection: some View {
         Section {
-            if dynamicTypeSize.isAccessibilitySize {
-                SelectionRow("Theme", selection: $appearance) { ForEach(AppearanceMode.allCases) { Text($0.title).tag($0.rawValue) } }
-            } else {
-                Picker("Theme", selection: $appearance) { ForEach(AppearanceMode.allCases) { Text($0.title).tag($0.rawValue) } }
-                    .pickerStyle(.segmented).tint(Theme.controlTint)
-            }
-            Toggle("Extra-large ride numbers", isOn: $extraLargeRideNumbers)
-            Toggle("Pause workouts when I stop pedaling", isOn: $model.autoPauseEnabled).accessibilityIdentifier("auto-pause-toggle")
-            Toggle("Show \(RideVisualBranding.name) during rides", isOn: $model.rideVisualEnabled).accessibilityIdentifier("pixel-ride-toggle")
+            RideChoiceRow(title: "Font", selection: $appFont, choices: [("Tektur", "tektur"), ("SF Rounded", "sfRounded"), ("System", "system")], detail: "Tektur, SF Rounded or the system typeface.")
+            RideChoiceRow(title: "Theme", selection: $appearance, choices: AppearanceMode.allCases.map { ($0.title, $0.rawValue) }, detail: "The ride screen is always dark.")
+            RideChoiceRow(title: "Power average", selection: $ridePowerWindow, choices: LivePower.windows.map { ("\($0) s", $0) }, detail: "The big number on the ride screen. Recordings always keep every sample.")
+            #if os(macOS)
+            RideChoiceRow(title: "Number size", selection: $dashboardCompactNumbers, choices: [("Fit to screen", false), ("Compact", true)], detail: "Fit to screen fills the window, sized to read from about 2 m in full screen.")
+            #else
+            Toggle("Extra-large ride numbers", isOn: $extraLargeRideNumbers).toggleStyle(RideSwitchStyle())
+            #endif
+            Toggle(isOn: $rideStepSound) {
+                rideSettingLabel("Sound before each step", detail: "Three short beeps in the last 3 s of a workout step.")
+            }.toggleStyle(RideSwitchStyle())
+            Toggle(isOn: $model.autoPauseEnabled) {
+                rideSettingLabel("Pause workouts when I stop pedalling", detail: "Workouts and free rides. Never during the FTP test.")
+            }.toggleStyle(RideSwitchStyle()).accessibilityIdentifier("auto-pause-toggle")
+            Toggle(isOn: $model.rideVisualEnabled) {
+                rideSettingLabel("Show \(RideVisualBranding.name) during rides", detail: "Off by default. When on, it takes the place of the timeline strip.")
+            }.toggleStyle(RideSwitchStyle()).accessibilityIdentifier("pixel-ride-toggle")
             if model.rideVisualEnabled {
                 SelectionRow("\(RideVisualBranding.name) layout", selection: $model.rideVisualPlacement) {
                     Text("Strip between the readings").tag(RideVisualPlacement.strip)
@@ -183,6 +195,13 @@ struct SettingsView: View {
             }
         } header: { Text(SettingsGroup.rideDisplay.title) } footer: {
             Text("Numbers follow your system text size; extra-large is easier to read from the bike. \(RideVisualBranding.name) is off by default: a neon night-city ride that follows your power. It never controls the trainer. You can also change it during a ride. Increase Contrast, Bold Text and Reduce Motion are supported.")
+        }
+    }
+
+    private func rideSettingLabel(_ title: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+            Text(detail).font(.callout).foregroundStyle(Theme.secondary).fixedSize(horizontal: false, vertical: true)
         }
     }
 

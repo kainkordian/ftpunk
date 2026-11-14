@@ -41,7 +41,7 @@ import FTPunkDomain
                 }
                 UserDefaults.standard.set("dark", forKey: "appearance")
                 model.previewPhoneLayout = false; model.previewTextSize = nil
-                resize(width: 900, height: 820)
+                resize(width: scenario.rawValue.hasPrefix("dash-") ? 1470 : 900, height: scenario.rawValue.hasPrefix("dash-") ? 923 : 820)
                 try await Task.sleep(for: .milliseconds(900))
                 try capture(to: directory.appendingPathComponent("\(scenario.rawValue)-mac.png"))
                 if scenario == .workoutDetail {

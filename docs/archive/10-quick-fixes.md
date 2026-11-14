@@ -48,9 +48,8 @@ No change to ride logic, trainer control, the ramp protocol, scoring or the 72 %
 ## Implementation and owner clarifications (2026-11-13)
 
 All four steps are implemented in separate commits. Swift tests (370) and both CI builds pass.
-The accessibility XCUITest compiles; its execution, menu/shortcut runtime checks and visual
-comparison remain queued while the owner rides. No app launches, screenshots or changes to
-installed app files or stored app data were performed.
+Review completed on 2026-11-13: implemented with no functional deviations. Runtime menu
+actions and accessibility checks passed as recorded below.
 
 - Mixed-target cycling workouts qualify when they contain % FTP power targets.
 - On the next successful calendar download, replace the current rider/account’s entire calendar
@@ -58,3 +57,21 @@ installed app files or stored app data were performed.
   imported files, other riders and other accounts remain untouched.
 - The menu’s More readings action is FTP-only until plan 11; workout/free-ride screens currently
   show all readings and have no toggle.
+
+## Visual review results (2026-11-13)
+
+Verified on a fresh FTPunkMac Debug build in `--debug-preview`: 370 Swift tests and both CI
+builds pass. Library and Today cards open on an accessibility press. Settings… / Go / Ride
+menu items act correctly for workouts and FTP ramps, including while minimised. There is
+no File menu or tab bar. `testLibraryCardAccessibilityElementOpensDetails` passed on the
+iPhone 18 Pro simulator. Result: implemented, no functional deviations. These results
+supersede the earlier blocked Computer Use attempt. Plan 11 has not started.
+
+Still unverified: physical key presses for shortcuts, Chaindance off by default on a truly
+fresh settings state (visual), and the live Intervals.icu sync message.
+
+Pause/Resume displays only Space in the menu; ⌘⇧P works through the cockpit and the hidden
+button in `App/FTPunkApp.swift`. The owner approved keeping Space displayed (2026-11-13).
+The singular sync summary currently says “1 cycling workouts”; the owner deferred the wording
+fix and test (parked in the roadmap). `--debug-preview` forces `.strip`, so it cannot show the
+fresh-settings off state; a preview scenario is parked in the roadmap, outside plan 10.

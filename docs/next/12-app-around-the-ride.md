@@ -99,6 +99,8 @@ new colour needs a light partner that passes the existing contrast tests.
    is destructive, set apart and asks once. The four "Learn more" rows become one
    "About and help" section. The connected state shows as a dot in the section list.
    Appearance gains **Font: Tektur / SF Rounded / System** (`appFont`) above Theme.
+   Carry-over from the plan 11 recheck (owner approved deferral, 2026-11-14): replace the
+   Chaindance layout system pop-up with the shared pill choices and add its row description.
 8. **Pre-flight** (`Features/Preflight`): tokens only. The devices row uses the same state
    texts as the sidebar card.
 9. **Preview scenarios and wrap-up:** refresh the Home, result, Progress and Settings scenarios
