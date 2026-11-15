@@ -17,7 +17,7 @@ struct MetricTile: View {
     var corner: CornerReading?
 
     private var tint: Color {
-        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Chaindance.heartLine }
+        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Theme.heart }
     }
 
     var body: some View {
@@ -27,10 +27,10 @@ struct MetricTile: View {
             }.ftpLabel().foregroundStyle(.primary)
             HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
                 Text(value ?? placeholder).ftpNumber(role).foregroundStyle(tone == .normal ? Color.primary : tint)
-                if value != nil, !unit.isEmpty { Text(unit).font(.footnote).foregroundStyle(Theme.secondary) }
+                if value != nil, !unit.isEmpty { Text(unit).ftpText(.footnote).foregroundStyle(Theme.secondary) }
             }
             if let caption {
-                Text(caption).font(.footnote.weight(.semibold))
+                Text(caption).ftpText(.footnote, weight: .semibold)
                     .foregroundStyle(tone == .warning ? Theme.warning : Theme.secondary).multilineTextAlignment(.center)
             }
         }
@@ -60,7 +60,7 @@ struct MetricRow: View {
     var corner: CornerReading?
 
     private var tint: Color {
-        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Chaindance.heartLine }
+        switch tone { case .normal: .primary; case .accent: Theme.accent; case .warning: Theme.warning; case .heart: Theme.heart }
     }
     private var heading: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -68,7 +68,7 @@ struct MetricRow: View {
                 if let symbol { Label(title, systemImage: symbol) } else { Text(title) }
             }.ftpLabel().foregroundStyle(.primary)
             if showsCaption, let caption {
-                Text(caption).font(.footnote.weight(.semibold))
+                Text(caption).ftpText(.footnote, weight: .semibold)
                     .foregroundStyle(tone == .warning ? Theme.warning : Theme.secondary)
             }
         }
@@ -76,7 +76,7 @@ struct MetricRow: View {
     private var reading: some View {
         HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
             Text(value ?? placeholder).ftpNumber(.metric).foregroundStyle(tone == .normal ? Color.primary : tint)
-            if value != nil, !unit.isEmpty { Text(unit).font(.footnote).foregroundStyle(Theme.secondary) }
+            if value != nil, !unit.isEmpty { Text(unit).ftpText(.footnote).foregroundStyle(Theme.secondary) }
         }
     }
 
@@ -110,10 +110,10 @@ struct CornerReadingBox: View {
     let reading: CornerReading
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
-            Text(reading.title).font(.system(size: 9, weight: .bold)).foregroundStyle(Theme.secondary)
+            Text(reading.title).font(.ftp(9, weight: .bold)).foregroundStyle(Theme.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text(reading.value ?? "—").font(.system(.subheadline, design: .rounded).weight(.semibold)).monospacedDigit()
-                if reading.value != nil { Text(reading.unit).font(.system(size: 9, weight: .semibold)).foregroundStyle(Theme.secondary) }
+                Text(reading.value ?? "—").ftpText(.subheadline, weight: .semibold).monospacedDigit()
+                if reading.value != nil { Text(reading.unit).font(.ftp(9, weight: .semibold)).foregroundStyle(Theme.secondary) }
             }
         }
         .padding(.horizontal, 6).padding(.vertical, 3)

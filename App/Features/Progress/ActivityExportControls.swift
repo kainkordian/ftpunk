@@ -32,6 +32,7 @@ extension ActivityFileFormat {
 struct ActivityExportControls: View {
     @Bindable var model: AppModel
     let session: TestSession
+    var compact = false
     @State private var document: ActivityFileDocument?
     @State private var format = ActivityFileFormat.fit
     @State private var fileName = ""
@@ -42,11 +43,11 @@ struct ActivityExportControls: View {
     static let corosMinimumBytes = 20_000
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
+        (compact ? AnyLayout(HStackLayout(spacing: 12)) : AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))) {
             Button { prepare(.fit) } label: {
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Export FIT file", systemImage: "square.and.arrow.up")
-                    Text("For COROS, Garmin, Strava and TrainingPeaks").font(.footnote).foregroundStyle(Theme.secondary)
+                    Label(compact ? "Export FIT" : "Export FIT file", systemImage: "square.and.arrow.up")
+                    if !compact { Text("For COROS, Garmin, Strava and TrainingPeaks").ftpText(.footnote).foregroundStyle(Theme.secondary) }
                 }
             }.accessibilityIdentifier("export-fit")
             Menu("Other formats") {
@@ -55,15 +56,16 @@ struct ActivityExportControls: View {
             #if os(iOS)
             if let prepared { ShareLink("Share \(prepared.format.title)", item: prepared.url) }
             #endif
-            if let prepared, prepared.format == .fit {
-                Text("COROS: open Training Hub → Activity List → Import Data and choose this file.").font(.footnote).foregroundStyle(Theme.secondary)
+            if !compact, let prepared, prepared.format == .fit {
+                Text("COROS: open Training Hub → Activity List → Import Data and choose this file.").ftpText(.footnote).foregroundStyle(Theme.secondary)
                 // Unverified: the Training Hub address has not been checked by the owner.
                 Link("Open COROS Training Hub", destination: URL(string: "https://t.coros.com")!)
                 if prepared.bytes < Self.corosMinimumBytes {
-                    Text("COROS may reject files under 20 KB. If it does, export TCX instead.").font(.footnote).foregroundStyle(Theme.secondary)
+                    Text("COROS may reject files under 20 KB. If it does, export TCX instead.").ftpText(.footnote).foregroundStyle(Theme.secondary)
                 }
             }
         }
+        .buttonStyle(FTPunkSecondaryButtonStyle())
         .fileExporter(isPresented: $saving, document: document, contentType: format.contentType, defaultFilename: fileName) { result in
             if case .failure(let error) = result { model.errorMessage = error.localizedDescription }
         }

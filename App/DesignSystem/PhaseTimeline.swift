@@ -29,7 +29,7 @@ struct PhaseTimelineView: View {
             if showsLabels {
                 HStack {
                     ForEach(Array(timeline.segments.enumerated()), id: \.offset) { index, segment in
-                        Text(label(segment.phase)).font(.caption2.weight(segment.phase == current ? .bold : .regular))
+                        Text(label(segment.phase)).ftpText(.caption2, weight: segment.phase == current ? .bold : .regular)
                             .foregroundStyle(segment.phase == current ? Color.primary : Theme.secondary)
                             .frame(maxWidth: .infinity, alignment: index == 0 ? .leading : index == timeline.segments.count - 1 ? .trailing : .center)
                     }

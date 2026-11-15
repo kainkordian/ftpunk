@@ -18,12 +18,12 @@ struct WorkoutDetailSheet: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: Space.l) {
                             VStack(alignment: .leading, spacing: Space.xs) {
-                                Text(detail.title).font(.title2.bold())
+                                Text(detail.title).ftpText(.title2, weight: .bold)
                                 Text([detail.category?.title, detail.source, DurationFormat.workout(detail.duration)].compactMap { $0 }.joined(separator: " · "))
-                                    .font(.subheadline).foregroundStyle(Theme.secondary)
-                                if let plan = detail.plan { Text(IntensityLabel.label(for: plan)).font(.headline) }
+                                    .ftpText(.subheadline).foregroundStyle(Theme.secondary)
+                                if let plan = detail.plan { Text(IntensityLabel.label(for: plan)).ftpText(.headline) }
                                 if let plan = detail.plan, let main = WorkoutPreview.mainSetText(for: plan) {
-                                    Text("Main set: \(main)").font(.subheadline.monospacedDigit())
+                                    Text("Main set: \(main)").ftpText(.subheadline).monospacedDigit()
                                 }
                             }
                             if let preview = detail.previewPlan {
@@ -32,7 +32,7 @@ struct WorkoutDetailSheet: View {
                             }
                             if detail.needsFTP {
                                 Label("Needs FTP. Take an FTP test or set your FTP to see targets in watts.", systemImage: "info.circle")
-                                    .font(.callout).foregroundStyle(Theme.warning)
+                                    .ftpText(.callout).foregroundStyle(Theme.warning)
                             } else if let plan = detail.plan {
                                 ftpNote(detail, plan)
                             }
@@ -68,7 +68,7 @@ struct WorkoutDetailSheet: View {
             .navigationTitle("Workout").toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } } }
         }
         #if os(macOS)
-        .frame(minWidth: 420, idealWidth: 520, minHeight: 560)
+        .frame(minWidth: 720, idealWidth: 800, minHeight: 640, idealHeight: 760)
         #endif
     }
 
@@ -85,9 +85,9 @@ struct WorkoutDetailSheet: View {
         let used = plan.ftpWatts
         let differs = detail.cached != nil && used != nil && current != nil && abs((used ?? 0) - (current ?? 0)) > 0.5
         return VStack(alignment: .leading, spacing: 2) {
-            if let used { Text(detail.cached == nil ? "Targets use your FTP of \(Int(used.rounded())) W." : "Targets are fixed in watts (saved at \(Int(used.rounded())) W FTP).").font(.callout) }
-            else { Text("Targets are fixed in watts.").font(.callout) }
-            if differs, let current { Text("Your current FTP is \(Int(current.rounded())) W. This workout does not rescale.").font(.footnote).foregroundStyle(Theme.warning) }
+            if let used { Text(detail.cached == nil ? "Targets use your FTP of \(Int(used.rounded())) W." : "Targets are fixed in watts (saved at \(Int(used.rounded())) W FTP).").ftpText(.callout) }
+            else { Text("Targets are fixed in watts.").ftpText(.callout) }
+            if differs, let current { Text("Your current FTP is \(Int(current.rounded())) W. This workout does not rescale.").ftpText(.footnote).foregroundStyle(Theme.warning) }
         }
     }
 
@@ -100,7 +100,7 @@ struct WorkoutDetailSheet: View {
                     HStack(spacing: Space.s) {
                         RoundedRectangle(cornerRadius: 3).fill(step.zone.map(ZonePalette.color(for:)) ?? Theme.secondary.opacity(0.5))
                             .frame(width: 12, height: 12).accessibilityHidden(true)
-                        Text(step.name).font(.subheadline)
+                        Text(step.name).ftpText(.subheadline)
                     }.gridColumnAlignment(.leading).frame(maxWidth: .infinity, alignment: .leading)
                     Text(step.durationText).frame(minWidth: 44, alignment: .trailing)
                     if showValues {
@@ -108,7 +108,7 @@ struct WorkoutDetailSheet: View {
                         Text(step.wattsText).frame(minWidth: 72, alignment: .trailing)
                     }
                 }
-                .font(.subheadline).monospacedDigit()
+                .ftpText(.subheadline).monospacedDigit()
                 .padding(.vertical, Space.s).frame(minHeight: 36)
                 .background(selectedStep == step.index ? Theme.accent.opacity(0.12) : Color.clear)
                 .contentShape(Rectangle())

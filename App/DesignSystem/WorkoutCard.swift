@@ -8,19 +8,22 @@ struct WorkoutCard: View {
     var plan: TrainingPlan?
     var badge: String?
     let action: () -> Void
+    @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: Space.s) {
-                Text(title).font(.headline).foregroundStyle(.primary).multilineTextAlignment(.leading).lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
-                Text(detail).font(.subheadline).foregroundStyle(Theme.secondary).multilineTextAlignment(.leading)
-                if let plan { WorkoutProfileChart(plan: plan, height: 44) }
+                Text(title).ftpText(.headline).foregroundStyle(.primary).multilineTextAlignment(.leading).lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                Text(detail).ftpText(.subheadline).foregroundStyle(Theme.secondary).multilineTextAlignment(.leading)
+                if let plan { WorkoutProfileChart(plan: plan, height: 36, dashboard: true) }
                 else { RoundedRectangle(cornerRadius: 8).fill(Theme.secondary.opacity(0.12)).frame(height: 44) }
                 if let badge { StatusPill(text: badge, tone: .warning) }
             }
-            .padding(Space.m).frame(maxWidth: .infinity, minHeight: 130, alignment: .topLeading)
-            .ftpCard(fill: 0.05).contentShape(RoundedRectangle(cornerRadius: Radius.card))
+            .padding(16).frame(maxWidth: .infinity, minHeight: 130, alignment: .topLeading)
+            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20))
+            .overlay(RoundedRectangle(cornerRadius: 20).strokeBorder(Theme.text.opacity(contrast == .increased ? 0.8 : 0), lineWidth: 2))
+            .contentShape(RoundedRectangle(cornerRadius: 20))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)

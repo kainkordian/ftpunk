@@ -38,7 +38,7 @@ struct WorkoutProfileChart: View {
             if left > 0 {
                 for percent in [50.0, 100.0] {
                     let y = size.height * (1 - percent / WorkoutProfile.scaleMaxPercent)
-                    context.draw(Text("\(Int(percent)) %").font(.caption2.monospacedDigit()).foregroundStyle(Theme.secondary),
+                    context.draw(Text("\(Int(percent)) %").font(.ftp(.caption2)).monospacedDigit().foregroundStyle(Theme.secondary),
                                  at: CGPoint(x: left - 4, y: y), anchor: .trailing)
                 }
             }
@@ -81,7 +81,7 @@ struct WorkoutProfileChart: View {
                     previous = point.time; previousPoint = p
                 }
                 if dashboard, let previousPoint { line.addLine(to: previousPoint) }
-                context.stroke(line, with: .color(Chaindance.heartLine), style: StrokeStyle(lineWidth: dashboard ? 3 : 2, lineCap: .round, lineJoin: .round))
+                context.stroke(line, with: .color(Theme.heart), style: StrokeStyle(lineWidth: dashboard ? 3 : 2, lineCap: .round, lineJoin: .round))
             }
             if let progressSeconds {
                 let x = left + plotWidth * min(1, max(0, progressSeconds / total))
@@ -93,7 +93,7 @@ struct WorkoutProfileChart: View {
                 GeometryReader { geo in
                     ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
                         if index < stepHeartRates.count, let average = stepHeartRates[index] {
-                            Text("♥ \(Int(average.rounded()))").font(.ftp(19, weight: .bold)).foregroundStyle(Chaindance.heartLine)
+                            Text("♥ \(Int(average.rounded()))").font(.ftp(19, weight: .bold)).foregroundStyle(Theme.heart)
                                 .frame(width: geo.size.width * (segment.end - segment.start) / total)
                                 .position(x: geo.size.width * (segment.start + segment.end) / 2 / total, y: 10)
                         }
@@ -147,8 +147,8 @@ struct WorkoutProfileChart: View {
 
     private func tooltip(_ step: WorkoutStepSummary) -> some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(step.name).font(.caption.weight(.semibold))
-            Text(step.valueText).font(.caption.monospacedDigit()).foregroundStyle(Theme.secondary)
+            Text(step.name).ftpText(.caption, weight: .semibold)
+            Text(step.valueText).ftpText(.caption).monospacedDigit().foregroundStyle(Theme.secondary)
         }
         .padding(.horizontal, Space.s).padding(.vertical, Space.xs)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))

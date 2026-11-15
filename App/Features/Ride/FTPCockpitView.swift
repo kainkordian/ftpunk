@@ -96,12 +96,12 @@ struct LegacyFTPCockpitView: View {
             supportTiles
             if !cadenceAvailable && engine.phase == .ramp {
                 Label("No cadence source: hold to finish when you cannot continue.", systemImage: "exclamationmark.triangle")
-                    .font(.callout).foregroundStyle(Theme.warning).frame(maxWidth: .infinity, alignment: .leading)
+                    .ftpText(.callout).foregroundStyle(Theme.warning).frame(maxWidth: .infinity, alignment: .leading)
             }
         case .controls: EmptyView()
         case .notes:
             if layout.showsCoachingLine {
-                Text(coachingText).font(.callout).foregroundStyle(Theme.secondary).frame(maxWidth: .infinity, alignment: .leading)
+                Text(coachingText).ftpText(.callout).foregroundStyle(Theme.secondary).frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
@@ -121,7 +121,7 @@ struct LegacyFTPCockpitView: View {
 
     private var minimiseButton: some View {
         Button { model.cockpitPresented = false } label: {
-            Image(systemName: "chevron.down").font(.title3.weight(.semibold)).frame(width: 44, height: 44).contentShape(Rectangle())
+            Image(systemName: "chevron.down").ftpText(.title3, weight: .semibold).frame(width: 44, height: 44).contentShape(Rectangle())
         }
         .buttonStyle(.plain).accessibilityLabel("Minimise ride").accessibilityHint("Keeps the test running behind the live-ride bar")
         .accessibilityIdentifier("minimise-ride")
@@ -137,15 +137,15 @@ struct LegacyFTPCockpitView: View {
         HStack(alignment: .center, spacing: Space.m) {
             minimiseButton
             VStack(alignment: .leading, spacing: 2) {
-                Text(headerTitle).font(.headline).foregroundStyle(Theme.accent).lineLimit(2)
+                Text(headerTitle).ftpText(.headline).foregroundStyle(Theme.accent).lineLimit(2)
                 if layout.showsHeaderSubtitle {
-                    Text("\(engine.session.riderName) · \(engine.session.activityTitle)").font(.caption).foregroundStyle(Theme.secondary).lineLimit(1)
+                    Text("\(engine.session.riderName) · \(engine.session.activityTitle)").ftpText(.caption).foregroundStyle(Theme.secondary).lineLimit(1)
                 }
             }
             Spacer(minLength: 0)
             VStack(alignment: .trailing, spacing: 2) {
-                Text(headerClock).font(.headline).monospacedDigit()
-                Text(headerClockLabel).font(.caption2).foregroundStyle(Theme.secondary)
+                Text(headerClock).ftpText(.headline).monospacedDigit()
+                Text(headerClockLabel).ftpText(.caption2).foregroundStyle(Theme.secondary)
             }
             headerControls
         }
@@ -156,8 +156,8 @@ struct LegacyFTPCockpitView: View {
         HStack(alignment: .top, spacing: Space.s) {
             minimiseButton
             VStack(alignment: .leading, spacing: 2) {
-                Text(headerTitle).font(.headline).foregroundStyle(Theme.accent).lineLimit(2).minimumScaleFactor(0.7)
-                Text(CockpitLayout.compactClock(headerClock, phase: engine.phase)).font(.headline).monospacedDigit()
+                Text(headerTitle).ftpText(.headline).foregroundStyle(Theme.accent).lineLimit(2).minimumScaleFactor(0.7)
+                Text(CockpitLayout.compactClock(headerClock, phase: engine.phase)).ftpText(.headline).monospacedDigit()
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(headerTitle.capitalized)
@@ -199,7 +199,7 @@ struct LegacyFTPCockpitView: View {
             StatusPill(text: model.mockPaused ? "Debug · stream paused" : "Debug · mock sensors", symbol: "ladybug", tone: .warning)
         }
         if model.isFinishing {
-            Label("Confirming trainer stop…", systemImage: "hourglass").font(.headline).foregroundStyle(Theme.warning)
+            Label("Confirming trainer stop…", systemImage: "hourglass").ftpText(.headline).foregroundStyle(Theme.warning)
         }
     }
 
@@ -274,15 +274,15 @@ struct LegacyFTPCockpitView: View {
             if let result = engine.session.result {
                 VStack(alignment: .leading, spacing: Space.xs) {
                     Text("PROVISIONAL RESULT").ftpLabel().foregroundStyle(Theme.accent)
-                    Text("\(Int(result.estimatedFTP.rounded())) W estimated FTP").font(.title2.bold())
+                    Text("\(Int(result.estimatedFTP.rounded())) W estimated FTP").ftpText(.title2, weight: .bold)
                     Text("\(Int(result.factor * 100)) % of your best minute, \(Int(result.bestMinutePower.rounded())) W. The final result appears when you save.")
-                        .font(.footnote).foregroundStyle(Theme.secondary)
+                        .ftpText(.footnote).foregroundStyle(Theme.secondary)
                 }
                 .padding(Space.m).frame(maxWidth: .infinity, alignment: .leading).ftpCard(tint: Theme.accent, fill: 0.06)
                 .accessibilityElement(children: .combine)
             } else {
                 Label("No FTP estimate from this ramp. You can still save the ride.", systemImage: "info.circle")
-                    .font(.callout).foregroundStyle(Theme.secondary).frame(maxWidth: .infinity, alignment: .leading)
+                    .ftpText(.callout).foregroundStyle(Theme.secondary).frame(maxWidth: .infinity, alignment: .leading)
             }
         default: EmptyView() // Warm-up time left is in the header and the "Ramp starts in" tile; no third copy.
         }

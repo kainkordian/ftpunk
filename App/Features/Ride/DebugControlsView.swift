@@ -6,7 +6,7 @@ struct DebugControlsView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Label("Debug controls", systemImage: "ladybug").font(.headline).foregroundStyle(Theme.warning)
+            Label("Debug controls", systemImage: "ladybug").ftpText(.headline).foregroundStyle(Theme.warning)
             SelectionRow("Signal scenario", selection: $model.mockScenario) {
                 ForEach(MockScenario.allCases) { Text($0.title).tag($0) }
             }
@@ -32,7 +32,7 @@ struct DebugControlsView: View {
             Button("Simulate trainer disconnect", role: .destructive) { model.simulateTrainerDisconnect() }
                 .buttonStyle(.bordered).controlSize(.large)
             Text("All sensor values are generated locally. No Bluetooth commands or activity uploads are sent.")
-                .font(.caption).foregroundStyle(Theme.secondary)
+                .ftpText(.caption).foregroundStyle(Theme.secondary)
         }.padding().background(.orange.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
     }
 }

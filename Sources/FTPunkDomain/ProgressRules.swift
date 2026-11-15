@@ -35,6 +35,7 @@ public struct ActivityRowModel: Equatable, Sendable {
     public let subtitle: String
     public let value: String?
     public let badges: [ActivityBadge]
+    public let symbol: String
 
     public static func make(_ session: TestSession, uploadStatus: UploadStatus?, showRider: Bool = true) -> ActivityRowModel {
         let date = session.startedAt.formatted(.dateTime.day().month(.abbreviated))
@@ -53,9 +54,9 @@ public struct ActivityRowModel: Equatable, Sendable {
         case .needsAttention: badges.append(.uploadFailed)
         case nil: break
         }
-        let detail = session.training == nil ? (session.outcome?.title ?? "Recording") : length
+        let detail = session.training == nil ? (session.outcome?.title ?? "Recording") : session.training?.kind == .workout ? "Workout" : "Free ride"
         return ActivityRowModel(id: session.id, title: "\(date) · \(activity)",
-                                subtitle: showRider ? "\(session.riderName) · \(detail)" : detail, value: value, badges: badges)
+                                subtitle: showRider ? "\(session.riderName) · \(detail)" : detail, value: value, badges: badges, symbol: session.training == nil ? "waveform.path.ecg" : session.training?.kind == .workout ? "list.bullet.rectangle" : "bicycle")
     }
 }
 
@@ -65,7 +66,7 @@ public enum ProgressRules {
         sessions.filter { (rider == nil || $0.riderID == rider) && metric.value($0) != nil && (includeDebug || !$0.isDemo) }
     }
     /// Newest first, for the selected rider (or everyone) and activity type.
-    public static func activities(_ sessions: [TestSession], rider: UUID?, filter: ActivityFilter) -> [TestSession] {
-        sessions.filter { (rider == nil || $0.riderID == rider) && filter.matches($0) }.sorted { $0.startedAt > $1.startedAt }
+    public static func activities(_ sessions: [TestSession], rider: UUID?, filter: ActivityFilter, includeDebug: Bool = true) -> [TestSession] {
+        sessions.filter { (rider == nil || $0.riderID == rider) && filter.matches($0) && (includeDebug || !$0.isDemo) }.sorted { $0.startedAt > $1.startedAt }
     }
 }

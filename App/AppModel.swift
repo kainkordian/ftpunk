@@ -32,6 +32,7 @@ struct UploadConsent: Identifiable {
     var engine: RampEngine?
     var elapsed = 0.0
     /// Preview scenarios can render the iPhone layout inside a Mac window.
+    var previewSummaryValues: [String: String] = [:]
     var previewDashboardReadings: [String: String] = [:]
     var previewDashboardMore: Bool?
     var previewDashboardCompact: Bool?

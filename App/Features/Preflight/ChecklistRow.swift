@@ -28,15 +28,15 @@ struct ChecklistRow: View {
     private func content(chevron: Bool) -> some View {
         HStack(alignment: .top, spacing: Space.m) {
             Image(systemName: status == .attention ? "exclamationmark.triangle.fill" : symbol)
-                .font(.title3).foregroundStyle(status == .attention ? Theme.warning : Theme.accent)
+                .ftpText(.title3).foregroundStyle(status == .attention ? Theme.warning : Theme.accent)
                 .frame(width: 28).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.footnote.weight(.bold)).foregroundStyle(Theme.secondary)
-                Text(value).font(.body).foregroundStyle(.primary).multilineTextAlignment(.leading)
-                if let detail { Text(detail).font(.footnote).foregroundStyle(status == .attention ? Theme.warning : Theme.secondary).multilineTextAlignment(.leading) }
+                Text(title).ftpText(.footnote, weight: .bold).foregroundStyle(Theme.secondary)
+                Text(value).ftpText(.body).foregroundStyle(.primary).multilineTextAlignment(.leading)
+                if let detail { Text(detail).ftpText(.footnote).foregroundStyle(status == .attention ? Theme.warning : Theme.secondary).multilineTextAlignment(.leading) }
             }
             Spacer(minLength: Space.s)
-            if chevron { Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Theme.secondary).padding(.top, Space.xs).accessibilityHidden(true) }
+            if chevron { Image(systemName: "chevron.right").ftpText(.footnote, weight: .semibold).foregroundStyle(Theme.secondary).padding(.top, Space.xs).accessibilityHidden(true) }
         }
         .padding(.vertical, Space.s).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).contentShape(Rectangle())
     }
@@ -48,7 +48,7 @@ struct ChecklistCard<Content: View>: View {
     @ViewBuilder let content: () -> Content
     var body: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            if let title { Text(title).font(.headline).padding(.horizontal, Space.xs) }
+            if let title { Text(title).ftpText(.headline).padding(.horizontal, Space.xs) }
             VStack(alignment: .leading, spacing: 0) { content() }
                 .padding(.horizontal, Space.l).padding(.vertical, Space.xs)
                 .frame(maxWidth: .infinity, alignment: .leading)

@@ -1,7 +1,7 @@
 # FTPunk roadmap
 
 The single source of truth for what FTPunk is, where it stands and what comes next.
-Updated 2026-11-14. If this file and an archived plan disagree, this file wins.
+Updated 2026-11-15. If this file and an archived plan disagree, this file wins.
 
 ## What FTPunk is
 
@@ -19,9 +19,11 @@ Fixed principles:
 - The trainer is only ever controlled by the ride engine. Visuals, imports and integrations
   never send trainer commands.
 
-## Where it stands (2026-11-14)
+## Where it stands (2026-11-15)
 
-Built and covered by tests (382 Swift tests, 301 web tests, iOS + Mac builds pass):
+Built and covered by tests (392 Swift tests, 301 web tests, iOS + Mac builds pass):
+
+- **Plan 12 (2026-11-15, native):** implemented shared typography, light/dark surfaces, pill actions, fields and setting rows; Mac sidebar with devices/rider controls; wide Home with Next up, featured library and Mine; inline device scanning; larger workout detail; shared result/history summary, current-FTP delta, combined chart and per-step averages; merged manual/synced/ramp FTP trend, hidden debug activities, and Settings section/detail panes. The owner confirmed the fixed hover line and reported normal-window/light-theme issues and a long-ride freeze. Corrections 21–27 respect the title-bar safe area, pair segment/switch colours, style Refresh, fill/style the Progress empty card, keep the six featured cards in three columns, cache summary chart geometry, remove the hover readout's ScrollView/intrinsic sizing, and accumulate live workout HR/read recent power without full-history scans on redraw. Live summary totals are memoized by recording revision. `app-summary-long` adds a 3,240-second ride with 9,647 samples and 3,214 HR points; Debug geometry construction measured about 9 ms, with cache reuse across 1,000 unchanged updates. Verified: 392 Swift tests, both CI builds and `git diff --check`. Rebuilt `dist/FTPunk.app` while stopped; signature and font resources verified, with no agent launch or visual review. Preview scenarios: `app-home`, `app-summary`, `app-summary-long`, `app-progress`, `app-settings` at 1470×923. Owner visual recheck of these corrections and real pointer/layout performance, native dialogs/VoiceOver execution and hardware scan behaviour remain unverified. Plan stays in `next/` for review; the owner authorized committing and pushing the implementation on 2026-11-15. Plan 11 was committed and pushed as `b618ac8` before starting this work.
 
 - **Plan 11 (2026-11-14, native):** shared dashboard implemented. The owner reviewed the first 14 Nov `dist` build at 1470×923: structure, content and states were right; 26 fidelity differences were reported. Corrections now cover intrinsic font sizing (the 0.8-em box had compressed Tektur's 1.3-em line height), title-bar space, tile sizing, menu/header styling, profile/chart rendering, elapsed lime ramp segments, warning colours/units, fixture readings and Settings controls/descriptions. The last-10-second Next tile keeps cyan tint and cyan digits (owner confirmed). Settings' section list/detail shell stays in plan 12. Verified: 382 Swift tests, both CI builds, `git diff --check`; `dist/FTPunk.app` rebuilt while stopped with a verified bundle signature, including the darker gauge band and mockup 1b scenario. No app launch or agent visual review. The owner’s Mac recheck at 1470×923 confirmed sizes, layout, ramp segments and Settings rows. The last two corrections darken the gauge amber band on warning tiles and add `dash-workout-recovery-next` for mockup 1b; those two items await the owner’s final check. The optional Chaindance layout pill/description is deferred to plan 12. Sound delivery, physical shortcuts and from-bike readability remain unverified. Free-ride mode switching uses acknowledged release/restart and timestamped engine events; ramp rules/scoring remain unchanged. Owner authorized committing/pushing and starting plan 12; plan 11 is archived, with those two visual checks still explicitly unverified.
 
@@ -91,7 +93,7 @@ the latest screens. The web app (`ftpunk_web/`) has the same caveat: its new scr
 
 ## Next steps
 
-The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). Milestone E is below; native plan 10 is reviewed; plan 11 is archived following the owner’s commit/push and plan 12 instruction; its last two visual checks remain unverified. Plan 12 is next.
+The seven plans of milestones A–C were implemented on 2026-11-04 and archived in [`archive/2026-11-04-roadmap/`](archive/2026-11-04-roadmap/). Milestone D (web parity) was done on 2026-11-05/06 and archived in [`archive/2026-11-05-web/`](archive/2026-11-05-web/). Milestone E is below; native plan 10 is reviewed; plan 11 is archived following the owner’s commit/push and plan 12 instruction; its last two visual checks remain unverified. Plan 12 is implemented; the 15 Nov review corrections await the owner’s recheck.
 
 ### Step 0: baseline commit (done 2026-11-04)
 
@@ -156,7 +158,7 @@ Owner clarifications (2026-11-13): cyan overrides the Next tile during the last 
 |---|------|------|
 | 10 | [Quick fixes](archive/10-quick-fixes.md) (implemented and reviewed 2026-11-13; no functional deviations): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
 | 11 | [Ride dashboard readable from 2 m](archive/11-ride-dashboard.md) (implemented 2026-11-14; final two visual checks unverified): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
-| 12 | [The app around the ride](next/12-app-around-the-ride.md): tokens, shell, Home, summary, Progress, Settings | L |
+| 12 | [The app around the ride](next/12-app-around-the-ride.md) (implemented 2026-11-14; owner review pending): tokens, shell, Home, summary, Progress, Settings | L |
 
 ## Parked (deliberately not now)
 

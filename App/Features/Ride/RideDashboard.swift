@@ -22,6 +22,11 @@ struct RideDashboard: View {
     @State private var previousCadence: RampCadenceState = .normal
     @State private var lastTickSound: Int?
     @State private var targetPulse = false
+    @StateObject private var readingsModel: DashboardReadingsModel
+    init(model: AppModel, engine: RampEngine) {
+        self.model = model; self.engine = engine
+        _readingsModel = StateObject(wrappedValue: DashboardReadingsModel(session: engine.session, time: model.elapsed))
+    }
 
     private var workout: Bool { engine.session.training?.kind == .workout }
     private var training: Bool { engine.session.training != nil }
@@ -32,10 +37,10 @@ struct RideDashboard: View {
     private var busy: Bool { model.trainingTransition != nil || model.isFinishing }
     private var phaseTime: Double { max(0, model.elapsed - engine.phaseStartedAt) }
     private var configuration: SessionConfiguration { engine.session.configuration }
-    private var power: Double? { LivePower.average(samples: engine.session.samples, at: model.elapsed, window: powerWindow, pauses: RidePause.list(engine.session)) }
+    private var power: Double? { readingsModel.readings.power(at: model.elapsed, window: powerWindow) }
     private var cadence: Double? { engine.lastCadence.flatMap { model.elapsed - $0.time <= 2 ? $0.rpm : nil } }
     private var cadenceState: RampCadenceState { .make(cadence: cadence, at: model.elapsed, lowCadenceSince: engine.lowCadenceSince) }
-    private var summary: RideSummary { RideSummary.make(engine.session) }
+    private var summary: RideSummary { readingsModel.summary(session: engine.session) }
     private var nextRemaining: Double { configuration.preset.stepSeconds - phaseTime.truncatingRemainder(dividingBy: configuration.preset.stepSeconds) }
     private func whole(_ value: Double?) -> String { value.map { String(Int($0.rounded())) } ?? "—" }
 
@@ -88,6 +93,9 @@ struct RideDashboard: View {
             withAnimation(.easeOut(duration: 0.25)) { targetPulse = false }
         }
         .background { shortcuts }
+        .onChange(of: DashboardReadingsModel.Revision(session: engine.session, time: model.elapsed)) { _, _ in
+            readingsModel.update(session: engine.session, time: model.elapsed)
+        }
     }
 
     private func desktop(_ m: DashboardMetrics) -> some View {
@@ -337,7 +345,7 @@ struct RideDashboard: View {
                     }.font(.ftp(22 * m.scale, weight: .bold)).foregroundStyle(RideStyle.dim)
                     if workout, let plan = engine.session.training {
                         WorkoutProfileChart(plan: plan, intensity: engine.intensity, progressSeconds: engine.trainingElapsed, height: 52 * m.scale,
-                                            heartRate: WorkoutClock.heartRate(engine.session), stepHeartRates: StepHeartRate.averages(session: engine.session), dashboard: true)
+                                            heartRate: readingsModel.readings.heartRate, stepHeartRates: readingsModel.readings.stepHeartRates, dashboard: true)
                     } else { LivePowerChart(session: engine.session, showsHeartRate: true, compact: true) }
                 }
             }

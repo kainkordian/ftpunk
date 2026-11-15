@@ -23,9 +23,9 @@ struct RideCharts: View {
         HStack(spacing: Space.m) {
             swatch("Power", color: Theme.accent, dashed: false)
             if hasTarget { swatch("Target", color: .primary.opacity(0.75), dashed: true) }
-            if hasHeartRate { swatch("Heart rate", color: Chaindance.heartLine, dashed: false) }
+            if hasHeartRate { swatch("Heart rate", color: Theme.heart, dashed: false) }
         }
-        .font(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
+        .ftpText(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
     }
     private func swatch(_ title: String, color: Color, dashed: Bool) -> some View {
         HStack(spacing: 4) {
@@ -54,7 +54,7 @@ struct RideHeartRateChart: View {
         let summary = RideSummary.make(session)
         Chart(points) { point in
             LineMark(x: .value("Minutes", point.time / 60), y: .value("Heart rate", point.bpm), series: .value("Continuous signal", "h\(point.segment)"))
-                .foregroundStyle(Chaindance.heartLine).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
+                .foregroundStyle(Theme.heart).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
         }
         .chartYScale(domain: .automatic(includesZero: false))
         .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
@@ -84,12 +84,12 @@ struct RideAlphaChart: View {
 
     var body: some View {
         let peak = max(1.6, hrv.alpha1.map(\.alpha1).max() ?? 0)
-        let end = max(session.endedAtOffset ?? 0, session.samples.last?.time ?? 0)
+        let end = RideChartDomain.end(session: session)
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(spacing: Space.m) {
-                Text("HRV · DFA α1").font(.caption.weight(.bold)).foregroundStyle(Theme.secondary)
+                Text("HRV · DFA α1").ftpText(.caption, weight: .bold).foregroundStyle(Theme.secondary)
                 Spacer()
-                Text("0.75 ≈ aerobic threshold · 0.5 ≈ anaerobic").font(.caption).foregroundStyle(Theme.secondary)
+                Text("0.75 ≈ aerobic threshold · 0.5 ≈ anaerobic").ftpText(.caption).foregroundStyle(Theme.secondary)
             }
             Chart {
                 RuleMark(y: .value("Aerobic threshold", 0.75)).foregroundStyle(Theme.secondary).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
@@ -99,7 +99,7 @@ struct RideAlphaChart: View {
                         .foregroundStyle(color).lineStyle(StrokeStyle(lineWidth: 2, lineJoin: .round))
                 }
             }
-            .chartXScale(domain: 0...max(1, end / 60))
+            .chartXScale(domain: 0...(end / 60))
             .chartYScale(domain: 0...(peak * 1.05))
             .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
             .chartXAxis { axis }.chartYAxis { axis }
@@ -139,7 +139,7 @@ struct RideBalanceChart: View {
         let left = Int(balance.left.rounded())
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(spacing: Space.m) {
-                Text("Pedal balance").font(.caption.weight(.bold)).foregroundStyle(Theme.secondary)
+                Text("Pedal balance").ftpText(.caption, weight: .bold).foregroundStyle(Theme.secondary)
                 Spacer()
                 key("Left \(left) %", color: leftColor)
                 key("Right \(100 - left) %", color: rightColor)
@@ -148,6 +148,7 @@ struct RideBalanceChart: View {
                 ForEach(points, id: \.time) { point in marks(point) }
                 RuleMark(y: .value("Even", 50.0)).foregroundStyle(Theme.secondary).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
             }
+            .chartXScale(domain: 0...((session.map { RideChartDomain.end(session: $0) } ?? max(1, points.last?.time ?? 0)) / 60))
             .chartYScale(domain: (50 - reach)...(50 + reach))
             .chartXAxisLabel { Text("Minutes").foregroundStyle(Theme.secondary) }
             .chartXAxis {
@@ -183,7 +184,7 @@ struct RideBalanceChart: View {
     private func key(_ title: String, color: Color) -> some View {
         HStack(spacing: 4) {
             RoundedRectangle(cornerRadius: 2).fill(color).frame(width: 12, height: 12)
-            Text(title).font(.caption).foregroundStyle(Theme.secondary).monospacedDigit()
+            Text(title).ftpText(.caption).foregroundStyle(Theme.secondary).monospacedDigit()
         }
     }
     private static func label(_ value: Double) -> String {
@@ -222,8 +223,8 @@ struct RideSummaryCard: View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), alignment: .leading)], alignment: .leading, spacing: Space.m) {
             ForEach(items + energyItems(summary), id: \.0) { title, value in
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title.uppercased()).font(.caption2.weight(.bold)).foregroundStyle(title.lowercased().contains("heart") ? Chaindance.heartLine : Theme.secondary)
-                    Text(value).font(.title3.bold()).monospacedDigit().foregroundStyle(title.lowercased().contains("heart") ? Chaindance.heartLine : Color.primary)
+                    Text(title.uppercased()).ftpText(.caption2, weight: .bold).foregroundStyle(title.lowercased().contains("heart") ? Theme.heart : Theme.secondary)
+                    Text(value).ftpText(.title3, weight: .bold).monospacedDigit().foregroundStyle(title.lowercased().contains("heart") ? Theme.heart : Color.primary)
                 }
                 .accessibilityElement(children: .combine)
             }
@@ -252,9 +253,9 @@ struct LivePowerChart: View {
         let peak = max(200, points.map(\.power).max() ?? 0, targets.map(\.watts).max() ?? 0)
         return VStack(alignment: .leading, spacing: Space.s) {
             if !compact { HStack {
-                Text("Power over time").font(.headline)
+                Text("Power over time").ftpText(.headline)
                 Spacer()
-                Text("Last 10 minutes").font(.caption).foregroundStyle(Theme.secondary)
+                Text("Last 10 minutes").ftpText(.caption).foregroundStyle(Theme.secondary)
             }
             }
             Chart {
@@ -279,7 +280,7 @@ struct LivePowerChart: View {
                             if let previous, sample.time - previous <= 5 { path.addLine(to: point) } else { path.move(to: point) }
                             previous = sample.time
                         }
-                    }.stroke(Chaindance.heartLine, lineWidth: 2)
+                    }.stroke(Theme.heart, lineWidth: 2)
                 }.allowsHitTesting(false)
             }
             .chartXScale(domain: (start / 60)...(end / 60))

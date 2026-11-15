@@ -6,7 +6,7 @@ import AppKit
 #endif
 
 /// Settings are grouped and short: one line of footer text per group, with "Learn more" sheets for detail.
-enum SettingsGroup: String, CaseIterable, Identifiable {
+enum SettingsGroup: String, CaseIterable, Identifiable, Hashable {
     case riders, devices, rideDisplay, intervals, backup, debug, about
     var id: String { rawValue }
     var title: String {
@@ -71,38 +71,128 @@ struct SettingsView: View {
     @State private var showDevices = false
     @State private var deviceRole: DeviceRole?
     @State private var apiKeyExpanded = false
+    @State private var selectedGroup: SettingsGroup = .rideDisplay
+    @State private var confirmDisconnect = false
+    @State private var settingsPath: [SettingsGroup] = []
 
     var body: some View {
-        NavigationStack {
-            ScrollViewReader { scroll in
-                Form {
-                    ForEach(orderedGroups) { group in
-                        content(for: group)
-                    }
+        Group {
+            #if os(macOS)
+            if !model.previewPhoneLayout { macSettings } else { phoneSettings }
+            #else
+            phoneSettings
+            #endif
+        }
+        .sheet(item: $topic) { LearnMoreSheet(topic: $0) }
+        .sheet(item: $info) { ProtocolInfoView(topic: $0) }
+        .sheet(isPresented: $showRiders) { RiderSheet(model: model) }
+        .sheet(isPresented: $showDevices) { DevicesSheet(model: model) }
+        .confirmationDialog("Disconnect Intervals.icu for this rider?", isPresented: $confirmDisconnect, titleVisibility: .visible) {
+            Button("Disconnect", role: .destructive) { Task { await model.disconnectIntervals() } }
+        } message: { Text("Local rides are kept. Connect again to sync this rider’s account.") }
+    }
+    private var phoneSettings: some View {
+        NavigationStack(path: $settingsPath) {
+            Form {
+                ForEach(SettingsGroup.visible(debugUnlocked: model.debugUnlocked)) { group in
+                    NavigationLink(group == .about ? "About and help" : group.title, value: group).accessibilityIdentifier("settings-\(group.rawValue)")
                 }
-                .formStyle(.grouped).buttonStyle(FTPunkRowButtonStyle()).navigationTitle("Settings")
-                .scrollDismissesKeyboard(.interactively)
-                .sheet(item: $topic) { LearnMoreSheet(topic: $0) }
-                .sheet(item: $info) { ProtocolInfoView(topic: $0) }
-                .sheet(isPresented: $showRiders) { RiderSheet(model: model) }
-                .sheet(isPresented: $showDevices) { DevicesSheet(model: model) }
-                .sheet(item: $deviceRole) { DevicePicker(model: model, role: $0) }
+            }.navigationTitle("Settings")
+                .navigationDestination(for: SettingsGroup.self) { group in
+                    Form { content(for: group) }.formStyle(.grouped).navigationTitle(group == .about ? "About and help" : group.title)
+                        .buttonStyle(FTPunkSecondaryButtonStyle()).scrollDismissesKeyboard(.interactively)
+                }
                 .task(id: model.previewSettingsAnchor) {
-                    if let anchor = model.previewSettingsAnchor {
-                        apiKeyExpanded = true
-                        try? await Task.sleep(for: .milliseconds(300))
-                        scroll.scrollTo(anchor, anchor: .top)
+                    if let anchor = model.previewSettingsAnchor, let group = SettingsGroup(rawValue: anchor) { settingsPath = [group]; apiKeyExpanded = true }
+                    if ProcessInfo.processInfo.arguments.contains("--preview-about") { settingsPath = [.about] }
+                }
+        }
+    }
+
+    #if os(macOS)
+    private var macSettings: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            Text("Settings").font(.ftp(34))
+            HStack(alignment: .top, spacing: 24) {
+                VStack(spacing: 6) {
+                    ForEach(SettingsGroup.visible(debugUnlocked: model.debugUnlocked)) { group in
+                        Button { selectedGroup = group } label: {
+                            HStack {
+                                Text(group == .devices ? "Devices and trainer control" : group == .about ? "About and help" : group.title)
+                                Spacer(minLength: 0)
+                                if group == .intervals && model.connection != nil { Circle().fill(Theme.accent).frame(width: 8, height: 8) }
+                            }.ftpText(.headline, weight: .semibold).padding(.horizontal, 14).frame(minHeight: 44, alignment: .leading)
+                                .foregroundStyle(selectedGroup == group ? Theme.text : Theme.secondary)
+                                .background(selectedGroup == group ? Theme.surface : .clear, in: RoundedRectangle(cornerRadius: 14))
+                        }.buttonStyle(.plain)
+                    }
+                }.frame(width: 216)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        if selectedGroup == .rideDisplay { macRideSettings }
+                        else if selectedGroup == .devices {
+                            SettingRow(title: "Devices and trainer control", detail: model.deviceSummary.description) {
+                                Button("Connect and manage devices") { showDevices = true }.buttonStyle(FTPunkPrimaryButtonStyle())
+                            }
+                            VStack(alignment: .leading, spacing: 16) { devicesSection }.padding(22).ftpCard(fill: 0)
+                        } else {
+                            VStack(alignment: .leading, spacing: 16) { groupContent(selectedGroup) }.padding(22).frame(maxWidth: .infinity, alignment: .leading).ftpCard(fill: 0)
+                        }
+                    }.buttonStyle(FTPunkSecondaryButtonStyle()).padding(.bottom, 24)
+                }
+            }
+        }.padding(.horizontal, 32).padding(.vertical, 28).frame(maxWidth: 1440, maxHeight: .infinity, alignment: .topLeading)
+            .frame(maxWidth: .infinity).background(Theme.ground)
+            .task(id: model.previewSettingsAnchor) { if let anchor = model.previewSettingsAnchor, let group = SettingsGroup(rawValue: anchor) { selectedGroup = group; apiKeyExpanded = true } }
+    }
+    private var macRideSettings: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("DASHBOARD").ftpText(.caption, weight: .bold).foregroundStyle(Theme.secondary).padding(.leading, 22)
+            settingsCard {
+                SettingRow(title: "Power average", detail: "The big number on the ride screen. Recordings always keep every sample.", grouped: true) {
+                    RideChoiceRow(title: "", selection: $ridePowerWindow, choices: LivePower.windows.map { ("\($0) s", $0) })
+                }
+                Divider().overlay(Theme.raised)
+                SettingRow(title: "Number size", detail: "Fit to screen fills the window, sized to read from about 2 m in full screen.", grouped: true) {
+                    RideChoiceRow(title: "", selection: $dashboardCompactNumbers, choices: [("Fit to screen", false), ("Compact", true)])
+                }
+                Divider().overlay(Theme.raised)
+                SettingRow(title: "Sound before each step", detail: "Three short beeps in the last 3 s of a workout step.", grouped: true) {
+                    Toggle("Sound before each step", isOn: $rideStepSound).labelsHidden().toggleStyle(RideSwitchStyle())
+                }
+                Divider().overlay(Theme.raised)
+                SettingRow(title: "Pause when I stop pedalling", detail: "Workouts and free rides. Never during the FTP test.", grouped: true) {
+                    Toggle("Pause when I stop pedalling", isOn: $model.autoPauseEnabled).labelsHidden().toggleStyle(RideSwitchStyle()).accessibilityIdentifier("auto-pause-toggle")
+                }
+            }
+            Text("CHAINDANCE").ftpText(.caption, weight: .bold).foregroundStyle(Theme.secondary).padding(.leading, 22).padding(.top, 10)
+            settingsCard {
+                SettingRow(title: "Show the night-city ride", detail: "Off by default. When on, it takes the place of the timeline strip.", grouped: true) {
+                    Toggle("Show Chaindance", isOn: $model.rideVisualEnabled).labelsHidden().toggleStyle(RideSwitchStyle()).accessibilityIdentifier("pixel-ride-toggle")
+                }
+                if model.rideVisualEnabled {
+                    Divider().overlay(Theme.raised)
+                    SettingRow(title: "Chaindance layout", detail: "Strip replaces the timeline. Large shows the city with readings on top.", grouped: true) {
+                        RideChoiceRow(title: "", selection: $model.rideVisualPlacement, choices: [("Strip", RideVisualPlacement.strip), ("Large", RideVisualPlacement.hero)])
                     }
                 }
-                .task {
-                    if ProcessInfo.processInfo.arguments.contains("--preview-about") {
-                        try? await Task.sleep(for: .milliseconds(300))
-                        scroll.scrollTo("app-about", anchor: .center)
-                    }
+            }
+            Text("APPEARANCE").ftpText(.caption, weight: .bold).foregroundStyle(Theme.secondary).padding(.leading, 22).padding(.top, 10)
+            settingsCard {
+                SettingRow(title: "Font", detail: "Used for the whole app, ride screen included.", grouped: true) {
+                    RideChoiceRow(title: "", selection: $appFont, choices: [("Tektur", "tektur"), ("SF Rounded", "sfRounded"), ("System", "system")])
+                }
+                Divider().overlay(Theme.raised)
+                SettingRow(title: "Theme", detail: "The ride screen is always dark.", grouped: true) {
+                    RideChoiceRow(title: "", selection: $appearance, choices: AppearanceMode.allCases.map { ($0.title, $0.rawValue) })
                 }
             }
         }
     }
+    private func settingsCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        VStack(spacing: 0, content: content).background(Theme.surface).clipShape(RoundedRectangle(cornerRadius: Radius.card))
+    }
+    #endif
 
     /// Preview captures put the requested group first (a grouped Form on macOS does not scroll to a section).
     private var orderedGroups: [SettingsGroup] {
@@ -133,9 +223,7 @@ struct SettingsView: View {
         }
     }
 
-    private func learnMore(_ topic: SettingsTopic) -> some View {
-        Button { self.topic = topic } label: { Label("Learn more", systemImage: "info.circle") }
-    }
+    @ViewBuilder private func learnMore(_ topic: SettingsTopic) -> some View { EmptyView() }
 
     // MARK: Groups
 
@@ -157,7 +245,7 @@ struct SettingsView: View {
                 ForEach([DeviceRole.trainer, .pedals, .heartRate]) { role in
                     DeviceStatusRow(role: role, connectedName: model.bluetooth.names[role],
                                     detail: role == .trainer ? (model.bluetooth.trainerReady ? "ERG ready" : model.bluetooth.status) : nil,
-                                    problem: model.bluetooth.problems[role]) { deviceRole = role }
+                                    problem: model.bluetooth.problems[role]) { showDevices = true }
                         .disabled(model.isBusy)
                 }
             }
@@ -188,10 +276,9 @@ struct SettingsView: View {
                 rideSettingLabel("Show \(RideVisualBranding.name) during rides", detail: "Off by default. When on, it takes the place of the timeline strip.")
             }.toggleStyle(RideSwitchStyle()).accessibilityIdentifier("pixel-ride-toggle")
             if model.rideVisualEnabled {
-                SelectionRow("\(RideVisualBranding.name) layout", selection: $model.rideVisualPlacement) {
-                    Text("Strip between the readings").tag(RideVisualPlacement.strip)
-                    Text("Large scene with readings on top").tag(RideVisualPlacement.hero)
-                }
+                RideChoiceRow(title: "\(RideVisualBranding.name) layout", selection: $model.rideVisualPlacement,
+                              choices: [("Strip", RideVisualPlacement.strip), ("Large", RideVisualPlacement.hero)],
+                              detail: "Strip replaces the timeline. Large shows the city with readings on top.")
             }
         } header: { Text(SettingsGroup.rideDisplay.title) } footer: {
             Text("Numbers follow your system text size; extra-large is easier to read from the bike. \(RideVisualBranding.name) is off by default: a neon night-city ride that follows your power. It never controls the trainer. You can also change it during a ride. Increase Contrast, Bold Text and Reduce Motion are supported.")
@@ -201,7 +288,7 @@ struct SettingsView: View {
     private func rideSettingLabel(_ title: String, detail: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-            Text(detail).font(.callout).foregroundStyle(Theme.secondary).fixedSize(horizontal: false, vertical: true)
+            Text(detail).ftpText(.callout).foregroundStyle(Theme.secondary).fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -209,17 +296,17 @@ struct SettingsView: View {
         Section {
             if let connection = model.connection {
                 LabeledContent("Connected as \(connection.athleteName)", value: "for \(model.profile.name)")
-                Text(connection.usesOAuth ? "Connected with secure sign-in" : "Connected with a personal API key").font(.footnote).foregroundStyle(Theme.secondary)
+                Text(connection.usesOAuth ? "Connected with secure sign-in" : "Connected with a personal API key").ftpText(.footnote).foregroundStyle(Theme.secondary)
                 Toggle("Ask to upload after each ride", isOn: $model.askToUploadAfterRide)
                 Text("Every upload still needs your confirmation. With this off you can upload from the result screen or an activity.")
-                    .font(.footnote).foregroundStyle(Theme.secondary)
+                    .ftpText(.footnote).foregroundStyle(Theme.secondary)
                 athleteSyncRows
                 Button("Retry approved pending uploads") { Task { await model.flushUploads(manual: true) } }
-                Button("Disconnect", role: .destructive) { Task { await model.disconnectIntervals() } }
+                Button("Disconnect", role: .destructive) { confirmDisconnect = true }.buttonStyle(FTPunkDestructiveButtonStyle())
             } else {
                 DisclosureGroup("Connect with an API key", isExpanded: $apiKeyExpanded) {
                     Text("In Intervals.icu, open Settings → Developer settings and copy your personal API key. FTPunk stores it securely in Keychain.")
-                        .font(.footnote).foregroundStyle(Theme.secondary)
+                        .ftpText(.footnote).foregroundStyle(Theme.secondary)
                     Link(destination: URL(string: "https://intervals.icu/settings")!) {
                         Label("Open Intervals.icu settings", systemImage: "arrow.up.right.square")
                             .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).contentShape(Rectangle())
@@ -262,11 +349,11 @@ struct SettingsView: View {
         Toggle("Use FTP and weight from Intervals.icu", isOn: Binding(get: { model.athleteSync.enabled }, set: { model.setAthleteSyncEnabled($0) }))
         if model.athleteSync.enabled {
             if model.athleteSyncNeedsReconnect {
-                Text("Disconnect and connect again to allow reading FTP and weight. Nothing else is needed.").font(.footnote).foregroundStyle(Theme.secondary)
+                Text("Disconnect and connect again to allow reading FTP and weight. Nothing else is needed.").ftpText(.footnote).foregroundStyle(Theme.secondary)
             } else {
                 LabeledContent("Last synced", value: model.athleteSync.lastSynced.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "Not yet")
             }
-            if let note = model.athleteSyncNote { Text(note).font(.footnote).foregroundStyle(Theme.accent) }
+            if let note = model.athleteSyncNote { Text(note).ftpText(.footnote).foregroundStyle(Theme.accent) }
             Button(model.athleteSyncing ? "Syncing…" : "Sync now") { Task { await model.syncAthleteSettings(manual: true) } }
                 .disabled(model.isBusy || model.athleteSyncing)
         }
@@ -283,7 +370,7 @@ struct SettingsView: View {
                     Text("Reference layout · 2 bytes").tag(ResistanceLayout.legacyTwoBytes)
                 }.disabled(model.isBusy)
                 Text("Use the standard layout unless a packet capture confirms the reference layout. Captures keep the latest 500 packets locally.")
-                    .font(.footnote).foregroundStyle(Theme.secondary)
+                    .ftpText(.footnote).foregroundStyle(Theme.secondary)
                 Button("Prepare packet capture") { captureURL = model.captureFile() }
                 if let captureURL { ShareLink("Share packet capture", item: captureURL) }
             }
@@ -296,15 +383,15 @@ struct SettingsView: View {
         Section {
             Button(action: model.tapAboutInfo) {
                 HStack(alignment: .top, spacing: 14) {
-                    Image(systemName: "info.circle.fill").font(.title2).foregroundStyle(Theme.accent)
+                    Image(systemName: "info.circle.fill").ftpText(.title2).foregroundStyle(Theme.accent)
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("FTPunk").font(.headline)
-                        Text(AppInfo.versionLabel).font(.subheadline)
-                        Text(AppInfo.credits).font(.footnote).foregroundStyle(Theme.secondary)
+                        Text("FTPunk").ftpText(.headline)
+                        Text(AppInfo.versionLabel).ftpText(.subheadline)
+                        Text(AppInfo.credits).ftpText(.footnote).foregroundStyle(Theme.secondary)
                         if model.debugUnlocked {
-                            Label("Debug tools enabled", systemImage: "ladybug").font(.footnote)
+                            Label("Debug tools enabled", systemImage: "ladybug").ftpText(.footnote)
                         } else if model.aboutTapCount >= 3 {
-                            Text("\(10 - model.aboutTapCount) more taps to enable debug tools").font(.footnote).foregroundStyle(Theme.secondary)
+                            Text("\(10 - model.aboutTapCount) more taps to enable debug tools").ftpText(.footnote).foregroundStyle(Theme.secondary)
                         }
                     }
                     Spacer(minLength: 0)
@@ -319,7 +406,9 @@ struct SettingsView: View {
             Button { info = .protocols } label: { Label("Ramp protocols and rider guidelines", systemImage: "info.circle") }
             Button { info = .estimate } label: { Label("Understanding the 72–77 % estimate", systemImage: "percent") }
             Button { info = .bestMinute } label: { Label("Live max power over 60 seconds", systemImage: "timer") }
-            learnMore(.privacy)
+            ForEach([SettingsTopic.riders, .powerMatching, .intervals, .privacy]) { item in
+                Button(item.title) { topic = item }.buttonStyle(FTPunkSecondaryButtonStyle())
+            }
         } header: { Text(SettingsGroup.about.title) } footer: {
             Text("Local by default: nothing leaves this device unless you approve an upload.")
         }.id("app-about")

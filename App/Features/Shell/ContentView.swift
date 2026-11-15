@@ -16,6 +16,9 @@ struct ContentView: View {
                 AppShell(model: model)
             }
         }
+        .ftpText(.body).foregroundStyle(Theme.text)
+        .background(Theme.ground.ignoresSafeArea())
+        .textFieldStyle(FTPTextFieldStyle())
         .tint(Theme.accent)
         .toggleStyle(FTPunkRowToggleStyle())
         .disclosureGroupStyle(FTPunkDisclosureStyle())
@@ -55,9 +58,9 @@ private struct UploadConsentView: View {
                 }
                 Section("Upload destination") {
                     LabeledContent("Intervals.icu account", value: consent.accountName)
-                    Text("Account ID: \(consent.accountID)").font(.caption).foregroundStyle(Theme.secondary)
+                    Text("Account ID: \(consent.accountID)").ftpText(.caption).foregroundStyle(Theme.secondary)
                     Text("This sends the activity, including the rider’s name, to this account. Check the destination when sharing FTPunk with another rider.")
-                        .font(.callout)
+                        .ftpText(.callout)
                 }
                 Button("Upload activity") {
                     model.uploadConsent = nil

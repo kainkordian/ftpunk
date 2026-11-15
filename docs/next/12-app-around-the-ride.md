@@ -128,3 +128,79 @@ light and dark.
 
 iPhone-specific redesign beyond the shared tokens, the web app, the workout builder,
 backup and import screens (tokens only).
+
+## Implementation checkpoint (2026-11-14)
+
+Plan 11 was committed and pushed as `b618ac8` before this implementation began. Plan 12
+adds the shared font/surface/action/field/setting-row styles, Mac sidebar and wide Home,
+inline device scanning, larger workout detail sheet, common result/history summary,
+combined chart and fixed hover line, chronological manual/synced/ramp FTP trend, hidden
+debug activities, and the Settings section/detail layout. Existing model actions still own
+adoption, upload consent, re-upload, export and rider changes. No archive/storage format,
+upload transport, trainer protocol, ramp scoring or estimate-factor change was made.
+
+Pure presentation rules and tests cover per-step averages excluding pauses, the common
+chart time domain, merged FTP settings/results, debug filtering and the reference scenarios.
+The four new isolated scenarios are `app-home`, `app-summary`, `app-progress`, `app-settings`;
+their Mac walkthrough size is 1470×923. The summary fixture keeps 290 W best minute,
+72 % / 209 W estimate, current FTP 250 W and recorded weight 82.2 kg; its illustrative
+summary totals use preview-only display fixtures as in plan 11.
+
+### Deviations from the mockup
+
+- Calendar dates and relative ages follow the actual preview date; the reference's weekday,
+  calendar-date and relative-age examples are internally inconsistent. Names, powers and
+  durations use the reference data and the existing classic workout definitions.
+- Native navigation bars, menus and system save/confirmation dialogs retain platform
+  typography. App content uses the font helper; the workout text editor retains a
+  monospaced face for editing structured text. Chaindance art is unchanged.
+- Settings panes not drawn in the reference retain their existing content within the new
+  grouped-card shell. The drawn Ride screen uses the shared SettingRow and pill/switch parts.
+- On compact widths the summary stacks, legends can scroll horizontally, the fixed reading line scales/truncates to fit, and
+  adoption stays pinned. Per-step details and source metadata follow below the reference's
+  first-screen content.
+
+The owner performs visual review. No native app/browser was opened for inspection and no
+agent capture was made. Visual fidelity in light/dark, native save/dialog behaviour, inline
+Bluetooth scanning on hardware, and VoiceOver execution remain unverified. This plan stays
+in `next/` until the owner reviews the implementation. Verified: 387 Swift tests, both CI
+builds and `git diff --check` pass. Rebuilt `dist/FTPunk.app` while stopped and verified its
+bundle signature. The owner subsequently authorized committing and pushing Plan 12 on 2026-11-15; visual recheck remains pending.
+
+
+### Owner review corrections 21–27 (2026-11-15)
+
+The owner reviewed light theme in a normal, titled Mac window on a large display and
+confirmed that hover readings occupy a fixed line above the summary chart. Corrections:
+
+- Shell and summary respect the top safe area and normal title bar; full-size title-bar
+  extension stays specific to the ride dashboard. The sidebar and first cards retain their
+  own top padding below the title bar.
+- Segments have paired light/dark tracks and labels; off switches use the adaptive raised
+  surface and text colour. Label/thumb contrast is covered by tests. Coming up's Refresh
+  uses the shared secondary pill style.
+- Progress's first-ride state uses shared typography in a full-width activity card. The six
+  featured workouts use three columns when the library has room, rather than four plus two.
+- Summary chart geometry is cached by recording revision. One target-series construction
+  and one sample traversal produce the three point arrays, limits and heart-rate transform;
+  marks and both axes use stored values. The plot is an independent equatable view. Hover
+  readings use a fixed-size overlay without a horizontal ScrollView, so changing their text
+  contributes no intrinsic size to the card/chart layout.
+- `app-summary-long` supplies a 3,240-second workout with 9,647 samples and 3,214 heart-rate
+  points. Its regression test checks geometry, signal gaps, heart-rate projection, reuse
+  across 1,000 unchanged updates, and invalidation when samples change.
+- Live dashboard power reads only the recent 62-second sample window. Workout heart-rate
+  points and per-step sums accumulate from appended samples; clock events (pause/resume/skip)
+  or recording replacement cause a replay. Live summary totals are memoized by recording
+  revision. Tests compare against the existing full-recording
+  calculations, verify paused samples and stale signal, and count visits over a 54-minute ride.
+
+Visual recheck of these corrections and real pointer/layout behaviour remain with the
+owner. No native app was launched or captured by the agent. These performance tests cover
+presentation data and cache reuse; they do not measure Swift Charts or native layout on screen.
+
+Verified after these corrections: 392 Swift tests, both required iOS/Mac builds, and
+`git diff --check` pass. On this machine the Debug long-ride geometry build took 8.84 ms;
+including 3,214 HR projection checks and 1,000 cache-reuse updates took 15.30 ms. This is
+nonvisual domain work, not an on-screen frame-time measurement. Rebuilt the stopped
+`dist/FTPunk.app` and verified its signature and bundled font bytes. The owner authorized committing and pushing these changes on 2026-11-15.

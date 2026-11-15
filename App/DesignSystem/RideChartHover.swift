@@ -6,6 +6,8 @@ import FTPunkDomain
 /// chart under the pointer also shows the readings. Kept in its own object so a pointer move redraws only the overlays,
 /// not the charts' thousands of points.
 @MainActor @Observable final class RideChartHover {
+    var showsFloatingCard: Bool
+    init(showsFloatingCard: Bool = true) { self.showsFloatingCard = showsFloatingCard }
     var time: Double?
     var chart: String?
 }
@@ -40,7 +42,7 @@ struct RideChartHoverOverlay: View {
                     if let time = hover.time, let x = proxy.position(forX: time / 60), x >= 0, x <= plot.width {
                         Rectangle().fill(Theme.secondary.opacity(0.8)).frame(width: 1, height: plot.height)
                             .offset(x: plot.minX + x, y: plot.minY).allowsHitTesting(false)
-                        if hover.chart == chart {
+                        if hover.chart == chart && hover.showsFloatingCard {
                             RideMomentCard(moment: RideMoment.at(session, time: time), showsPower: session.training?.resistance == nil)
                                 .fixedSize()
                                 // Right of the rule in the left half of the plot, left of it in the right half.
@@ -81,8 +83,8 @@ struct RideMomentCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(DurationFormat.clock(moment.time)).font(.caption.weight(.bold)).monospacedDigit()
-            if rows.isEmpty { Text("No readings").font(.caption).foregroundStyle(Theme.secondary) }
+            Text(DurationFormat.clock(moment.time)).ftpText(.caption, weight: .bold).monospacedDigit()
+            if rows.isEmpty { Text("No readings").ftpText(.caption).foregroundStyle(Theme.secondary) }
             Grid(alignment: .leading, horizontalSpacing: Space.s, verticalSpacing: 2) {
                 ForEach(rows, id: \.0) { title, value, color in
                     GridRow {
@@ -94,7 +96,7 @@ struct RideMomentCard: View {
                     }
                 }
             }
-            .font(.caption)
+            .ftpText(.caption)
         }
         .padding(.horizontal, Space.s).padding(.vertical, 6)
         .background(Theme.surface.opacity(0.95), in: RoundedRectangle(cornerRadius: 6))

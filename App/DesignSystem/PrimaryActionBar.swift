@@ -14,7 +14,7 @@ struct PrimaryActionBar<Secondary: View>: View {
         VStack(spacing: Space.s) {
             if let reason, !isEnabled {
                 Label(reason, systemImage: "exclamationmark.circle")
-                    .font(.callout).foregroundStyle(Theme.warning)
+                    .ftpText(.callout).foregroundStyle(Theme.warning)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityIdentifier("start-blocker")
             }

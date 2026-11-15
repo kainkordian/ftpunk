@@ -28,12 +28,27 @@ struct ProgressTabView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                trendSection
-                filterSection
-                activitySection
-            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    HStack {
+                        Text("Progress").font(.ftp(34)); Spacer()
+                        Menu {
+                            Picker("Rider", selection: $scope) {
+                                Text("Current rider · \(model.profile.name)").tag(RiderScope.current)
+                                Text("All riders").tag(RiderScope.all)
+                                ForEach(model.riders.filter { $0.id != model.profile.id }) { Text($0.name).tag(RiderScope.rider($0.id)) }
+                            }
+                            Toggle("Show debug results", isOn: $includeDebug)
+                        } label: { Label("Filter", systemImage: "line.3.horizontal.decrease.circle") }
+                            .menuStyle(.button).buttonStyle(FTPunkSecondaryButtonStyle()).accessibilityIdentifier("progress-filter")
+                    }
+                    VStack(alignment: .leading, spacing: 16) { trendSection }.padding(22).ftpCard(fill: 0)
+                    filterSection
+                    VStack(alignment: .leading, spacing: 16) { activitySection }.frame(maxWidth: .infinity, alignment: .leading).padding(22).ftpCard(fill: 0)
+                }.padding(.horizontal, 32).padding(.vertical, 28).frame(maxWidth: 1440).frame(maxWidth: .infinity)
+            }.background(Theme.ground)
             .navigationTitle("Progress")
+            #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
@@ -42,12 +57,15 @@ struct ProgressTabView: View {
                             Text("All riders").tag(RiderScope.all)
                             ForEach(model.riders.filter { $0.id != model.profile.id }) { Text($0.name).tag(RiderScope.rider($0.id)) }
                         }
-                        Toggle("Show debug results in the trend", isOn: $includeDebug)
+                        Toggle("Show debug results", isOn: $includeDebug)
                     } label: { Label("Filter", systemImage: "line.3.horizontal.decrease.circle") }
                         .accessibilityLabel("Filter progress").accessibilityValue(scopeTitle + (includeDebug ? ", debug results shown" : ""))
                         .accessibilityIdentifier("progress-filter")
                 }
             }
+            #else
+            .toolbar(.hidden, for: .windowToolbar)
+            #endif
             .navigationDestination(for: UUID.self) { ActivityDetailView(model: model, sessionID: $0) }
             .alert("Delete this activity?", isPresented: Binding(get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }), presenting: pendingDelete) { session in
                 Button("Delete", role: .destructive) { model.delete(session); pendingDelete = nil }
@@ -66,14 +84,15 @@ struct ProgressTabView: View {
                 ForEach(TrendMetric.allCases) { Text($0.rawValue).tag($0) }
             }.pickerStyle(.segmented).tint(Theme.controlTint)
             let sessions = ProgressRules.trendSessions(model.history, rider: riderID, metric: metric, includeDebug: includeDebug)
-            if sessions.isEmpty {
+            let profiles = model.riders.filter { riderID == nil || $0.id == riderID }
+            if sessions.isEmpty && profiles.allSatisfy({ FTPTrendReadings.series(profile: $0, sessions: sessions, metric: metric, includeDebug: includeDebug).isEmpty }) {
                 Text("\(metric == .wattsPerKG ? "FTP tests with a result and a saved rider weight" : "FTP test results") for \(scopeTitle) will appear here. Debug results are hidden unless you turn them on in the filter menu.")
-                    .font(.callout).foregroundStyle(Theme.secondary).padding(.vertical, Space.s)
+                    .ftpText(.callout).foregroundStyle(Theme.secondary).padding(.vertical, Space.s)
             } else {
                 TrendChart(groups: RiderHistory.groups(sessions: sessions, profiles: model.riders), metric: metric, includeDebug: includeDebug,
-                           riderOrder: model.riders.map(\.id))
-                Text("Each point is one FTP test. Colour identifies the rider; circles are real results and diamonds are debug results. Compare matching protocols and power sources.")
-                    .font(.caption).foregroundStyle(Theme.secondary)
+                           riderOrder: model.riders.map(\.id), profiles: profiles)
+                Text("Filled circles are ramp tests, diamonds are debug tests, and hollow markers are manual or synced FTP settings. Colour identifies the rider. Compare matching protocols and power sources.")
+                    .ftpText(.caption).foregroundStyle(Theme.secondary)
             }
         } header: { Text("FTP trend · \(scopeTitle)") }
     }
@@ -93,10 +112,13 @@ struct ProgressTabView: View {
     }
 
     @ViewBuilder private var activitySection: some View {
-        let sessions = ProgressRules.activities(model.history, rider: riderID, filter: filter)
+        let sessions = ProgressRules.activities(model.history, rider: riderID, filter: filter, includeDebug: includeDebug)
         if model.history.isEmpty {
-            ContentUnavailableView("Your first ride starts on Home", systemImage: "chart.line.uptrend.xyaxis",
-                                   description: Text("Finished rides are saved here, with FTP trends for every rider."))
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "chart.line.uptrend.xyaxis").font(.system(size: 32)).foregroundStyle(Theme.secondary)
+                Text("Your first ride starts on Home").ftpText(.title2, weight: .bold)
+                Text("Finished rides are saved here, with FTP trends for every rider.").ftpText(.body).foregroundStyle(Theme.secondary)
+            }.frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 24)
         } else if sessions.isEmpty {
             Section { Text("No \(filter == .all ? "activities" : filter.title.lowercased()) for \(scopeTitle) yet.").foregroundStyle(Theme.secondary) }
         } else {
@@ -119,9 +141,11 @@ struct ActivityRow: View {
     let row: ActivityRowModel
     var body: some View {
         HStack(alignment: .top, spacing: Space.m) {
+            Image(systemName: row.symbol)
+                .ftpText(.title3).foregroundStyle(Theme.accent).frame(width: 28).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                Text(row.title).font(.headline)
-                Text(row.subtitle).font(.subheadline).foregroundStyle(Theme.secondary)
+                Text(row.title).ftpText(.headline)
+                Text(row.subtitle).ftpText(.subheadline).foregroundStyle(Theme.secondary)
                 if !row.badges.isEmpty {
                     HStack(spacing: Space.xs) {
                         ForEach(row.badges, id: \.rawValue) { badge in
@@ -131,7 +155,7 @@ struct ActivityRow: View {
                 }
             }
             Spacer(minLength: Space.s)
-            if let value = row.value { Text(value).font(.headline).foregroundStyle(Theme.accent).monospacedDigit() }
+            if let value = row.value { Text(value).ftpText(.headline).foregroundStyle(Theme.accent).monospacedDigit() }
         }
         .padding(.vertical, Space.xs).frame(minHeight: 44)
         .accessibilityElement(children: .combine)

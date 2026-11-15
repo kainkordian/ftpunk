@@ -13,7 +13,7 @@ import FTPunkStorage
 }
 
 @Test func scenarioNamesMatchThePlan() {
-    let expected: Set<String> = ["first-launch", "home-today", "home-not-connected", "home-no-ftp", "home-retest-due", "library",
+    let expected: Set<String> = ["app-home", "app-summary", "app-summary-long", "app-progress", "app-settings", "first-launch", "home-today", "home-not-connected", "home-no-ftp", "home-retest-due", "library",
         "preflight-blocked", "ride-warmup", "ride-ramp", "ride-ramp-low-cadence", "ride-cooldown", "result-new-ftp", "result-interrupted", "result-upload-prompt",
         "workout-running", "workout-paused", "free-ride", "resistance", "progress-two-riders",
         "visual-ramp-threshold", "visual-workout-vo2", "visual-recovery", "visual-summit", "visual-paused", "visual-off",

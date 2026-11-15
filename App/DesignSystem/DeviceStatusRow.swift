@@ -31,17 +31,17 @@ struct DeviceStatusRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: Space.m) {
-                Image(systemName: symbol).font(.title3).foregroundStyle(Theme.accent).frame(width: 28).accessibilityHidden(true)
+                Image(systemName: symbol).ftpText(.title3).foregroundStyle(Theme.accent).frame(width: 28).accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: Space.s) {
                         Text(title).foregroundStyle(.primary)
                         StatusPill(text: badge, tone: role == .trainer && connectedName == nil ? .warning : .neutral)
                     }
-                    Text(subtitle).font(.subheadline).foregroundStyle(Theme.secondary)
+                    Text(subtitle).ftpText(.subheadline).foregroundStyle(Theme.secondary)
                 }
                 Spacer(minLength: Space.s)
                 Circle().fill(dot).frame(width: 10, height: 10).accessibilityHidden(true)
-                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Theme.secondary).accessibilityHidden(true)
+                Image(systemName: "chevron.right").ftpText(.footnote, weight: .semibold).foregroundStyle(Theme.secondary).accessibilityHidden(true)
             }
         }
         .accessibilityElement(children: .combine)

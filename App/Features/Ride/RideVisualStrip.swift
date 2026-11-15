@@ -77,10 +77,10 @@ struct RideVisualHero: View {
                         Spacer(minLength: 0)
                         VStack(alignment: .trailing, spacing: 2) {
                             if let detail = readout.detail {
-                                Text(detail).font(.headline.monospacedDigit()).foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
+                                Text(detail).ftpText(.headline).monospacedDigit().foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
                             }
                             if let speed = simulatedSpeed {
-                                Text("\(speed) km/h").font(.caption.weight(.semibold)).monospacedDigit().foregroundStyle(.white)
+                                Text("\(speed) km/h").ftpText(.caption, weight: .semibold).monospacedDigit().foregroundStyle(.white)
                                     .padding(.horizontal, 6).padding(.vertical, 2).background(.black.opacity(0.35), in: RoundedRectangle(cornerRadius: 5))
                             }
                         }
@@ -103,11 +103,11 @@ struct RideVisualHero: View {
 
     private func column(_ title: String, _ value: String?, tint: Color) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(title).font(.caption2.weight(.bold)).foregroundStyle(.white.opacity(0.8))
+            Text(title).ftpText(.caption2, weight: .bold).foregroundStyle(.white.opacity(0.8))
             HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(value ?? "—").font(.system(size: 34, weight: .bold, design: .rounded)).monospacedDigit().foregroundStyle(tint)
+                Text(value ?? "—").font(.ftp(34, weight: .bold)).monospacedDigit().foregroundStyle(tint)
                     .lineLimit(1).minimumScaleFactor(0.6)
-                Text(readout.unit).font(.footnote.weight(.semibold)).foregroundStyle(.white.opacity(0.8))
+                Text(readout.unit).ftpText(.footnote, weight: .semibold).foregroundStyle(.white.opacity(0.8))
             }
         }
     }
@@ -154,7 +154,7 @@ struct RideVisualMenuView: View, Equatable {
             .pickerStyle(.inline)
         } label: {
             Image(systemName: placement == .off ? "sparkles.tv" : "sparkles.tv.fill")
-                .font(.title3).frame(width: 44, height: 44).contentShape(Rectangle())
+                .ftpText(.title3).frame(width: 44, height: 44).contentShape(Rectangle())
         }
         .iconMenuStyle()
         .accessibilityLabel("\(RideVisualBranding.name) view")
@@ -171,7 +171,7 @@ struct RideOptionsMenu: View, Equatable {
     var body: some View {
         Menu {
             Button("Debug controls…", action: showDebug)
-        } label: { Image(systemName: "ellipsis.circle").font(.title3).frame(width: 44, height: 44).contentShape(Rectangle()) }
+        } label: { Image(systemName: "ellipsis.circle").ftpText(.title3).frame(width: 44, height: 44).contentShape(Rectangle()) }
             .iconMenuStyle().accessibilityLabel("More ride options").accessibilityIdentifier("ride-options")
     }
 }

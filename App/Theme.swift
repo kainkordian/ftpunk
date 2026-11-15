@@ -19,13 +19,20 @@ enum Theme {
     static var secondary: Color { adaptive(light: (0.28, 0.31, 0.29), dark: (0.74, 0.78, 0.75)) }
     static var warning: Color { adaptive(light: (0.50, 0.25, 0.02), dark: (0.99, 0.72, 0.32)) }
     static var danger: Color { adaptive(light: (0.68, 0.12, 0.12), dark: (1, 0.55, 0.55)) }
-    static var surface: Color {
-        #if canImport(UIKit)
-        Color(uiColor: .systemBackground)
-        #else
-        Color(nsColor: .windowBackgroundColor)
-        #endif
-    }
+    static let groundPair = (light: ActionRGB(red: 0.95, green: 0.95, blue: 0.97), dark: ActionRGB(red: 13/255, green: 12/255, blue: 21/255))
+    static let cardPair = (light: ActionRGB(red: 1, green: 1, blue: 1), dark: ActionRGB(red: 25/255, green: 24/255, blue: 39/255))
+    static let raisedPair = (light: ActionRGB(red: 0.88, green: 0.89, blue: 0.93), dark: ActionRGB(red: 35/255, green: 34/255, blue: 53/255))
+    static let textPair = (light: ActionRGB(red: 0.08, green: 0.07, blue: 0.12), dark: ActionRGB(red: 243/255, green: 244/255, blue: 248/255))
+    static let segmentTrackPair = (light: raisedPair.light, dark: cardPair.dark)
+    static let segmentLabelPair = (light: ActionRGB(red: 0.28, green: 0.31, blue: 0.29), dark: ActionRGB(red: 0.66, green: 0.66, blue: 0.75))
+    static var segmentTrack: Color { colorPair(segmentTrackPair) }
+    static var segmentLabel: Color { colorPair(segmentLabelPair) }
+    static var ground: Color { colorPair(groundPair) }
+    static var surface: Color { colorPair(cardPair) }
+    static var raised: Color { colorPair(raisedPair) }
+    static var text: Color { colorPair(textPair) }
+    static var heart: Color { adaptive(light: (0.70, 0.08, 0.13), dark: (1, 92/255, 92/255)) }
+    static var cyan: Color { adaptive(light: (0.02, 0.37, 0.43), dark: (95/255, 217/255, 232/255)) }
     private static func adaptive(light: (Double, Double, Double), dark: (Double, Double, Double)) -> Color {
         #if canImport(UIKit)
         Color(uiColor: UIColor { traits in
@@ -84,30 +91,32 @@ enum PrimaryActionPalette {
 /// Explicit opaque fills prevent system/glass styles from pairing white text with lime.
 struct FTPunkPrimaryButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.controlSize) private var controlSize
     @Environment(\.isEnabled) private var enabled
     @Environment(\.colorSchemeContrast) private var contrast
     func makeBody(configuration: Configuration) -> some View {
         let palette = PrimaryActionPalette.colors(dark: scheme == .dark)
-        configuration.label.font(.headline).multilineTextAlignment(.center)
+        configuration.label.ftpText(.headline).multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .foregroundStyle(enabled ? palette.foreground.color : Color.secondary)
             .padding(.horizontal, 18).padding(.vertical, 12)
-            .frame(minWidth: 44, minHeight: 44)
+            .frame(minWidth: 44, minHeight: controlSize == .large ? 52 : 44)
             .background(enabled ? palette.background.color : Color.secondary.opacity(0.15),
-                        in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Color.primary.opacity(contrast == .increased ? 0.8 : 0), lineWidth: 2))
+                        in: Capsule())
+            .overlay(Capsule().strokeBorder(Color.primary.opacity(contrast == .increased ? 0.8 : 0), lineWidth: 2))
             .opacity(configuration.isPressed ? 0.85 : 1)
     }
 }
 
 struct FTPunkSecondaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var enabled
+    @Environment(\.colorSchemeContrast) private var contrast
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label.font(.headline).multilineTextAlignment(.center)
+        configuration.label.ftpText(.headline).multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true).foregroundStyle(.primary)
             .padding(.horizontal, 18).padding(.vertical, 12).frame(minWidth: 44, minHeight: 44)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Theme.secondary, lineWidth: 1.5))
+            .background(Theme.raised, in: Capsule())
+            .overlay(Capsule().strokeBorder(Theme.text.opacity(contrast == .increased ? 0.8 : 0), lineWidth: 2))
             .opacity(enabled ? (configuration.isPressed ? 0.8 : 1) : 0.45)
     }
 }
@@ -118,13 +127,13 @@ struct FTPunkTertiaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var enabled
     @Environment(\.colorSchemeContrast) private var contrast
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label.font(.subheadline.weight(.semibold)).multilineTextAlignment(.center)
+        configuration.label.ftpText(.subheadline, weight: .semibold).multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .foregroundStyle(enabled ? Theme.accent : Color.secondary)
             .padding(.horizontal, 18).padding(.vertical, 10)
             .frame(maxWidth: .infinity, minHeight: 44)
-            .background(Theme.accent.opacity(enabled ? 0.12 : 0.05), in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Theme.accent.opacity(contrast == .increased && enabled ? 0.9 : 0), lineWidth: 1.5))
+            .background(Theme.accent.opacity(enabled ? 0.12 : 0.05), in: Capsule())
+            .overlay(Capsule().strokeBorder(Theme.accent.opacity(contrast == .increased && enabled ? 0.9 : 0), lineWidth: 1.5))
             .contentShape(RoundedRectangle(cornerRadius: 14))
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
@@ -153,7 +162,7 @@ struct FTPunkDisclosureStyle: DisclosureGroupStyle {
                     configuration.label.foregroundStyle(.primary)
                     Spacer(minLength: 8)
                     Image(systemName: configuration.isExpanded ? "chevron.down" : "chevron.right")
-                        .font(.footnote.weight(.semibold)).foregroundStyle(Theme.secondary)
+                        .ftpText(.footnote, weight: .semibold).foregroundStyle(Theme.secondary)
                         .accessibilityHidden(true)
                 }
             }
@@ -220,10 +229,10 @@ struct DurationInputField: View {
             .onTapGesture { focused = true }
             if !isValid {
                 Text("Enter a whole number from 0 to 60 minutes.")
-                    .font(.footnote).foregroundStyle(Theme.danger)
+                    .ftpText(.footnote).foregroundStyle(Theme.danger)
             } else {
                 Text("0–60 minutes · 0 skips this phase")
-                    .font(.footnote).foregroundStyle(Theme.secondary)
+                    .ftpText(.footnote).foregroundStyle(Theme.secondary)
             }
         }
         .onAppear { isValid = parsed.map { (0...60).contains($0) } ?? false }
@@ -254,5 +263,15 @@ extension View {
         #else
         self.multilineTextAlignment(.trailing)
         #endif
+    }
+}
+
+struct FTPunkDestructiveButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var enabled
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label.ftpText(.headline, weight: .bold).foregroundStyle(Theme.danger)
+            .padding(.horizontal, 20).padding(.vertical, 12).frame(minHeight: 44)
+            .background(Theme.danger.opacity(configuration.isPressed ? 0.2 : 0.1), in: Capsule())
+            .opacity(enabled ? 1 : 0.45)
     }
 }

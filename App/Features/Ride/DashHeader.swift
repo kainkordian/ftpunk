@@ -132,7 +132,7 @@ struct DashHeader: View {
     private func deviceDot(_ title: String, connected: Bool) -> some View {
         HStack(spacing: 6 * scale) {
             Image(systemName: connected ? "circle.fill" : "exclamationmark.triangle.fill")
-                .font(.system(size: 10 * scale)).foregroundStyle(connected ? RideStyle.lime : RideStyle.warning)
+                .font(.ftp(10 * scale)).foregroundStyle(connected ? RideStyle.lime : RideStyle.warning)
             Text(title).font(.ftp(16 * scale, weight: .bold)).foregroundStyle(RideStyle.dim)
         }.accessibilityLabel("\(title): \(connected ? "connected" : "No signal")")
     }

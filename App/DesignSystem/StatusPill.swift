@@ -15,7 +15,7 @@ struct StatusPill: View {
         Group {
             if let symbol { Label(text, systemImage: symbol) } else { Text(text) }
         }
-        .font(.caption.weight(.semibold)).foregroundStyle(tint)
+        .ftpText(.caption, weight: .semibold).foregroundStyle(tint)
         .padding(.horizontal, Space.s).padding(.vertical, Space.xs)
         .background(tint.opacity(0.12), in: Capsule())
         .overlay(Capsule().strokeBorder(tint.opacity(0.4), lineWidth: 1))

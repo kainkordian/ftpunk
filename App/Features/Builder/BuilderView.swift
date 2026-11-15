@@ -85,11 +85,11 @@ struct BuilderView: View {
                 WorkoutProfileChart(plan: plan, height: wide ? 180 : 96, selectedStep: $selected, showsAxis: ftp != nil, showsValues: ftp != nil)
                     .opacity(state.chartIsStale ? 0.35 : 1)
                     .accessibilityLabel(state.chartIsStale ? "Workout profile, from the last text that was valid" : "Workout profile")
-                if state.chartIsStale { Label("Showing the last valid text", systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(Theme.warning) }
+                if state.chartIsStale { Label("Showing the last valid text", systemImage: "exclamationmark.triangle").ftpText(.footnote).foregroundStyle(Theme.warning) }
                 summary(plan)
             } else {
                 RoundedRectangle(cornerRadius: 8).fill(Theme.secondary.opacity(0.12)).frame(height: wide ? 180 : 96)
-                    .overlay { Text("Add a step to see the profile").font(.footnote).foregroundStyle(Theme.secondary) }
+                    .overlay { Text("Add a step to see the profile").ftpText(.footnote).foregroundStyle(Theme.secondary) }
             }
         }
     }
@@ -97,12 +97,12 @@ struct BuilderView: View {
     private func summary(_ plan: TrainingPlan) -> some View {
         let draft = CustomWorkout(riderID: request.state.workout().riderID, name: "Workout", blocks: state.shownBlocks)
         return VStack(alignment: .leading, spacing: 2) {
-            Text(DurationFormat.workout(plan.duration)).font(.headline)
-            if let main = WorkoutPreview.mainSetText(for: plan, showValues: ftp != nil || !draft.needsFTP) { Text("Main set: \(main)").font(.subheadline.monospacedDigit()) }
+            Text(DurationFormat.workout(plan.duration)).ftpText(.headline)
+            if let main = WorkoutPreview.mainSetText(for: plan, showValues: ftp != nil || !draft.needsFTP) { Text("Main set: \(main)").ftpText(.subheadline).monospacedDigit() }
             if let load = draft.estimatedLoad(ftp: ftp) {
-                Text(String(format: "IF %.2f · TSS %.0f (estimated)", load.intensityFactor, load.tss)).font(.subheadline.monospacedDigit()).foregroundStyle(Theme.secondary)
+                Text(String(format: "IF %.2f · TSS %.0f (estimated)", load.intensityFactor, load.tss)).ftpText(.subheadline).monospacedDigit().foregroundStyle(Theme.secondary)
             } else if ftp == nil {
-                Text("Set an FTP to see IF and TSS.").font(.footnote).foregroundStyle(Theme.secondary)
+                Text("Set an FTP to see IF and TSS.").ftpText(.footnote).foregroundStyle(Theme.secondary)
             }
         }
     }
@@ -122,14 +122,14 @@ struct BuilderView: View {
         Picker("Editor", selection: modeBinding) {
             Text("Blocks").tag(BuilderState.Mode.blocks); Text("Text").tag(BuilderState.Mode.text)
         }.pickerStyle(.segmented).accessibilityIdentifier("builder-mode")
-        if let notice = state.notice { Label(notice, systemImage: "exclamationmark.triangle").font(.callout).foregroundStyle(Theme.warning) }
+        if let notice = state.notice { Label(notice, systemImage: "exclamationmark.triangle").ftpText(.callout).foregroundStyle(Theme.warning) }
     }
 
     @ViewBuilder private var blockers: some View {
         let reasons = state.mode == .blocks ? state.saveBlockers : []
         if !reasons.isEmpty {
             VStack(alignment: .leading, spacing: 2) {
-                ForEach(reasons, id: \.self) { Text($0).font(.footnote).foregroundStyle(Theme.warning) }
+                ForEach(reasons, id: \.self) { Text($0).ftpText(.footnote).foregroundStyle(Theme.warning) }
             }.accessibilityElement(children: .combine)
         }
     }
@@ -202,16 +202,16 @@ struct BuilderView: View {
                 .accessibilityLabel("Workout text").accessibilityIdentifier("builder-text")
             VStack(alignment: .leading, spacing: 2) {
                 if state.parsed.isValid {
-                    Label("Text is valid", systemImage: "checkmark.circle").font(.footnote).foregroundStyle(Theme.accent)
+                    Label("Text is valid", systemImage: "checkmark.circle").ftpText(.footnote).foregroundStyle(Theme.accent)
                 } else {
                     ForEach(Array(state.parsed.errors.enumerated()), id: \.offset) { _, error in
-                        Text("Line \(error.line): \(error.message)").font(.footnote).foregroundStyle(Theme.warning)
+                        Text("Line \(error.line): \(error.message)").ftpText(.footnote).foregroundStyle(Theme.warning)
                     }
                 }
                 Text("Steps start with “-”: duration (10m, 30s, 1m30), then 80 % or 200w or ramp 60-80%. A line ending in 5x repeats the steps under it. Text before the duration names the step.")
-                    .font(.footnote).foregroundStyle(Theme.secondary)
+                    .ftpText(.footnote).foregroundStyle(Theme.secondary)
                 if let issue = state.parsed.isValid ? state.workout().issues().first : nil {
-                    Text(issue).font(.footnote).foregroundStyle(Theme.warning)
+                    Text(issue).ftpText(.footnote).foregroundStyle(Theme.warning)
                 }
             }.padding(.horizontal, Space.l).accessibilityElement(children: .combine)
             Spacer(minLength: 0)
@@ -239,7 +239,7 @@ private struct BlockRow: View {
             case .repeats(let count, let steps):
                 HStack {
                     Stepper(value: Binding(get: { count }, set: { block = .repeats(count: $0, steps: steps) }), in: CustomWorkout.repeatRange) {
-                        Text("Repeat × \(count)").font(.headline)
+                        Text("Repeat × \(count)").ftpText(.headline)
                     }
                 }
                 ForEach(Array(steps.enumerated()), id: \.offset) { index, _ in
@@ -253,14 +253,14 @@ private struct BlockRow: View {
                         }
                 }
                 Button { block = .repeats(count: count, steps: steps + [.init(seconds: 60, start: .percentFTP(0.5))]) } label: { Label("Add step to repeat", systemImage: "plus") }
-                    .font(.subheadline)
+                    .ftpText(.subheadline)
             }
             HStack {
                 Button("Duplicate", action: duplicate)
                 Button("Delete", role: .destructive, action: delete)
                 if let moveUp { Button { moveUp() } label: { Image(systemName: "arrow.up") }.accessibilityLabel("Move up") }
                 if let moveDown { Button { moveDown() } label: { Image(systemName: "arrow.down") }.accessibilityLabel("Move down") }
-            }.font(.footnote).buttonStyle(.borderless)
+            }.ftpText(.footnote).buttonStyle(.borderless)
         }
         .padding(.vertical, Space.xs)
         .background(highlighted ? Theme.accent.opacity(0.1) : Color.clear)
@@ -294,7 +294,7 @@ private struct StepEditor: View {
                 TextField("Name (optional)", text: $step.name).accessibilityLabel("Step name")
             }
             if !CustomWorkout.nameIsPlain(step.name) {
-                Text("The name cannot contain line breaks, '@', or words such as 10m, 80%, 200w, ramp or 5x.").font(.footnote).foregroundStyle(Theme.warning)
+                Text("The name cannot contain line breaks, '@', or words such as 10m, 80%, 200w, ramp or 5x.").ftpText(.footnote).foregroundStyle(Theme.warning)
             }
             HStack {
                 TextField("m:ss", text: $durationText)
@@ -311,7 +311,7 @@ private struct StepEditor: View {
             targetRow(title: isRamp ? "From" : "Target", value: Binding(get: { step.start }, set: { step.start = $0 }))
             Toggle("Ramp", isOn: Binding(get: { isRamp }, set: { on in step.end = on ? step.start : nil }))
             if let end = step.end { targetRow(title: "To", value: Binding(get: { end }, set: { step.end = $0 })) }
-            Text(equivalent).font(.footnote).foregroundStyle(Theme.secondary)
+            Text(equivalent).ftpText(.footnote).foregroundStyle(Theme.secondary)
         }
         .onAppear { durationText = CustomWorkout.durationText(step.seconds) }
     }

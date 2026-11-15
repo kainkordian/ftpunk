@@ -2,82 +2,52 @@ import SwiftUI
 import Charts
 import FTPunkDomain
 
-/// One colour per rider, one marker shape for real/debug results, one combined legend.
+/// One chronological line per rider; marker fill distinguishes results from FTP settings.
 struct TrendChart: View {
-    typealias Metric = TrendMetric
     let groups: [RiderHistoryGroup]
-    let metric: Metric
+    let metric: TrendMetric
     let includeDebug: Bool
-    /// Stable rider order, so a rider keeps their colour when the rider filter changes.
     var riderOrder: [UUID] = []
-
-    private var visible: [RiderHistoryGroup] { groups.filter { !points(for: $0).isEmpty } }
-    private func points(for group: RiderHistoryGroup) -> [TestSession] {
-        group.sessions.filter { metric.value($0) != nil && (includeDebug || !$0.isDemo) }.sorted { $0.startedAt < $1.startedAt }
+    var profiles: [RiderProfile] = []
+    private var allProfiles: [RiderProfile] {
+        let known = Set(profiles.map(\.id))
+        return profiles + groups.filter { !known.contains($0.id) }.map { RiderProfile(id: $0.id, name: $0.name) }
     }
-    private func color(_ group: RiderHistoryGroup) -> Color {
-        Theme.riderColor(at: riderOrder.firstIndex(of: group.id) ?? groups.firstIndex { $0.id == group.id } ?? 0)
+    private func points(_ profile: RiderProfile) -> [FTPTrendPoint] {
+        FTPTrendReadings.series(profile: profile, sessions: groups.flatMap(\.sessions), metric: metric, includeDebug: includeDebug)
     }
-    private var hasDebug: Bool { includeDebug && visible.contains { points(for: $0).contains(where: \.isDemo) } }
-
+    private func color(_ profile: RiderProfile) -> Color { Theme.riderColor(at: riderOrder.firstIndex(of: profile.id) ?? 0) }
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Chart {
-                ForEach(visible) { group in
-                    ForEach(points(for: group)) { session in
-                        if let amount = metric.value(session) {
-                            LineMark(x: .value("Date", session.startedAt), y: .value(metric.rawValue, amount),
-                                     series: .value("Rider", group.id.uuidString))
-                                .foregroundStyle(by: .value("Rider", group.id.uuidString))
-                            PointMark(x: .value("Date", session.startedAt), y: .value(metric.rawValue, amount))
-                                .foregroundStyle(by: .value("Rider", group.id.uuidString))
-                                .symbol(by: .value("Data", session.isDemo ? "Debug" : "Real"))
-                                .accessibilityLabel("\(group.name), \(session.isDemo ? "debug" : "real"), \(session.startedAt.formatted(date: .abbreviated, time: .omitted))")
-                                .accessibilityValue("\(amount.formatted(.number.precision(.fractionLength(metric == .watts ? 0 : 2)))) \(metric.rawValue)")
-                        }
+                ForEach(allProfiles) { profile in
+                    ForEach(points(profile)) { point in
+                        LineMark(x: .value("Date", point.date), y: .value(metric.rawValue, point.value), series: .value("Rider", profile.id.uuidString))
+                            .foregroundStyle(color(profile))
+                        PointMark(x: .value("Date", point.date), y: .value(metric.rawValue, point.value))
+                            .foregroundStyle(color(profile))
+                            .symbol {
+                                if point.kind == .setting { Circle().strokeBorder(color(profile), lineWidth: 2).frame(width: 10, height: 10) }
+                                else if point.kind == .debug { Rectangle().fill(color(profile)).frame(width: 8, height: 8).rotationEffect(.degrees(45)) }
+                                else { Circle().fill(color(profile)).frame(width: 8, height: 8) }
+                            }
+                            .accessibilityLabel("\(profile.name), \(point.source), \(point.date.formatted(date: .abbreviated, time: .omitted))")
+                            .accessibilityValue("\(point.value.formatted(.number.precision(.fractionLength(metric == .watts ? 0 : 2)))) \(metric.rawValue)")
                     }
                 }
-            }
-            .chartForegroundStyleScale(domain: visible.map { $0.id.uuidString }, range: visible.map { color($0) })
-            .chartSymbolScale(["Real": BasicChartSymbolShape.circle, "Debug": BasicChartSymbolShape.diamond])
-            .chartLegend(.hidden)
-            .chartXAxis { axis }
-            .chartYAxis { axis }
-            .chartYAxisLabel { Text(metric.rawValue).foregroundStyle(Theme.secondary) }
-            .frame(height: 210)
-            legend
-        }
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(metric.rawValue) history by rider")
-        .accessibilityHint("Dated values are also available in the activity list below.")
+            }.chartLegend(.hidden).chartXAxis { axis }.chartYAxis { axis }.frame(height: 210)
+            HStack(spacing: 18) {
+                ForEach(allProfiles.filter { !points($0).isEmpty }) { profile in
+                    Label(profile.name, systemImage: "circle.fill").foregroundStyle(color(profile))
+                }
+            }.ftpText(.caption)
+            Text("● Ramp test   ○ Manual or synced FTP" + (includeDebug ? "   ◇ Debug ramp" : "")).ftpText(.caption).foregroundStyle(Theme.secondary)
+            if metric == .wattsPerKG { Text("Manual and synced W/kg uses the rider’s current saved weight.").ftpText(.caption).foregroundStyle(Theme.secondary) }
+        }.accessibilityElement(children: .contain).accessibilityLabel("\(metric.rawValue) history by rider")
     }
-
     private var axis: some AxisContent {
         AxisMarks { _ in
-            AxisGridLine().foregroundStyle(Theme.secondary.opacity(0.25))
-            AxisTick().foregroundStyle(Theme.secondary)
-            AxisValueLabel().foregroundStyle(Theme.secondary)
+            AxisGridLine().foregroundStyle(Theme.secondary.opacity(0.25)); AxisTick().foregroundStyle(Theme.secondary); AxisValueLabel().foregroundStyle(Theme.secondary)
         }
-    }
-
-    /// Colour identifies the rider; shape identifies real or debug data.
-    private var legend: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 130), alignment: .leading)], alignment: .leading, spacing: 6) {
-            ForEach(visible) { group in
-                Label(group.name, systemImage: "circle.fill").foregroundStyle(color(group))
-                    .labelStyle(LegendLabelStyle())
-            }
-            Label("Real result", systemImage: "circle").labelStyle(LegendLabelStyle())
-            if hasDebug { Label("Debug result", systemImage: "diamond").labelStyle(LegendLabelStyle()) }
-        }
-        .font(.caption).foregroundStyle(Theme.secondary)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Legend. Colour shows the rider. Circles are real results\(hasDebug ? ", diamonds are debug results" : "").")
-    }
-}
-
-private struct LegendLabelStyle: LabelStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 6) { configuration.icon; configuration.title.foregroundStyle(Theme.secondary) }
     }
 }

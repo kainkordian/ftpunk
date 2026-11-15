@@ -9,7 +9,7 @@ enum RideStyle {
     static let text = Color(red: 243/255, green: 244/255, blue: 248/255)
     static let dim = Color(red: 169/255, green: 169/255, blue: 191/255)
     static let lime = Color(red: 197/255, green: 247/255, blue: 77/255)
-    static let heart = Chaindance.heartLine
+    static let heart = Theme.heart
     static let coolTile = Color(red: 21/255, green: 36/255, blue: 48/255)
     static let progressGrey = Color(red: 125/255, green: 129/255, blue: 145/255)
     static let cyan = Color(red: 95/255, green: 217/255, blue: 232/255)
@@ -32,7 +32,7 @@ extension Font {
         if choice == "tektur", registerRideFont {
             let descriptor = CTFontDescriptorCreateWithAttributes([
                 kCTFontNameAttribute: "Tektur-Regular", kCTFontSizeAttribute: size,
-                kCTFontVariationAttribute: [2003072104: width, 2003265652: weight == .black ? 900 : 800]
+                kCTFontVariationAttribute: [2003072104: width, 2003265652: weight == .black ? 900 : weight == .bold || weight == .heavy ? 800 : weight == .semibold ? 600 : weight == .medium ? 500 : 400]
             ] as CFDictionary)
             return Font(CTFontCreateWithFontDescriptor(descriptor, size, nil))
         }
@@ -156,7 +156,7 @@ struct RideChoiceRow<Value: Hashable>: View {
     private var label: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-            if let detail { Text(detail).font(.callout).foregroundStyle(Theme.secondary).fixedSize(horizontal: false, vertical: true) }
+            if let detail { Text(detail).ftpText(.callout).foregroundStyle(Theme.secondary).fixedSize(horizontal: false, vertical: true) }
         }
     }
     private var segments: some View {
@@ -165,12 +165,12 @@ struct RideChoiceRow<Value: Hashable>: View {
                 let item = choices[index]
                 Button { selection = item.1 } label: {
                     Text(item.0).font(.ftp(16, weight: .bold)).padding(.horizontal, 14).frame(minHeight: 40)
-                        .foregroundStyle(selection == item.1 ? RideStyle.ground : RideStyle.dim)
-                        .background(selection == item.1 ? RideStyle.lime : .clear, in: Capsule())
+                        .foregroundStyle(selection == item.1 ? Theme.ground : Theme.segmentLabel)
+                        .background(selection == item.1 ? Theme.accent : .clear, in: Capsule())
                 }.buttonStyle(.plain).accessibilityLabel("\(title): \(item.0)")
                     .accessibilityAddTraits(selection == item.1 ? .isSelected : [])
             }
-        }.padding(4).background(RideStyle.tile, in: Capsule())
+        }.padding(4).background(Theme.segmentTrack, in: Capsule())
     }
 }
 struct RideSwitchStyle: ToggleStyle {
@@ -179,10 +179,10 @@ struct RideSwitchStyle: ToggleStyle {
             configuration.label
             Spacer()
             Button { configuration.isOn.toggle() } label: {
-                Capsule().fill(configuration.isOn ? RideStyle.lime : RideStyle.raised)
+                Capsule().fill(configuration.isOn ? Theme.accent : Theme.raised)
                     .frame(width: 52, height: 30)
                     .overlay(alignment: configuration.isOn ? .trailing : .leading) {
-                        Circle().fill(configuration.isOn ? RideStyle.ground : RideStyle.text).frame(width: 24, height: 24).padding(3)
+                        Circle().fill(configuration.isOn ? Theme.ground : Theme.text).frame(width: 24, height: 24).padding(3)
                     }
             }.buttonStyle(.plain)
         }

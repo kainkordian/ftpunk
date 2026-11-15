@@ -14,7 +14,7 @@ struct ArchiveTransferView: View {
     var body: some View {
         Section("Backup & transfer") {
             Text("Move riders, recordings, FTP history and workout library between FTPunk on Mac, iPhone and web. Saves remain independent until you transfer a file.")
-                .font(.footnote).foregroundStyle(Theme.secondary)
+                .ftpText(.footnote).foregroundStyle(Theme.secondary)
             Button("Prepare portable backup") { exportURL = model.archiveFile() }
                 .disabled(!model.canTransferData)
             if let exportURL { ShareLink("Save or share backup", item: exportURL) }
@@ -22,7 +22,7 @@ struct ArchiveTransferView: View {
             if restored { Label("Backup imported", systemImage: "checkmark.circle") }
             if let rollbackURL { ShareLink("Save the backup from before import", item: rollbackURL) }
             Text("Imports replace matching rider identities after review. Other riders stay unchanged. Accounts, credentials and upload approvals are never transferred.")
-                .font(.footnote).foregroundStyle(Theme.secondary)
+                .ftpText(.footnote).foregroundStyle(Theme.secondary)
         }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
             do {

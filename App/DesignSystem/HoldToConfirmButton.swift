@@ -23,7 +23,7 @@ struct HoldToConfirmButton: View {
                 if dashboardScale == nil { ZStack {
                     Circle().stroke(Theme.secondary.opacity(0.35), lineWidth: 3)
                     Circle().trim(from: 0, to: fraction).stroke(Theme.accent, style: StrokeStyle(lineWidth: 3, lineCap: .round)).rotationEffect(.degrees(-90))
-                    if let systemImage { Image(systemName: systemImage).font(.footnote) }
+                    if let systemImage { Image(systemName: systemImage).ftpText(.footnote) }
                 }.frame(width: 26, height: 26) }
                 Text(pressStart == nil ? title : holdingTitle).font(dashboardScale.map { .ftp(17 * $0, weight: .bold) } ?? .headline)
             }

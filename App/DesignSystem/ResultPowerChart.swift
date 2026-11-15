@@ -51,7 +51,7 @@ struct ResultPowerChart: View {
                     legend("Trainer reported", Theme.warning)
                     if !targets.isEmpty { legend("Target", .primary.opacity(0.75)) }
                 }
-                .font(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
+                .ftpText(.caption).foregroundStyle(Theme.secondary).accessibilityHidden(true)
             }
         }
     }
@@ -111,7 +111,7 @@ struct ResultPowerChart: View {
                     ForEach(Array(bands.enumerated()), id: \.offset) { _, band in
                         if let start = proxy.position(forX: band.start / 60), let end = proxy.position(forX: band.end / 60),
                            let text = ResultChartLayout.fittingLabel(for: band.title, availableWidth: Double(end - start) - 8, characterWidth: phaseCharacterWidth) {
-                            Text(text).font(.caption2).foregroundStyle(Theme.secondary).lineLimit(1).fixedSize()
+                            Text(text).ftpText(.caption2).foregroundStyle(Theme.secondary).lineLimit(1).fixedSize()
                                 .offset(x: plot.minX + start + 4, y: plot.minY + 2)
                         }
                     }
@@ -122,7 +122,7 @@ struct ResultPowerChart: View {
                         let centre: Double = Double(start + end) / 2
                         let leading: CGFloat = CGFloat(ResultChartLayout.clampedLeading(centre: centre, width: width, plotWidth: Double(plot.width)))
                         let top: CGFloat = plot.minY + CGFloat(rowHeight) + 2
-                        Text(text).font(.caption.weight(.bold)).foregroundStyle(Theme.accent).lineLimit(1).fixedSize()
+                        Text(text).ftpText(.caption, weight: .bold).foregroundStyle(Theme.accent).lineLimit(1).fixedSize()
                             .padding(.horizontal, 4).padding(.vertical, 1)
                             .background(Theme.surface.opacity(0.85), in: RoundedRectangle(cornerRadius: 4))
                             .offset(x: plot.minX + leading, y: top)

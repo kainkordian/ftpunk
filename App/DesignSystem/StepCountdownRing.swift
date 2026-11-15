@@ -14,9 +14,9 @@ struct StepCountdownRing: View {
                 Circle().trim(from: 0, to: max(0, min(1, fraction)))
                     .stroke(Theme.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round)).rotationEffect(.degrees(-90))
                     .animation(reduceMotion ? nil : .linear(duration: 0.25), value: fraction)
-                Text("\(remainingSeconds)").font(.headline).monospacedDigit()
+                Text("\(remainingSeconds)").ftpText(.headline).monospacedDigit()
             }.frame(width: 52, height: 52)
-            Text("\(nextChange) in \(remainingSeconds) s").font(.title3.weight(.semibold)).monospacedDigit()
+            Text("\(nextChange) in \(remainingSeconds) s").ftpText(.title3, weight: .semibold).monospacedDigit()
             Spacer(minLength: 0)
         }
         .accessibilityElement(children: .ignore)

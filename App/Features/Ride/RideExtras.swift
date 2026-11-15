@@ -16,11 +16,11 @@ struct RideDashboardBar: View {
     var body: some View {
         let kilojoules = RideTrack.make(session).kilojoules
         HStack {
-            Text(RideFigures.kilojoules(kilojoules)).font(.footnote.weight(.semibold)).monospacedDigit().foregroundStyle(Theme.secondary)
+            Text(RideFigures.kilojoules(kilojoules)).ftpText(.footnote, weight: .semibold).monospacedDigit().foregroundStyle(Theme.secondary)
                 .accessibilityLabel("\(Int(kilojoules.rounded())) kilojoules so far")
             Spacer()
             Button(showsMore ? "Main readings" : "More readings") { showsMore.toggle() }
-                .font(.footnote.weight(.semibold)).buttonStyle(.borderless)
+                .ftpText(.footnote, weight: .semibold).buttonStyle(.borderless)
                 .accessibilityIdentifier("dashboard-toggle")
         }
     }

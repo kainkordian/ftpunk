@@ -19,6 +19,7 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
     case settingsDevices = "settings-devices", settingsIntervals = "settings-intervals", workoutDetail = "workout-detail"
     case visualHero = "visual-hero", visualSprint = "visual-sprint", settingsIntervalsConnected = "settings-intervals-connected"
     case builderBlocks = "builder-blocks", builderText = "builder-text"
+    case appHome = "app-home", appSummary = "app-summary", appSummaryLong = "app-summary-long", appProgress = "app-progress", appSettings = "app-settings"
     case dashWorkout = "dash-workout"
     case dashWorkoutRecoveryNext = "dash-workout-recovery-next"
     case dashWorkoutCountdown = "dash-workout-countdown"
@@ -57,6 +58,8 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
             return
         }
         switch scenario {
+        case .appHome, .appSummary, .appSummaryLong, .appProgress, .appSettings:
+            try await appReference(scenario, model: model)
         case .dashWorkout, .dashWorkoutRecoveryNext, .dashWorkoutCountdown, .dashWorkoutPaused, .dashWorkoutScaled, .dashFtpWarmup, .dashFtpRamp, .dashFtpLowCadence, .dashFtpEnding, .dashFtpCooldown, .dashFreeRide, .dashFreeRideResistance, .dashMoreMetrics, .dashSignalLost: break
 
         case .firstLaunch:
@@ -196,6 +199,63 @@ enum PreviewScenario: String, CaseIterable, Identifiable {
             model.skipMockWarmup(); model.advanceMock(seconds: 95)
             model.rideVisualEnabled = false; model.mockPaused = true
         }
+    }
+
+    private static func appReference(_ scenario: PreviewScenario, model: AppModel) async throws {
+        let rider = PreviewFixtures.rider(name: "Kordian", weightKG: 82, ftp: 250, daysAgo: 22, source: "Manual")
+        try model.resetPreview { try $0.saveProfile(rider) }
+        if scenario == .appSettings {
+            model.hideDebugTools()
+            model.destination = .settings; model.previewSettingsAnchor = SettingsGroup.rideDisplay.rawValue
+            model.rideVisualPlacement = .off
+            return
+        }
+        if scenario == .appHome {
+            var workouts: [CachedWorkout] = []
+            let names = ["Sweet spot 3×12 min @ 90 %", "Long endurance", "Endurance + tempo", "Sweet spot 2×20 @ 90 %", "Long endurance", "Easy spin", "Tempo"]
+            for index in names.indices {
+                let date = Calendar.current.date(byAdding: .day, value: [1, 2, 3, 5, 8, 10, 13][index], to: Date())!
+                let steps: [TrainingPlan.Step] = index == 0 ? [
+                    .init("Warm-up", seconds: 900, watts: 165), .init("Sweet spot 1", seconds: 720, watts: 225), .init("Recovery", seconds: 300, watts: 125),
+                    .init("Sweet spot 2", seconds: 720, watts: 225), .init("Recovery", seconds: 300, watts: 125), .init("Sweet spot 3", seconds: 720, watts: 225), .init("Cool-down", seconds: 300, watts: 125)
+                ] : [.init("Endurance", seconds: Double([66, 150, 105, 71, 180, 20, 60][index] * 60), watts: 170)]
+                workouts.append(CachedWorkout(id: "intervals:preview:\(rider.id.uuidString.lowercased()):app-\(index)", riderID: rider.id, source: "Intervals.icu · preview", plan: try TrainingPlan(kind: .workout, name: names[index], ftpWatts: 250, steps: steps), scheduledDate: ScheduledDate.string(for: date)))
+            }
+            try model.store.saveWorkouts(workouts); try model.reload()
+            model.connection = IntervalsConnection(athleteID: "preview", athleteName: "Kordian", apiKey: "preview-only")
+            model.catalog.syncMessage = CalendarWorkoutPolicy.syncSummary(count: 7)
+            model.demoMode = false
+            return
+        }
+        if scenario == .appSummaryLong {
+            let plan = try TrainingPlan(kind: .workout, name: "Sweet spot · 54 minutes", ftpWatts: 250, steps: [
+                .init("Warm-up", seconds: 540, watts: 150), .init("Sweet spot 1", seconds: 720, watts: 225),
+                .init("Recovery", seconds: 300, watts: 125), .init("Sweet spot 2", seconds: 720, watts: 225),
+                .init("Recovery", seconds: 300, watts: 125), .init("Cool-down", seconds: 660, watts: 150)
+            ])
+            var engine = RideEngine(configuration: try SessionConfiguration(priorFTP: rider.currentFTP, riderID: rider.id, riderName: rider.name), training: plan)
+            for index in 0..<9647 {
+                let time = Double(index) * 3240 / 9646
+                engine.receive(.init(time: time, power: 185 + 45 * sin(time / 90), cadence: 87,
+                                     heartRate: index.isMultiple(of: 3) && index < 9642 ? 135 + Int(20 * sin(time / 180)) : nil))
+                engine.tick(at: time)
+            }
+            try model.showFinished(engine)
+            return
+        }
+        let configuration = try SessionConfiguration(priorFTP: rider.currentFTP, weightKG: 82.2, warmupSeconds: 10, cooldownSeconds: 10, riderID: rider.id, riderName: rider.name)
+        var engine = RideEngine(configuration: configuration, date: Calendar.current.date(from: DateComponents(year: 2026, month: 11, day: 12))!)
+        for second in 0...518 {
+            let time = Double(second)
+            engine.receive(.init(time: time, power: second >= 508 ? 75 : second >= 448 ? 290 : 100 + time * 0.37, cadence: 87,
+                                 heartRate: min(162, 110 + Int(time * 0.1)), leftBalance: 49,
+                                 rrIntervals: [second.isMultiple(of: 2) ? 0.5006 : 0.4994]))
+            engine.tick(at: time)
+            if second == 508 { engine.finishRamp(at: time) }
+        }
+        try model.showFinished(engine)
+        model.previewSummaryValues = ["Time": "8:38", "Best minute": "290", "Average power": "194", "Normalized power": "220", "Average heart rate": "139", "Max heart rate": "162", "Average cadence": "87", "Work": "101"]
+        if scenario == .appProgress { model.cockpitPresented = false; model.destination = .progress }
     }
 
     private static func dashboard(_ scenario: PreviewScenario, model: AppModel, rider: RiderProfile) async throws {

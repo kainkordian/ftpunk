@@ -20,7 +20,7 @@ enum Chaindance {
 
     enum Accent { case none, lime, cyan, pink, amber
         var color: Color? {
-            switch self { case .none: nil; case .lime: Chaindance.lime; case .cyan: Chaindance.cyan; case .pink: Chaindance.pink; case .amber: Chaindance.amber }
+            switch self { case .none: nil; case .lime: Theme.accent; case .cyan: Theme.cyan; case .pink: Theme.heart; case .amber: Theme.warning }
         }
     }
 }
@@ -28,7 +28,7 @@ enum Chaindance {
 extension View {
     /// Small uppercase caption, e.g. "STEP LEFT".
     func chaindanceCaption() -> some View {
-        font(.system(.footnote, design: .rounded).weight(.bold)).textCase(.uppercase).tracking(1.2).foregroundStyle(Chaindance.dim)
+        font(.system(.footnote, design: .rounded).weight(.bold)).textCase(.uppercase).tracking(1.2).foregroundStyle(Theme.secondary)
     }
 }
 
@@ -36,14 +36,14 @@ extension View {
 struct ChaindanceNumber: View {
     let text: String
     var size: CGFloat
-    var color: Color = Chaindance.text
+    var color: Color = Theme.text
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0
     @AppStorage("extraLargeRideNumbers") private var extraLarge = false
     var body: some View {
         Text(text)
-            .font(.system(size: size * scale * (extraLarge ? 1.2 : 1), weight: .black, design: .rounded))
+            .font(.ftp(size * scale * (extraLarge ? 1.2 : 1), weight: .black))
             .monospacedDigit().tracking(-1).foregroundStyle(color)
-            .shadow(color: color == Chaindance.text ? .clear : color.opacity(0.55), radius: 10)
+            .shadow(color: color == Theme.text ? .clear : color.opacity(0.55), radius: 10)
             .lineLimit(1).minimumScaleFactor(0.4)
     }
 }
@@ -61,15 +61,15 @@ struct ChaindanceBox<Content: View>: View {
             HStack(alignment: .firstTextBaseline) {
                 Text(caption).chaindanceCaption()
                 Spacer(minLength: Space.s)
-                if let corner { Text(corner).chaindanceCaption().foregroundStyle(Chaindance.text) }
+                if let corner { Text(corner).chaindanceCaption().foregroundStyle(Theme.text) }
             }
             content.frame(maxWidth: .infinity)
         }
         .padding(Space.m)
         .frame(maxWidth: .infinity, minHeight: minHeight, alignment: .topLeading)
         .background(accent.color.map { $0.opacity(0.08) } ?? .clear)
-        .background(Chaindance.panel)
-        .overlay(Rectangle().strokeBorder(accent.color ?? Chaindance.line, lineWidth: 3))
+        .background(Theme.surface)
+        .overlay(Rectangle().strokeBorder(accent.color ?? Theme.secondary.opacity(0.2), lineWidth: 3))
         .shadow(color: (accent.color ?? .clear).opacity(0.3), radius: 8)
     }
 }
@@ -79,10 +79,10 @@ struct ChaindanceStepButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(.headline, design: .rounded).weight(.heavy)).monospacedDigit()
-            .foregroundStyle(isEnabled ? Chaindance.background : Chaindance.dim)
+            .ftpText(.headline, weight: .heavy).monospacedDigit()
+            .foregroundStyle(isEnabled ? Theme.ground : Theme.secondary)
             .padding(.horizontal, Space.m).frame(minWidth: 64, minHeight: 44)
-            .background(isEnabled ? Chaindance.lime.opacity(configuration.isPressed ? 0.7 : 1) : Chaindance.line)
+            .background(isEnabled ? Theme.accent.opacity(configuration.isPressed ? 0.7 : 1) : Theme.secondary.opacity(0.2))
             .contentShape(Rectangle())
     }
 }
@@ -92,11 +92,11 @@ struct ChaindanceOutlineButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(.subheadline, design: .rounded).weight(.bold)).textCase(.uppercase).tracking(1)
-            .foregroundStyle(isEnabled ? Chaindance.cyan : Chaindance.dim)
+            .ftpText(.subheadline, weight: .bold).textCase(.uppercase).tracking(1)
+            .foregroundStyle(isEnabled ? Theme.cyan : Theme.secondary)
             .padding(.horizontal, Space.m).frame(minHeight: 44)
-            .background(configuration.isPressed ? Chaindance.cyan.opacity(0.2) : Chaindance.panel)
-            .overlay(Rectangle().strokeBorder(isEnabled ? Chaindance.cyan : Chaindance.line, lineWidth: 2))
+            .background(configuration.isPressed ? Theme.cyan.opacity(0.2) : Theme.surface)
+            .overlay(Rectangle().strokeBorder(isEnabled ? Theme.cyan : Theme.secondary.opacity(0.2), lineWidth: 2))
             .contentShape(Rectangle())
     }
 }

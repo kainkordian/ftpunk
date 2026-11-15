@@ -11,7 +11,7 @@ struct OnboardingView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("Welcome to FTPunk").font(.title2.bold())
+                    Text("Welcome to FTPunk").ftpText(.title2, weight: .bold)
                     Text("A few details make workouts fit you. Everything stays on this device.").foregroundStyle(Theme.secondary)
                 }
                 Section {

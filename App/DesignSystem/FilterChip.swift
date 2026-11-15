@@ -12,12 +12,12 @@ struct FilterChip: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title).font(.subheadline.weight(selected ? .bold : .regular))
-                .padding(.horizontal, Space.m).frame(minHeight: 44)
+            Text(title).ftpText(.footnote, weight: selected ? .bold : .regular)
+                .padding(.horizontal, Space.m).frame(height: 36)
                 .foregroundStyle(selected ? PrimaryActionPalette.colors(dark: scheme == .dark).foreground.color : Color.primary)
                 .background(selected ? PrimaryActionPalette.colors(dark: scheme == .dark).background.color : Theme.secondary.opacity(0.14), in: Capsule())
                 .overlay(Capsule().strokeBorder(Color.primary.opacity(contrast == .increased ? 0.8 : 0), lineWidth: 2))
-                .contentShape(Capsule())
+                .contentShape(Rectangle().inset(by: -4))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? .isSelected : [])

@@ -17,16 +17,21 @@ struct HomeView: View {
         NavigationStack(path: $model.preflightPath) {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: Space.xl) {
-                        if model.ftpSummary == nil { FTPCard(model: model).id(HomeSection.ftp) }
-                        TodaySection(model: model, open: { detail = $0 }).id(HomeSection.today)
-                        if model.ftpSummary != nil { FTPCard(model: model).id(HomeSection.ftp) }
-                        QuickRides(model: model).id(HomeSection.quickRides)
-                        WorkoutLibrarySection(model: model, category: $category, open: { detail = $0 }).id(HomeSection.library)
-                        UpcomingSection(model: model, open: { detail = $0 }).id(HomeSection.upcoming)
-                        MyWorkoutsSection(model: model, importing: $importing, open: { detail = $0 }).id(HomeSection.mine)
-                    }
-                    .padding(Space.l).frame(maxWidth: 760).frame(maxWidth: .infinity)
+                    ViewThatFits(in: .horizontal) {
+                        if !model.previewPhoneLayout {
+                            HStack(alignment: .top, spacing: 24) {
+                                VStack(alignment: .leading, spacing: 24) { nextUp; library }.frame(minWidth: 592, maxWidth: .infinity)
+                                VStack(spacing: 16) { FTPCard(model: model).id(HomeSection.ftp); quick; UpcomingSection(model: model, open: { detail = $0 }) }.frame(width: 380)
+                            }.frame(minWidth: 1036).padding(.horizontal, 32).padding(.vertical, 28)
+                        }
+                        VStack(alignment: .leading, spacing: 24) {
+                            if model.ftpSummary == nil { FTPCard(model: model).id(HomeSection.ftp) }
+                            nextUp
+                            if model.ftpSummary != nil { FTPCard(model: model).id(HomeSection.ftp) }
+                            quick; library
+                            UpcomingSection(model: model, open: { detail = $0 }).id(HomeSection.upcoming)
+                        }.padding(16)
+                    }.frame(maxWidth: 1440).frame(maxWidth: .infinity)
                 }
                 .onChange(of: model.homeFocus) { _, focus in
                     guard let focus else { return }
@@ -42,10 +47,14 @@ struct HomeView: View {
             }
             .refreshable { await model.downloadWorkouts() }
             .navigationTitle("Home")
+            #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .navigation) { RiderChip(name: model.profile.name) { showRiders = true } }
                 ToolbarItem(placement: .primaryAction) { DevicesPill(summary: model.deviceSummary) { showDevices = true } }
             }
+            #else
+            .toolbar(model.preflightPath.isEmpty ? .hidden : .visible, for: .windowToolbar)
+            #endif
             .navigationDestination(for: RideKind.self) { PreflightView(model: model, kind: $0) }
             .sheet(isPresented: $showRiders) { RiderSheet(model: model) }
             .sheet(isPresented: $showDevices) { DevicesSheet(model: model) }
@@ -68,6 +77,10 @@ struct HomeView: View {
             .task { await model.refreshWorkoutsIfNeeded() }
         }
     }
+    private var nextUp: some View { NextUpCard(model: model, open: { detail = $0 }).id(HomeSection.today) }
+    private var library: some View { WorkoutLibrarySection(model: model, category: $category, importing: $importing, open: { detail = $0 }).id(HomeSection.library) }
+    private var quick: some View { QuickRides(model: model).id(HomeSection.quickRides) }
+
 }
 
 struct FTPCard: View {
@@ -75,26 +88,26 @@ struct FTPCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.s) {
             if let summary = model.ftpSummary {
-                Text("FTP").ftpLabel().foregroundStyle(Theme.secondary)
+                Text("YOUR FTP").ftpLabel().foregroundStyle(Theme.secondary)
                 HStack(alignment: .firstTextBaseline, spacing: Space.s) {
-                    Text("\(Int(summary.watts.rounded())) W").font(.largeTitle.bold()).monospacedDigit()
-                    if let wkg = summary.wattsPerKG { Text("\(wkg, specifier: "%.2f") W/kg").font(.title3).foregroundStyle(Theme.secondary) }
+                    Text("\(Int(summary.watts.rounded())) W").font(.ftp(60)).monospacedDigit().fixedSize(horizontal: false, vertical: true).frame(height: 60)
+                    if let wkg = summary.wattsPerKG { Text("\(wkg, specifier: "%.2f") W/kg").ftpText(.title3).foregroundStyle(Theme.secondary) }
                 }
                 // One line: when it was set and how long ago; after 8 weeks the same line is the retest prompt.
                 Label(summary.statusLine.text, systemImage: summary.statusLine.isRetestPrompt ? "arrow.triangle.2.circlepath" : "calendar")
-                    .font(.subheadline.weight(summary.statusLine.isRetestPrompt ? .semibold : .regular))
+                    .ftpText(.subheadline, weight: summary.statusLine.isRetestPrompt ? .semibold : .regular)
                     .foregroundStyle(summary.statusLine.isRetestPrompt ? Theme.warning : Theme.secondary)
                     .accessibilityIdentifier(summary.statusLine.isRetestPrompt ? "retest-due" : "ftp-age")
-                NavigationLink(value: RideKind.ftpTest) { Label("FTP test", systemImage: "waveform.path.ecg") }
+                NavigationLink(value: RideKind.ftpTest) { Label("Take the FTP test", systemImage: "waveform.path.ecg") }
                     .buttonStyle(FTPunkSecondaryButtonStyle()).disabled(model.isBusy).accessibilityIdentifier("ftp-test")
             } else {
-                Label("No FTP yet", systemImage: "bolt.heart").font(.headline)
+                Label("No FTP yet", systemImage: "bolt.heart").ftpText(.headline)
                 Text("Take an FTP test so workouts fit you.").foregroundStyle(Theme.secondary)
                 NavigationLink(value: RideKind.ftpTest) { Label("Take an FTP test", systemImage: "waveform.path.ecg").frame(maxWidth: .infinity) }
                     .buttonStyle(FTPunkPrimaryButtonStyle()).disabled(model.isBusy).accessibilityIdentifier("ftp-test")
             }
         }
-        .padding(Space.l).frame(maxWidth: .infinity, alignment: .leading)
+        .padding(22).frame(maxWidth: .infinity, alignment: .leading)
         .ftpCard(tint: Theme.accent, fill: 0.08)
         .accessibilityElement(children: .contain)
     }
@@ -108,13 +121,13 @@ struct QuickRides: View {
     }
     var body: some View {
         VStack(alignment: .leading, spacing: Space.s) {
-            Text("Quick ride").font(.title3.bold()).accessibilityAddTraits(.isHeader)
+            Text("Quick ride").ftpText(.title3, weight: .bold).accessibilityAddTraits(.isHeader)
             // The FTP test has its own button on the FTP card, with the retest and no-FTP context.
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: Space.s) { tiles }
                 VStack(spacing: Space.s) { tiles }
             }
-        }
+        }.padding(22).ftpCard(fill: 0)
     }
     @ViewBuilder private var tiles: some View {
         tile("Free ERG", "bolt.fill", .freeERG, reason: nil, id: "quick-erg")
@@ -123,9 +136,9 @@ struct QuickRides: View {
     private func tile(_ title: String, _ symbol: String, _ kind: RideKind, reason: String?, id: String) -> some View {
         NavigationLink(value: kind) {
             VStack(spacing: Space.xs) {
-                Image(systemName: symbol).font(.title2)
-                Text(title).font(.headline)
-                if let reason { Text(reason).font(.caption).multilineTextAlignment(.center).foregroundStyle(Theme.secondary) }
+                Image(systemName: symbol).ftpText(.title2)
+                Text(title).ftpText(.headline)
+                if let reason { Text(reason).ftpText(.caption).multilineTextAlignment(.center).foregroundStyle(Theme.secondary) }
             }
             .foregroundStyle(reason == nil ? Color.primary : Theme.secondary)
             .frame(maxWidth: .infinity, minHeight: 84).padding(Space.s)

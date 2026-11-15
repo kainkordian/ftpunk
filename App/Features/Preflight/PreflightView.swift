@@ -44,7 +44,7 @@ struct PreflightView: View {
                 case .workout: workoutRows
                 }
                 if model.debugUnlocked && model.demoMode { debugGroup }
-                Text(footer).font(.footnote).foregroundStyle(Theme.secondary)
+                Text(footer).ftpText(.footnote).foregroundStyle(Theme.secondary)
             }
             .padding(Space.l).frame(maxWidth: 700).frame(maxWidth: .infinity)
         }
@@ -132,10 +132,10 @@ struct PreflightView: View {
                         LabeledContent("Warm-up watts") { TextField("100", text: $model.manualWarmup).numberEntry().labelsHidden() }
                     }
                     if model.selectedFTP == nil && model.automaticWarmup {
-                        Text("No FTP selected: the warm-up uses the protocol’s default target.").font(.footnote).foregroundStyle(Theme.secondary)
+                        Text("No FTP selected: the warm-up uses the protocol’s default target.").ftpText(.footnote).foregroundStyle(Theme.secondary)
                     }
                     Text("Set either duration to zero to skip that phase. After automatic exhaustion the trainer releases its load; you can stop and save at any time.")
-                        .font(.footnote).foregroundStyle(Theme.secondary)
+                        .ftpText(.footnote).foregroundStyle(Theme.secondary)
                 }.padding(.top, Space.xs)
             } label: {
                 ChecklistRow(symbol: "flame", title: "Warm-up and cool-down", value: warmupCooldownSummary,
@@ -251,18 +251,18 @@ struct ProtocolChooserSheet: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("Recommended: \(model.recommendedProtocol.reason)").font(.callout).foregroundStyle(Theme.secondary)
+                    Text("Recommended: \(model.recommendedProtocol.reason)").ftpText(.callout).foregroundStyle(Theme.secondary)
                 }
                 Section("Choose your ramp") {
                     ForEach([RampPreset.gentle, .standard, .zwift]) { preset in
                         Button { model.choosePreset(preset); dismiss() } label: {
                             HStack(alignment: .top, spacing: Space.m) {
                                 Image(systemName: model.preset == preset ? "checkmark.circle.fill" : "circle")
-                                    .font(.title3).foregroundStyle(model.preset == preset ? Theme.accent : .secondary).accessibilityHidden(true)
+                                    .ftpText(.title3).foregroundStyle(model.preset == preset ? Theme.accent : .secondary).accessibilityHidden(true)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(preset.title).font(.headline).foregroundStyle(.primary)
+                                    Text(preset.title).ftpText(.headline).foregroundStyle(.primary)
                                     Text(preset.summary).foregroundStyle(.primary)
-                                    Text(preset.audience).font(.footnote).foregroundStyle(Theme.secondary)
+                                    Text(preset.audience).ftpText(.footnote).foregroundStyle(Theme.secondary)
                                 }
                                 Spacer(minLength: 0)
                             }.padding(.vertical, Space.s).contentShape(Rectangle())

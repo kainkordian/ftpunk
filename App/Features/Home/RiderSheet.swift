@@ -9,6 +9,8 @@ struct RiderSheet: View {
     @State private var newFTP = ""
     private var fromIntervals: Bool { model.connection != nil && model.athleteSync.enabled }
 
+    private var validFTP: Bool { Double(newFTP.replacingOccurrences(of: ",", with: ".")).map { $0.isFinite && $0 > 0 && $0 <= 32767 } ?? false }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -16,12 +18,12 @@ struct RiderSheet: View {
                     ForEach(model.riders) { rider in
                         Button { model.selectRider(rider.id) } label: {
                             HStack(spacing: Space.m) {
-                                Text(RiderInitials.make(rider.name)).font(.caption.weight(.bold)).frame(width: 32, height: 32)
+                                Text(RiderInitials.make(rider.name)).ftpText(.caption, weight: .bold).frame(width: 32, height: 32)
                                     .background(Theme.accent.opacity(0.18), in: Circle()).accessibilityHidden(true)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(rider.name).foregroundStyle(.primary)
                                     Text(rider.currentFTP.map { "FTP \(Int($0.watts.rounded())) W" } ?? "No FTP yet")
-                                        .font(.footnote).foregroundStyle(Theme.secondary)
+                                        .ftpText(.footnote).foregroundStyle(Theme.secondary)
                                 }
                                 Spacer(minLength: 0)
                                 if rider.id == model.profile.id { Image(systemName: "checkmark.circle.fill").foregroundStyle(Theme.accent).accessibilityLabel("Selected") }
@@ -30,9 +32,9 @@ struct RiderSheet: View {
                         .disabled(model.isBusy).accessibilityIdentifier("rider-\(rider.name)")
                     }
                     HStack {
-                        TextField("New rider’s name", text: $newName)
-                        Button("Add") { if model.addRider(name: newName) { newName = "" } }
-                            .disabled(model.isBusy || newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        TextField("Name", text: $newName).textFieldStyle(FTPTextFieldStyle())
+                        Button("Add rider") { if model.addRider(name: newName) { newName = "" } }
+                            .buttonStyle(FTPunkPrimaryButtonStyle()).disabled(model.isBusy || newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
                 }
                 Section {
@@ -54,9 +56,9 @@ struct RiderSheet: View {
                         }
                     }
                     HStack {
-                        TextField("New FTP, W", text: $newFTP).numberEntry().accessibilityLabel("New FTP in watts")
-                        Button("Save") { if model.setCurrentFTP(newFTP) { newFTP = "" } }
-                            .disabled(model.isBusy || newFTP.trimmingCharacters(in: .whitespaces).isEmpty)
+                        TextField("FTP in watts", text: $newFTP).textFieldStyle(FTPTextFieldStyle()).numberEntry().accessibilityLabel("New FTP in watts")
+                        Button("Save FTP") { if model.setCurrentFTP(newFTP) { newFTP = "" } }
+                            .buttonStyle(FTPunkPrimaryButtonStyle()).disabled(model.isBusy || !validFTP)
                     }
                 } header: { Text("FTP") } footer: {
                     Text("Saving makes this the rider’s current FTP. Workouts and warm-ups use it. A test result is adopted from the result screen."
