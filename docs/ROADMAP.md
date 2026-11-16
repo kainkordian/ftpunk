@@ -159,12 +159,15 @@ Owner clarifications (2026-11-13): cyan overrides the Next tile during the last 
 | 10 | [Quick fixes](archive/10-quick-fixes.md) (implemented and reviewed 2026-11-13; no functional deviations): workout cards for VoiceOver, Chaindance off by default, sync summary, menu bar | S |
 | 11 | [Ride dashboard readable from 2 m](archive/11-ride-dashboard.md) (implemented 2026-11-14; final two visual checks unverified): one layout for workout, FTP test and free ride, 3 s power, no scrolling | L |
 | 12 | [The app around the ride](next/12-app-around-the-ride.md) (implemented 2026-11-14; owner review pending): tokens, shell, Home, summary, Progress, Settings | L |
+| 13 | [Walkthrough fixes, Chaindance parked, steadier power matching](next/13-walkthrough-fixes-and-matching.md) (written 2026-11-15; not started): back from pre-flight, Progress rows, last 7 days in the calendar card, hover states, intervals in pre-flight, current step and step count on the dashboard, Chaindance out of the build, workout power matching (the FTP test's matcher is unchanged) | M–L |
 
 ## Parked (deliberately not now)
 
 Each item needs a decision from the owner before a plan is written.
 
 - Web port of the plan 11 ride dashboard (native first).
+- Power matching: remember the last warm trainer model per trainer (contradicts the 2026-11-04 decision); give the FTP test plan 13's fade guard (plan 13 leaves the test untouched).
+- Web: park Chaindance there too and port plan 13's workout matcher tuning (the web app keeps both as they are for now).
 - Correct the singular calendar sync summary (“1 cycling workout”); owner deferred the wording fix and test on 2026-11-13.
 - Add a Chaindance-off preview scenario: `--debug-preview` currently forces `.strip`, so previews cannot demonstrate the fresh-settings default.
 - Web: Intervals.icu OAuth in the browser (needs a client secret, so a server; conflicts with local only). An own
@@ -197,6 +200,7 @@ Each item needs a decision from the owner before a plan is written.
 | 2026-11-04 | Builder: % FTP **and** watts, ramps allowed, local only, iPhone + Mac, block and text editors with a toggle. |
 | 2026-11-05 | The web app follows the native app (milestone D). The story is scratched there too. Local only: no server or accounts. Intervals.icu answers CORS for localhost and github.io, so the browser talks to it directly. Pages serves the new web app (GitHub Actions), not `web-v1`. Web tests run in headless Chrome, no Node. The Intervals.icu key can be remembered per rider, opt-in, encrypted with a non-extractable WebCrypto key. |
 | 2026-11-09 | Intervals.icu uploads are FIT instead of TCX (supersedes 2026-11-04); TCX stays an export. |
+| 2026-11-15 | **Chaindance is parked** (owner): it leaves the native build with plan 13; the code is kept in the repository. Supersedes the 2026-11-13 clarification that kept the Large/Strip integration. |
 
 ## Where the docs are
 
